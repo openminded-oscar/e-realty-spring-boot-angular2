@@ -1,0 +1,50 @@
+<div class="form-group">
+    <div class = "col-md-offset-4 col-md-4">
+        {{uploadError}}
+        {{progressPercentage}}%
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-4 control-label">Realty object photo(s) - maximum 5 MB:</label>
+    <div class="col-md-4">
+        <div ngf-drop ngf-select ngf-before-model-change="setObjectPhotosUpload()" ng-model="files" class="drop-box"
+             ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+             accept="image/*"
+             ngf-pattern="'image/*,application/pdf'">Drop images here or click to upload
+        </div>
+        <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+        <div ng-show="files">
+            <ul>
+                <li ng-repeat="f in files">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-4 control-label">Ownership verification photo </label>
+    <div class="col-md-4">
+        <div ngf-drop ngf-select ngf-before-model-change="setConfirmationUpload()" ng-model="file" class="drop-box"
+             ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true"
+             accept="image/*"
+             ngf-pattern="'image/*,application/pdf'"
+        >Drop image here or click to upload
+        </div>
+        <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+        <div ng-show="files">
+            <ul>
+                <li ng-repeat="f in files">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-4 col-md-4">
+        <div class="col-md-6 col-md-offset-3 text-center">
+            <a ui-sref="new-object.step4" class="btn btn-block btn-success">
+                Previous Section <span class="glyphicon"></span>
+            </a>
+        </div>
+    </div>
+</div>

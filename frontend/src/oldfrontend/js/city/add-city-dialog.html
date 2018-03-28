@@ -1,0 +1,37 @@
+<div>
+	<div class='modal-header'><h3 class="">Add new city here</h3></div>
+					
+	<div class='modal-body'>
+		<div class="row form-group">
+			<label class="col-md-2 control-label" for="textinput">Name:</label>
+			<div class="col-md-10">
+				<input id="textinput" ng-model="city.name" name="textinput" type="text"
+					placeholder="Input name here" class="form-control input-md">
+			</div>
+		</div>
+		<div class="row form-group">
+			<label class="col-md-2 control-label" for="selectbasic">Region:</label>
+			<div class="col-md-10">
+				<select ng-model="city.region"
+					ng-options="region for region in regions"
+					id="city" ng-model="city.region" name="city" class="form-control">
+					<option disabled value="">Choose the region</option>
+				</select>
+			</div>
+		</div>
+		<div class="row form-group">
+			<label class="col-md-2 control-label" for="selectbasic">District:</label>
+			<div class="col-md-10">
+				<select ng-model="city.district"
+					ng-options="city as city.name for city in controller.cities track by city.id"
+					id="city" ng-model="realty.city" name="city" class="form-control">
+					<option disabled value="">Choose the district</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" ng-click="close()" class="btn btn-secondary">Close</button>
+		<button type="button" ng-click="addCity()" class="btn btn-primary">Add city</button>
+	</div>
+</div>

@@ -1,0 +1,59 @@
+<div class="form-group">
+    <label class="col-md-4 control-label" for="price-input">Price ($)*</label>
+    <div class="col-md-4">
+        <input id="price-input" name="buildNum" type="text"
+               class="form-control input-md" ng-model="realty.price"
+               required>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-4 control-label">
+        <label>Supported operations:</label>
+    </div>
+    <div class="col-md-4">
+        <label ng-repeat="operation in operations">
+            <input class="big-checkbox"
+                    type="checkbox"
+                    name="{{operation}}-type"
+                    value="{{operation.name}}"
+                    ng-model="operation.selected"
+            > {{operation.name}}&nbsp;
+        </label>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-4 control-label">
+        <label>Realtor*:</label>
+    </div>
+    <div class="col-md-4">
+        <angucomplete-alt id="realtor-selector"
+                          placeholder="Type realtor name"
+                          pause="400"
+                          selected-object="setRealter"
+                          remote-url="/realters/find?query="
+                          title-field="user.name,user.surname"
+                          description-field="user.email"
+                          image-field="user.profilePic"
+                          minlength="0"
+                          input-class="form-control form-control-small"
+                          matchclass="highlight"/>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-4 col-md-4">
+        <div class="col-md-6 text-center">
+            <a ui-sref="new-object.step3" class="btn btn-block btn-success">
+                Previous Section <span class="glyphicon"></span>
+            </a>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <a ui-sref="new-object.step5" class="btn btn-block btn-success">
+                Next Section <span class="glyphicon"></span>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+spring.datasource:
+  url: jdbc:mysql://localhost:3306/database?autoReconnect=true&useSSL=false
+  username: root
+  password: root
+  driverClassName: com.mysql.jdbc.Driver
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update

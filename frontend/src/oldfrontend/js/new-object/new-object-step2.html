@@ -1,0 +1,75 @@
+<div class="form-group">
+    <label class="col-md-4 control-label" for="rooms-amount-input">Rooms
+        amount*</label>
+    <div class="col-md-4">
+        <input id="rooms-amount-input" name="rooms" type="text"
+               class="form-control input-md"
+               ng-model="realty.roomsAmount"
+               required>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-4 control-label" for="total-area-input">Total
+        area*</label>
+    <div class="col-md-4">
+        <input id="total-area-input" name="total-area" type="text"
+               class="form-control input-md" ng-model="realty.totalArea"
+               required>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-4 control-label" for="textinput">Living
+        area</label>
+    <div class="col-md-4">
+        <input id="textinput" name="buildNum" type="text"
+               class="form-control input-md" ng-model="realty.livingArea">
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-md-4 control-label" for="floor-input">Floor</label>
+    <div class="col-md-4">
+        <input id="floor-input" name="buildNum" type="text"
+               class="form-control input-md" ng-model="realty.floor">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-4 control-label" for="building-floors-input">Floors
+        in building</label>
+    <div class="col-md-4">
+        <input id="building-floors-input" name="buildNum" type="text"
+               class="form-control input-md" ng-model="realty.totalFloors">
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-4 control-label">
+        <label>Building type:</label>
+    </div>
+    <div class="col-md-4">
+        <label ng-repeat="buildingType in buildingTypes">
+            <input type="radio" name="buildingType" ng-model="realty.buildingType"
+                   ng-value="buildingType"/> {{buildingType}}&nbsp;
+        </label>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-4 col-md-4">
+        <div class="col-md-6 text-center">
+            <a ui-sref="new-object.step1" class="btn btn-block btn-success">
+                Previous Section <span class="glyphicon"></span>
+            </a>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <a ui-sref="new-object.step3" class="btn btn-block btn-success">
+                Next Section <span class="glyphicon"></span>
+            </a>
+        </div>
+    </div>
+</div>

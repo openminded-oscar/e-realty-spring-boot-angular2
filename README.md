@@ -1,0 +1,19 @@
+# BackEnd dependencies and build
+####Dependencies
+* Maven 3, Java 8
+####Build
+* `mvn spring-boot:run -P dev|prod`
+
+# FrontEnd dependencies and build
+####Dependencies
+* `npm install -g @angular/cli` to install angular cli (globally)
+* `npm install` to install Node packages
+####Build
+* `ng serve` for `dev`
+* `ng build` to make files build for `prod`. Builds all to `dist` folder.
+
+#Bootstrapping All Project
+## For `dev`:
+build BackEnd and then build (serve) FrontEnd (access UI by FrontEnd port).
+## For `prod`:
+build (compile, 'compress', etc) FrontEnd into `dist` folder and then build BackEnd (access UI by BackEnd port).

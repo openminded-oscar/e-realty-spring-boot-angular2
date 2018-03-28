@@ -1,0 +1,73 @@
+<div class="form-group">
+    <div class="col-md-4 control-label">
+        <label for="description-input">Overall description:</label>
+    </div>
+    <div class="col-md-4">
+					<textarea rows="4" maxlength="128" ng-model="realty.description" class="form-control"
+                              id="description-input"></textarea>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-4 control-label">
+        <label for="other-info-input">Other info:</label>
+    </div>
+    <div class="col-md-4">
+					<textarea rows="2" maxlength="64" ng-model="realty.otherInfo" class="form-control"
+                              rows="3" id="other-info-input"></textarea>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-4 control-label">
+        <label for="repaired-input">Recently repaired</label>
+    </div>
+    <div class="checkbox col-md-4 text-center">
+        <input
+                type="checkbox"
+                id="repaired-input"
+                ng-model="realty.hasRepairing"
+                class="big-checkbox">
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-4 control-label">
+        <label for="garage-input">
+            Garage
+        </label>
+    </div>
+    <div class="checkbox col-md-4 text-center">
+        <input type="checkbox"
+               name="garage"
+               id="garage-input"
+               ng-model="realty.hasGarage"
+               class="big-checkbox">
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-4 control-label">
+        <label for="foundation-year-input">Building foundation year:</label>
+    </div>
+    <div class="col-md-4">
+        <input ng-model="realty.foundationYear" class="form-control"
+               id="foundation-year-input">
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-4 col-md-4">
+        <div class="col-md-6 text-center">
+            <a ui-sref="new-object.step2" class="btn btn-block btn-success">
+                Previous Section <span class="glyphicon"></span>
+            </a>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <a ui-sref="new-object.step4" class="btn btn-block btn-success">
+                Next Section <span class="glyphicon"></span>
+            </a>
+        </div>
+    </div>
+</div>

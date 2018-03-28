@@ -1,0 +1,41 @@
+<div id="form-container">
+
+    <div class="page-header text-center">
+        <h3>Add your realty object</h3>
+
+        <!-- the links to our nested states using relative paths -->
+        <!-- add the active class if the state matches our ui-sref -->
+        <div id="status-buttons" class="text-center">
+            <a ui-sref-active="active" ui-sref=".step1">
+                <span class="step-number">1</span><span class="step-name">Address</span>
+            </a>
+            <a ui-sref-active="active" ui-sref=".step2">
+                <span class="step-number">2</span><span class="step-name">Primary info</span>
+            </a>
+            <a ui-sref-active="active" ui-sref=".step3">
+                <span class="step-number">3</span><span class="step-name">Additional info</span>
+            </a>
+            <a ui-sref-active="active" ui-sref=".step4">
+                <span class="step-number">4</span><span class="step-name">Realtor and targeting</span>
+            </a>
+            <a ui-sref-active="active" ui-sref=".step5">
+                <span class="step-number">5</span><span class="step-name">Photos</span>
+            </a>
+        </div>
+    </div>
+    <!-- use ng-submit to catch the form submission and use our Angular function -->
+    <form id="new-object-form" name="newobjectform" class="form-horizontal">
+        <!-- our nested state views will be injected here -->
+        <div id="form-views" ui-view></div>
+    </form>
+
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-4">
+            <button id="addRealtyBtn"
+                    ng-click="controller.addRealtyObject()"
+                    ng-disabled="newobjectform.$valid"
+                    class="btn btn-success btn-block">Add object
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="form-group">
+    <label class="col-md-4 control-label" for="city">City*</label>
+    <div class="col-md-4">
+        <address-auto-complete
+                auto-complete-url="{{cityURL}}"
+                parameters-elements-ids="{{cityParametersElementsIds}}"
+                result-element-id="{{cityIdElementId}}"
+                current-id="realty.address.streetInCity.city.id">
+            <input type="text"
+                   class="form-control"
+                   id="city"
+                   required>
+            <input type="hidden" id="cityId">
+        </address-auto-complete>
+    </div>
+    <div class="col-md-1">
+        <button id="addCityBtn" ng-click="addCity()"
+                class="btn btn-success">+
+        </button>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-4 control-label" for="street">Street*</label>
+    <div class="col-md-4">
+        <address-auto-complete auto-complete-url="{{streetURL}}"
+                               parameters-elements-ids='{{streetParametersElementsIds}}'
+                               result-element-id="{{streetIdElementId}}"
+                               current-id="realty.address.streetInCity.id">
+            <input type="text"
+                   class="form-control"
+                   id="street"
+                   required>
+            <input type="hidden" id="streetId">
+        </address-auto-complete>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-4 control-label" for="number-of-street-input">Building
+        number*</label>
+    <div class="col-md-4">
+        <input id="number-of-street-input" name="buildNum" type="text"
+               class="form-control input-md"
+               ng-model="realty.address.numberOfStreet"
+               required>
+    </div>
+</div>
+
+<div ng-show="isApt" class="form-group">
+    <label class="col-md-4 control-label" for="apt-number-input">Apt.
+        number*</label>
+    <div class="col-md-4">
+        <input id="apt-number-input" ng-model="realty.address.aptNumber"
+               name="flatNum" type="text" class="form-control input-md"
+               ng-required="isApt">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-4 control-label" for="is-apt">It's
+        an apartment</label>
+    <div class="col-md-4 text-center">
+        <input
+                type="checkbox" name="is-apt" id="is-apt" ng-model="isApt" class="big-checkbox">
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-4 col-md-4">
+        <div class="col-md-6 col-md-offset-3 text-center">
+            <a ui-sref="new-object.step2" class="btn btn-block btn-success">
+                Next Section <span class="glyphicon"></span>
+            </a>
+        </div>
+    </div>
+</div>
