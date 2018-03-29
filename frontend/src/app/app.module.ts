@@ -7,6 +7,7 @@ import { NewObjectComponent } from './new-object/new-object.component';
 import {FormsModule} from "@angular/forms";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {AddressService} from "./address.service";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -15,7 +16,7 @@ import {AddressService} from "./address.service";
     NewObjectComponent
   ],
   imports: [
-    BrowserModule, FormsModule, NgbModule.forRoot()
+    BrowserModule, FormsModule, HttpClientModule, NgbModule.forRoot()
   ],
   providers: [AddressService],
   bootstrap: [AppComponent]
