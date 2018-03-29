@@ -17,7 +17,7 @@ export class NewObjectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.addressService.getAddressesByQuery("Hor").subscribe(
+    this.addressService.getAddressesByTerm("Hor", 49.8118805, 24.0096293).subscribe(
       data => {
         console.log(JSON.stringify(data))
       }, error => {
