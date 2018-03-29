@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 
 @Injectable()
 export class AddressService {
-  private googlePlaceAutocompleteUrl: string = "/maps/api/place/autocomplete/json";
+  private googlePlaceAutocompleteUrl: string = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
 
   constructor(private http: HttpClient) {
   }
