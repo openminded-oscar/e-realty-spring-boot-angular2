@@ -5,6 +5,8 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { NewObjectComponent } from './new-object/new-object.component';
 import {FormsModule} from "@angular/forms";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {AddressService} from "./address.service";
 
 
 @NgModule({
@@ -13,9 +15,9 @@ import {FormsModule} from "@angular/forms";
     NewObjectComponent
   ],
   imports: [
-    BrowserModule, FormsModule
+    BrowserModule, FormsModule, NgbModule.forRoot()
   ],
-  providers: [],
+  providers: [AddressService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
