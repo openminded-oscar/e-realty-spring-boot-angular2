@@ -1,1 +1,24 @@
-<address-input></address-input>
+<h5>Add your realty object</h5>
+<aw-wizard [navBarLayout]="'large-empty'">
+  <aw-wizard-step stepTitle="Address">
+    <button type="button" class="btn" awNextStep>Next Step</button>
+    <address-input></address-input>
+  </aw-wizard-step>
+  <aw-wizard-step stepTitle="Primary info" awOptionalStep>
+    <button type="button" class="btn" awPreviousStep>Previous step</button>
+    <button type="button" class="btn" awNextStep>Next Step</button>
+  </aw-wizard-step>
+  <aw-wizard-step stepTitle="Additional info" awOptionalStep>
+    <button type="button" class="btn" awPreviousStep>Previous step</button>
+    <button type="button" class="btn" awNextStep>Next Step</button>
+  </aw-wizard-step>
+  <aw-wizard-step stepTitle="Realtor and targeting" awOptionalStep>
+    <button type="button" class="btn" awPreviousStep>Previous step</button>
+    <button type="button" class="btn" awNextStep>Next Step</button>
+  </aw-wizard-step>
+  <aw-wizard-step stepTitle="Photos">
+    <button type="button" class="btn" awPreviousStep>Previous Step</button>
+  </aw-wizard-step>
+</aw-wizard>
+<button id="addRealtyBtn" class="btn btn-success">Add object
+</button>

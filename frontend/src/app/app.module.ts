@@ -9,6 +9,7 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {AddressService} from "./services/address.service";
 import {HttpClientModule} from "@angular/common/http";
 import { AddressInputComponent } from './address-input/address-input.component';
+import {ArchwizardModule} from "angular-archwizard";
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import { AddressInputComponent } from './address-input/address-input.component';
     AddressInputComponent
   ],
   imports: [
-    BrowserModule, FormsModule, HttpClientModule, NgbModule.forRoot()
+    BrowserModule, FormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule
   ],
   providers: [AddressService],
   bootstrap: [AppComponent]
