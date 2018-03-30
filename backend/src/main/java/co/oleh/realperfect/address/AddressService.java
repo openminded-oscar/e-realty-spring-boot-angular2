@@ -1,17 +1,34 @@
 package co.oleh.realperfect.address;
 
 import co.oleh.realperfect.model.CityOnMap;
+import com.google.maps.GeoApiContext;
+import com.google.maps.PlaceAutocompleteRequest;
+import com.google.maps.PlacesApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.AutocompletePrediction;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.PlaceAutocompleteType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import co.oleh.realperfect.model.StreetInCity;
 import co.oleh.realperfect.repository.StreetRepository;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class AddressService {
+    @Autowired
+    private GeoApiContext geoApiContext;
+
     private static final List<CityOnMap> SUPPORTED_CITIES;
     static {
         SUPPORTED_CITIES = Arrays.asList(
@@ -23,5 +40,21 @@ public class AddressService {
 
     public List<CityOnMap> getSupportedCities() {
         return AddressService.SUPPORTED_CITIES;
+    }
+
+    public List<AutocompletePrediction> getAddressesNearby(String term, Double lat, Double lng)
+            throws InterruptedException, ApiException, IOException {
+        if(term.trim().equals("")){
+            return new ArrayList<>();
+        }
+
+        PlaceAutocompleteRequest request = PlacesApi.placeAutocomplete(geoApiContext, term)
+                .types(PlaceAutocompleteType.GEOCODE)
+                .radius(150000)
+                .location(new LatLng(lat, lng))
+                .language("uk");
+
+        AutocompletePrediction[] autocompletePredictions = request.await();
+        return Arrays.asList(autocompletePredictions);
     }
 }

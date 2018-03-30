@@ -1,15 +1,16 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {webServiceEndpoint} from "./commons";
 import "rxjs/add/observable/of";
 import {ReplaySubject} from "rxjs/ReplaySubject";
+import {Subject} from "rxjs/Subject";
+import {webServiceEndpoint} from "../commons";
 
 @Injectable()
 export class AddressService {
   private addressesNearbyUrl: string = webServiceEndpoint + "/addresses/addresses-nearby";
   private supportedCitiesUrl: string = webServiceEndpoint + "/addresses/cities-supported";
 
-  private observableAddresses = new ReplaySubject(1);
+  private observableAddresses = new Subject;
   private observableCities = new ReplaySubject(1);
 
   constructor(private http: HttpClient) {
@@ -17,20 +18,19 @@ export class AddressService {
 
   public getAddressesByTerm(term: string, lat: number, lng: number) {
     term = term.trim();
-    if (!this.observableAddresses.observers.length) {
-      let params = new HttpParams()
-        .set("lat", lat.toString())
-        .set("lng", lng.toString())
-        .set("term", term);
-      this.http.get(this.addressesNearbyUrl, {params: params}).subscribe(
-        (data:any[]) => {
-          data = data.map(data => data.description);
-          this.observableAddresses.next(data);
-        }, error => {
-          this.observableAddresses.error(error);
-          this.observableAddresses = new ReplaySubject(1);
-        });
-    }
+
+    let params = new HttpParams()
+      .set("lat", lat.toString())
+      .set("lng", lng.toString())
+      .set("term", term);
+    this.http.get(this.addressesNearbyUrl, {params: params}).subscribe(
+      (data: any[]) => {
+        data = data.map(data => data.description);
+        this.observableAddresses.next(data);
+      }, error => {
+        this.observableAddresses.error(error);
+        this.observableAddresses = new ReplaySubject(1);
+      });
 
     return this.observableAddresses;
   }

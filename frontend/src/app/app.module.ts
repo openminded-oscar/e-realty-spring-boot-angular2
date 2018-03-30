@@ -6,14 +6,16 @@ import { AppComponent } from './app.component';
 import { NewObjectComponent } from './new-object/new-object.component';
 import {FormsModule} from "@angular/forms";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {AddressService} from "./address.service";
+import {AddressService} from "./services/address.service";
 import {HttpClientModule} from "@angular/common/http";
+import { AddressInputComponent } from './address-input/address-input.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NewObjectComponent
+    NewObjectComponent,
+    AddressInputComponent
   ],
   imports: [
     BrowserModule, FormsModule, HttpClientModule, NgbModule.forRoot()
