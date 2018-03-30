@@ -1,4 +1,4 @@
-package co.oleh.realperfect.security;
+package co.oleh.realperfect.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;

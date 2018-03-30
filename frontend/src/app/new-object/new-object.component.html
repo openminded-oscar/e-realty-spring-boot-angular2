@@ -1,2 +1,2 @@
 <h2>Input your address: </h2>
-<input [(ngModel)]="addressQuery" name="addressQuery" type="text">
+<input [(ngModel)]="currentQuery" [ngbTypeahead]="search" name="addressQuery" type="text">
