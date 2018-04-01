@@ -1,6 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {AddressService} from "../services/address.service";
-import {CityOnMap} from "../domain/domain";
+import {Component, OnInit} from "@angular/core";
 
 
 @Component({
@@ -9,15 +7,9 @@ import {CityOnMap} from "../domain/domain";
   styleUrls: ['./new-object.component.css']
 })
 export class NewObjectComponent implements OnInit {
-  public baseCities: CityOnMap[] = [];
-  public currentCity: CityOnMap = {name: "Львів", lat: 49.8430008, lng: 24.0215309};
-
-  public constructor(public addressService: AddressService) {
+  public constructor() {
   }
 
   public ngOnInit() {
-    this.addressService.getSupportedCities().subscribe((data:CityOnMap[]) => {
-      this.baseCities = data;
-    });
   }
 }
