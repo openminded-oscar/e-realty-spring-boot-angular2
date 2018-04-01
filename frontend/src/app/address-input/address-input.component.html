@@ -1,21 +1,2 @@
-<div class="form-group row">
-  <label class="col-2 col-form-label">Select your region: </label>
-  <div class="col-4">
-    <select class="form-control" [(ngModel)]="currentCity">
-      <option *ngFor="let baseCity of baseCities"
-              [ngValue]="baseCity">
-        {{baseCity.name}}
-      </option>
-    </select>
-  </div>
-</div>
-<div class="form-group row">
-  <label class="col-1 col-form-label">City:</label>
-  <div class="col-5">
-    <input class="form-control" [(ngModel)]="currentCityQuery" [ngbTypeahead]="searchAddressForTerm" name="cityQuery" type="text">
-  </div>
-  <label class="col-1 col-form-label">Street:</label>
-  <div class="col-5">
-    <input class="form-control" [(ngModel)]="streetQuery" [ngbTypeahead]="searchAddressForTerm" name="streetQuery" type="text">
-  </div>
-</div>
+<input class="form-control" [(ngModel)]="addressQuery" [ngbTypeahead]="searchAddressForTerm" name="cityQuery"
+       type="text">

@@ -2,11 +2,32 @@
   <h5 class="text-center">Add your realty object</h5>
   <aw-wizard [navBarLayout]="'large-empty'">
     <aw-wizard-step stepTitle="Address and primary info">
-      <div class="text-center">
-        <button type="button" class="btn" awNextStep>Next Step</button>
+      <div class="text-right">
+        <button type="button" class="btn btn-info" awNextStep>Next Step</button>
       </div>
       <div class="form-horizontal">
-        <address-input></address-input>
+        <!--todo - move to another component - header-->
+        <div class="form-group row">
+          <label class="col-2 col-form-label">Select your region: </label>
+          <div class="col-4">
+            <select class="form-control" [(ngModel)]="currentCity">
+              <option *ngFor="let baseCity of baseCities"
+                      [ngValue]="baseCity">
+                {{baseCity.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-1 col-form-label">City:</label>
+          <div class="col-5">
+            <address-input [currentCity]="currentCity"></address-input>
+          </div>
+          <label class="col-1 col-form-label">Street:</label>
+          <div class="col-5">
+            <address-input [currentCity]="currentCity"></address-input>
+          </div>
+        </div>
         <div class="form-group row">
           <label class="col-1 col-form-label" for="number-of-street-input">Building number:</label>
           <div class="col-3">
@@ -68,7 +89,7 @@
                    class="form-control" ng-model="realty.totalArea"
                    required>
           </div>
-          <label class="col-form-label col-1" for="textinput">Living
+          <label class="col-form-label col-1 text-right" for="textinput">Living
             area:</label>
           <div class="col-3">
             <input id="textinput" name="buildNum" type="text"
@@ -77,10 +98,15 @@
         </div>
       </div>
     </aw-wizard-step>
+
     <aw-wizard-step stepTitle="Additional info" awOptionalStep>
-      <div class="text-center">
-        <button type="button" class="btn" awPreviousStep>Previous step</button>
-        <button type="button" class="btn" awNextStep>Next Step</button>
+      <div class="row">
+        <div class="col-6 text-left">
+          <button type="button" class="btn" awPreviousStep>Previous step</button>
+        </div>
+        <div class="col-6 text-right">
+          <button type="button" class="btn btn-info" awNextStep>Next Step</button>
+        </div>
       </div>
       <div class="form-group">
         <div class="col-4 col-form-label">
@@ -136,10 +162,15 @@
         </div>
       </div>
     </aw-wizard-step>
+
     <aw-wizard-step stepTitle="Realtor and targeting" awOptionalStep>
-      <div class="text-center">
-        <button type="button" class="btn" awPreviousStep>Previous step</button>
-        <button type="button" class="btn" awNextStep>Next Step</button>
+      <div class="row">
+        <div class="col-6 text-left">
+          <button type="button" class="btn" awPreviousStep>Previous step</button>
+        </div>
+        <div class="col-6 text-right">
+          <button type="button" class="btn btn-info" awNextStep>Next Step</button>
+        </div>
       </div>
       <div class="form-group">
         <label class="col-4 col-form-label" for="price-input">Price ($)*</label>
@@ -149,7 +180,6 @@
                  required>
         </div>
       </div>
-
       <div class="form-group">
         <div class="col-4 col-form-label">
           <label>Supported operations:</label>
@@ -174,9 +204,12 @@
         </div>
       </div>
     </aw-wizard-step>
+
     <aw-wizard-step stepTitle="Photos">
-      <div class="text-center">
-        <button type="button" class="btn" awPreviousStep>Previous Step</button>
+      <div class="row">
+        <div class="col-6 text-left">
+          <button type="button" class="btn" awPreviousStep>Previous step</button>
+        </div>
       </div>
       <div class="form-group">
         <div class="col-offset-4 col-4">

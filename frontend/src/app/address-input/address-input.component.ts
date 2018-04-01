@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 
 import {of} from 'rxjs/observable/of';
@@ -19,10 +19,9 @@ import {CityOnMap} from "../domain/domain";
   styleUrls: ['./address-input.component.css']
 })
 export class AddressInputComponent implements OnInit {
-  public currentCityQuery: string = '';
-  public streetQuery: string = '';
-  public currentCity: CityOnMap = {"name": "Львів", "lat": 49.8430008, "lng": 24.0215309};
-  public baseCities: CityOnMap[] = [];
+  public addressQuery: string = '';
+  @Input()
+  public currentCity: CityOnMap;
 
   private searching = false;
   private searchFailed = false;
@@ -32,9 +31,6 @@ export class AddressInputComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.addressService.getSupportedCities().subscribe((data:CityOnMap[]) => {
-      this.baseCities = data;
-    });
   }
 
   public searchAddressForTerm = (text$: Observable<string>) => {
