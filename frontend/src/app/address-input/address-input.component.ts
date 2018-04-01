@@ -19,7 +19,8 @@ import {CityOnMap} from "../domain/domain";
   styleUrls: ['./address-input.component.css']
 })
 export class AddressInputComponent implements OnInit {
-  public currentQuery: string = '';
+  public currentCityQuery: string = '';
+  public streetQuery: string = '';
   public currentCity: CityOnMap = {"name": "Львів", "lat": 49.8430008, "lng": 24.0215309};
   public baseCities: CityOnMap[] = [];
 

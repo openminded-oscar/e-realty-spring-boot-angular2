@@ -1,9 +1,11 @@
-<h5>Select your base city: </h5>
+<h5>Select your region: </h5>
 <select [(ngModel)]="currentCity">
   <option *ngFor="let baseCity of baseCities"
           [ngValue]="baseCity">
     {{baseCity.name}}
   </option>
 </select>
-<h5>Input your address: </h5>
-<input [(ngModel)]="currentQuery" [ngbTypeahead]="searchAddressForTerm" name="addressQuery" type="text">
+<h5>City:</h5>
+<input [(ngModel)]="currentCityQuery" [ngbTypeahead]="searchAddressForTerm" name="cityQuery" type="text">
+<h5>Street:</h5>
+<input [(ngModel)]="streetQuery" [ngbTypeahead]="searchAddressForTerm" name="streetQuery" type="text">
