@@ -5,7 +5,7 @@
     <form class="form-horizontal">
       <address-input></address-input>
       <div class="form-group row">
-        <label class="col-3 control-label text-right" for="number-of-street-input">Building
+        <label class="col-3 col-form-label text-right" for="number-of-street-input">Building
           number*</label>
         <div class="col-8">
           <input id="number-of-street-input" name="buildNum" type="text"
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div ng-show="isApt" class="form-group row">
-        <label class="col-3 control-label text-right" for="apt-number-input">Apt.
+        <label class="col-3 col-form-label text-right" for="apt-number-input">Apt.
           number*</label>
         <div class="col-8">
           <input id="apt-number-input" ng-model="realty.address.aptNumber"
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-3 control-label text-right" for="is-apt">It's
+        <label class="col-3 col-form-label text-right" for="is-apt">It's
           an apartment</label>
         <div class="col-8 text-center">
           <input
@@ -37,7 +37,7 @@
     <button type="button" class="btn" awPreviousStep>Previous step</button>
     <button type="button" class="btn" awNextStep>Next Step</button>
     <div class="form-group">
-      <label class="col-4 control-label" for="rooms-amount-input">Rooms
+      <label class="col-4 col-form-label" for="rooms-amount-input">Rooms
         amount*</label>
       <div class="col-4">
         <input id="rooms-amount-input" name="rooms" type="text"
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-4 control-label" for="total-area-input">Total
+      <label class="col-4 col-form-label" for="total-area-input">Total
         area*</label>
       <div class="col-4">
         <input id="total-area-input" name="total-area" type="text"
@@ -56,7 +56,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-4 control-label" for="textinput">Living
+      <label class="col-4 col-form-label" for="textinput">Living
         area</label>
       <div class="col-4">
         <input id="textinput" name="buildNum" type="text"
@@ -64,14 +64,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-4 control-label" for="floor-input">Floor</label>
+      <label class="col-4 col-form-label" for="floor-input">Floor</label>
       <div class="col-4">
         <input id="floor-input" name="buildNum" type="text"
                class="form-control" ng-model="realty.floor">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-4 control-label" for="building-floors-input">Floors
+      <label class="col-4 col-form-label" for="building-floors-input">Floors
         in building</label>
       <div class="col-4">
         <input id="building-floors-input" name="buildNum" type="text"
@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-4 control-label">
+      <div class="col-4 col-form-label">
         <label>Building type:</label>
       </div>
       <div class="col-4">
@@ -94,7 +94,7 @@
     <button type="button" class="btn" awPreviousStep>Previous step</button>
     <button type="button" class="btn" awNextStep>Next Step</button>
     <div class="form-group">
-      <div class="col-4 control-label">
+      <div class="col-4 col-form-label">
         <label for="description-input">Overall description:</label>
       </div>
       <div class="col-4">
@@ -103,7 +103,7 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-4 control-label">
+      <div class="col-4 col-form-label">
         <label for="other-info-input">Other info:</label>
       </div>
       <div class="col-4">
@@ -112,7 +112,7 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-4 control-label">
+      <div class="col-4 col-form-label">
         <label for="repaired-input">Recently repaired</label>
       </div>
       <div class="checkbox col-4 text-center">
@@ -124,7 +124,7 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-4 control-label">
+      <div class="col-4 col-form-label">
         <label for="garage-input">
           Garage
         </label>
@@ -138,7 +138,7 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-4 control-label">
+      <div class="col-4 col-form-label">
         <label for="foundation-year-input">Building foundation year:</label>
       </div>
       <div class="col-4">
@@ -151,7 +151,7 @@
     <button type="button" class="btn" awPreviousStep>Previous step</button>
     <button type="button" class="btn" awNextStep>Next Step</button>
     <div class="form-group">
-      <label class="col-4 control-label" for="price-input">Price ($)*</label>
+      <label class="col-4 col-form-label" for="price-input">Price ($)*</label>
       <div class="col-4">
         <input id="price-input" name="buildNum" type="text"
                class="form-control" ng-model="realty.price"
@@ -160,7 +160,7 @@
     </div>
 
     <div class="form-group">
-      <div class="col-4 control-label">
+      <div class="col-4 col-form-label">
         <label>Supported operations:</label>
       </div>
       <div class="col-4">
@@ -175,7 +175,7 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-4 control-label">
+      <div class="col-4 col-form-label">
         <label>Realtor*:</label>
       </div>
       <div class="col-4">
@@ -192,7 +192,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-4 control-label">Realty object photo(s) - maximum 5 MB:</label>
+      <label class="col-4 col-form-label">Realty object photo(s) - maximum 5 MB:</label>
       <div class="col-4">
         <div ngf-drop ngf-select ngf-before-model-change="setObjectPhotosUpload()" ng-model="files" class="drop-box"
              ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
@@ -208,7 +208,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-4 control-label">Ownership verification photo </label>
+      <label class="col-4 col-form-label">Ownership verification photo </label>
       <div class="col-4">
         <div ngf-drop ngf-select ngf-before-model-change="setConfirmationUpload()" ng-model="file" class="drop-box"
              ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true"
@@ -221,15 +221,6 @@
           <ul>
             <!--<li ng-repeat="f in files">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>-->
           </ul>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-offset-4 col-4">
-        <div class="col-6 col-offset-3 text-center">
-          <a ui-sref="new-object.step4" class="btn btn-block btn-success">
-            Previous Section <span class="glyphicon"></span>
-          </a>
         </div>
       </div>
     </div>
