@@ -12,6 +12,7 @@ import 'rxjs/add/operator/merge';
 
 import {AddressService} from "../services/address.service";
 import {CityOnMap} from "../domain/domain";
+import {ConfigService} from "../services/config.service";
 
 @Component({
   selector: 'address-input',
@@ -20,14 +21,12 @@ import {CityOnMap} from "../domain/domain";
 })
 export class AddressInputComponent implements OnInit {
   public addressQuery: string = '';
-  @Input()
-  public currentCity: CityOnMap;
 
   private searching = false;
   private searchFailed = false;
   private hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
-  public constructor(public addressService: AddressService) {
+  public constructor(public addressService: AddressService, public config: ConfigService) {
   }
 
   public ngOnInit() {
@@ -39,7 +38,7 @@ export class AddressInputComponent implements OnInit {
       .distinctUntilChanged()
       .do(() => this.searching = true)
       .switchMap(term =>
-        this.addressService.getAddressesByTerm(term, this.currentCity.lat, this.currentCity.lng)
+        this.addressService.getAddressesByTerm(term, this.config.getUserRegion().lat, this.config.getUserRegion().lng)
           .do(() => this.searchFailed = false)
           .catch(() => {
             this.searchFailed = true;

@@ -6,26 +6,14 @@
         <button type="button" class="btn btn-info" awNextStep>Next Step</button>
       </div>
       <div class="form-horizontal">
-        <!--todo - move to another component - header-->
-        <div class="form-group row">
-          <label class="col-2 col-form-label">Select your region: </label>
-          <div class="col-4">
-            <select class="form-control" [(ngModel)]="currentCity">
-              <option *ngFor="let baseCity of baseCities"
-                      [ngValue]="baseCity">
-                {{baseCity.name}}
-              </option>
-            </select>
-          </div>
-        </div>
         <div class="form-group row">
           <label class="col-1 col-form-label">City:</label>
           <div class="col-5">
-            <address-input [currentCity]="currentCity"></address-input>
+            <address-input></address-input>
           </div>
           <label class="col-1 col-form-label">Street:</label>
           <div class="col-5">
-            <address-input [currentCity]="currentCity"></address-input>
+            <address-input></address-input>
           </div>
         </div>
         <div class="form-group row">
