@@ -87,7 +87,7 @@
       </div>
     </aw-wizard-step>
 
-    <aw-wizard-step stepTitle="Additional info" awOptionalStep>
+    <aw-wizard-step stepTitle="Additional info">
       <div class="row mb-2">
         <div class="col-6 text-left">
           <button type="button" class="btn" awPreviousStep>Previous step</button>
@@ -96,62 +96,70 @@
           <button type="button" class="btn btn-info" awNextStep>Next Step</button>
         </div>
       </div>
-      <div class="form-group">
-        <div class="col-4 col-form-label">
-          <label for="description-input">Overall description:</label>
-        </div>
-        <div class="col-4">
+      <div class="form-horizontal">
+        <div class="form-group row">
+          <div class="col-1 col-form-label">
+            <label for="description-input">Overall description:</label>
+          </div>
+          <div class="col-5">
 					<textarea rows="4" maxlength="128" ng-model="realty.description" class="form-control"
                     id="description-input"></textarea>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-4 col-form-label">
-          <label for="other-info-input">Other info:</label>
-        </div>
-        <div class="col-4">
+          </div>
+          <div class="col-1 col-form-label">
+            <label for="other-info-input">Other info:</label>
+          </div>
+          <div class="col-5">
 					<textarea rows="2" maxlength="64" ng-model="realty.otherInfo" class="form-control"
                     rows="3" id="other-info-input"></textarea>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="col-4 col-form-label">
-          <label for="repaired-input">Recently repaired</label>
-        </div>
-        <div class="checkbox col-4 text-center">
-          <input
-            type="checkbox"
-            id="repaired-input"
-            ng-model="realty.hasRepairing"
-            class="big-checkbox">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-4 col-form-label">
-          <label for="garage-input">
-            Garage
-          </label>
-        </div>
-        <div class="checkbox col-4 text-center">
-          <input type="checkbox"
-                 name="garage"
-                 id="garage-input"
-                 ng-model="realty.hasGarage"
-                 class="big-checkbox">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-4 col-form-label">
-          <label for="foundation-year-input">Building foundation year:</label>
-        </div>
-        <div class="col-4">
-          <input ng-model="realty.foundationYear" class="form-control"
-                 id="foundation-year-input">
+        <div class="form-group row">
+          <div class="col-1">
+            <label for="foundation-year-input">Foundation year:</label>
+          </div>
+          <div class="col-2">
+            <input ng-model="realty.foundationYear" class="form-control"
+                   id="foundation-year-input">
+          </div>
+          <div class="col-3">
+            <label>Recently repaired</label>
+            <input
+              type="checkbox"
+              ng-model="realty.hasRepairing"
+              class="big-checkbox">
+          </div>
+          <div class="col-2">
+            <label>
+              Garage
+            </label>
+            <input type="checkbox"
+                   name="garage"
+                   ng-model="realty.hasGarage"
+                   class="big-checkbox">
+          </div>
+          <div class="col-2">
+            <label>
+              Cellar
+            </label>
+            <input type="checkbox"
+                   name="cellar"
+                   ng-model="realty.hasCellar"
+                   class="big-checkbox">
+          </div>
+          <div class="col-2">
+            <label>
+              Loft
+            </label>
+            <input type="checkbox"
+                   name="loft"
+                   ng-model="realty.hasLoft"
+                   class="big-checkbox">
+          </div>
         </div>
       </div>
     </aw-wizard-step>
 
-    <aw-wizard-step stepTitle="Realtor and targeting" awOptionalStep>
+    <aw-wizard-step stepTitle="Realtor and targeting">
       <div class="row mb-2">
         <div class="col-6 text-left">
           <button type="button" class="btn" awPreviousStep>Previous step</button>
@@ -160,35 +168,34 @@
           <button type="button" class="btn btn-info" awNextStep>Next Step</button>
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-4 col-form-label" for="price-input">Price ($)*</label>
-        <div class="col-4">
-          <input id="price-input" name="buildNum" type="text"
-                 class="form-control" ng-model="realty.price"
-                 required>
+      <div class="form-horizontal">
+        <div class="form-group row">
+          <div class="col-1">
+            <label class="col-form-label" for="price-input">Price ($):</label>
+          </div>
+          <div class="col-7">
+            <input id="price-input" name="buildNum" type="text"
+                   class="form-control" ng-model="realty.price"
+                   required>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="col-4 col-form-label">
-          <label>Supported operations:</label>
+        <div class="form-group row">
+          <div class="col-2 mr-0 ml-0">
+            <label class="col-form-label">Supported operations:</label>
+          </div>
+          <div class="col-2" *ngFor="let operation of supportedOperations">
+            <label>{{operation|lowercase}}</label>
+            <input class="big-checkbox"
+                   type="checkbox">
+          </div>
         </div>
-        <div class="col-4">
-          <!--<label ng-repeat="operation in operations">-->
-          <!--<input class="big-checkbox"-->
-          <!--type="checkbox"-->
-          <!--name="{{operation}}-type"-->
-          <!--value="{{operation.name}}"-->
-          <!--ng-model="operation.selected"-->
-          <!--&gt; {{operation.name}}&nbsp;-->
-          <!--</label>-->
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-4 col-form-label">
-          <label>Realtor*:</label>
-        </div>
-        <div class="col-4">
-          <input type="text" name="realtor">
+        <div class="form-group row">
+          <div class="col-2 col-form-label">
+            <label>Select a Realtor:</label>
+          </div>
+          <div class="col-6">
+            <input class="form-control" type="text" name="realtor">
+          </div>
         </div>
       </div>
     </aw-wizard-step>
