@@ -7,7 +7,6 @@ import javax.persistence.ManyToOne;
 
 @Embeddable
 public class Address {
-	private StreetInCity streetInCity;
 	// +
 	private Integer numberOfStreet;
 	// -
@@ -15,17 +14,6 @@ public class Address {
 	// +
 	private Integer aptNumber;
 
-
-	@ManyToOne
-	@JoinColumn(name="street_in_city_id")
-	public StreetInCity getStreetInCity() {
-		return streetInCity;
-	}
-
-	public void setStreetInCity(StreetInCity streetInCity) {
-		this.streetInCity = streetInCity;
-	}
-	
 	@Column(name="number_of_street")
 	public Integer getNumberOfStreet() {
 		return numberOfStreet;

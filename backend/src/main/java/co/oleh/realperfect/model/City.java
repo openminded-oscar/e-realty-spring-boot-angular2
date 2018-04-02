@@ -19,9 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class City {
 	private Long id;
 	private String name;
-	private Region region;
 	private String district;
-	private Set<StreetInCity> cityStreet;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,30 +39,11 @@ public class City {
 		this.name = name;
 	}
 
-	@Enumerated(EnumType.STRING)
-	public Region getRegion() {
-		return region;
-	}
-
-	public void setRegion(Region region) {
-		this.region = region;
-	}
-
 	public String getDistrict() {
 		return district;
 	}
 
 	public void setDistrict(String district) {
 		this.district = district;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
-	@JsonIgnore
-	public Set<StreetInCity> getCityStreet() {
-		return cityStreet;
-	}
-
-	public void setCityStreet(Set<StreetInCity> cityStreet) {
-		this.cityStreet = cityStreet;
 	}
 }
