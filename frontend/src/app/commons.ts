@@ -1,5 +1,5 @@
 export function showLoading() {
-	console.log("loading ...");    
+	console.log("loading ...");
 }
 
 export function hideLoading() {

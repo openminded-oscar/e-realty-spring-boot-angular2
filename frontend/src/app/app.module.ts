@@ -12,6 +12,7 @@ import { AddressInputComponent } from './address-input/address-input.component';
 import {ArchwizardModule} from "angular-archwizard";
 import { UserRegionInputComponent } from './user-region-input/user-region-input.component';
 import {ConfigService} from "./services/config.service";
+import {FileUploadService} from "./services/file-upload.service";
 
 
 @NgModule({
@@ -24,7 +25,7 @@ import {ConfigService} from "./services/config.service";
   imports: [
     BrowserModule, FormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule
   ],
-  providers: [AddressService, ConfigService],
+  providers: [AddressService, ConfigService, FileUploadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

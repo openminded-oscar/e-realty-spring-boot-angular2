@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class FileUploadController {
 
     @Autowired
@@ -48,10 +50,8 @@ public class FileUploadController {
     }
 
     @PostMapping("/upload-photo")
-    public ResponseEntity<Void> handleFileUpload(@RequestParam("file") MultipartFile file,
-                                                   @RequestParam(name = "category", required = true) String fileCategory,
-                                                   @RequestParam("userId") String userId) {
-        storageService.storeFileWithCategoryForUser(file, fileCategory, userId);
+    public ResponseEntity<Void> handleFileUpload(@RequestParam("file") MultipartFile file) {
+        storageService.storeFileWithCategoryForUser(file, "category", "someId");
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

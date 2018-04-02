@@ -8,6 +8,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+spring.http:
+  multipart:
+    max-file-size: 5MB
+    max-request-size: 6MB
 security:
   basic:
     enabled: false
