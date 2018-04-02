@@ -22,7 +22,7 @@ export class FileUploadService {
     const options = {headers: headers};
 
     (<any>this.http.post(url, formData, options)
-      .map(res => res.json()))
+      .map(res => res))
       .catch(error => Observable.throw(error))
       .subscribe(
         data => console.log('success'),

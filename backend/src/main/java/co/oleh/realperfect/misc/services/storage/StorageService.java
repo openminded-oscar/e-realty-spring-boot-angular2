@@ -7,17 +7,11 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface StorageService {
+    void uploadFileForCategoryAndUser(MultipartFile file, String category, String userId);
 
-    void init();
+    Stream<Path> listAllPicsForCategoryAndUser(String category, String userId);
 
-    void storeFileWithCategoryForUser(MultipartFile file, String category, String userId);
-
-    Stream<Path> loadAll();
-
-    Path load(String filename);
-
-    Resource loadAsResource(String filename);
+    Resource downloadFileAsResourceForCategoryAndUser(String filename, String category, String someId);
 
     void deleteAll();
-
 }

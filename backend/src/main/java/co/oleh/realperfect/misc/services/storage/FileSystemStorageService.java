@@ -1,6 +1,8 @@
 package co.oleh.realperfect.misc.services.storage;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -16,40 +18,50 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 @Service
-public class FileSystemStorageService implements StorageService {
+public class FileSystemStorageService implements StorageService, InitializingBean {
+    @Value("${realtypics.storage.root}")
+    private final String rootLocationString = null;
+    private Path rootLocation = null;
 
-    private final Path rootLocation;
-
-    @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
-        this.rootLocation = Paths.get(properties.getLocation());
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        try {
+            this.rootLocation = Paths.get(rootLocationString);
+            Files.createDirectories(rootLocation);
+        } catch (IOException e) {
+            throw new StorageException("Could not initialize storage", e);
+        }
     }
 
     @Override
-    public void storeFileWithCategoryForUser(MultipartFile file, String category, String userId) {
+    public void uploadFileForCategoryAndUser(MultipartFile file, String category, String userId) {
         try {
-            if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
-            }
-
-            Path photoPath = this.rootLocation.resolve(userId).resolve(category);
-            File photoFolder = photoPath.toFile();
-            if (! photoFolder.exists()){
-                photoFolder.mkdirs();
-            }
-
-            Files.copy(file.getInputStream(), photoPath.resolve(file.getOriginalFilename()));
-
+            Path pathToStore = prepareForFileStorageAndReturnPath(file, category, userId);
+            Files.copy(file.getInputStream(), pathToStore);
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
         }
     }
 
+    private Path prepareForFileStorageAndReturnPath(MultipartFile file, String category, String userId) throws IOException {
+        if (file.isEmpty()) {
+            throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
+        }
+        Path photoPath = this.rootLocation.resolve(userId).resolve(category);
+        File photoFolder = photoPath.toFile();
+        if (!photoFolder.exists()) {
+            photoFolder.mkdirs();
+        }
+        Files.deleteIfExists(new File(file.getOriginalFilename()).toPath());
+
+        return photoPath.resolve(file.getOriginalFilename());
+    }
+
     @Override
-    public Stream<Path> loadAll() {
+    public Stream<Path> listAllPicsForCategoryAndUser(String category, String userId) {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
+            return Files.walk(this.rootLocation.resolve(userId).resolve(category), 1)
+                    .filter(path -> !Files.isDirectory(path))
                     .map(path -> this.rootLocation.relativize(path));
         } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
@@ -57,21 +69,16 @@ public class FileSystemStorageService implements StorageService {
 
     }
 
-    @Override
-    public Path load(String filename) {
-        return rootLocation.resolve(filename);
-    }
 
     @Override
-    public Resource loadAsResource(String filename) {
+    public Resource downloadFileAsResourceForCategoryAndUser(String filename, String category, String userId) {
         try {
-            Path file = load(filename);
+            Path file = rootLocation.resolve(userId).resolve(category).resolve(filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
                 throw new StorageFileNotFoundException("Could not read file: " + filename);
-
             }
         } catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
@@ -81,14 +88,5 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
-    }
-
-    @Override
-    public void init() {
-        try {
-            Files.createDirectory(rootLocation);
-        } catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
-        }
     }
 }

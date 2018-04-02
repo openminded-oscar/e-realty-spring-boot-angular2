@@ -18,3 +18,4 @@ security:
 management:
   security:
     enabled: false
+realtypics.storage.root: "D:/realperfect"

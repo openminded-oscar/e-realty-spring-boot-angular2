@@ -20,14 +20,20 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200")
 public class FileUploadController {
-
     @Autowired
     private StorageService storageService;
 
-    @GetMapping("/uploaded-files-list")
+    @PostMapping("/upload-photo")
+    public ResponseEntity<Boolean> handleFileUpload(@RequestParam("file") MultipartFile file) {
+        storageService.uploadFileForCategoryAndUser(file, "category", "someId");
+
+        return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/list-uploaded-photos")
     public ResponseEntity<List<String>> listUploadedFiles() throws IOException {
         List<String> fileNamesList = storageService
-                .loadAll()
+                .listAllPicsForCategoryAndUser("category", "someId")
                 .map(path ->
                         MvcUriComponentsBuilder
                                 .fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString())
@@ -42,23 +48,15 @@ public class FileUploadController {
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-        Resource file = storageService.loadAsResource(filename);
+        Resource file = storageService.downloadFileAsResourceForCategoryAndUser(filename, "category", "someId");
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
     }
 
-    @PostMapping("/upload-photo")
-    public ResponseEntity<Void> handleFileUpload(@RequestParam("file") MultipartFile file) {
-        storageService.storeFileWithCategoryForUser(file, "category", "someId");
-
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();
     }
-
 }
