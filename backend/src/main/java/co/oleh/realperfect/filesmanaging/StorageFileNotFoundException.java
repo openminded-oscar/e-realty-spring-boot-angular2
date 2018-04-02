@@ -1,4 +1,4 @@
-package co.oleh.realperfect.misc.services.storage;
+package co.oleh.realperfect.filesmanaging;
 
 public class StorageFileNotFoundException extends StorageException {
 

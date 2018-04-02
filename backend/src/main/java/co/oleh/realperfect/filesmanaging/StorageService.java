@@ -1,4 +1,4 @@
-package co.oleh.realperfect.misc.services.storage;
+package co.oleh.realperfect.filesmanaging;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface StorageService {
-    void uploadFileForCategoryAndUser(MultipartFile file, String category, String userId);
+    String uploadFileForCategoryAndUser(MultipartFile file, String filename, String category, String userId);
 
     Stream<Path> listAllPicsForCategoryAndUser(String category, String userId);
 

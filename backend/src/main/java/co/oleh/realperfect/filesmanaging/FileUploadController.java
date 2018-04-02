@@ -1,7 +1,5 @@
-package co.oleh.realperfect.misc.services;
+package co.oleh.realperfect.filesmanaging;
 
-import co.oleh.realperfect.misc.services.storage.StorageFileNotFoundException;
-import co.oleh.realperfect.misc.services.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
@@ -23,11 +24,19 @@ public class FileUploadController {
     @Autowired
     private StorageService storageService;
 
-    @PostMapping("/upload-photo")
-    public ResponseEntity<Boolean> handleFileUpload(@RequestParam("file") MultipartFile file) {
-        storageService.uploadFileForCategoryAndUser(file, "category", "someId");
+    @PostMapping(value="/upload-photo", produces = "application/json")
+    public ResponseEntity<Map> handleFileUpload(@RequestParam("file") MultipartFile file) {
+        String filename = generateUuidFilename(file);
+        storageService.uploadFileForCategoryAndUser(file, filename,"category", "someId");
+        // store path to database
+        return new ResponseEntity<>(Collections.singletonMap("filename", filename), HttpStatus.ACCEPTED);
+    }
 
-        return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
+    private String generateUuidFilename(MultipartFile file){
+        String[] filenameParts = file.getOriginalFilename().split("\\.");
+        String filename = UUID.randomUUID().toString() +"."+ filenameParts[filenameParts.length-1];
+
+        return filename;
     }
 
     @GetMapping("/list-uploaded-photos")

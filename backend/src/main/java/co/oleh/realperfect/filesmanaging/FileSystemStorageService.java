@@ -1,4 +1,4 @@
-package co.oleh.realperfect.misc.services.storage;
+package co.oleh.realperfect.filesmanaging;
 
 
 import org.springframework.beans.factory.InitializingBean;
@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
@@ -34,10 +35,11 @@ public class FileSystemStorageService implements StorageService, InitializingBea
     }
 
     @Override
-    public void uploadFileForCategoryAndUser(MultipartFile file, String category, String userId) {
+    public String uploadFileForCategoryAndUser(MultipartFile file,  String filename, String category, String userId) {
         try {
-            Path pathToStore = prepareForFileStorageAndReturnPath(file, category, userId);
-            Files.copy(file.getInputStream(), pathToStore);
+            Path path = prepareForFileStorageAndReturnPath(file, category, userId);
+            Files.copy(file.getInputStream(), path);
+            return path.getFileName().toString();
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
         }
@@ -52,9 +54,13 @@ public class FileSystemStorageService implements StorageService, InitializingBea
         if (!photoFolder.exists()) {
             photoFolder.mkdirs();
         }
-        Files.deleteIfExists(new File(file.getOriginalFilename()).toPath());
 
-        return photoPath.resolve(file.getOriginalFilename());
+        String[] filenameParts = file.getOriginalFilename().split("\\.");
+        String filename = UUID.randomUUID().toString() +"."+ filenameParts[filenameParts.length-1];
+        Path path = photoPath.resolve(filename);
+        Files.deleteIfExists(path);
+
+        return path;
     }
 
     @Override
