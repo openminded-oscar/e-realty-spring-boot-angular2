@@ -1,4 +1,4 @@
-package co.oleh.realperfect.filesmanaging;
+package co.oleh.realperfect.pictures;
 
 
 import org.springframework.beans.factory.InitializingBean;
@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
-public class FileSystemStorageService implements StorageService, InitializingBean {
+public class FileSystemStorageService implements InitializingBean {
     @Value("${realtypics.storage.root}")
     private final String rootLocationString = null;
     private Path rootLocation = null;
@@ -34,8 +34,7 @@ public class FileSystemStorageService implements StorageService, InitializingBea
         }
     }
 
-    @Override
-    public String uploadFileForCategoryAndUser(MultipartFile file,  String filename, String category, String userId) {
+    public String uploadFileForCategoryAndUser(MultipartFile file, String filename, String category, String userId) {
         try {
             Path path = prepareForFileStorageAndReturnPath(file, category, userId);
             Files.copy(file.getInputStream(), path);
@@ -56,14 +55,13 @@ public class FileSystemStorageService implements StorageService, InitializingBea
         }
 
         String[] filenameParts = file.getOriginalFilename().split("\\.");
-        String filename = UUID.randomUUID().toString() +"."+ filenameParts[filenameParts.length-1];
+        String filename = UUID.randomUUID().toString() + "." + filenameParts[filenameParts.length - 1];
         Path path = photoPath.resolve(filename);
         Files.deleteIfExists(path);
 
         return path;
     }
 
-    @Override
     public Stream<Path> listAllPicsForCategoryAndUser(String category, String userId) {
         try {
             return Files.walk(this.rootLocation.resolve(userId).resolve(category), 1)
@@ -76,7 +74,6 @@ public class FileSystemStorageService implements StorageService, InitializingBea
     }
 
 
-    @Override
     public Resource downloadFileAsResourceForCategoryAndUser(String filename, String category, String userId) {
         try {
             Path file = rootLocation.resolve(userId).resolve(category).resolve(filename);
@@ -91,7 +88,6 @@ public class FileSystemStorageService implements StorageService, InitializingBea
         }
     }
 
-    @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }

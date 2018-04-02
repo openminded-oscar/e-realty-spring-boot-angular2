@@ -1,5 +1,6 @@
-package co.oleh.realperfect.filesmanaging;
+package co.oleh.realperfect.pictures;
 
+import co.oleh.realperfect.model.PictureInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -22,19 +23,25 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:4200")
 public class FileUploadController {
     @Autowired
-    private StorageService storageService;
+    private FileSystemStorageService storageService;
 
-    @PostMapping(value="/upload-photo", produces = "application/json")
+    @Autowired
+    private PictureInfoService pictureInfoService;
+
+
+    @PostMapping(value = "/upload-photo", produces = "application/json")
     public ResponseEntity<Map> handleFileUpload(@RequestParam("file") MultipartFile file) {
         String filename = generateUuidFilename(file);
-        storageService.uploadFileForCategoryAndUser(file, filename,"category", "someId");
-        // store path to database
+        storageService.uploadFileForCategoryAndUser(file, filename, "category", "someId");
+
+        pictureInfoService.save(new PictureInfo(filename));
+
         return new ResponseEntity<>(Collections.singletonMap("filename", filename), HttpStatus.ACCEPTED);
     }
 
-    private String generateUuidFilename(MultipartFile file){
+    private String generateUuidFilename(MultipartFile file) {
         String[] filenameParts = file.getOriginalFilename().split("\\.");
-        String filename = UUID.randomUUID().toString() +"."+ filenameParts[filenameParts.length-1];
+        String filename = UUID.randomUUID().toString() + "." + filenameParts[filenameParts.length - 1];
 
         return filename;
     }

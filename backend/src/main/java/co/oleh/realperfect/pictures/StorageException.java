@@ -1,4 +1,4 @@
-package co.oleh.realperfect.filesmanaging;;
+package co.oleh.realperfect.pictures;;
 
 public class StorageException extends RuntimeException {
 
