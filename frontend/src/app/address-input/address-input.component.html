@@ -1,3 +1,3 @@
 <input class="form-control" type="text"
        [ngbTypeahead]="searchAddressForTerm" (selectItem)="selectedItemFromAutocomplete($event)"
-       [formControl]="formControl" (input)="onInput($event.target.value)">
+       [formControl]="formControl" (input)="onInputUpdated($event.target.value)">

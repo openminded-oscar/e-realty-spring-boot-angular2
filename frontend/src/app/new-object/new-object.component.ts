@@ -21,13 +21,6 @@ export class NewObjectComponent implements OnInit {
     this.supportedOperations = this.config.getSupportedOperations();
   }
 
-  public detectCityChange(value){
-    this.realtyObj.city = value;
-  }
-  public detectStreetChange(value){
-    this.realtyObj.street = value;
-  }
-
   onVerificationPictureSelecting(event) {
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {

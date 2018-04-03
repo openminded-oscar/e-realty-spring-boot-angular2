@@ -11,11 +11,11 @@
           <div class="form-group row">
             <label class="col-1 col-form-label">City:</label>
             <div class="col-5">
-              <address-input (onSelectedFromAutocomplete)="detectCityChange($event)" [(ngModel)]="realtyObj.city" name="city" required></address-input>
+              <address-input [(ngModel)]="realtyObj.city" name="city" required></address-input>
             </div>
             <label class="col-1 col-form-label">Street:</label>
             <div class="col-5">
-              <address-input (onSelectedFromAutocomplete)="detectStreetChange($event)" [(ngModel)]="realtyObj.street" name="street" required></address-input>
+              <address-input [(ngModel)]="realtyObj.street" name="street" required></address-input>
             </div>
           </div>
           <div class="form-group row">

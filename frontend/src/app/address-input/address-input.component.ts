@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Observable} from "rxjs/Observable";
 
 import {of} from "rxjs/observable/of";
@@ -29,8 +29,6 @@ export class AddressInputComponent implements OnInit, ControlValueAccessor {
   private hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
   // Used for input propagation
-  @Output()
-  public onSelectedFromAutocomplete = new EventEmitter<string>();
   public formControl = new FormControl();
 
   public constructor(public addressService: AddressService, public config: ConfigService) {
@@ -56,10 +54,10 @@ export class AddressInputComponent implements OnInit, ControlValueAccessor {
   }
 
   public selectedItemFromAutocomplete(value){
-    this.onSelectedFromAutocomplete.emit(value.item);
+    this.onInputUpdated(value.item);
   }
 
-  public onInput(value){
+  public onInputUpdated(value){
     return value;
   }
 
@@ -68,7 +66,7 @@ export class AddressInputComponent implements OnInit, ControlValueAccessor {
   }
 
   registerOnChange(fn: (value: any) => void) {
-    this.onInput = fn;
+    this.onInputUpdated = fn;
   }
 
   registerOnTouched() {}
