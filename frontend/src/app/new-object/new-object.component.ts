@@ -10,8 +10,9 @@ import {pathToPictures, webServiceEndpoint} from "../commons";
   styleUrls: ['./new-object.component.css']
 })
 export class NewObjectComponent implements OnInit {
-  public supportedOperations: string[];
   public realtyObj: any = {pictures: []};
+  public realtors: string[] = ["Petro Petrenko", "Pavlo Pavlenko", "Andriy Andriyenko", "Ivan Ivanenko"];
+  public supportedOperations: string[];
 
   public constructor(public config: ConfigService, public fileUploadService: FileUploadService) {
   }

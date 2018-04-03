@@ -56,8 +56,9 @@
           </div>
           <div class="col-3">
             <select class="form-control">
-              <option>Type1</option>
-              <option>Type2</option>
+              <option>Block</option>
+              <option>Brick</option>
+              <option>Wooden</option>
             </select>
           </div>
         </div>
@@ -185,37 +186,43 @@
             <label>Select a Realtor:</label>
           </div>
           <div class="col-10">
-            <input class="form-control" type="text" name="realtor">
+            <select class="form-control" name="realtor">
+              <option *ngFor="let realtor of realtors"
+                      [value]="realtor">
+                {{realtor}}
+              </option>
+            </select>
           </div>
         </div>
       </div>
     </aw-wizard-step>
-
     <aw-wizard-step stepTitle="Photos and ownership confirmation">
       <div class="row mb-2">
         <div class="col-6 text-left">
           <button type="button" class="btn" awPreviousStep>Previous step</button>
         </div>
       </div>
-      <div class="row">
-        <div class="col-3">
-          <div class="row">
+      <div class="form-horizontal">
+        <div class="form-group row">
+          <div class="col-3">
             <label class="col-form-label">Ownership verification photo:&nbsp;</label>
-            <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file" accept="image/*">
+            <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
+                   accept="image/*">
+            <div class="realty-pic-preview-container">
+              <img class="img-fluid" [src]="realtyObj.verificationPicture.link">
+            </div>
           </div>
-          <div class="row realty-pic-preview-container">
-            <img class="img-fluid" [src]="realtyObj.verificationPicture.link">
-          </div>
-        </div>
-        <div class="col-9">
-          <div>
-            <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
-            <br/>
-            <input type="file" (change)="onRealtyObjPictureSelecting($event)" placeholder="Upload file" accept="image/*">
-          </div>
-          <div class="row">
-            <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
-              <img class="img-fluid" [src]="picture.link">
+          <div class="col-9">
+            <div>
+              <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
+              <br/>
+              <input type="file" (change)="onRealtyObjPictureSelecting($event)" placeholder="Upload file"
+                     accept="image/*">
+            </div>
+            <div class="row">
+              <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
+                <img class="img-fluid" [src]="picture.link">
+              </div>
             </div>
           </div>
         </div>
