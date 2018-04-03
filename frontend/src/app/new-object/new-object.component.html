@@ -1,237 +1,240 @@
 <div class="col-12">
-  <h5 class="text-center">Add your realty object</h5>
-  <aw-wizard [navBarLayout]="'large-empty'">
-    <aw-wizard-step stepTitle="Address and primary info">
-      <div class="text-right mb-2">
-        <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-        <button type="button" class="btn" awNextStep>Save</button>
-      </div>
-      <div class="form-horizontal">
-        <div class="form-group row">
-          <label class="col-1 col-form-label">City:</label>
-          <div class="col-5">
-            <address-input></address-input>
-          </div>
-          <label class="col-1 col-form-label">Street:</label>
-          <div class="col-5">
-            <address-input></address-input>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-1 col-form-label" for="number-of-street-input">Building number:</label>
-          <div class="col-3">
-            <input id="number-of-street-input" name="buildNum" type="text"
-                   class="form-control"
-                   ng-model="realty.address.numberOfStreet"
-                   required>
-          </div>
-          <label class="col-1 col-form-label" for="apt-number-input">Apt.
-            number:</label>
-          <div class="col-3">
-            <input id="apt-number-input" ng-model="realty.address.aptNumber"
-                   name="flatNum" type="text" class="form-control"
-                   ng-required="isApt">
-          </div>
-          <label class="col-2 col-form-label text-right">Dwelling type:</label>
-          <div class="col-2">
-            <select class="form-control">
-              <option>Apartment</option>
-              <option>House</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-form-label col-1" for="floor-input">Floor:</label>
-          <div class="col-3">
-            <input id="floor-input" name="buildNum" type="text"
-                   class="form-control" ng-model="realty.floor">
-          </div>
-          <label class="col-form-label col-1" for="building-floors-input">Floors
-            in building:</label>
-          <div class="col-3">
-            <input id="building-floors-input" name="buildNum" type="text"
-                   class="form-control" ng-model="realty.totalFloors">
-          </div>
-          <div class="col-form-label text-right col-1">
-            <label>Building type:</label>
-          </div>
-          <div class="col-3">
-            <select class="form-control">
-              <option>Block</option>
-              <option>Brick</option>
-              <option>Wooden</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-1 col-form-label" for="rooms-amount-input">Rooms
-            amount:</label>
-          <div class="col-3">
-            <input id="rooms-amount-input" name="rooms" type="text"
-                   class="form-control"
-                   ng-model="realty.roomsAmount"
-                   required>
-          </div>
-          <label class="col-form-label col-1" for="total-area-input">Total
-            area:</label>
-          <div class="col-3">
-            <input id="total-area-input" name="total-area" type="text"
-                   class="form-control" ng-model="realty.totalArea"
-                   required>
-          </div>
-          <label class="col-form-label col-1 text-right" for="textinput">Living
-            area:</label>
-          <div class="col-3">
-            <input id="textinput" name="buildNum" type="text"
-                   class="form-control" ng-model="realty.livingArea">
-          </div>
-        </div>
-      </div>
-    </aw-wizard-step>
-
-    <aw-wizard-step stepTitle="Description and targeting">
-      <div class="row mb-2">
-        <div class="col-6 text-left">
-          <button type="button" class="btn" awPreviousStep>Previous step</button>
-        </div>
-        <div class="col-6 text-right">
+  <form #realtyForm="ngForm">
+    <h5 class="text-center">Add your realty object</h5>
+    <button type="submit" [disabled]="realtyForm.invalid">Submit</button>
+    <aw-wizard [navBarLayout]="'large-empty'">
+      <aw-wizard-step stepTitle="Address and primary info">
+        <div class="text-right mb-2">
           <button type="button" class="btn btn-info" awNextStep>Next Step</button>
           <button type="button" class="btn" awNextStep>Save</button>
         </div>
-      </div>
-      <div class="form-horizontal">
-        <div class="form-group row">
-          <div class="col-1 col-form-label">
-            <label for="description-input">Overall description:</label>
+        <div class="form-horizontal">
+          <div class="form-group row">
+            <label class="col-1 col-form-label">City:</label>
+            <div class="col-5">
+              <address-input></address-input>
+            </div>
+            <label class="col-1 col-form-label">Street:</label>
+            <div class="col-5">
+              <address-input></address-input>
+            </div>
           </div>
-          <div class="col-5">
+          <div class="form-group row">
+            <label class="col-1 col-form-label" for="number-of-street-input">Building number:</label>
+            <div class="col-3">
+              <input id="number-of-street-input" [(ngModel)]="sth1" name="buildNum" type="text"
+                     class="form-control"
+                     ng-model="realty.address.numberOfStreet"
+                     required>
+            </div>
+            <label class="col-1 col-form-label" for="apt-number-input">Apt.
+              number:</label>
+            <div class="col-3">
+              <input id="apt-number-input" ng-model="realty.address.aptNumber"
+                     name="flatNum" type="text" class="form-control"
+                     ng-required="isApt">
+            </div>
+            <label class="col-2 col-form-label text-right">Dwelling type:</label>
+            <div class="col-2">
+              <select class="form-control">
+                <option>Apartment</option>
+                <option>House</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-form-label col-1" for="floor-input">Floor:</label>
+            <div class="col-3">
+              <input id="floor-input" name="buildNum" type="text"
+                     class="form-control" ng-model="realty.floor">
+            </div>
+            <label class="col-form-label col-1" for="building-floors-input">Floors
+              in building:</label>
+            <div class="col-3">
+              <input id="building-floors-input" name="buildNum" type="text"
+                     class="form-control" ng-model="realty.totalFloors">
+            </div>
+            <div class="col-form-label text-right col-1">
+              <label>Building type:</label>
+            </div>
+            <div class="col-3">
+              <select class="form-control">
+                <option>Block</option>
+                <option>Brick</option>
+                <option>Wooden</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-1 col-form-label" for="rooms-amount-input">Rooms
+              amount:</label>
+            <div class="col-3">
+              <input id="rooms-amount-input" name="rooms" type="text"
+                     class="form-control"
+                     ng-model="realty.roomsAmount"
+                     required>
+            </div>
+            <label class="col-form-label col-1" for="total-area-input">Total
+              area:</label>
+            <div class="col-3">
+              <input id="total-area-input" name="total-area" type="text"
+                     class="form-control" ng-model="realty.totalArea"
+                     required>
+            </div>
+            <label class="col-form-label col-1 text-right" for="textinput">Living
+              area:</label>
+            <div class="col-3">
+              <input id="textinput" name="buildNum" type="text"
+                     class="form-control" ng-model="realty.livingArea">
+            </div>
+          </div>
+        </div>
+      </aw-wizard-step>
+
+      <aw-wizard-step stepTitle="Description and targeting">
+        <div class="row mb-2">
+          <div class="col-6 text-left">
+            <button type="button" class="btn" awPreviousStep>Previous step</button>
+          </div>
+          <div class="col-6 text-right">
+            <button type="button" class="btn btn-info" awNextStep>Next Step</button>
+            <button type="button" class="btn" awNextStep>Save</button>
+          </div>
+        </div>
+        <div class="form-horizontal">
+          <div class="form-group row">
+            <div class="col-1 col-form-label">
+              <label for="description-input">Overall description:</label>
+            </div>
+            <div class="col-5">
 					<textarea rows="4" maxlength="128" ng-model="realty.description" class="form-control"
                     id="description-input"></textarea>
-          </div>
-          <div class="col-1 col-form-label">
-            <label for="other-info-input">Other info:</label>
-          </div>
-          <div class="col-5">
+            </div>
+            <div class="col-1 col-form-label">
+              <label for="other-info-input">Other info:</label>
+            </div>
+            <div class="col-5">
 					<textarea rows="2" maxlength="64" ng-model="realty.otherInfo" class="form-control"
                     rows="3" id="other-info-input"></textarea>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-1">
-            <label for="foundation-year-input">Foundation year:</label>
-          </div>
-          <div class="col-2">
-            <input ng-model="realty.foundationYear" class="form-control"
-                   id="foundation-year-input">
-          </div>
-          <div class="col-3">
-            <label>Recently repaired</label>
-            <input
-              type="checkbox"
-              ng-model="realty.hasRepairing"
-              class="big-checkbox">
-          </div>
-          <div class="col-2">
-            <label>
-              Garage
-            </label>
-            <input type="checkbox"
-                   name="garage"
-                   ng-model="realty.hasGarage"
-                   class="big-checkbox">
-          </div>
-          <div class="col-2">
-            <label>
-              Cellar
-            </label>
-            <input type="checkbox"
-                   name="cellar"
-                   ng-model="realty.hasCellar"
-                   class="big-checkbox">
-          </div>
-          <div class="col-2">
-            <label>
-              Loft
-            </label>
-            <input type="checkbox"
-                   name="loft"
-                   ng-model="realty.hasLoft"
-                   class="big-checkbox">
-          </div>
-        </div>
-        <hr/>
-        <div class="row">
-          <div class="col-2 mr-0 ml-0">
-            <label class="col-form-label">Supported operations:</label>
-          </div>
-          <div class="col-10">
-            <ng-container *ngFor="let operation of supportedOperations">
-              <label>{{operation|lowercase}}</label>
-              <input class="big-checkbox"
-                     type="checkbox">
-            </ng-container>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-2">
-            <label class="col-form-label" for="price-input">Your expected price ($):</label>
-          </div>
-          <div class="col-10">
-            <input id="price-input" name="buildNum" type="text"
-                   class="form-control" ng-model="realty.price"
-                   required>
-          </div>
-        </div>
-        <hr/>
-        <div class="row">
-          <div class="col-2 col-form-label">
-            <label>Select a Realtor:</label>
-          </div>
-          <div class="col-10">
-            <select class="form-control" name="realtor">
-              <option *ngFor="let realtor of realtors"
-                      [value]="realtor">
-                {{realtor}}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </aw-wizard-step>
-    <aw-wizard-step stepTitle="Photos and ownership confirmation">
-      <div class="row mb-2">
-        <div class="col-6 text-left">
-          <button type="button" class="btn" awPreviousStep>Previous step</button>
-        </div>
-        <div class="col-6 text-right">
-          <button type="button" class="btn" awNextStep>Save</button>
-        </div>
-      </div>
-      <div class="form-horizontal">
-        <div class="form-group row">
-          <div class="col-3">
-            <label class="col-form-label">Ownership verification photo:&nbsp;</label>
-            <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
-                   accept="image/*">
-            <div class="realty-pic-preview-container">
-              <img class="img-fluid" src="{{realtyObj.verificationPicture.link}}">
             </div>
           </div>
-          <div class="col-9">
-            <div>
-              <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
-              <br/>
-              <input type="file" (change)="onRealtyObjPictureSelecting($event)" placeholder="Upload file"
+          <div class="form-group row">
+            <div class="col-1">
+              <label for="foundation-year-input">Foundation year:</label>
+            </div>
+            <div class="col-2">
+              <input class="form-control"
+                     id="foundation-year-input" [(ngModel)]="sth2" name="foundation" required>
+            </div>
+            <div class="col-3">
+              <label>Recently repaired</label>
+              <input
+                type="checkbox"
+                ng-model="realty.hasRepairing"
+                class="big-checkbox">
+            </div>
+            <div class="col-2">
+              <label>
+                Garage
+              </label>
+              <input type="checkbox"
+                     name="garage"
+                     ng-model="realty.hasGarage"
+                     class="big-checkbox">
+            </div>
+            <div class="col-2">
+              <label>
+                Cellar
+              </label>
+              <input type="checkbox"
+                     name="cellar"
+                     ng-model="realty.hasCellar"
+                     class="big-checkbox">
+            </div>
+            <div class="col-2">
+              <label>
+                Loft
+              </label>
+              <input type="checkbox"
+                     name="loft"
+                     ng-model="realty.hasLoft"
+                     class="big-checkbox">
+            </div>
+          </div>
+          <hr/>
+          <div class="row">
+            <div class="col-2 mr-0 ml-0">
+              <label class="col-form-label">Supported operations:</label>
+            </div>
+            <div class="col-10">
+              <ng-container *ngFor="let operation of supportedOperations">
+                <label>{{operation|lowercase}}</label>
+                <input class="big-checkbox"
+                       type="checkbox">
+              </ng-container>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-2">
+              <label class="col-form-label" for="price-input">Your expected price ($):</label>
+            </div>
+            <div class="col-10">
+              <input id="price-input" name="buildNum" type="text"
+                     class="form-control" ng-model="realty.price"
+                     required>
+            </div>
+          </div>
+          <hr/>
+          <div class="row">
+            <div class="col-2 col-form-label">
+              <label>Select a Realtor:</label>
+            </div>
+            <div class="col-10">
+              <select class="form-control" name="realtor">
+                <option *ngFor="let realtor of realtors"
+                        [value]="realtor">
+                  {{realtor}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </aw-wizard-step>
+      <aw-wizard-step stepTitle="Photos and ownership confirmation">
+        <div class="row mb-2">
+          <div class="col-6 text-left">
+            <button type="button" class="btn" awPreviousStep>Previous step</button>
+          </div>
+          <div class="col-6 text-right">
+            <button type="button" class="btn" awNextStep>Save</button>
+          </div>
+        </div>
+        <div class="form-horizontal">
+          <div class="form-group row">
+            <div class="col-3">
+              <label class="col-form-label">Ownership verification photo:&nbsp;</label>
+              <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
                      accept="image/*">
+              <div class="realty-pic-preview-container">
+                <img class="img-fluid" src="{{realtyObj.verificationPicture.link}}">
+              </div>
             </div>
-            <div class="row">
-              <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
-                <img class="img-fluid" src="{{picture.link}}">
+            <div class="col-9">
+              <div>
+                <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
+                <br/>
+                <input type="file" (change)="onRealtyObjPictureSelecting($event)" placeholder="Upload file"
+                       accept="image/*">
+              </div>
+              <div class="row">
+                <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
+                  <img class="img-fluid" src="{{picture.link}}">
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </aw-wizard-step>
-  </aw-wizard>
+      </aw-wizard-step>
+    </aw-wizard>
+  </form>
 </div>
