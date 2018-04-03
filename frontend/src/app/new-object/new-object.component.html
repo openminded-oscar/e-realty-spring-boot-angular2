@@ -4,6 +4,7 @@
     <aw-wizard-step stepTitle="Address and primary info">
       <div class="text-right mb-2">
         <button type="button" class="btn btn-info" awNextStep>Next Step</button>
+        <button type="button" class="btn" awNextStep>Save</button>
       </div>
       <div class="form-horizontal">
         <div class="form-group row">
@@ -95,6 +96,7 @@
         </div>
         <div class="col-6 text-right">
           <button type="button" class="btn btn-info" awNextStep>Next Step</button>
+          <button type="button" class="btn" awNextStep>Save</button>
         </div>
       </div>
       <div class="form-horizontal">
@@ -201,6 +203,9 @@
         <div class="col-6 text-left">
           <button type="button" class="btn" awPreviousStep>Previous step</button>
         </div>
+        <div class="col-6 text-right">
+          <button type="button" class="btn" awNextStep>Save</button>
+        </div>
       </div>
       <div class="form-horizontal">
         <div class="form-group row">
@@ -209,7 +214,7 @@
             <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
                    accept="image/*">
             <div class="realty-pic-preview-container">
-              <img class="img-fluid" [src]="realtyObj.verificationPicture.link">
+              <img class="img-fluid" src="{{realtyObj.verificationPicture.link}}">
             </div>
           </div>
           <div class="col-9">
@@ -221,7 +226,7 @@
             </div>
             <div class="row">
               <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
-                <img class="img-fluid" [src]="picture.link">
+                <img class="img-fluid" src="{{picture.link}}">
               </div>
             </div>
           </div>
