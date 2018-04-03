@@ -9,3 +9,4 @@ export function hideLoading() {
 export function doNothing () {}
 
 export const webServiceEndpoint: string = 'http://localhost:8080/api';
+export const pathToPictures: string = webServiceEndpoint+'/files/'

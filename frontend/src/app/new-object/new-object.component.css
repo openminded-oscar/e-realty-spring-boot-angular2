@@ -1,0 +1,7 @@
+.realty-pic-preview-container {
+  text-align: center
+}
+
+.realty-pic-preview-container img {
+  max-height: 150px;
+}

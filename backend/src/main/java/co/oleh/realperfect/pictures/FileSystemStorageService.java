@@ -36,7 +36,7 @@ public class FileSystemStorageService implements InitializingBean {
 
     public String uploadFileForCategoryAndUser(MultipartFile file, String filename, String category, String userId) {
         try {
-            Path path = prepareForFileStorageAndReturnPath(file, category, userId);
+            Path path = prepareForFileStorageAndReturnPath(file, filename, category, userId);
             Files.copy(file.getInputStream(), path);
             return path.getFileName().toString();
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class FileSystemStorageService implements InitializingBean {
         }
     }
 
-    private Path prepareForFileStorageAndReturnPath(MultipartFile file, String category, String userId) throws IOException {
+    private Path prepareForFileStorageAndReturnPath(MultipartFile file, String filename, String category, String userId) throws IOException {
         if (file.isEmpty()) {
             throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
         }
@@ -54,8 +54,6 @@ public class FileSystemStorageService implements InitializingBean {
             photoFolder.mkdirs();
         }
 
-        String[] filenameParts = file.getOriginalFilename().split("\\.");
-        String filename = UUID.randomUUID().toString() + "." + filenameParts[filenameParts.length - 1];
         Path path = photoPath.resolve(filename);
         Files.deleteIfExists(path);
 

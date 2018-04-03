@@ -21,12 +21,8 @@ export class FileUploadService {
     headers.append('Accept', 'application/json');
     const options = {headers: headers};
 
-    (<any>this.http.post(url, formData, options)
+    return (<any>this.http.post(url, formData, options)
       .map(res => res))
       .catch(error => Observable.throw(error))
-      .subscribe(
-        data => console.log('success'),
-        error => console.log(error)
-      );
   }
 }
