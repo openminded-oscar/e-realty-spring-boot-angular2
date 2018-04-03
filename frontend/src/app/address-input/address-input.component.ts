@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output} from "@angular/core";
 import {Observable} from "rxjs/Observable";
 
 import {of} from "rxjs/observable/of";
@@ -12,18 +12,26 @@ import "rxjs/add/operator/merge";
 
 import {AddressService} from "../services/address.service";
 import {ConfigService} from "../services/config.service";
+import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
   selector: 'address-input',
   templateUrl: './address-input.component.html',
-  styleUrls: ['./address-input.component.css']
+  styleUrls: ['./address-input.component.css'],
+  providers: [
+    {provide: NG_VALUE_ACCESSOR, useExisting: AddressInputComponent, multi: true}
+  ]
 })
-export class AddressInputComponent implements OnInit {
-  public addressQuery: string = '';
-
+export class AddressInputComponent implements OnInit, ControlValueAccessor {
+  // Used for input with autocomplete
   private searching = false;
   private searchFailed = false;
   private hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
+
+  // Used for input propagation
+  @Output()
+  public onSelectedFromAutocomplete = new EventEmitter<string>();
+  public formControl = new FormControl();
 
   public constructor(public addressService: AddressService, public config: ConfigService) {
   }
@@ -46,4 +54,22 @@ export class AddressInputComponent implements OnInit {
       .do(() => this.searching = false)
       .merge(this.hideSearchingWhenUnsubscribed);
   }
+
+  public selectedItemFromAutocomplete(value){
+    this.onSelectedFromAutocomplete.emit(value.item);
+  }
+
+  public onInput(value){
+    return value;
+  }
+
+  writeValue(value: any) {
+    this.formControl.setValue(value);
+  }
+
+  registerOnChange(fn: (value: any) => void) {
+    this.onInput = fn;
+  }
+
+  registerOnTouched() {}
 }

@@ -1,22 +1,21 @@
 <div class="col-12">
   <form #realtyForm="ngForm">
     <h5 class="text-center">Add your realty object</h5>
-    <button type="submit" [disabled]="realtyForm.invalid">Submit</button>
     <aw-wizard [navBarLayout]="'large-empty'">
       <aw-wizard-step stepTitle="Address and primary info">
         <div class="text-right mb-2">
           <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-          <button type="button" class="btn" awNextStep>Save</button>
+          <button type="button" class="btn" [disabled]="realtyForm.invalid">Save</button>
         </div>
         <div class="form-horizontal">
           <div class="form-group row">
             <label class="col-1 col-form-label">City:</label>
             <div class="col-5">
-              <address-input></address-input>
+              <address-input (onSelectedFromAutocomplete)="detectCityChange($event)" [(ngModel)]="realtyObj.city" name="city" required></address-input>
             </div>
             <label class="col-1 col-form-label">Street:</label>
             <div class="col-5">
-              <address-input></address-input>
+              <address-input (onSelectedFromAutocomplete)="detectStreetChange($event)" [(ngModel)]="realtyObj.street" name="street" required></address-input>
             </div>
           </div>
           <div class="form-group row">
@@ -25,7 +24,7 @@
               <input id="number-of-street-input" [(ngModel)]="sth1" name="buildNum" type="text"
                      class="form-control"
                      ng-model="realty.address.numberOfStreet"
-                     required>
+                     >
             </div>
             <label class="col-1 col-form-label" for="apt-number-input">Apt.
               number:</label>
@@ -98,7 +97,7 @@
           </div>
           <div class="col-6 text-right">
             <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-            <button type="button" class="btn" awNextStep>Save</button>
+            <button type="button" class="btn" [disabled]="realtyForm.invalid">Save</button>
           </div>
         </div>
         <div class="form-horizontal">
@@ -124,7 +123,7 @@
             </div>
             <div class="col-2">
               <input class="form-control"
-                     id="foundation-year-input" [(ngModel)]="sth2" name="foundation" required>
+                     id="foundation-year-input" [(ngModel)]="sth2" name="foundation">
             </div>
             <div class="col-3">
               <label>Recently repaired</label>
@@ -206,7 +205,7 @@
             <button type="button" class="btn" awPreviousStep>Previous step</button>
           </div>
           <div class="col-6 text-right">
-            <button type="button" class="btn" awNextStep>Save</button>
+            <button type="button" class="btn" [disabled]="realtyForm.invalid">Save</button>
           </div>
         </div>
         <div class="form-horizontal">

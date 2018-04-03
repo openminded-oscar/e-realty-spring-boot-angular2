@@ -10,17 +10,22 @@ import {pathToPictures, webServiceEndpoint} from "../commons";
   styleUrls: ['./new-object.component.css']
 })
 export class NewObjectComponent implements OnInit {
-  public realtyObj: any = {pictures: [], verificationPicture: {}};
+  public realtyObj: any = {pictures: [], verificationPicture: {}, city: "", street:""};
   public realtors: string[] = ["Petro Petrenko", "Pavlo Pavlenko", "Andriy Andriyenko", "Ivan Ivanenko"];
   public supportedOperations: string[];
-  public sth1: string = "";
-  public sth2: string = "";
 
   public constructor(public config: ConfigService, public fileUploadService: FileUploadService) {
   }
 
   public ngOnInit() {
     this.supportedOperations = this.config.getSupportedOperations();
+  }
+
+  public detectCityChange(value){
+    this.realtyObj.city = value;
+  }
+  public detectStreetChange(value){
+    this.realtyObj.street = value;
   }
 
   onVerificationPictureSelecting(event) {

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { NewObjectComponent } from './new-object/new-object.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {AddressService} from "./services/address.service";
 import {HttpClientModule} from "@angular/common/http";
@@ -23,7 +23,7 @@ import {FileUploadService} from "./services/file-upload.service";
     UserRegionInputComponent
   ],
   imports: [
-    BrowserModule, FormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule
+    BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule
   ],
   providers: [AddressService, ConfigService, FileUploadService],
   bootstrap: [AppComponent]

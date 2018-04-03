@@ -1,2 +1,3 @@
-<input class="form-control" [(ngModel)]="addressQuery" [ngbTypeahead]="searchAddressForTerm" name="cityQuery"
-       type="text">
+<input class="form-control" type="text"
+       [ngbTypeahead]="searchAddressForTerm" (selectItem)="selectedItemFromAutocomplete($event)"
+       [formControl]="formControl" (input)="onInput($event.target.value)">
