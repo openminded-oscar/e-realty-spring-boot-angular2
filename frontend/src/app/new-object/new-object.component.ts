@@ -20,7 +20,22 @@ export class NewObjectComponent implements OnInit {
     this.supportedOperations = this.config.getSupportedOperations();
   }
 
-  onFilesChange(event) {
+  onVerificationPictureSelecting(event) {
+    let fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+      this.fileUploadService.upload(file, webServiceEndpoint + "/upload-photo")
+        .subscribe(
+          data => {
+            this.realtyObj.verificationPicture = {link: (pathToPictures + data.filename), filename: data.filename};
+          },
+          error => console.log(error)
+        );
+      ;
+    }
+  }
+
+  onRealtyObjPictureSelecting(event) {
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       let file: File = fileList[0];

@@ -87,7 +87,7 @@
       </div>
     </aw-wizard-step>
 
-    <aw-wizard-step stepTitle="Additional info">
+    <aw-wizard-step stepTitle="Description and targeting">
       <div class="row mb-2">
         <div class="col-6 text-left">
           <button type="button" class="btn" awPreviousStep>Previous step</button>
@@ -156,75 +156,67 @@
                    class="big-checkbox">
           </div>
         </div>
-      </div>
-    </aw-wizard-step>
-
-    <aw-wizard-step stepTitle="Targeting and photos">
-      <div class="row mb-2">
-        <div class="col-6 text-left">
-          <button type="button" class="btn" awPreviousStep>Previous step</button>
-        </div>
-        <div class="col-6 text-right">
-          <button type="button" class="btn" awNextStep>Next step</button>
-        </div>
-      </div>
-      <div class="form-horizontal row">
-        <div class="col-6">
-          <div class="row">
-            <div class="col-2">
-              <label class="col-form-label" for="price-input">Price ($):</label>
-            </div>
-            <div class="col-10">
-              <input id="price-input" name="buildNum" type="text"
-                     class="form-control" ng-model="realty.price"
-                     required>
-            </div>
+        <hr/>
+        <div class="row">
+          <div class="col-2 mr-0 ml-0">
+            <label class="col-form-label">Supported operations:</label>
           </div>
-          <div class="row">
-            <div class="col-2 mr-0 ml-0">
-              <label class="col-form-label">Supported operations:</label>
-            </div>
-            <div class="col-10">
-              <ng-container *ngFor="let operation of supportedOperations">
-                <label>{{operation|lowercase}}</label>
-                <input class="big-checkbox"
-                       type="checkbox">
-              </ng-container>
-            </div>
+          <div class="col-10">
+            <ng-container *ngFor="let operation of supportedOperations">
+              <label>{{operation|lowercase}}</label>
+              <input class="big-checkbox"
+                     type="checkbox">
+            </ng-container>
           </div>
         </div>
-        <div class="col-6">
-          <div class="row">
-            <label class="ml-5 col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
-            <input type="file" (change)="onFilesChange($event)" placeholder="Upload file" accept="image/*">
+        <div class="row">
+          <div class="col-2">
+            <label class="col-form-label" for="price-input">Your expected price ($):</label>
+          </div>
+          <div class="col-10">
+            <input id="price-input" name="buildNum" type="text"
+                   class="form-control" ng-model="realty.price"
+                   required>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
-          <img class="img-fluid" [src]="picture.link">
-        </div>
-      </div>
-    </aw-wizard-step>
-    <aw-wizard-step stepTitle="Realtor and ownership confirmation">
-      <div class="row mb-2">
-        <div class="col-6 text-left">
-          <button type="button" class="btn" awPreviousStep>Previous step</button>
-        </div>
-      </div>
-      <div class="form-horizontal">
+        <hr/>
         <div class="row">
           <div class="col-2 col-form-label">
             <label>Select a Realtor:</label>
           </div>
-          <div class="col-6">
+          <div class="col-10">
             <input class="form-control" type="text" name="realtor">
           </div>
         </div>
-        <div class="row">
-          <div class="col-8">
+      </div>
+    </aw-wizard-step>
+
+    <aw-wizard-step stepTitle="Photos and ownership confirmation">
+      <div class="row mb-2">
+        <div class="col-6 text-left">
+          <button type="button" class="btn" awPreviousStep>Previous step</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <div class="row">
             <label class="col-form-label">Ownership verification photo:&nbsp;</label>
-            <input type="file" (change)="onFilesChange($event)" placeholder="Upload file" accept="image/*">
+            <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file" accept="image/*">
+          </div>
+          <div class="row realty-pic-preview-container">
+            <img class="img-fluid" [src]="realtyObj.verificationPicture.link">
+          </div>
+        </div>
+        <div class="col-9">
+          <div>
+            <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
+            <br/>
+            <input type="file" (change)="onRealtyObjPictureSelecting($event)" placeholder="Upload file" accept="image/*">
+          </div>
+          <div class="row">
+            <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
+              <img class="img-fluid" [src]="picture.link">
+            </div>
           </div>
         </div>
       </div>
