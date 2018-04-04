@@ -14,6 +14,8 @@ import { UserRegionInputComponent } from './user-region-input/user-region-input.
 import {ConfigService} from "./services/config.service";
 import {FileUploadService} from "./services/file-upload.service";
 import {RealtyObjService} from "./services/realty-obj.service";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {SimpleNotificationsModule} from "angular2-notifications";
 
 
 @NgModule({
@@ -24,7 +26,7 @@ import {RealtyObjService} from "./services/realty-obj.service";
     UserRegionInputComponent
   ],
   imports: [
-    BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule
+    BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule, BrowserAnimationsModule, SimpleNotificationsModule.forRoot()
   ],
   providers: [AddressService, ConfigService, FileUploadService, RealtyObjService],
   bootstrap: [AppComponent]

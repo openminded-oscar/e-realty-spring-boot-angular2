@@ -27,6 +27,8 @@ public class RealtyObject {
     private Boolean hasGarage;
     // +
     private Boolean hasRepairing;
+    private Boolean hasCellar;
+    private Boolean hasLoft;
     // +
     private Integer foundationYear;
     // +
@@ -185,8 +187,8 @@ public class RealtyObject {
         this.address = address;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "owner_id", nullable = true)
     public User getOwner() {
         return owner;
     }
@@ -212,8 +214,8 @@ public class RealtyObject {
         this.realterAware = realterAware;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "realter_id", nullable = false)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "realter_id", nullable = true)
     public Realter getRealter() {
         return realter;
     }

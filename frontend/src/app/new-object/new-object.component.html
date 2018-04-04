@@ -5,7 +5,7 @@
       <aw-wizard-step stepTitle="Address and primary info">
         <div class="text-right mb-2">
           <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-          <button type="button" class="btn" [disabled]="realtyForm.invalid">Save</button>
+          <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save</button>
         </div>
         <div class="form-horizontal">
           <div class="form-group row">
@@ -93,7 +93,7 @@
           </div>
           <div class="col-6 text-right">
             <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-            <button type="button" class="btn" [disabled]="realtyForm.invalid">Save</button>
+            <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save</button>
           </div>
         </div>
         <div class="form-horizontal">
@@ -240,4 +240,7 @@
       </aw-wizard-step>
     </aw-wizard>
   </form>
+  <div style="text-align: right">
+    <simple-notifications></simple-notifications>
+  </div>
 </div>

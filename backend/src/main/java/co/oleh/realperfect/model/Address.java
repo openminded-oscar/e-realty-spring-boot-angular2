@@ -7,19 +7,15 @@ import javax.persistence.ManyToOne;
 
 @Embeddable
 public class Address {
-	// +
-	private Integer numberOfStreet;
-	// -
-	private String numberOfStreetSuffix;
-	// +
+	private String numberOfStreet;
 	private Integer aptNumber;
 
 	@Column(name="number_of_street")
-	public Integer getNumberOfStreet() {
+	public String getNumberOfStreet() {
 		return numberOfStreet;
 	}
 
-	public void setNumberOfStreet(Integer numberOfStreet) {
+	public void setNumberOfStreet(String numberOfStreet) {
 		this.numberOfStreet = numberOfStreet;
 	}
 	
@@ -30,14 +26,5 @@ public class Address {
 
 	public void setAptNumber(Integer aptNumber) {
 		this.aptNumber = aptNumber;
-	}
-
-	@Column(name="number_of_street_suffix")
-	public String getNumberOfStreetSuffix() {
-		return numberOfStreetSuffix;
-	}
-
-	public void setNumberOfStreetSuffix(String numberOfStreetSuffix) {
-		this.numberOfStreetSuffix = numberOfStreetSuffix;
 	}
 }

@@ -4,6 +4,7 @@ import {FileUploadService} from "../services/file-upload.service";
 import {endpoints, apiBase} from "../commons";
 import {RealtyObj} from "../domain/realty-obj";
 import {RealtyObjService} from "../services/realty-obj.service";
+import {NotificationsService} from "angular2-notifications";
 
 
 @Component({
@@ -25,7 +26,10 @@ export class NewObjectComponent implements OnInit, OnChanges {
       .map(opt => opt.value)
   }
 
-  public constructor(public config: ConfigService, public fileUploadService: FileUploadService, public realtyObjService: RealtyObjService) {
+  public constructor(public config: ConfigService,
+                     public fileUploadService: FileUploadService,
+                     public realtyObjService: RealtyObjService,
+                     private _notification: NotificationsService) {
   }
 
   public ngOnInit() {
@@ -47,9 +51,10 @@ export class NewObjectComponent implements OnInit, OnChanges {
 
   saveRealtyObject() {
     this.realtyObjService.save(this.realtyObj).subscribe((data: RealtyObj) => {
+      this._notification.success('Success!', 'the object was added!');
       this.realtyObj = data;
     }, error => {
-      alert('error');
+      this._notification.error('Failure!', 'the object adding failed!');
     });
   }
 
