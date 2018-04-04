@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
-import { NewObjectComponent } from './new-object/new-object.component';
+import { RealtyObjEditComponent } from './realty-obj-edit/realty-obj-edit.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {AddressService} from "./services/address.service";
@@ -21,7 +21,7 @@ import {SimpleNotificationsModule} from "angular2-notifications";
 @NgModule({
   declarations: [
     AppComponent,
-    NewObjectComponent,
+    RealtyObjEditComponent,
     AddressInputComponent,
     UserRegionInputComponent
   ],

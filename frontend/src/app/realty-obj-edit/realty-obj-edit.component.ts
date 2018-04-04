@@ -9,10 +9,10 @@ import {NotificationsService} from "angular2-notifications";
 
 @Component({
   selector: 'new-object',
-  templateUrl: './new-object.component.html',
-  styleUrls: ['./new-object.component.css']
+  templateUrl: './realty-obj-edit.component.html',
+  styleUrls: ['./realty-obj-edit.css']
 })
-export class NewObjectComponent implements OnInit, OnChanges {
+export class RealtyObjEditComponent implements OnInit, OnChanges {
   @Input()
   public realtyObj: RealtyObj;
   public realters: string[];

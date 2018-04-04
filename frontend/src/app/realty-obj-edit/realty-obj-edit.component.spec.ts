@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewObjectComponent } from './new-object.component';
+import { RealtyObjEditComponent } from './realty-obj-edit.component';
 
-describe('NewObjectComponent', () => {
-  let component: NewObjectComponent;
-  let fixture: ComponentFixture<NewObjectComponent>;
+describe('RealtyObjEditComponent', () => {
+  let component: RealtyObjEditComponent;
+  let fixture: ComponentFixture<RealtyObjEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewObjectComponent ]
+      declarations: [ RealtyObjEditComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NewObjectComponent);
+    fixture = TestBed.createComponent(RealtyObjEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
