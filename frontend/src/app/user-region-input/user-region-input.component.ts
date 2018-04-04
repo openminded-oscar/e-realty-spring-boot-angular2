@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CityOnMap} from "../domain/domain";
+import {CityOnMap} from "../domain/city-on-map";
 import {AddressService} from "../services/address.service";
 import {ConfigService} from "../services/config.service";
 
@@ -16,7 +16,7 @@ export class UserRegionInputComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.currentCity = this.config.getUserRegion();
+    this.currentCity = this.config.userRegion;
     this.baseCities = [this.currentCity];
     this.addressService.getSupportedCities().subscribe((data: CityOnMap[]) => {
       this.baseCities = data;
@@ -24,7 +24,7 @@ export class UserRegionInputComponent implements OnInit {
   }
 
   public onChangeRegion(value) {
-    this.config.setUserRegion(value);
+    this.config.userRegion = value;
   }
 
   public compareRegions(r1: CityOnMap, r2: CityOnMap) {

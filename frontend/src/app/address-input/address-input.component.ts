@@ -43,7 +43,7 @@ export class AddressInputComponent implements OnInit, ControlValueAccessor {
       .distinctUntilChanged()
       .do(() => this.searching = true)
       .switchMap(term =>
-        this.addressService.getAddressesByTerm(term, this.config.getUserRegion().lat, this.config.getUserRegion().lng)
+        this.addressService.getAddressesByTerm(term, this.config.userRegion.lat, this.config.userRegion.lng)
           .do(() => this.searchFailed = false)
           .catch(() => {
             this.searchFailed = true;

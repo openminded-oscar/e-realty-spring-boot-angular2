@@ -3,13 +3,10 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import "rxjs/add/observable/of";
 import {ReplaySubject} from "rxjs/ReplaySubject";
 import {Subject} from "rxjs/Subject";
-import {webServiceEndpoint} from "../commons";
+import {apiBase, endpoints} from "../commons";
 
 @Injectable()
 export class AddressService {
-  private addressesNearbyUrl: string = webServiceEndpoint + "/addresses/addresses-nearby";
-  private supportedCitiesUrl: string = webServiceEndpoint + "/addresses/cities-supported";
-
   private observableAddresses = new Subject;
   private observableCities = new ReplaySubject(1);
 
@@ -23,7 +20,7 @@ export class AddressService {
       .set("lat", lat.toString())
       .set("lng", lng.toString())
       .set("term", term);
-    this.http.get(this.addressesNearbyUrl, {params: params}).subscribe(
+    this.http.get(endpoints.addressesNearby, {params: params}).subscribe(
       (data: any[]) => {
         data = data.map(data => data.description);
         this.observableAddresses.next(data);
@@ -36,7 +33,7 @@ export class AddressService {
   }
 
   public getSupportedCities(forceRefresh?: boolean) {
-    this.http.get(this.supportedCitiesUrl).subscribe(
+    this.http.get(endpoints.supportedCities).subscribe(
       data => {
         this.observableCities.next(data);
       }, error => {

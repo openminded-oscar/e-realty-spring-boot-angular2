@@ -13,6 +13,7 @@ import {ArchwizardModule} from "angular-archwizard";
 import { UserRegionInputComponent } from './user-region-input/user-region-input.component';
 import {ConfigService} from "./services/config.service";
 import {FileUploadService} from "./services/file-upload.service";
+import {RealtyObjService} from "./services/realty-obj.service";
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import {FileUploadService} from "./services/file-upload.service";
   imports: [
     BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule
   ],
-  providers: [AddressService, ConfigService, FileUploadService],
+  providers: [AddressService, ConfigService, FileUploadService, RealtyObjService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
