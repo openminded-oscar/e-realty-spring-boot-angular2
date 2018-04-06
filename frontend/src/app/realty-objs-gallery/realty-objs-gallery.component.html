@@ -1,0 +1,70 @@
+<div>
+  <div id="filter-row" class="row form-group">
+    <div class="col-2">
+      <input type="text" name="street" placeholder="Enter street">
+    </div>
+    <div class="col-2">
+      <input type="text" name="city" placeholder="Enter city">
+    </div>
+    <div class="col-md-1 col-md-offset-1">
+      Price min <input name="minPrice" type="text" class="form-control">
+    </div>
+    <div class="col-md-1">
+      Price max <input name="maxPrice" type="text" class="form-control">
+    </div>
+    <div class="col-md-1">
+      Rooms
+      <input name="rooms" type="text" class="form-control">
+    </div>
+    <div class="col-md-2">
+      House type <select name="houseType" class="form-control">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+    </select>
+    </div>
+    <div class="col-md-2">
+      <div style="text-align: right;">
+        <button class="btn">
+          More filters <i class="fa fa-arrow-down" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-bottom: 2em;">
+    <div class="col-md-4 col-md-offset-4">
+      <button (click)="searchObjects()" class="btn btn-info btn-block">SEARCH</button>
+    </div>
+  </div>
+
+  <div id="itemsContainer" class="row">
+    <div *ngFor="let realtyObject of realtyObjects" class="col-4">
+      <div class="thumbnail">
+        <img src="{{realtyObject.mainPhotoPath?realtyObject.mainPhotoPath:'//www.fgschaub.com/images/2013/03/house-3d-image.jpg'}}">
+        <div class="caption">
+          <h4 class="pull-right">${{realtyObject.price}}</h4>
+          <h4>
+            <a href="#">{{realtyObject.address.streetInCity.name}},
+              {{transformCityToString(realtyObject.address.streetInCity.city)}}</a>
+          </h4>
+          <div>
+            <p>
+              {{realtyObject.roomsAmount}} rooms, {{realtyObject.totalArea}}
+              sq.m., {{realtyObject.floor}} floor of
+              {{realtyObject.totalFloors}} <span class="pull-right">{{realtyObject.hasRepairing?'Repaired':''}}</span>
+            </p>
+            <p>{{trimDescription(realtyObject.description)}}</p>
+          </div>
+          <a [href]="realtyObject.id" class="btn btn-block">Watch details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2 col-md-offset-5">
+      <button class="btn btn-block btn-info">Next items</button>
+    </div>
+  </div>
+</div>

@@ -16,6 +16,7 @@ import {FileUploadService} from "./services/file-upload.service";
 import {RealtyObjService} from "./services/realty-obj.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SimpleNotificationsModule} from "angular2-notifications";
+import { RealtyObjsGalleryComponent } from './realty-objs-gallery/realty-objs-gallery.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import {SimpleNotificationsModule} from "angular2-notifications";
     AppComponent,
     RealtyObjEditComponent,
     AddressInputComponent,
-    UserRegionInputComponent
+    UserRegionInputComponent,
+    RealtyObjsGalleryComponent
   ],
   imports: [
     BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule, BrowserAnimationsModule, SimpleNotificationsModule.forRoot()
