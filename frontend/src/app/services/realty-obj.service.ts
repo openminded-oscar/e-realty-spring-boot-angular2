@@ -10,7 +10,7 @@ export class RealtyObjService {
   }
 
   findByFilter(filter){
-    return this.http.post('/realty-objects', filter);
+    return this.http.post(endpoints.realtyObj.list, filter);
   }
 
   save(realtyObj: RealtyObj) {
