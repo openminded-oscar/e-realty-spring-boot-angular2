@@ -5,3 +5,11 @@
 .realty-pic-preview-container img {
   max-height: 150px;
 }
+
+input.ng-invalid, select.ng-invalid, textarea.ng-invalid {
+  border: 1px solid #ffeb6b !important;
+}
+
+input.ng-valid, select.ng-valid, textarea.ng-valid {
+  border: 1px solid green !important;
+}

@@ -5,14 +5,6 @@ body { padding-top: 70px; }
   height: 20px;
 }
 
-input.ng-invalid, select.ng-invalid, textarea.ng-invalid {
-    border: 1px solid #ffeb6b !important;
-}
-
-input.ng-valid, select.ng-valid, textarea.ng-valid {
-  border: 1px solid green !important;
-}
-
 .not-yet-supported {
   color: #606060 !important;
 }

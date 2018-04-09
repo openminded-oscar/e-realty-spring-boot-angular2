@@ -22,11 +22,13 @@
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.4",
+    "@types/lodash": "^4.14.106",
     "angular-archwizard": "^3.0.0",
     "angular2-notifications": "^0.9.8",
     "bootstrap": "^4.0.0",
     "core-js": "^2.4.1",
     "jquery": "^3.3.1",
+    "lodash": "^4.17.5",
     "popper.js": "^1.14.1",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.14"

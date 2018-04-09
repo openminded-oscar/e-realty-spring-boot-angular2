@@ -18,6 +18,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import { RealtyObjsGalleryComponent } from './realty-objs-gallery/realty-objs-gallery.component';
 import {RouterModule, Routes} from "@angular/router";
+import { RealtyObjsListComponent } from './realty-objs-gallery/realty-objs-list.component';
 
 
 const appRoutes: Routes = [
@@ -35,7 +36,8 @@ const appRoutes: Routes = [
     RealtyObjEditComponent,
     AddressInputComponent,
     UserRegionInputComponent,
-    RealtyObjsGalleryComponent
+    RealtyObjsGalleryComponent,
+    RealtyObjsListComponent
   ],
   imports: [
     BrowserModule,
