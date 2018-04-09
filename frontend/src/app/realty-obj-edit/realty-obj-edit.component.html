@@ -1,246 +1,253 @@
-<div class="col-12">
-  <form #realtyForm="ngForm">
-    <h5 class="text-center">Add your realty object</h5>
-    <aw-wizard [navBarLayout]="'large-empty'">
-      <aw-wizard-step stepTitle="Address and primary info">
-        <div class="text-right mb-2">
-          <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-          <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save</button>
-        </div>
-        <div class="form-horizontal">
-          <div class="form-group row">
-            <label class="col-1 col-form-label">City:</label>
-            <div class="col-5">
-              <address-input [(ngModel)]="realtyObj.city" name="city" required></address-input>
-            </div>
-            <label class="col-1 col-form-label">Street:</label>
-            <div class="col-5">
-              <address-input [(ngModel)]="realtyObj.street" name="street" required></address-input>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-1 col-form-label" for="number-of-street-input">Building number:</label>
-            <div class="col-3">
-              <input id="number-of-street-input" name="buildingNumber" type="text"
-                     class="form-control"
-                     [(ngModel)]="realtyObj.buildingNumber" required minlength="1">
-            </div>
-            <label class="col-1 col-form-label" for="apt-number-input">Apt.
-              number:</label>
-            <div class="col-3">
-              <input id="apt-number-input" [(ngModel)]="realtyObj.apartmentNumber"
-                     name="flatNum" type="text" class="form-control"
-                     [disabled]="realtyObj.dwellingType!=='APARTMENT'" required>
-            </div>
-            <label class="col-2 col-form-label text-right">Dwelling type:</label>
-            <div class="col-2">
-              <select [(ngModel)]="realtyObj.dwellingType" name="dwellingType" class="form-control" required>
-                <option *ngFor="let dwellingType of dwellingTypes" [ngValue]="dwellingType">{{dwellingType}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-form-label col-1" for="floor-input">Floor:</label>
-            <div class="col-3">
-              <input id="floor-input" name="floor" type="text"
-                     class="form-control" [(ngModel)]="realtyObj.floor" required>
-            </div>
-            <label class="col-form-label col-1" for="building-floors-input">Floors in building:</label>
-            <div class="col-3">
-              <input id="building-floors-input" name="buildNum" type="text"
-                     class="form-control" [(ngModel)]="realtyObj.totalFloors" required>
-            </div>
-            <div class="col-form-label text-right col-1">
-              <label>Building type:</label>
-            </div>
-            <div class="col-3">
-              <select [(ngModel)]="realtyObj.buildingType" name="buildingType" class="form-control" required>
-                <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{buildingType}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-1 col-form-label" for="rooms-amount-input">Rooms
-              amount:</label>
-            <div class="col-3">
-              <input id="rooms-amount-input" name="rooms" type="text"
-                     class="form-control"
-                     [(ngModel)]="realtyObj.roomsAmount"
-                     required>
-            </div>
-            <label class="col-form-label col-1" for="total-area-input">Total
-              area:</label>
-            <div class="col-3">
-              <input id="total-area-input" name="total-area" type="text"
-                     class="form-control" [(ngModel)]="realtyObj.totalArea"
-                     required>
-            </div>
-            <label class="col-form-label col-1 text-right" for="textinput">Living
-              area:</label>
-            <div class="col-3">
-              <input id="textinput" name="buildNum" type="text"
-                     class="form-control" [(ngModel)]="realtyObj.livingArea"
-                     required>
-            </div>
-          </div>
-        </div>
-      </aw-wizard-step>
-
-      <aw-wizard-step stepTitle="Description and targeting">
-        <div class="row mb-2">
-          <div class="col-6 text-left">
-            <button type="button" class="btn" awPreviousStep>Previous step</button>
-          </div>
-          <div class="col-6 text-right">
+<div class="row">
+  <div class="col-12">
+    <form #realtyForm="ngForm">
+      <h5 class="text-center">Add your realty object</h5>
+      <aw-wizard [navBarLayout]="'large-empty'">
+        <aw-wizard-step stepTitle="Address and primary info">
+          <div class="text-right mb-2">
             <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-            <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save</button>
+            <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
+            </button>
           </div>
-        </div>
-        <div class="form-horizontal">
-          <div class="form-group row">
-            <div class="col-1 col-form-label">
-              <label for="description-input">Overall description:</label>
+          <div class="form-horizontal">
+            <div class="form-group row">
+              <label class="col-1 col-form-label">City:</label>
+              <div class="col-5">
+                <address-input [(ngModel)]="realtyObj.city" name="city" required></address-input>
+              </div>
+              <label class="col-1 col-form-label">Street:</label>
+              <div class="col-5">
+                <address-input [(ngModel)]="realtyObj.street" name="street" required></address-input>
+              </div>
             </div>
-            <div class="col-5">
+            <div class="form-group row">
+              <label class="col-1 col-form-label" for="number-of-street-input">Building number:</label>
+              <div class="col-3">
+                <input id="number-of-street-input" name="buildingNumber" type="text"
+                       class="form-control"
+                       [(ngModel)]="realtyObj.buildingNumber" required minlength="1">
+              </div>
+              <label class="col-1 col-form-label" for="apt-number-input">Apt.
+                number:</label>
+              <div class="col-3">
+                <input id="apt-number-input" [(ngModel)]="realtyObj.apartmentNumber"
+                       name="flatNum" type="text" class="form-control"
+                       [disabled]="realtyObj.dwellingType!=='APARTMENT'" required>
+              </div>
+              <label class="col-2 col-form-label text-right">Dwelling type:</label>
+              <div class="col-2">
+                <select [(ngModel)]="realtyObj.dwellingType" name="dwellingType" class="form-control" required>
+                  <option *ngFor="let dwellingType of dwellingTypes" [ngValue]="dwellingType">{{dwellingType}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-form-label col-1" for="floor-input">Floor:</label>
+              <div class="col-3">
+                <input id="floor-input" name="floor" type="text"
+                       class="form-control" [(ngModel)]="realtyObj.floor" required>
+              </div>
+              <label class="col-form-label col-1" for="building-floors-input">Floors in building:</label>
+              <div class="col-3">
+                <input id="building-floors-input" name="buildNum" type="text"
+                       class="form-control" [(ngModel)]="realtyObj.totalFloors" required>
+              </div>
+              <div class="col-form-label text-right col-1">
+                <label>Building type:</label>
+              </div>
+              <div class="col-3">
+                <select [(ngModel)]="realtyObj.buildingType" name="buildingType" class="form-control" required>
+                  <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{buildingType}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-1 col-form-label" for="rooms-amount-input">Rooms
+                amount:</label>
+              <div class="col-3">
+                <input id="rooms-amount-input" name="rooms" type="text"
+                       class="form-control"
+                       [(ngModel)]="realtyObj.roomsAmount"
+                       required>
+              </div>
+              <label class="col-form-label col-1" for="total-area-input">Total
+                area:</label>
+              <div class="col-3">
+                <input id="total-area-input" name="total-area" type="text"
+                       class="form-control" [(ngModel)]="realtyObj.totalArea"
+                       required>
+              </div>
+              <label class="col-form-label col-1 text-right" for="textinput">Living
+                area:</label>
+              <div class="col-3">
+                <input id="textinput" name="buildNum" type="text"
+                       class="form-control" [(ngModel)]="realtyObj.livingArea"
+                       required>
+              </div>
+            </div>
+          </div>
+        </aw-wizard-step>
+
+        <aw-wizard-step stepTitle="Description and targeting">
+          <div class="row mb-2">
+            <div class="col-6 text-left">
+              <button type="button" class="btn" awPreviousStep>Previous step</button>
+            </div>
+            <div class="col-6 text-right">
+              <button type="button" class="btn btn-info" awNextStep>Next Step</button>
+              <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
+              </button>
+            </div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group row">
+              <div class="col-1 col-form-label">
+                <label for="description-input">Overall description:</label>
+              </div>
+              <div class="col-5">
 					<textarea rows="4" maxlength="128" [(ngModel)]="realtyObj.description" class="form-control"
                     id="description-input" name="description-input" required></textarea>
-            </div>
-            <div class="col-1 col-form-label">
-              <label for="other-info-input">Other info:</label>
-            </div>
-            <div class="col-5">
+              </div>
+              <div class="col-1 col-form-label">
+                <label for="other-info-input">Other info:</label>
+              </div>
+              <div class="col-5">
 					<textarea rows="3" maxlength="64" name="otherInfo" [(ngModel)]="realtyObj.otherInfo" class="form-control"
                     id="other-info-input"
                     required></textarea>
+              </div>
             </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-1">
-              <label for="foundation-year-input">Foundation year:</label>
-            </div>
-            <div class="col-2">
-              <input class="form-control" id="foundation-year-input"
-                     [(ngModel)]="realtyObj.foundationYear" name="foundationYear"
-                     required>
-            </div>
-            <div class="col-3">
-              <label>Recently repaired</label>
-              <input name="repairing"
-                type="checkbox"
-                [(ngModel)]="realtyObj.hasRepairing"
-                class="big-checkbox">
-            </div>
-            <div class="col-2">
-              <label>
-                Garage
-              </label>
-              <input type="checkbox"
-                     name="garage"
-                     [(ngModel)]="realtyObj.hasGarage"
-                     class="big-checkbox">
-            </div>
-            <div class="col-2">
-              <label>
-                Cellar
-              </label>
-              <input type="checkbox"
-                     name="cellar"
-                     [(ngModel)]="realtyObj.hasCellar"
-                     class="big-checkbox">
-            </div>
-            <div class="col-2">
-              <label>
-                Loft
-              </label>
-              <input type="checkbox"
-                     name="loft"
-                     [(ngModel)]="realtyObj.hasLoft"
-                     class="big-checkbox">
-            </div>
-          </div>
-          <hr/>
-          <div class="row">
-            <div class="col-2 mr-0 ml-0">
-              <label class="col-form-label">Supported operations:</label>
-            </div>
-            <div class="col-10">
-              <ng-container *ngFor="let operation of supportedOperations">
+            <div class="form-group row">
+              <div class="col-1">
+                <label for="foundation-year-input">Foundation year:</label>
+              </div>
+              <div class="col-2">
+                <input class="form-control" id="foundation-year-input"
+                       [(ngModel)]="realtyObj.foundationYear" name="foundationYear"
+                       required>
+              </div>
+              <div class="col-3">
+                <label>Recently repaired</label>
+                <input name="repairing"
+                       type="checkbox"
+                       [(ngModel)]="realtyObj.hasRepairing"
+                       class="big-checkbox">
+              </div>
+              <div class="col-2">
                 <label>
-                  <input class="big-checkbox"
-                         type="checkbox"
-                         name="options"
-                         value="{{operation.value}}"
-                         [(ngModel)]="operation.checked"
-                         required/>
-                  {{operation.name}}
+                  Garage
                 </label>
-              </ng-container>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-2">
-              <label class="col-form-label" for="price-input">Your expected price ($):</label>
-            </div>
-            <div class="col-10">
-              <input id="price-input" name="price" type="text"
-                     class="form-control" [(ngModel)]="realtyObj.price"
-                     required>
-            </div>
-          </div>
-          <hr/>
-          <div class="row">
-            <div class="col-2 col-form-label">
-              <label>Select a Realtor:</label>
-            </div>
-            <div class="col-10">
-              <select class="form-control" [(ngModel)]="realtyObj.realter" name="realter" required>
-                <option *ngFor="let realter of realters"
-                        [value]="realter">
-                  {{realter}}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </aw-wizard-step>
-      <aw-wizard-step stepTitle="Photos and ownership confirmation">
-        <div class="row mb-2">
-          <div class="col-6 text-left">
-            <button type="button" class="btn" awPreviousStep>Previous step</button>
-          </div>
-          <div class="col-6 text-right">
-            <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save</button>
-          </div>
-        </div>
-        <div class="form-horizontal">
-          <div class="form-group row">
-            <div class="col-3">
-              <label class="col-form-label">Ownership verification photo:&nbsp;</label>
-              <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
-                     accept="image/*" required>
-              <div class="realty-pic-preview-container">
-                <img class="img-fluid" src="{{realtyObj?.verificationPicture?.link}}">
+                <input type="checkbox"
+                       name="garage"
+                       [(ngModel)]="realtyObj.hasGarage"
+                       class="big-checkbox">
+              </div>
+              <div class="col-2">
+                <label>
+                  Cellar
+                </label>
+                <input type="checkbox"
+                       name="cellar"
+                       [(ngModel)]="realtyObj.hasCellar"
+                       class="big-checkbox">
+              </div>
+              <div class="col-2">
+                <label>
+                  Loft
+                </label>
+                <input type="checkbox"
+                       name="loft"
+                       [(ngModel)]="realtyObj.hasLoft"
+                       class="big-checkbox">
               </div>
             </div>
-            <div class="col-9">
-              <div>
-                <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
-                <br/>
-                <input type="file" (change)="onRealtyObjPictureSelecting($event)" placeholder="Upload file"
+            <hr/>
+            <div class="row">
+              <div class="col-2 mr-0 ml-0">
+                <label class="col-form-label">Supported operations:</label>
+              </div>
+              <div class="col-10">
+                <ng-container *ngFor="let operation of supportedOperations">
+                  <label>
+                    <input class="big-checkbox"
+                           type="checkbox"
+                           name="options"
+                           value="{{operation.value}}"
+                           [(ngModel)]="operation.checked"
+                           required/>
+                    {{operation.name}}
+                  </label>
+                </ng-container>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">
+                <label class="col-form-label" for="price-input">Your expected price ($):</label>
+              </div>
+              <div class="col-10">
+                <input id="price-input" name="price" type="text"
+                       class="form-control" [(ngModel)]="realtyObj.price"
+                       required>
+              </div>
+            </div>
+            <hr/>
+            <div class="row">
+              <div class="col-2 col-form-label">
+                <label>Select a Realtor:</label>
+              </div>
+              <div class="col-10">
+                <select class="form-control" [(ngModel)]="realtyObj.realter" name="realter" required>
+                  <option *ngFor="let realter of realters"
+                          [value]="realter">
+                    {{realter}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </aw-wizard-step>
+        <aw-wizard-step stepTitle="Photos and ownership confirmation">
+          <div class="row mb-2">
+            <div class="col-6 text-left">
+              <button type="button" class="btn" awPreviousStep>Previous step</button>
+            </div>
+            <div class="col-6 text-right">
+              <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
+              </button>
+            </div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group row">
+              <div class="col-3">
+                <label class="col-form-label">Ownership verification photo:&nbsp;</label>
+                <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
                        accept="image/*" required>
+                <div class="realty-pic-preview-container">
+                  <img class="img-fluid" src="{{realtyObj?.verificationPicture?.link}}">
+                </div>
               </div>
-              <div class="row">
-                <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
-                  <img class="img-fluid" src="{{picture.link}}">
+              <div class="col-9">
+                <div>
+                  <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
+                  <br/>
+                  <input type="file" (change)="onRealtyObjPictureSelecting($event)" placeholder="Upload file"
+                         accept="image/*" required>
+                </div>
+                <div class="row">
+                  <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
+                    <img class="img-fluid" src="{{picture.link}}">
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </aw-wizard-step>
-    </aw-wizard>
-  </form>
-  <div style="text-align: right">
-    <simple-notifications></simple-notifications>
+        </aw-wizard-step>
+      </aw-wizard>
+    </form>
+    <div style="text-align: right">
+      <simple-notifications></simple-notifications>
+    </div>
   </div>
 </div>
