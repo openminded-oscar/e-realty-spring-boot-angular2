@@ -17,7 +17,17 @@ import {RealtyObjService} from "./services/realty-obj.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import { RealtyObjsGalleryComponent } from './realty-objs-gallery/realty-objs-gallery.component';
+import {RouterModule, Routes} from "@angular/router";
 
+
+const appRoutes: Routes = [
+  { path: 'sell', component: RealtyObjEditComponent },
+  { path: 'buy', component: RealtyObjsGalleryComponent },
+  { path: '',
+    redirectTo: '/buy',
+    pathMatch: 'full'
+  }
+];
 
 @NgModule({
   declarations: [
@@ -28,7 +38,18 @@ import { RealtyObjsGalleryComponent } from './realty-objs-gallery/realty-objs-ga
     RealtyObjsGalleryComponent
   ],
   imports: [
-    BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule, NgbModule.forRoot(), ArchwizardModule, BrowserAnimationsModule, SimpleNotificationsModule.forRoot()
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // <-- debugging purposes only
+    ),
+    NgbModule.forRoot(),
+    ArchwizardModule,
+    BrowserAnimationsModule,
+    SimpleNotificationsModule.forRoot()
   ],
   providers: [AddressService, ConfigService, FileUploadService, RealtyObjService],
   bootstrap: [AppComponent]

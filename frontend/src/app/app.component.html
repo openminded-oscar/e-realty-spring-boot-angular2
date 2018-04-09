@@ -7,16 +7,16 @@
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Buy</a>
+        <a class="nav-link" routerLink="/buy">Buy</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Rent</a>
+        <a class="nav-link" routerLink="#">Rent</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Sell</a>
+        <a class="nav-link" routerLink="/sell">Sell</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Find a realtor</a>
+        <a class="nav-link" routerLink="#">Find a realtor</a>
       </li>
     </ul>
     <region-input></region-input>
@@ -27,9 +27,7 @@
     <div class="col-2">
     </div>
     <div class="col-10">
-      <new-object>
-
-      </new-object>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>
