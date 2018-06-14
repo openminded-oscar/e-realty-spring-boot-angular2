@@ -21,7 +21,8 @@ public class RealtyObjectsService {
 
     @SuppressWarnings("unchecked")
     public Iterable<RealtyObject> getAll(RealtyObjectsFilter objectsFilter) {
-        return realtyObjectRepository.findAll(new RealtyObjectSpecification(objectsFilter));
+//        return realtyObjectRepository.findAll(new RealtyObjectSpecification(objectsFilter));
+        return realtyObjectRepository.findAll();
     }
 
     public RealtyObject add(RealtyObject realtyObject) {
