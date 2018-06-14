@@ -2,7 +2,7 @@ spring.datasource:
   url: jdbc:mysql://localhost:3306/realperfect?autoReconnect=true&useSSL=false
   username: root
   password: root
-  driverClassName: com.mysql.jdbc.Driver
+  driverClassName: com.mysql.cj.jdbc.Driver
 spring:
   jpa:
     show-sql: true
