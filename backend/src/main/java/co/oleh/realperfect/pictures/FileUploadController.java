@@ -30,13 +30,13 @@ public class FileUploadController {
 
 
     @PostMapping(value = "/upload-photo", produces = "application/json")
-    public ResponseEntity<Map> handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<PictureInfo> handleFileUpload(@RequestParam("file") MultipartFile file) {
         String filename = generateUuidFilename(file);
         storageService.uploadFileForCategoryAndUser(file, filename, "category", "someId");
 
-        pictureInfoService.save(new PictureInfo(filename));
+        PictureInfo pictureInfo = pictureInfoService.save(new PictureInfo(filename));
 
-        return new ResponseEntity<>(Collections.singletonMap("filename", filename), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(pictureInfo, HttpStatus.ACCEPTED);
     }
 
     private String generateUuidFilename(MultipartFile file) {

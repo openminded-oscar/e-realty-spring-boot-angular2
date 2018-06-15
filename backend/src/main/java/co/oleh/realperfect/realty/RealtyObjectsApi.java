@@ -1,16 +1,20 @@
 package co.oleh.realperfect.realty;
 
 import co.oleh.realperfect.model.OperationType;
+import co.oleh.realperfect.model.PictureInfo;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.filtering.RealtyObjectsFilter;
 import co.oleh.realperfect.model.BuildingType;
+import co.oleh.realperfect.repository.PictureInfoRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -20,6 +24,9 @@ public class RealtyObjectsApi {
 
     @Autowired
     private RealtyObjectsService realtyObjectsService;
+
+    @Autowired
+    private PictureInfoRepository pictureInfoRepository;
 
     @RequestMapping(method = RequestMethod.GET, value = "/realty-objects/{objectId}")
     public ResponseEntity<RealtyObject> getObjectDetails(@PathVariable Long objectId) {
@@ -37,6 +44,11 @@ public class RealtyObjectsApi {
 
     @RequestMapping(method = RequestMethod.POST, value = "/realty-object/add")
     public ResponseEntity<RealtyObject> postRealtyObject(@RequestBody RealtyObject realtyObject) {
+        List<PictureInfo> retrievedPictures = realtyObject.getPictures()
+                .stream()
+                .map(picture -> pictureInfoRepository.findOne(picture.getId()))
+                .collect(Collectors.toList());
+        realtyObject.setPictures(retrievedPictures);
         RealtyObject addedObject = realtyObjectsService.add(realtyObject);
 
         return new ResponseEntity<RealtyObject>(addedObject, HttpStatus.OK);

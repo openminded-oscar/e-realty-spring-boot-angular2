@@ -15,13 +15,6 @@ export class RealtyObjsListComponent implements OnInit {
   }
 
   trimDescription(fullDescr) {
-    return fullDescr.substr(0, 52) + '...';
+    return fullDescr.substr(0, 75) + '...';
   }
-
-  transformCityToString (city) {
-    return (city.name
-      + (city.district ? (', ' + city.district + ' distr.')
-        : '') + (city.region ? (', '
-        + city.region + ' reg.') : ''));
-  };
 }

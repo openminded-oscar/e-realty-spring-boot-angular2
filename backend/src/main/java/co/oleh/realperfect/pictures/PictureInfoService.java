@@ -10,7 +10,7 @@ public class PictureInfoService {
     @Autowired
     private PictureInfoRepository pictureRepository;
 
-    public void save(PictureInfo pictureInfo) {
-        pictureRepository.save(pictureInfo);
+    public PictureInfo save(PictureInfo pictureInfo) {
+        return pictureRepository.save(pictureInfo);
     }
 }

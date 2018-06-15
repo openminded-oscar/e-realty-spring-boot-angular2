@@ -1,6 +1,7 @@
 package co.oleh.realperfect.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class RealtyObject {
     private Integer foundationYear;
     private String otherInfo;
     private BuildingType buildingType;
+    private List<PictureInfo> pictures;
     private Set<OperationType> targetOperations;
     private Address address;
     private User owner;
@@ -243,5 +245,15 @@ public class RealtyObject {
 
     public void setConfirmationDocPhotoPath(String confirmationDocPhotoPath) {
         this.confirmationDocPhotoPath = confirmationDocPhotoPath;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "realty_object_id")
+    public List<PictureInfo> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<PictureInfo> pictures) {
+        this.pictures = pictures;
     }
 }
