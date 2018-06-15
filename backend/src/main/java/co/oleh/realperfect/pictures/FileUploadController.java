@@ -1,6 +1,6 @@
 package co.oleh.realperfect.pictures;
 
-import co.oleh.realperfect.model.PictureInfo;
+import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -12,9 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,11 +28,11 @@ public class FileUploadController {
 
 
     @PostMapping(value = "/upload-photo", produces = "application/json")
-    public ResponseEntity<PictureInfo> handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<RealtyObjectPhoto> handleFileUpload(@RequestParam("file") MultipartFile file) {
         String filename = generateUuidFilename(file);
         storageService.uploadFileForCategoryAndUser(file, filename, "category", "someId");
 
-        PictureInfo pictureInfo = pictureInfoService.save(new PictureInfo(filename));
+        RealtyObjectPhoto pictureInfo = pictureInfoService.save(new RealtyObjectPhoto(filename));
 
         return new ResponseEntity<>(pictureInfo, HttpStatus.ACCEPTED);
     }

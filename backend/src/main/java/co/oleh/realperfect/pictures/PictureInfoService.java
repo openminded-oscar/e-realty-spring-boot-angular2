@@ -1,16 +1,16 @@
 package co.oleh.realperfect.pictures;
 
-import co.oleh.realperfect.model.PictureInfo;
-import co.oleh.realperfect.repository.PictureInfoRepository;
+import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
+import co.oleh.realperfect.repository.RealtyObjectPhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PictureInfoService {
     @Autowired
-    private PictureInfoRepository pictureRepository;
+    private RealtyObjectPhotoRepository pictureRepository;
 
-    public PictureInfo save(PictureInfo pictureInfo) {
+    public RealtyObjectPhoto save(RealtyObjectPhoto pictureInfo) {
         return pictureRepository.save(pictureInfo);
     }
 }

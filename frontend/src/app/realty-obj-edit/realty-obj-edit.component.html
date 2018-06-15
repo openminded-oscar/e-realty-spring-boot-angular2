@@ -116,7 +116,7 @@
               <div class="col-5">
 					<textarea rows="3" maxlength="64" name="otherInfo" [(ngModel)]="realtyObj.otherInfo" class="form-control"
                     id="other-info-input"
-                    ></textarea>
+          ></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -225,7 +225,7 @@
                 <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
                        accept="image/*" required>
                 <div class="realty-pic-preview-container">
-                  <img class="img-fluid" src="{{realtyObj?.verificationPicture?.link}}">
+                  <img class="img-fluid" src="{{realtyObj?.verificationPhoto?.link}}">
                 </div>
               </div>
               <div class="col-9">
@@ -236,8 +236,14 @@
                          accept="image/*" required>
                 </div>
                 <div class="row">
-                  <div class="col-3 realty-pic-preview-container" *ngFor="let picture of realtyObj.pictures">
-                    <img class="img-fluid" src="{{picture.link}}">
+                  <div class="col-3 realty-pic-preview-container" *ngFor="let photo of realtyObj.photos">
+                    <img class="img-fluid" src="{{photo.link}}">
+                    <div *ngIf="photo.type!==photoType.REALTY_MAIN">
+                      <button (click)="makeMain(photo)" class="btn">Make main</button>
+                    </div>
+                    <div *ngIf="photo.type===photoType.REALTY_MAIN">
+                      <span>Main photo</span>
+                    </div>
                   </div>
                 </div>
               </div>

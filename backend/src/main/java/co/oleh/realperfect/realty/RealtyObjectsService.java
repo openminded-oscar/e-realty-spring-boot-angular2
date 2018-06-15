@@ -1,14 +1,12 @@
 package co.oleh.realperfect.realty;
 
-import co.oleh.realperfect.model.filtering.RealtyObjectSpecification;
-import co.oleh.realperfect.model.filtering.RealtyObjectsFilter;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
+import co.oleh.realperfect.model.RealtyObject;
+import co.oleh.realperfect.model.filtering.RealtyObjectsFilter;
+import co.oleh.realperfect.repository.RealtyObjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import co.oleh.realperfect.model.RealtyObject;
-import co.oleh.realperfect.repository.RealtyObjectRepository;
 
 import java.util.Collections;
 import java.util.HashSet;

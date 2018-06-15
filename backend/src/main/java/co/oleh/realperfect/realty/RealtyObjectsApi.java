@@ -1,11 +1,11 @@
 package co.oleh.realperfect.realty;
 
 import co.oleh.realperfect.model.OperationType;
-import co.oleh.realperfect.model.PictureInfo;
+import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.filtering.RealtyObjectsFilter;
 import co.oleh.realperfect.model.BuildingType;
-import co.oleh.realperfect.repository.PictureInfoRepository;
+import co.oleh.realperfect.repository.RealtyObjectPhotoRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class RealtyObjectsApi {
     private RealtyObjectsService realtyObjectsService;
 
     @Autowired
-    private PictureInfoRepository pictureInfoRepository;
+    private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
 
     @RequestMapping(method = RequestMethod.GET, value = "/realty-objects/{objectId}")
     public ResponseEntity<RealtyObject> getObjectDetails(@PathVariable Long objectId) {
@@ -44,13 +44,17 @@ public class RealtyObjectsApi {
 
     @RequestMapping(method = RequestMethod.POST, value = "/realty-object/add")
     public ResponseEntity<RealtyObject> postRealtyObject(@RequestBody RealtyObject realtyObject) {
-        List<PictureInfo> retrievedPictures = realtyObject.getPictures()
+        List<RealtyObjectPhoto> retrievedPhotos = realtyObject.getPhotos()
                 .stream()
-                .map(picture -> pictureInfoRepository.findOne(picture.getId()))
+                .map(photoToMap -> {
+                    RealtyObjectPhoto photo = realtyObjectPhotoRepository.findOne(photoToMap.getId());
+                    photo.setType(photoToMap.getType());
+                    return photo;
+                })
                 .collect(Collectors.toList());
-        realtyObject.setPictures(retrievedPictures);
-        RealtyObject addedObject = realtyObjectsService.add(realtyObject);
+        realtyObject.setPhotos(retrievedPhotos);
 
+        RealtyObject addedObject = realtyObjectsService.add(realtyObject);
         return new ResponseEntity<RealtyObject>(addedObject, HttpStatus.OK);
     }
 

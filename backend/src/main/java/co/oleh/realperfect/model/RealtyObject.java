@@ -1,5 +1,9 @@
 package co.oleh.realperfect.model;
 
+import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
+import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
+import lombok.ToString;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_realty_object")
+@ToString
 public class RealtyObject {
     private Long id;
     private Integer roomsAmount;
@@ -24,16 +29,16 @@ public class RealtyObject {
     private Integer foundationYear;
     private String otherInfo;
     private BuildingType buildingType;
-    private List<PictureInfo> pictures;
     private Set<OperationType> targetOperations;
-    private Address address;
-    private User owner;
-
-//    private Realter realter;
     private Boolean confirmed = false;
     private Boolean realterAware = false;
-    private String mainPhotoPath;
-    private String confirmationDocPhotoPath;
+
+    private Address address;
+    private User owner;
+//    private Realter realter;
+
+    private List<RealtyObjectPhoto> photos;
+    private ConfirmationDocPhoto confirmationDocPhoto;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -219,41 +224,34 @@ public class RealtyObject {
         this.realterAware = realterAware;
     }
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "realter_id", nullable = true)
-    public Realter getRealter() {
-        return realter;
+//    @ManyToOne(optional = true)
+//    @JoinColumn(name = "realter_id", nullable = true)
+//    public Realter getRealter() {
+//        return realter;
+//    }
+//
+//    public void setRealter(Realter realter) {
+//        this.realter = realter;
+//    }
+
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "realty_object_id")
+    public ConfirmationDocPhoto getConfirmationDocPhoto() {
+        return confirmationDocPhoto;
     }
 
-    public void setRealter(Realter realter) {
-        this.realter = realter;
-    }
-
-    @Column(name = "main_photo_path")
-    public String getMainPhotoPath() {
-        return mainPhotoPath;
-    }
-
-    public void setMainPhotoPath(String mainPhotoPath) {
-        this.mainPhotoPath = mainPhotoPath;
-    }
-
-    @Column(name = "confirmation_doc_photo_path")
-    public String getConfirmationDocPhotoPath() {
-        return confirmationDocPhotoPath;
-    }
-
-    public void setConfirmationDocPhotoPath(String confirmationDocPhotoPath) {
-        this.confirmationDocPhotoPath = confirmationDocPhotoPath;
+    public void setConfirmationDocPhoto(ConfirmationDocPhoto confirmationDocPhoto) {
+        this.confirmationDocPhoto = confirmationDocPhoto;
     }
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "realty_object_id")
-    public List<PictureInfo> getPictures() {
-        return pictures;
+    public List<RealtyObjectPhoto> getPhotos() {
+        return photos;
     }
 
-    public void setPictures(List<PictureInfo> pictures) {
-        this.pictures = pictures;
+    public void setPhotos(List<RealtyObjectPhoto> photos) {
+        this.photos = photos;
     }
 }

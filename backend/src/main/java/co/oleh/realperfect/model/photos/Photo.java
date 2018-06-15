@@ -1,22 +1,24 @@
-package co.oleh.realperfect.model;
+package co.oleh.realperfect.model.photos;
 
+import co.oleh.realperfect.model.RealtyPhotoType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "tbl_picture_info")
+@MappedSuperclass
 @NoArgsConstructor
-public class PictureInfo {
+@ToString
+public class Photo {
     private Long id;
 
     @Getter
     @Setter
     private String filename;
 
-    public PictureInfo(String filename) {
+    public Photo(String filename) {
         this.filename = filename;
     }
 

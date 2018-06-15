@@ -1,4 +1,4 @@
-import {Picture} from "./picture";
+import {Photo, RealtyPhoto} from "./photo";
 import {Address} from "./address";
 
 export class RealtyObj {
@@ -20,8 +20,8 @@ export class RealtyObj {
   public confirmed: boolean;
   public realterAware: boolean;
   public dwellingType: string;
-  public pictures: Picture[];
-  public verificationPicture: Picture;
+  public photos: RealtyPhoto[];
+  public verificationPhoto: Photo;
   public address: Address;
   public realter: string;
   public owner: string;
@@ -29,7 +29,7 @@ export class RealtyObj {
 
   constructor() {
     this.targetOperations = [];
-    this.pictures = [];
+    this.photos = [];
     this.address = new Address();
   }
 
