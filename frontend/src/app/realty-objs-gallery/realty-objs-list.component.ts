@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {RealtyObj} from "../domain/realty-obj";
 
 @Component({
   selector: 'realty-objs-list',
@@ -7,7 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class RealtyObjsListComponent implements OnInit {
   @Input()
-  public realtyObjects = [];
+  public realtyObjects:RealtyObj[] = [];
 
   constructor() { }
 

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 
 import * as _ from "lodash";
 import {RealtyObjService} from "../services/realty-obj.service";
+import {RealtyObj} from "../domain/realty-obj";
 
 @Component({
   selector: 'realty-objs-gallery',
@@ -29,7 +30,10 @@ export class RealtyObjsGalleryComponent implements OnInit {
   }
 
   public searchObjects() {
-    this.realtyObjService.findByFilter(this.filter).subscribe((response: any) => {
+    this.realtyObjService.findByFilter(this.filter).subscribe((response: RealtyObj[]) => {
+      response.forEach(value => {
+        value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+      });
       this.currentRealtyObjects = response;
     });
   }

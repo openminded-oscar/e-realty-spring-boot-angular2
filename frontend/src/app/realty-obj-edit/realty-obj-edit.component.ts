@@ -48,11 +48,12 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     this.supportedOperations = this.config.supportedOperations.map((value, index, array) => <any>{
       value: value,
       name: value,
-      checked: this.realtyObj.checkIfOperationSupported(value)
+      checked: RealtyObj.checkIfOperationSupported(this.realtyObj, value)
     });
   }
 
   saveRealtyObject() {
+    this.realtyObj.targetOperations = this.targetOperations;
     this.realtyObjService.save(this.realtyObj).subscribe((data: RealtyObj) => {
       this._notification.success('Success!', 'the object was added!');
       this.realtyObj = data;

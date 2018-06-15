@@ -1,5 +1,6 @@
-import {Photo, RealtyPhoto} from "./photo";
+import {Photo, RealtyPhoto, RealtyPhotoType} from "./photo";
 import {Address} from "./address";
+import {endpoints} from "../commons";
 
 export class RealtyObj {
   public roomsAmount: number;
@@ -25,6 +26,7 @@ export class RealtyObj {
   public address: Address;
   public realter: string;
   public owner: string;
+  public mainPhotoPath: string;
 
 
   constructor() {
@@ -33,8 +35,12 @@ export class RealtyObj {
     this.address = new Address();
   }
 
-  public checkIfOperationSupported(operation: string) {
-    return this.targetOperations.indexOf(operation) > 0;
+  public static checkIfOperationSupported(realty: RealtyObj, operation: string) {
+    return realty.targetOperations.indexOf(operation) > 0;
+  }
+
+  public static getMainPhoto(realty: RealtyObj){
+    return endpoints.pictures + realty.photos.filter(value => value.type==RealtyPhotoType.REALTY_MAIN)[0].filename;
   }
 }
 
