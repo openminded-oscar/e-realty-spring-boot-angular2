@@ -29,10 +29,9 @@ export class RealtyObjsGalleryComponent implements OnInit {
   }
 
   public searchObjects() {
-    this.realtyObjService.findByFilter(this.filter).subscribe(
-      function (response) {
-        this.currentRealtyObjects = response;
-      });
+    this.realtyObjService.findByFilter(this.filter).subscribe((response: any) => {
+      this.currentRealtyObjects = response;
+    });
   }
 
   public resetAllFilters() {

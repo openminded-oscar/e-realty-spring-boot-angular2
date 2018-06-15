@@ -13,11 +13,11 @@
             <div class="form-group row">
               <label class="col-1 col-form-label">City:</label>
               <div class="col-5">
-                <address-input [(ngModel)]="realtyObj.city" name="city" required></address-input>
+                <address-input [(ngModel)]="realtyObj.address.city" name="city" required></address-input>
               </div>
               <label class="col-1 col-form-label">Street:</label>
               <div class="col-5">
-                <address-input [(ngModel)]="realtyObj.street" name="street" required></address-input>
+                <address-input [(ngModel)]="realtyObj.address.street" name="street" required></address-input>
               </div>
             </div>
             <div class="form-group row">
@@ -25,12 +25,12 @@
               <div class="col-3">
                 <input id="number-of-street-input" name="buildingNumber" type="text"
                        class="form-control"
-                       [(ngModel)]="realtyObj.buildingNumber" required minlength="1">
+                       [(ngModel)]="realtyObj.address.numberOfStreet" required minlength="1">
               </div>
               <label class="col-1 col-form-label" for="apt-number-input">Apt.
                 number:</label>
               <div class="col-3">
-                <input id="apt-number-input" [(ngModel)]="realtyObj.apartmentNumber"
+                <input id="apt-number-input" [(ngModel)]="realtyObj.address.apartmentNumber"
                        name="flatNum" type="text" class="form-control"
                        [disabled]="realtyObj.dwellingType!=='APARTMENT'" required>
               </div>
@@ -116,7 +116,7 @@
               <div class="col-5">
 					<textarea rows="3" maxlength="64" name="otherInfo" [(ngModel)]="realtyObj.otherInfo" class="form-control"
                     id="other-info-input"
-                    required></textarea>
+                    ></textarea>
               </div>
             </div>
             <div class="form-group row">

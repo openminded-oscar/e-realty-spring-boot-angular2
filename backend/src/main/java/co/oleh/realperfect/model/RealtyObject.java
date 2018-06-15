@@ -9,40 +9,25 @@ import javax.persistence.*;
 @Table(name = "tbl_realty_object")
 public class RealtyObject {
     private Long id;
-    // +
     private Integer roomsAmount;
-    // +
     private Integer floor;
-    // +
     private Integer totalFloors;
-    //+
     private BigDecimal price;
-    // +
     private BigDecimal totalArea;
-    // +
     private BigDecimal livingArea;
-    // +
     private String description;
-    // +
     private Boolean hasGarage;
-    // +
     private Boolean hasRepairing;
     private Boolean hasCellar;
     private Boolean hasLoft;
-    // +
     private Integer foundationYear;
-    // +
     private String otherInfo;
-    // +
     private BuildingType buildingType;
-    // +
     private Set<OperationType> targetOperations;
-    // +
     private Address address;
-    // +
     private User owner;
 
-    private Realter realter;
+//    private Realter realter;
     private Boolean confirmed = false;
     private Boolean realterAware = false;
     private String mainPhotoPath;
@@ -127,6 +112,24 @@ public class RealtyObject {
 
     public void setHasRepairing(Boolean hasRepairing) {
         this.hasRepairing = hasRepairing;
+    }
+
+    @Column(name = "has_cellar")
+    public Boolean getHasCellar() {
+        return hasCellar;
+    }
+
+    public void setHasCellar(Boolean hasCellar) {
+        this.hasCellar = hasCellar;
+    }
+
+    @Column(name = "has_loft")
+    public Boolean getHasLoft() {
+        return hasLoft;
+    }
+
+    public void setHasLoft(Boolean hasLoft) {
+        this.hasLoft = hasLoft;
     }
 
     @Column(name = "foundation_year")

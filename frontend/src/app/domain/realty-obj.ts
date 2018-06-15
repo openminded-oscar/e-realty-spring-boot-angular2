@@ -1,4 +1,5 @@
 import {Picture} from "./picture";
+import {Address} from "./address";
 
 export class RealtyObj {
   public roomsAmount: number;
@@ -16,22 +17,20 @@ export class RealtyObj {
   public otherInfo: string;
   public buildingType: string;
   public targetOperations: string[];
-  public city: string;
-  public buildingNumber: string;
-  public apartmentNumber: string;
-  public street: string;
-  public realter: string;
-  public owner: string;
   public confirmed: boolean;
   public realterAware: boolean;
   public dwellingType: string;
   public pictures: Picture[];
   public verificationPicture: Picture;
+  public address: Address;
+  public realter: string;
+  public owner: string;
 
 
   constructor() {
     this.targetOperations = [];
     this.pictures = [];
+    this.address = new Address();
   }
 
   public checkIfOperationSupported(operation: string) {

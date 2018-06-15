@@ -83,7 +83,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
       this.fileUploadService.upload(file, apiBase + "/upload-photo")
         .subscribe(
           data => {
-            this.realtyObj.pictures.push({link: (endpoints.pathToPictures + data.filename), filename: data.filename})
+            this.realtyObj.pictures.push({link: (endpoints.pictures + data.filename), filename: data.filename})
           },
           error => console.log(error)
         );
