@@ -9,8 +9,12 @@ export class RealtyObjService {
   constructor(private http: HttpClient) {
   }
 
-  findByFilter(filter){
+  findByFilter(filter) {
     return this.http.post(endpoints.realtyObj.list, filter);
+  }
+
+  findById(id) {
+    return this.http.get(endpoints.realtyObj.byId + "/" + id);
   }
 
   save(realtyObj: RealtyObj) {

@@ -23,6 +23,7 @@ import { RealtyObjsListComponent } from './realty-objs-gallery/realty-objs-list.
 
 const appRoutes: Routes = [
   { path: 'sell', component: RealtyObjEditComponent },
+  { path: 'sell/:id', component: RealtyObjEditComponent },
   { path: 'buy', component: RealtyObjsGalleryComponent },
   { path: '',
     redirectTo: '/buy',

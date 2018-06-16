@@ -1,9 +1,0 @@
-<form class="form-inline mt-2">
-  <label class="col-form-label text-white">Your region:&nbsp;</label>
-  <select class="form-control" [ngModel]="currentCity" (ngModelChange)="onChangeRegion($event)" name="currentCity">
-    <option *ngFor="let baseCity of baseCities"
-            [ngValue]="baseCity">
-      {{baseCity.name}}
-    </option>
-  </select>
-</form>

@@ -39,8 +39,12 @@ export class RealtyObj {
     return realty.targetOperations.indexOf(operation) > 0;
   }
 
-  public static getMainPhoto(realty: RealtyObj){
-    return endpoints.pictures + realty.photos.filter(value => value.type==RealtyPhotoType.REALTY_MAIN)[0].filename;
+  public static getMainPhoto(realty: RealtyObj) {
+    let mainPhotos = realty.photos.filter(value => value.type == RealtyPhotoType.REALTY_MAIN);
+
+    if (mainPhotos && mainPhotos.length > 0) {
+      return endpoints.pictures + mainPhotos[0].filename;
+    }
   }
 }
 

@@ -15,7 +15,7 @@
           <p>{{trimDescription(realtyObject.description)}}</p>
         </div>
         <h4 class="pull-right">Price: ${{realtyObject.price}}</h4>
-        <a [href]="realtyObject.id" class="btn btn-block">Watch details</a>
+        <a [routerLink]="['/sell', realtyObject.id]" class="btn btn-block">Watch details</a>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core";
+import {ActivatedRoute} from '@angular/router';
 import {ConfigService} from "../services/config.service";
 import {FileUploadService} from "../services/file-upload.service";
 import {endpoints, apiBase} from "../commons";
@@ -32,16 +33,26 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   public constructor(public config: ConfigService,
                      public fileUploadService: FileUploadService,
                      public realtyObjService: RealtyObjService,
-                     private _notification: NotificationsService) {
+                     public _notification: NotificationsService,
+                     public route: ActivatedRoute) {
   }
 
   public ngOnInit() {
-    this.realtyObj = new RealtyObj();
     this.realters = ["Petro Petrenko", "Pavlo Pavlenko", "Andriy Andriyenko", "Ivan Ivanenko"];
     this.supportedOperations = this.config.supportedOperations
       .map((value, index, array) => <any> {value: value, name: value, checked: false});
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
+
+    this.realtyObj = new RealtyObj();
+    // if passed object id in parameter then retrieve that object
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.realtyObjService.findById(+params['id']).subscribe(realtyObj => {
+          this.realtyObj = <RealtyObj>realtyObj;
+        });
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
