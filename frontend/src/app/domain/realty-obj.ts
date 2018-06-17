@@ -43,7 +43,7 @@ export class RealtyObj {
     let mainPhotos = realty.photos.filter(value => value.type == RealtyPhotoType.REALTY_MAIN);
 
     if (mainPhotos && mainPhotos.length > 0) {
-      return endpoints.pictures + mainPhotos[0].filename;
+      return Photo.getLinkByFilename(mainPhotos[0].filename);
     }
   }
 }

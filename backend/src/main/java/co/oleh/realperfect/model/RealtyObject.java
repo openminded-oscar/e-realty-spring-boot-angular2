@@ -29,6 +29,7 @@ public class RealtyObject {
     private Integer foundationYear;
     private String otherInfo;
     private BuildingType buildingType;
+    private DwellingType dwellingType;
     private Set<OperationType> targetOperations;
     private Boolean confirmed = false;
     private Boolean realterAware = false;
@@ -173,6 +174,16 @@ public class RealtyObject {
 
     public void setBuildingType(BuildingType buildingType) {
         this.buildingType = buildingType;
+    }
+
+    @Column(name = "dwelling_type")
+    @Enumerated(EnumType.STRING)
+    public DwellingType getDwellingType() {
+        return dwellingType;
+    }
+
+    public void setDwellingType(DwellingType dwellingType) {
+        this.dwellingType = dwellingType;
     }
 
     @ElementCollection(targetClass = OperationType.class)

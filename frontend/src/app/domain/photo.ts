@@ -1,7 +1,13 @@
+import {endpoints} from "../commons";
+
 export class Photo {
   public link: string;
   public filename: string;
   public id: number;
+
+  public static getLinkByFilename(filename){
+    return endpoints.pictures + filename;
+  }
 }
 
 export class RealtyPhoto extends Photo {

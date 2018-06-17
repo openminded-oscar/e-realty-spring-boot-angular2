@@ -6,7 +6,7 @@ import {endpoints, apiBase} from "../commons";
 import {RealtyObj} from "../domain/realty-obj";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {NotificationsService} from "angular2-notifications";
-import {RealtyPhotoType} from "../domain/photo";
+import {Photo, RealtyPhotoType} from "../domain/photo";
 
 
 @Component({
@@ -27,7 +27,17 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   public get targetOperations() {
     return this.supportedOperations
       .filter(opt => opt.checked)
-      .map(opt => opt.value)
+      .map(opt => opt.value);
+  }
+
+  public set targetOperations(operations: string[]) {
+    operations.forEach(value => {
+      this.supportedOperations.forEach((supportedOperation, index) => {
+        if (supportedOperation.value === value && index == 0) {
+          supportedOperation.checked = true;
+        }
+      });
+    });
   }
 
   public constructor(public config: ConfigService,
@@ -50,6 +60,10 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
       if (params['id']) {
         this.realtyObjService.findById(+params['id']).subscribe(realtyObj => {
           this.realtyObj = <RealtyObj>realtyObj;
+          this.realtyObj.photos.forEach(photo => {
+            photo.link = Photo.getLinkByFilename(photo.filename);
+          });
+          this.targetOperations = (<RealtyObj>realtyObj).targetOperations;
         });
       }
     });
@@ -81,7 +95,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
         .subscribe(
           data => {
             this.realtyObj.verificationPhoto = {
-              link: (endpoints.pictures + data.filename),
+              link: Photo.getLinkByFilename(data.filename),
               filename: data.filename,
               id: data.id
             };
@@ -100,12 +114,9 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
         .subscribe(
           data => {
             let type = (this.realtyObj.photos.length == 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
-            this.realtyObj.photos.push({
-              link: (endpoints.pictures + data.filename),
-              filename: data.filename,
-              id: data.id,
-              type: type
-            })
+            data.type = type;
+            data.link = Photo.getLinkByFilename(data.filename);
+            this.realtyObj.photos.push(data);
           },
           error => console.log(error)
         );

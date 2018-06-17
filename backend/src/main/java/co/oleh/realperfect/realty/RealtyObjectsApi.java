@@ -25,9 +25,6 @@ public class RealtyObjectsApi {
     @Autowired
     private RealtyObjectsService realtyObjectsService;
 
-    @Autowired
-    private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
-
     @RequestMapping(method = RequestMethod.GET, value = "/realty-objects/{objectId}")
     public ResponseEntity<RealtyObject> getObjectDetails(@PathVariable Long objectId) {
         RealtyObject realtyObject = realtyObjectsService.getObjectById(objectId);
@@ -44,16 +41,6 @@ public class RealtyObjectsApi {
 
     @RequestMapping(method = RequestMethod.POST, value = "/realty-object/add")
     public ResponseEntity<RealtyObject> postRealtyObject(@RequestBody RealtyObject realtyObject) {
-        List<RealtyObjectPhoto> retrievedPhotos = realtyObject.getPhotos()
-                .stream()
-                .map(photoToMap -> {
-                    RealtyObjectPhoto photo = realtyObjectPhotoRepository.findOne(photoToMap.getId());
-                    photo.setType(photoToMap.getType());
-                    return photo;
-                })
-                .collect(Collectors.toList());
-        realtyObject.setPhotos(retrievedPhotos);
-
         RealtyObject addedObject = realtyObjectsService.add(realtyObject);
         return new ResponseEntity<RealtyObject>(addedObject, HttpStatus.OK);
     }

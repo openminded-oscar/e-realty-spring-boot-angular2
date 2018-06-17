@@ -173,7 +173,7 @@
                   <label>
                     <input class="big-checkbox"
                            type="checkbox"
-                           name="options"
+                           [name]="operation.name"
                            value="{{operation.value}}"
                            [(ngModel)]="operation.checked"
                            required/>
