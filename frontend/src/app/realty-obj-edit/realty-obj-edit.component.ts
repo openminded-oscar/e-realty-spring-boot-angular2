@@ -7,6 +7,7 @@ import {RealtyObj} from "../domain/realty-obj";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {NotificationsService} from "angular2-notifications";
 import {Photo, RealtyPhotoType} from "../domain/photo";
+import {RealterService} from "../services/realter.service";
 
 
 @Component({
@@ -43,16 +44,19 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   public constructor(public config: ConfigService,
                      public fileUploadService: FileUploadService,
                      public realtyObjService: RealtyObjService,
+                     public realtersService: RealterService,
                      public _notification: NotificationsService,
                      public route: ActivatedRoute) {
   }
 
   public ngOnInit() {
-    this.realters = ["Petro Petrenko", "Pavlo Pavlenko", "Andriy Andriyenko", "Ivan Ivanenko"];
     this.supportedOperations = this.config.supportedOperations
       .map((value, index, array) => <any> {value: value, name: value, checked: false});
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
+    this.realtersService.getRealters().subscribe((gotRealters: any) => {
+      this.realters = gotRealters.map(realtor => realtor.user.name+" "+ realtor.user.surname);
+    });
 
     this.realtyObj = new RealtyObj();
     // if passed object id in parameter then retrieve that object

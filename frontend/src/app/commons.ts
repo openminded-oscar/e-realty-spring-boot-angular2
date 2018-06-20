@@ -14,6 +14,9 @@ export const endpoints: any = {
   pictures: apiBase + '/files/',
   addressesNearby: apiBase + "/addresses/addresses-nearby",
   supportedCities: apiBase + "/addresses/cities-supported",
+  realters:{
+    list: apiBase + "/realter/list"
+  },
   realtyObj: {
     add: apiBase + "/realty-object/add",
     list: apiBase + '/realty-objects',

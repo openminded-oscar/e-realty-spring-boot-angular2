@@ -45,6 +45,4 @@ public class Realter {
 //	public void setRealtyObjects(Set<RealtyObject> realtyObjects) {
 //		this.realtyObjects = realtyObjects;
 //	}
-	
-	
 }

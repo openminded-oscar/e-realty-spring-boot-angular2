@@ -14,6 +14,7 @@ import { UserRegionInputComponent } from './user-region-input/user-region-input.
 import {ConfigService} from "./services/config.service";
 import {FileUploadService} from "./services/file-upload.service";
 import {RealtyObjService} from "./services/realty-obj.service";
+import {RealterService} from "./services/realter.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import { RealtyObjsGalleryComponent } from './realty-objs-gallery/realty-objs-gallery.component';
@@ -54,7 +55,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot()
   ],
-  providers: [AddressService, ConfigService, FileUploadService, RealtyObjService],
+  providers: [AddressService, ConfigService, FileUploadService, RealtyObjService, RealterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
