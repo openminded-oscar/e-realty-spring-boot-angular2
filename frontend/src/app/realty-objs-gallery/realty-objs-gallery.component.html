@@ -5,24 +5,41 @@
         Filters
       </div>
       <div class="form-group card-body">
-        Street<input name="street" [(ngModel)]="filter.street" class="form-control">
-        City<input name="city" [(ngModel)]="filter.city" class="form-control">
-        Price min <input name="minPrice" [(ngModel)]="filter.minPrice" class="form-control">
-        Price max <input name="maxPrice" [(ngModel)]="filter.maxPrice" class="form-control">
-        Rooms <input name="rooms" [(ngModel)]="filter.rooms" class="form-control">
-        House type <select name="houseType" [(ngModel)]="filter.houseType" class="form-control">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-      </select>
+        <!--Street-->
+        <!--<input name="street" [(ngModel)]="filter.street.eq" class="form-control">-->
+        <!--City-->
+        <!--<input name="city" [(ngModel)]="filter.city.eq" class="form-control">-->
+        Price min
+        <input name="minPrice" [(ngModel)]="filter.price.ge" class="form-control">
+        Price max
+        <input name="maxPrice" [(ngModel)]="filter.price.le" class="form-control">
+        <!--Total area min-->
+        <!--<input name="minTotalArea" [(ngModel)]="filter.totalArea.ge" class="form-control">-->
+        <!--Total area max-->
+        <!--<input name="maxTotalArea" [(ngModel)]="filter.totalArea.le" class="form-control">-->
+        <!--Rooms-->
+        <!--<input name="rooms" [(ngModel)]="filter.rooms.eq" class="form-control">-->
+        <!--Description like-->
+        <!--<input name="description" [(ngModel)]="filter.description.like" class="form-control">-->
+        <!--Building type-->
+        <!--<select name="buildingType" [(ngModel)]="filter.buildingType.eq" class="form-control">-->
+
+        <!--</select>-->
+        <!--Dwelling type-->
+        <!--<select name="dwellingType" [(ngModel)]="filter.dwellingType.eq" class="form-control">-->
+
+        <!--</select>-->
+        <!--Supported operation-->
+        <!--<select name="supportedOperation" [(ngModel)]="filter.supportedOperation.oneOfMany" class="form-control">-->
+
+        <!--</select>-->
       </div>
       <div class="row">
         <div class="col-6">
           <button (click)="resetAllFilters()" class="btn btn-info btn-block">Reset all</button>
         </div>
         <div class="col-6">
-          <button (click)="searchObjects()" class="btn btn-info btn-block">Search</button>
+          <button (click)="resetAndLoadObjects()" class="btn btn-info btn-block">Search</button>
         </div>
       </div>
     </div>
@@ -31,7 +48,7 @@
     <realty-objs-list [realtyObjects]="currentRealtyObjects"></realty-objs-list>
     <div class="row">
       <div class="col-2 offset-5">
-        <button class="btn btn-block btn-info">Next items</button>
+        <button (click)="loadNextObjects()" class="btn btn-block btn-info">Next items</button>
       </div>
     </div>
   </div>

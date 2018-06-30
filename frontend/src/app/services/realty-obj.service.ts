@@ -9,8 +9,24 @@ export class RealtyObjService {
   constructor(private http: HttpClient) {
   }
 
-  findByFilter(filter) {
-    return this.http.post(endpoints.realtyObj.list, filter);
+  findByFilterAndPage(filter, pageable) {
+    let filterItems: any[] = [];
+    for(let field in filter){
+      for(let operation in filter[field]){
+        filterItems.push({
+          field: field,
+          operation: operation,
+          value: filter[field][operation]
+        });
+      }
+    }
+
+    return this.http.post(endpoints.realtyObj.list, filterItems, {
+      params: {
+        page: pageable.page,
+        size: pageable.size
+      }
+    });
   }
 
   findById(id) {

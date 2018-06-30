@@ -1,42 +1,48 @@
 package co.oleh.realperfect.realty;
 
-import co.oleh.realperfect.model.OperationType;
-import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
-import co.oleh.realperfect.model.RealtyObject;
-import co.oleh.realperfect.model.filtering.RealtyObjectsFilter;
 import co.oleh.realperfect.model.BuildingType;
-import co.oleh.realperfect.repository.RealtyObjectPhotoRepository;
+import co.oleh.realperfect.model.OperationType;
+import co.oleh.realperfect.model.RealtyObject;
+import co.oleh.realperfect.realty.filtering.FilterItem;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class RealtyObjectsApi {
     private static final Logger LOGGER = Logger.getLogger(RealtyObjectsApi.class);
 
     @Autowired
     private RealtyObjectsService realtyObjectsService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/realty-objects/{objectId}")
+
+    @GetMapping(value = "/realty-objects/{objectId}")
     public ResponseEntity<RealtyObject> getObjectDetails(@PathVariable Long objectId) {
         RealtyObject realtyObject = realtyObjectsService.getObjectById(objectId);
 
         return new ResponseEntity<RealtyObject>(realtyObject, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/realty-objects")
-    public ResponseEntity<Iterable<RealtyObject>> getAllRealtyObjects(@RequestBody RealtyObjectsFilter objectsFilter) {
-        Iterable<RealtyObject> allObjects = realtyObjectsService.getAll(objectsFilter);
+    @PostMapping(value = "/realty-objects")
+    public ResponseEntity<Page<RealtyObject>> getRealtyObjects(@RequestBody(required = false) List<FilterItem> filterItems,
+                                                               Pageable pageable) {
+        Page<RealtyObject> allObjects;
+        if (filterItems != null) {
+            allObjects = realtyObjectsService.getAllObjectsForFilterItems(filterItems, pageable);
+        } else {
+            allObjects = realtyObjectsService.getAllObjects(pageable);
+        }
 
-        return new ResponseEntity<Iterable<RealtyObject>>(allObjects, HttpStatus.OK);
+        return new ResponseEntity<Page<RealtyObject>>(allObjects, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/realty-object/add")

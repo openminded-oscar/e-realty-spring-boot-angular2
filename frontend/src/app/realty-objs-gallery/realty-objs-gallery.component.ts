@@ -11,30 +11,43 @@ import {RealtyObj} from "../domain/realty-obj";
 })
 export class RealtyObjsGalleryComponent implements OnInit {
   public currentRealtyObjects = [];
+  public filter: any;
+  public pageable: any;
 
   public initialFilter: any = {
-    "limit": 12,
-    "offset": 0,
-    "minPrice": 0.0,
-    "maxPrice": 1000000.0
+    "price": {
+      "ge": 0.0,
+      "le": 1000000.0
+    }
   };
-  public filter: any;
-
+  public initialPageable: any = {
+    "page": 0,
+    "size": 12
+  };
 
   constructor(private realtyObjService: RealtyObjService) {
   }
 
   ngOnInit() {
     this.filter = _.cloneDeep(this.initialFilter);
-    this.searchObjects();
+    this.pageable = _.cloneDeep(this.initialPageable);
+    this.resetAndLoadObjects();
   }
 
-  public searchObjects() {
-    this.realtyObjService.findByFilter(this.filter).subscribe((response: RealtyObj[]) => {
-      response.forEach(value => {
+  public resetAndLoadObjects() {
+    this.currentRealtyObjects = [];
+    this.pageable = this.initialPageable;
+    this.loadNextObjects();
+  }
+
+  public loadNextObjects() {
+    this.realtyObjService.findByFilterAndPage(this.filter, this.pageable).subscribe((response: any) => {
+      let realtyObjects: RealtyObj[] = response.content;
+      realtyObjects.forEach(value => {
         value.mainPhotoPath = RealtyObj.getMainPhoto(value);
       });
-      this.currentRealtyObjects = response;
+      this.currentRealtyObjects.push(realtyObjects);
+      ++this.pageable.page;
     });
   }
 

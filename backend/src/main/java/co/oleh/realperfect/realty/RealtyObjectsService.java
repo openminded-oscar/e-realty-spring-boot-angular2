@@ -3,11 +3,15 @@ package co.oleh.realperfect.realty;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.RealtyObject;
-import co.oleh.realperfect.model.filtering.RealtyObjectsFilter;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
+import co.oleh.realperfect.realty.filtering.FilterItem;
+import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
 import co.oleh.realperfect.repository.RealtyObjectPhotoRepository;
 import co.oleh.realperfect.repository.RealtyObjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -24,10 +28,18 @@ public class RealtyObjectsService {
     @Autowired
     private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
 
-    @SuppressWarnings("unchecked")
-    public Iterable<RealtyObject> getAll(RealtyObjectsFilter objectsFilter) {
-//        return realtyObjectRepository.findAll(new RealtyObjectSpecification(objectsFilter));
-        return realtyObjectRepository.findAll();
+    public Page<RealtyObject> getAllObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
+        RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
+        for(FilterItem filterItem: filterItems){
+            builder.with(filterItem.getField(), filterItem.getOperation(), filterItem.getValue());
+        }
+        Specification<RealtyObject> spec = builder.build();
+
+        return realtyObjectRepository.findAll(spec, pageable);
+    }
+
+    public Page<RealtyObject> getAllObjects(Pageable pageable) {
+        return realtyObjectRepository.findAll(pageable);
     }
 
     public RealtyObject add(RealtyObject realtyObject) {
