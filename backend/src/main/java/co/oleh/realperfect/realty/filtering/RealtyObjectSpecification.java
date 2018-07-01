@@ -20,21 +20,25 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
         Class<?> keyPathClass = keyPath.getJavaType();
         String value = criteria.getValue().toString();
 
-        if (operation.equalsIgnoreCase("ge")) {
-            return cb.greaterThanOrEqualTo(keyPath, value);
-        } else if (operation.equalsIgnoreCase("le")) {
-            return cb.lessThanOrEqualTo(keyPath, value);
-        } else if (operation.equalsIgnoreCase("eq") || operation.equalsIgnoreCase("like")) {
-            if (keyPathClass == String.class) {
-                return cb.like(cb.lower(keyPath), "%" + value.toLowerCase() + "%");
-            } else {
-                if (keyPathClass.isEnum()) {
-                    Object enumObject = toEnum(keyPathClass, value);
-                    return cb.equal(keyPath, enumObject);
+        switch (operation.toLowerCase()) {
+            case "ge":
+                return cb.greaterThanOrEqualTo(keyPath, value);
+            case "le":
+                return cb.lessThanOrEqualTo(keyPath, value);
+            case "eq":
+            case "like": {
+                if (keyPathClass == String.class) {
+                    return cb.like(cb.lower(keyPath), "%" + value.toLowerCase() + "%");
+                } else {
+                    if (keyPathClass.isEnum()) {
+                        Object enumObject = toEnum(keyPathClass, value);
+                        return cb.equal(keyPath, enumObject);
+                    }
+                    return cb.equal(keyPath, value);
                 }
-                return cb.equal(keyPath, value);
             }
         }
+
         return null;
     }
 
