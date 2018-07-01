@@ -3,6 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import * as _ from "lodash";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {RealtyObj} from "../domain/realty-obj";
+import {ConfigService} from "../services/config.service";
 
 @Component({
   selector: 'realty-objs-gallery',
@@ -13,6 +14,7 @@ export class RealtyObjsGalleryComponent implements OnInit {
   public currentRealtyObjects = [];
   public filter: any;
   public pageable: any;
+  public buildingTypes: string[];
 
   public initialFilter: any = {
     price: {
@@ -25,6 +27,15 @@ export class RealtyObjsGalleryComponent implements OnInit {
     street: {
       like: ""
     },
+    roomsAmount: {
+      eq: ""
+    },
+    description: {
+      like: ""
+    },
+    buildingType: {
+      eq: ""
+    },
     totalArea:{
       ge: "",
       le: ""
@@ -35,10 +46,12 @@ export class RealtyObjsGalleryComponent implements OnInit {
     size: 12
   };
 
-  constructor(private realtyObjService: RealtyObjService) {
+  constructor(private realtyObjService: RealtyObjService,
+              private config: ConfigService) {
   }
 
   ngOnInit() {
+    this.buildingTypes = this.config.supportedBuildingTypes;
     this.resetFiltersAndPageable();
     this.loadObjects();
   }

@@ -17,14 +17,15 @@
         <input name="minTotalArea" [(ngModel)]="filter.totalArea.ge" class="form-control">
         Total area max
         <input name="maxTotalArea" [(ngModel)]="filter.totalArea.le" class="form-control">
-        <!--Rooms-->
-        <!--<input name="rooms" [(ngModel)]="filter.rooms.eq" class="form-control">-->
-        <!--Description like-->
-        <!--<input name="description" [(ngModel)]="filter.description.like" class="form-control">-->
-        <!--Building type-->
-        <!--<select name="buildingType" [(ngModel)]="filter.buildingType.eq" class="form-control">-->
-
-        <!--</select>-->
+        Rooms
+        <input name="rooms" type="number" [(ngModel)]="filter.roomsAmount.eq" class="form-control">
+        Description like
+        <input name="description" [(ngModel)]="filter.description.like" class="form-control">
+        Building type
+        <select [(ngModel)]="filter.buildingType.eq" name="buildingType" class="form-control" required>
+          <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{buildingType}}
+          </option>
+        </select>
         <!--Dwelling type-->
         <!--<select name="dwellingType" [(ngModel)]="filter.dwellingType.eq" class="form-control">-->
 

@@ -4,6 +4,7 @@ import co.oleh.realperfect.model.RealtyObject;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
+import java.lang.reflect.InvocationTargetException;
 
 public class RealtyObjectSpecification implements Specification<RealtyObject> {
     private final SearchCriteria criteria;
@@ -15,33 +16,44 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
     @Override
     public Predicate toPredicate(Root<RealtyObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         String operation = criteria.getOperation();
-        Path<String> keyPath = getFieldFromRoot(root, criteria.getKey());
+        Path<String> keyPath = getField(root, criteria.getKey());
+        Class<?> keyPathClass = keyPath.getJavaType();
+        String value = criteria.getValue().toString();
 
         if (operation.equalsIgnoreCase("ge")) {
-            return cb.greaterThanOrEqualTo(
-                    keyPath, criteria.getValue().toString());
+            return cb.greaterThanOrEqualTo(keyPath, value);
         } else if (operation.equalsIgnoreCase("le")) {
-            return cb.lessThanOrEqualTo(
-                    keyPath, criteria.getValue().toString());
+            return cb.lessThanOrEqualTo(keyPath, value);
         } else if (operation.equalsIgnoreCase("eq") || operation.equalsIgnoreCase("like")) {
-            if (keyPath.getJavaType() == String.class) {
-                return cb.like(
-                        cb.lower(keyPath), "%" + criteria.getValue().toString().toLowerCase() + "%");
+            if (keyPathClass == String.class) {
+                return cb.like(cb.lower(keyPath), "%" + value.toLowerCase() + "%");
             } else {
-                return cb.equal(keyPath, criteria.getValue());
+                if (keyPathClass.isEnum()) {
+                    Object enumObject = toEnum(keyPathClass, value);
+                    return cb.equal(keyPath, enumObject);
+                }
+                return cb.equal(keyPath, value);
             }
         }
         return null;
     }
 
-    private Path<String> getFieldFromRoot(Root<RealtyObject> root, String key) {
+    private Object toEnum(Class<?> keyPathClass, String value) {
+        try {
+            return keyPathClass.getMethod("valueOf", String.class).invoke(null, value);
+        } catch (Exception e) {
+            throw new RuntimeException("Exception on casting value " +
+                    value + " to enum type " + keyPathClass.toString() + "");
+        }
+    }
+
+    private Path<String> getField(Root<RealtyObject> root, String key) {
         String[] keyParts = key.split("\\.");
         Path path = null;
         for (int i = 0; i < keyParts.length; ++i) {
             if (i == 0) {
                 path = root.get(keyParts[i]);
-            }
-            else{
+            } else {
                 path = path.get(keyParts[i]);
             }
         }
