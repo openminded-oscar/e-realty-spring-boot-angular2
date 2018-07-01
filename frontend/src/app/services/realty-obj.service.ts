@@ -16,7 +16,7 @@ export class RealtyObjService {
         let value = filter[field][operation];
         let fieldNameToRequest = this.appendFieldNameIfNestedRequired(field);
         if (value === "") {
-          break;
+          continue;
         } else {
           filterItems.push({
             field: fieldNameToRequest,

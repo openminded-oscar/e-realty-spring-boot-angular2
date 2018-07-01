@@ -16,14 +16,18 @@ export class RealtyObjsGalleryComponent implements OnInit {
 
   public initialFilter: any = {
     price: {
-      ge: 0.0,
-      le: 1000000.0
+      ge: "0",
+      le: "1000000"
     },
     city: {
       like: ""
     },
     street: {
       like: ""
+    },
+    totalArea:{
+      ge: "",
+      le: ""
     }
   };
   public initialPageable: any = {
