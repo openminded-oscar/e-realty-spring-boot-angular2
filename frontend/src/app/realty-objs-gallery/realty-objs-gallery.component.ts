@@ -15,28 +15,33 @@ export class RealtyObjsGalleryComponent implements OnInit {
   public pageable: any;
 
   public initialFilter: any = {
-    "price": {
-      "ge": 0.0,
-      "le": 1000000.0
+    price: {
+      ge: 0.0,
+      le: 1000000.0
+    },
+    city: {
+      like: ""
+    },
+    street: {
+      like: ""
     }
   };
   public initialPageable: any = {
-    "page": 0,
-    "size": 12
+    page: 0,
+    size: 12
   };
 
   constructor(private realtyObjService: RealtyObjService) {
   }
 
   ngOnInit() {
-    this.filter = _.cloneDeep(this.initialFilter);
-    this.pageable = _.cloneDeep(this.initialPageable);
-    this.resetAndLoadObjects();
+    this.resetFiltersAndPageable();
+    this.loadObjects();
   }
 
-  public resetAndLoadObjects() {
+  public loadObjects() {
     this.currentRealtyObjects = [];
-    this.pageable = this.initialPageable;
+    this.pageable = _.cloneDeep(this.initialPageable);
     this.loadNextObjects();
   }
 
@@ -46,12 +51,13 @@ export class RealtyObjsGalleryComponent implements OnInit {
       realtyObjects.forEach(value => {
         value.mainPhotoPath = RealtyObj.getMainPhoto(value);
       });
-      this.currentRealtyObjects.push(realtyObjects);
+      this.currentRealtyObjects.push(...realtyObjects);
       ++this.pageable.page;
     });
   }
 
-  public resetAllFilters() {
+  public resetFiltersAndPageable() {
     this.filter = _.cloneDeep(this.initialFilter);
+    this.pageable = _.cloneDeep(this.initialPageable);
   }
 }

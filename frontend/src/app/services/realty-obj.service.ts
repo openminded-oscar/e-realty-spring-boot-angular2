@@ -11,13 +11,19 @@ export class RealtyObjService {
 
   findByFilterAndPage(filter, pageable) {
     let filterItems: any[] = [];
-    for(let field in filter){
-      for(let operation in filter[field]){
-        filterItems.push({
-          field: field,
-          operation: operation,
-          value: filter[field][operation]
-        });
+    for (let field in filter) {
+      for (let operation in filter[field]) {
+        let value = filter[field][operation];
+        let fieldNameToRequest = this.appendFieldNameIfNestedRequired(field);
+        if (value === "") {
+          break;
+        } else {
+          filterItems.push({
+            field: fieldNameToRequest,
+            operation: operation,
+            value: value
+          });
+        }
       }
     }
 
@@ -27,6 +33,14 @@ export class RealtyObjService {
         size: pageable.size
       }
     });
+  }
+
+  private appendFieldNameIfNestedRequired(field: string): string {
+    if (field === "street" || field === "city") {
+      field = "address." + field
+    }
+
+    return field;
   }
 
   findById(id) {

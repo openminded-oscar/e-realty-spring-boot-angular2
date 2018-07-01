@@ -1,13 +1,9 @@
 package co.oleh.realperfect.realty.filtering;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import co.oleh.realperfect.model.RealtyObject;
 import org.springframework.data.jpa.domain.Specification;
 
-import co.oleh.realperfect.model.RealtyObject;
+import javax.persistence.criteria.*;
 
 public class RealtyObjectSpecification implements Specification<RealtyObject> {
     private final SearchCriteria criteria;
@@ -19,21 +15,37 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
     @Override
     public Predicate toPredicate(Root<RealtyObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         String operation = criteria.getOperation();
+        Path<String> keyPath = getFieldFromRoot(root, criteria.getKey());
 
         if (operation.equalsIgnoreCase("ge")) {
             return cb.greaterThanOrEqualTo(
-                    root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                    keyPath, criteria.getValue().toString());
         } else if (operation.equalsIgnoreCase("le")) {
             return cb.lessThanOrEqualTo(
-                    root.<String>get(criteria.getKey()), criteria.getValue().toString());
-        } else if (operation.equalsIgnoreCase("eq")||operation.equalsIgnoreCase("like")) {
-            if (root.get(criteria.getKey()).getJavaType() == String.class) {
+                    keyPath, criteria.getValue().toString());
+        } else if (operation.equalsIgnoreCase("eq") || operation.equalsIgnoreCase("like")) {
+            if (keyPath.getJavaType() == String.class) {
                 return cb.like(
-                        cb.lower(root.<String>get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%");
+                        cb.lower(keyPath), "%" + criteria.getValue().toString().toLowerCase() + "%");
             } else {
-                return cb.equal(root.get(criteria.getKey()), criteria.getValue());
+                return cb.equal(keyPath, criteria.getValue());
             }
         }
         return null;
+    }
+
+    private Path<String> getFieldFromRoot(Root<RealtyObject> root, String key) {
+        String[] keyParts = key.split("\\.");
+        Path path = null;
+        for (int i = 0; i < keyParts.length; ++i) {
+            if (i == 0) {
+                path = root.get(keyParts[i]);
+            }
+            else{
+                path = path.get(keyParts[i]);
+            }
+        }
+
+        return path;
     }
 }

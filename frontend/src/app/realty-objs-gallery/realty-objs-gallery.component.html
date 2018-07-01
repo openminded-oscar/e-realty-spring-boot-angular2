@@ -5,10 +5,10 @@
         Filters
       </div>
       <div class="form-group card-body">
-        <!--Street-->
-        <!--<input name="street" [(ngModel)]="filter.street.eq" class="form-control">-->
-        <!--City-->
-        <!--<input name="city" [(ngModel)]="filter.city.eq" class="form-control">-->
+        Street
+        <input name="street" [(ngModel)]="filter.street.like" class="form-control">
+        City
+        <input name="city" [(ngModel)]="filter.city.like" class="form-control">
         Price min
         <input name="minPrice" [(ngModel)]="filter.price.ge" class="form-control">
         Price max
@@ -36,10 +36,10 @@
       </div>
       <div class="row">
         <div class="col-6">
-          <button (click)="resetAllFilters()" class="btn btn-info btn-block">Reset all</button>
+          <button (click)="resetFiltersAndPageable()" class="btn btn-info btn-block">Reset all</button>
         </div>
         <div class="col-6">
-          <button (click)="resetAndLoadObjects()" class="btn btn-info btn-block">Search</button>
+          <button (click)="loadObjects()" class="btn btn-info btn-block">Search</button>
         </div>
       </div>
     </div>
