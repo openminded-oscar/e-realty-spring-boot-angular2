@@ -31,7 +31,7 @@ public class RealtyObjectsService {
     public Page<RealtyObject> getAllObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
         RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
         for(FilterItem filterItem: filterItems){
-            builder.with(filterItem.getField(), filterItem.getOperation(), filterItem.getValue());
+            builder.with(filterItem);
         }
         Specification<RealtyObject> spec = builder.build();
 

@@ -4,21 +4,20 @@ import co.oleh.realperfect.model.RealtyObject;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
-import java.lang.reflect.InvocationTargetException;
 
 public class RealtyObjectSpecification implements Specification<RealtyObject> {
-    private final SearchCriteria criteria;
+    private final FilterItem filterItem;
 
-    public RealtyObjectSpecification(SearchCriteria criteria) {
-        this.criteria = criteria;
+    public RealtyObjectSpecification(FilterItem filterItem) {
+        this.filterItem = filterItem;
     }
 
     @Override
     public Predicate toPredicate(Root<RealtyObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-        String operation = criteria.getOperation();
-        Path<String> keyPath = getField(root, criteria.getKey());
+        String operation = filterItem.getOperation();
+        Path<String> keyPath = getField(root, filterItem.getField());
         Class<?> keyPathClass = keyPath.getJavaType();
-        String value = criteria.getValue().toString();
+        String value = filterItem.getValue().toString();
 
         switch (operation.toLowerCase()) {
             case "ge":

@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RealtyObjectSpecificationBuilder {
-    private final List<SearchCriteria> params;
+    private final List<FilterItem> params;
 
     public RealtyObjectSpecificationBuilder() {
-        params = new ArrayList<SearchCriteria>();
+        params = new ArrayList<FilterItem>();
     }
 
-    public RealtyObjectSpecificationBuilder with(String key, String operation, Object value) {
-        params.add(new SearchCriteria(key, operation, value));
+    public RealtyObjectSpecificationBuilder with(FilterItem filterItem) {
+        params.add(filterItem);
         return this;
     }
 
@@ -25,7 +25,7 @@ public class RealtyObjectSpecificationBuilder {
         }
 
         List<Specification<RealtyObject>> specs = new ArrayList<Specification<RealtyObject>>();
-        for (SearchCriteria param : params) {
+        for (FilterItem param : params) {
             specs.add(new RealtyObjectSpecification(param));
         }
 
