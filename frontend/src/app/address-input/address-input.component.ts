@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
+import { Observable } from 'rxjs';
 
 import {of} from "rxjs/observable/of";
 import "rxjs/add/operator/catch";
