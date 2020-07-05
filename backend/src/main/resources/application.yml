@@ -8,6 +8,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
 spring.http:
   multipart:
     max-file-size: 5MB
