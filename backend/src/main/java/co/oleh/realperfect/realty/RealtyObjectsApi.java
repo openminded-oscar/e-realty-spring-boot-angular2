@@ -29,7 +29,7 @@ public class RealtyObjectsApi {
     public ResponseEntity<RealtyObject> getObjectDetails(@PathVariable Long objectId) {
         RealtyObject realtyObject = realtyObjectsService.getObjectById(objectId);
 
-        return new ResponseEntity<RealtyObject>(realtyObject, HttpStatus.OK);
+        return new ResponseEntity<>(realtyObject, HttpStatus.OK);
     }
 
     @PostMapping(value = "/realty-objects")
@@ -42,23 +42,23 @@ public class RealtyObjectsApi {
             allObjects = realtyObjectsService.getAllObjects(pageable);
         }
 
-        return new ResponseEntity<Page<RealtyObject>>(allObjects, HttpStatus.OK);
+        return new ResponseEntity<>(allObjects, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/realty-object/add")
+    @PostMapping("/realty-object/add")
     public ResponseEntity<RealtyObject> postRealtyObject(@RequestBody RealtyObject realtyObject) {
         RealtyObject addedObject = realtyObjectsService.add(realtyObject);
-        return new ResponseEntity<RealtyObject>(addedObject, HttpStatus.OK);
+        return new ResponseEntity<>(addedObject, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/realty-objects/building-types")
+    @GetMapping("/realty-objects/building-types")
     public ResponseEntity<Set<BuildingType>> getRealtyBuildingTypes() {
         Set<BuildingType> buildingTypes = realtyObjectsService.getRealtyBuildingTypes();
 
         return new ResponseEntity<>(buildingTypes, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/realty-objects/supported-operations")
+    @GetMapping("/realty-objects/supported-operations")
     public ResponseEntity<Set<OperationType>> getRealtySupportedOperations() {
         Set<OperationType> operationTypes = realtyObjectsService.getRealtyOperationTypes();
 
