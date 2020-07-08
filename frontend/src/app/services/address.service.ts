@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import "rxjs/add/observable/of";
 import {ReplaySubject} from "rxjs/ReplaySubject";
 import {Subject} from "rxjs/Subject";
-import {apiBase, endpoints} from "../commons";
+import {endpoints} from "../commons";
 
 @Injectable()
 export class AddressService {

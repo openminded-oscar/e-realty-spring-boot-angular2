@@ -1,8 +1,8 @@
-<button class="btn btn-info btn-sign-in" (click)="openModal(content)">Sign in</button>
+<button class="btn btn-info btn-sign-up" (click)="openModal(content)">Sign up</button>
 
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Please Sign In</h4>
+    <h4 class="modal-title" id="modal-basic-title">Please Sign Up</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -22,6 +22,6 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close({login: login, password: password})">Sign In</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close({login: login, password: password})">Sign Up</button>
   </div>
 </ng-template>

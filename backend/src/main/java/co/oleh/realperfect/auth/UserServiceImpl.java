@@ -1,5 +1,6 @@
 package co.oleh.realperfect.auth;
 
+import co.oleh.realperfect.model.AccountCredentials;
 import co.oleh.realperfect.model.User;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,6 +29,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
+        return userRepository.findByLogin(login).orElse(null);
+    }
+
+    public User verify(AccountCredentials authentication) {
+        Optional<User> maybeUser = userRepository.findByLogin(authentication.getLogin());
+        if (!maybeUser.isPresent()) {
+            throw new RuntimeException("User doesn't exist with this username");
+        }
+
+        User user = maybeUser.get();
+
+        boolean isPasswordValid =
+                bCryptPasswordEncoder.matches(authentication.getPassword(), user.getPassword());
+        if (!isPasswordValid) {
+            throw new RuntimeException("Login and password do not match");
+        }
+        return maybeUser.get();
     }
 }

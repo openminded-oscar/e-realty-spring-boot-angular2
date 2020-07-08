@@ -1,21 +1,31 @@
 package co.oleh.realperfect.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import co.oleh.realperfect.auth.JWTAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private JWTAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter) {
+        super();
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -24,29 +34,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/index.html", "/", "/login", "/message", "/home", "/user",
-                        "/realty-objects/supported-operations", "/realty-objects/building-types")
-                    .permitAll()
+        http.antMatcher("/api/**")
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS)
+                .permitAll()
+                // TODO add secured endpoints here
+                .antMatchers("/api/upload-photo")
+                .authenticated()
+                .antMatchers("/api/**", "/index.html", "/")
+                .permitAll()
                 .and()
-                    .formLogin()
-                    .loginProcessingUrl("/login")
-                .and()
-                    .csrf()
-                    .disable();
-
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf()
+                .disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint());
     }
 
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-//        auth.userDetailsService(userDetailsService)
-//                .passwordEncoder(bCryptPasswordEncoder())
-//                .and()
-        auth.inMemoryAuthentication()
-                    .withUser("user")
-                    .password("password")
-                    .roles("USER");
+    public static class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
+        @Override
+        public void commence(
+                HttpServletRequest request,
+                HttpServletResponse response,
+                AuthenticationException authException)
+                throws IOException {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        }
     }
 }

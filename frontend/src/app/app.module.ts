@@ -22,6 +22,10 @@ import {RouterModule, Routes} from "@angular/router";
 import { RealtyObjsListComponent } from './realty-objs-gallery/realty-objs-list.component';
 import {UserService} from "./services/user.service";
 import { SigninButtonComponent } from './commons/signin-button/signin-button.component';
+import {SigninSignoutService} from "./services/auth/signin-signout.service";
+import {SignupButtonComponent} from "./commons/signup-button/signup-button.component";
+import {SignupService} from "./services/auth/signup.service";
+import {SignoutButtonComponent} from "./commons/signout-button/signout-button.component";
 
 
 const appRoutes: Routes = [
@@ -42,7 +46,9 @@ const appRoutes: Routes = [
     UserRegionInputComponent,
     RealtyObjsGalleryComponent,
     RealtyObjsListComponent,
-    SigninButtonComponent
+    SigninButtonComponent,
+    SignupButtonComponent,
+    SignoutButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +64,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot()
   ],
-  providers: [AddressService, ConfigService, FileUploadService, RealtyObjService, RealterService, UserService],
+  providers: [AddressService, ConfigService, FileUploadService, RealtyObjService, RealterService, UserService, SigninSignoutService, SignupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,29 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Credentials} from "../../domain/credentials.model";
+import {SigninSignoutService} from "../../services/auth/signin-signout.service";
 
 @Component({
   selector: 'signin-button',
   templateUrl: './signin-button.component.html',
   styleUrls: ['./signin-button.component.css']
 })
-export class SigninButtonComponent implements OnInit {
-  showLoginButton: boolean = false;
+export class SigninButtonComponent {
   login: string;
   password: string;
 
-  constructor(private userService: UserService, private modalService: NgbModal) {
-    this.showLoginButton = this.userService.isAuthenticated();
-  }
+  @Output()
+  onSignin = new EventEmitter();
 
-  ngOnInit() {
+  constructor(private modalService: NgbModal, private authService: SigninSignoutService) {
   }
 
   openModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      console.log(result);
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((credentials: Credentials) => {
+      this.sendLoginRequest(credentials);
     }, (reason) => {
       console.log(reason);
     });
+  }
+
+  sendLoginRequest(credentials: Credentials) {
+    this.authService.signin(credentials)
+      .subscribe(res => {
+        localStorage.setItem('token', res.body.token);
+        this.onSignin.emit();
+      });
   }
 }
