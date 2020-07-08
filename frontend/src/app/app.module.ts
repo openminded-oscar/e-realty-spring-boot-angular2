@@ -20,6 +20,8 @@ import {SimpleNotificationsModule} from "angular2-notifications";
 import { RealtyObjsGalleryComponent } from './realty-objs-gallery/realty-objs-gallery.component';
 import {RouterModule, Routes} from "@angular/router";
 import { RealtyObjsListComponent } from './realty-objs-gallery/realty-objs-list.component';
+import {UserService} from "./services/user.service";
+import { SigninButtonComponent } from './commons/signin-button/signin-button.component';
 
 
 const appRoutes: Routes = [
@@ -39,7 +41,8 @@ const appRoutes: Routes = [
     AddressInputComponent,
     UserRegionInputComponent,
     RealtyObjsGalleryComponent,
-    RealtyObjsListComponent
+    RealtyObjsListComponent,
+    SigninButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot()
   ],
-  providers: [AddressService, ConfigService, FileUploadService, RealtyObjService, RealterService],
+  providers: [AddressService, ConfigService, FileUploadService, RealtyObjService, RealterService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

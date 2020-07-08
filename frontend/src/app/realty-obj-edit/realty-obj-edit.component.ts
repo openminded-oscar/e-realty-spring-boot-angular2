@@ -55,7 +55,9 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
     this.realtersService.getRealters().subscribe((gotRealters: any) => {
-      this.realters = gotRealters.map(realtor => realtor.user.name+" "+ realtor.user.surname);
+      this.realters = ['Andriy Andriyenko'];
+      // ToDo add ui for realters adding
+      // this.realters = gotRealters.map(realtor => realtor.user.name+" "+ realtor.user.surname);
     });
 
     this.realtyObj = new RealtyObj();
@@ -75,7 +77,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.supportedOperations = this.config.supportedOperations.map((value, index, array) => <any>{
-      value: value,
+      value,
       name: value,
       checked: RealtyObj.checkIfOperationSupported(this.realtyObj, value)
     });
