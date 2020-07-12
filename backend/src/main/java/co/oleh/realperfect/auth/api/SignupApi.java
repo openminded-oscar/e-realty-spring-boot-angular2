@@ -1,5 +1,7 @@
-package co.oleh.realperfect.auth;
+package co.oleh.realperfect.auth.api;
 
+import co.oleh.realperfect.auth.CredentialsValidator;
+import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.model.AccountCredentials;
 import co.oleh.realperfect.model.User;
 import lombok.AllArgsConstructor;

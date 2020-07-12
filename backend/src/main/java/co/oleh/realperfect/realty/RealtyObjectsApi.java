@@ -17,7 +17,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class RealtyObjectsApi {
     private static final Logger LOGGER = Logger.getLogger(RealtyObjectsApi.class);
 

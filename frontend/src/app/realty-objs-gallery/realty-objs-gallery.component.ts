@@ -15,6 +15,7 @@ export class RealtyObjsGalleryComponent implements OnInit {
   public filter: any;
   public pageable: any;
   public buildingTypes: string[];
+  public showNotificaton = false;
 
   public initialFilter: any = {
     price: {
@@ -64,6 +65,7 @@ export class RealtyObjsGalleryComponent implements OnInit {
 
   public loadNextObjects() {
     this.realtyObjService.findByFilterAndPage(this.filter, this.pageable).subscribe((response: any) => {
+      this.showNotificaton = true;
       let realtyObjects: RealtyObj[] = response.content;
       realtyObjects.forEach(value => {
         value.mainPhotoPath = RealtyObj.getMainPhoto(value);

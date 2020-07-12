@@ -46,7 +46,19 @@
     </div>
   </div>
   <div class="col-10">
+    <div class="toast-container">
+      <ngb-toast
+        *ngIf="showNotificaton"
+        [class]="'bg-info text-light'"
+        [autohide]="true"
+        [delay]="1500"
+        (hide)="showNotificaton = false;">
+        {{currentRealtyObjects.length}} object(s) found!
+      </ngb-toast>
+    </div>
+
     <realty-objs-list [realtyObjects]="currentRealtyObjects"></realty-objs-list>
+
     <div class="row">
       <div class="col-2 offset-5">
         <button (click)="loadNextObjects()" class="btn btn-block btn-info">Next items</button>
