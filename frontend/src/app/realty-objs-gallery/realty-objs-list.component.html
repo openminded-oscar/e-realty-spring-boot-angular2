@@ -4,7 +4,7 @@
       <img class="img-fluid" src="{{realtyObject.mainPhotoPath?realtyObject.mainPhotoPath:'//www.fgschaub.com/images/2013/03/house-3d-image.jpg'}}">
       <div class="caption">
         <h4>
-         {{realtyObject.address.street}},&nbsp;{{realtyObject.address.city}}{{realtyObject.sth}}
+         {{realtyObject.address.street}},&nbsp;{{realtyObject.address.city}}
         </h4>
         <div>
           <p>
@@ -15,7 +15,8 @@
           <p>{{trimDescription(realtyObject.description)}}</p>
         </div>
         <h4 class="pull-right">Price: ${{realtyObject.price}}</h4>
-        <a [routerLink]="['/sell', realtyObject.id]" class="btn btn-block">Watch details</a>
+        <a [routerLink]="['/view-obj', realtyObject.id]" class="btn btn-block">Watch details</a>
+        <a *ngIf="userService.isAuthenticated" [routerLink]="['/sell', realtyObject.id]" class="btn btn-block">Edit</a>
       </div>
     </div>
   </div>

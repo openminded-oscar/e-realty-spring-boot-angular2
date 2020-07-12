@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {RealtyObj} from "../domain/realty-obj";
 import {endpoints} from "../commons";
+import {Observable} from "rxjs";
+import {RealtyPhoto} from "../domain/photo";
 
 @Injectable()
 export class RealtyObjService {
@@ -43,8 +45,13 @@ export class RealtyObjService {
     return field;
   }
 
-  findById(id) {
-    return this.http.get(endpoints.realtyObj.byId + "/" + id);
+  findById(id):Observable<RealtyObj>  {
+    return <Observable<RealtyObj>>this.http.get(endpoints.realtyObj.byId + "/" + id).map((realtyObj: RealtyObj) => {
+      realtyObj.photos.forEach(photo =>{
+        photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
+        });
+      return realtyObj;
+    });
   }
 
   save(realtyObj: RealtyObj) {

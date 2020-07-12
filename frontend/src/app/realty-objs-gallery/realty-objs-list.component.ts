@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RealtyObj} from "../domain/realty-obj";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'realty-objs-list',
@@ -10,7 +11,7 @@ export class RealtyObjsListComponent implements OnInit {
   @Input()
   public realtyObjects:RealtyObj[] = [];
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
   }

@@ -10,7 +10,7 @@ import {AddressService} from "./services/address.service";
 import {HttpClientModule} from "@angular/common/http";
 import { AddressInputComponent } from './address-input/address-input.component';
 import {ArchwizardModule} from "angular-archwizard";
-import { UserRegionInputComponent } from './user-region-input/user-region-input.component';
+import { UserRegionInputComponent } from './commons/user-region-input/user-region-input.component';
 import {ConfigService} from "./services/config.service";
 import {FileUploadService} from "./services/file-upload.service";
 import {RealtyObjService} from "./services/realty-obj.service";
@@ -26,11 +26,13 @@ import {SigninSignoutService} from "./services/auth/signin-signout.service";
 import {SignupButtonComponent} from "./commons/signup-button/signup-button.component";
 import {SignupService} from "./services/auth/signup.service";
 import {SignoutButtonComponent} from "./commons/signout-button/signout-button.component";
+import { RealtyObjDetailsComponent } from './realty-obj-details/realty-obj-details.component';
 
 
 const appRoutes: Routes = [
   { path: 'sell', component: RealtyObjEditComponent },
   { path: 'sell/:id', component: RealtyObjEditComponent },
+  { path: 'view-obj/:id', component: RealtyObjDetailsComponent },
   { path: 'buy', component: RealtyObjsGalleryComponent },
   { path: '',
     redirectTo: '/buy',
@@ -48,7 +50,8 @@ const appRoutes: Routes = [
     RealtyObjsListComponent,
     SigninButtonComponent,
     SignupButtonComponent,
-    SignoutButtonComponent
+    SignoutButtonComponent,
+    RealtyObjDetailsComponent
   ],
   imports: [
     BrowserModule,

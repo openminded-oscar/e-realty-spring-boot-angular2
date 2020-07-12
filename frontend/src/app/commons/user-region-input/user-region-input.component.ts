@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {CityOnMap} from "../domain/city-on-map";
-import {AddressService} from "../services/address.service";
-import {ConfigService} from "../services/config.service";
+import {CityOnMap} from "../../domain/city-on-map";
+import {AddressService} from "../../services/address.service";
+import {ConfigService} from "../../services/config.service";
 
 @Component({
   selector: 'region-input',

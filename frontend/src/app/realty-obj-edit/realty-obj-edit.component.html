@@ -235,7 +235,7 @@
                          accept="image/*" required>
                 </div>
                 <div class="row">
-                  <div class="col-3 realty-pic-preview-container" *ngFor="let photo of realtyObj.photos">
+                  <div class="col-3 realty-pic-preview-container" *ngFor="let photo of realtyObj.photos; let i = index">
                     <img class="img-fluid" src="{{photo.link}}">
                     <div *ngIf="photo.type!==photoType.REALTY_MAIN">
                       <button (click)="makeMain(photo)" class="btn">Make main</button>
@@ -243,6 +243,7 @@
                     <div *ngIf="photo.type===photoType.REALTY_MAIN">
                       <span>Main photo</span>
                     </div>
+                    <button (click)="deletePhoto(i)">x</button>
                   </div>
                 </div>
               </div>

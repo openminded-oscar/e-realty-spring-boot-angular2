@@ -4,6 +4,8 @@ import * as _ from "lodash";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {RealtyObj} from "../domain/realty-obj";
 import {ConfigService} from "../services/config.service";
+import {Router} from "@angular/router";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'realty-objs-gallery',
@@ -48,7 +50,9 @@ export class RealtyObjsGalleryComponent implements OnInit {
   };
 
   constructor(private realtyObjService: RealtyObjService,
-              private config: ConfigService) {
+              private userService: UserService,
+              private config: ConfigService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -78,5 +82,9 @@ export class RealtyObjsGalleryComponent implements OnInit {
   public resetFiltersAndPageable() {
     this.filter = _.cloneDeep(this.initialFilter);
     this.pageable = _.cloneDeep(this.initialPageable);
+  }
+
+  public addObject() {
+    this.router.navigateByUrl('/sell');
   }
 }

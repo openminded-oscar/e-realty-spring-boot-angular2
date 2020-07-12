@@ -3,6 +3,7 @@ import {Address} from "./address";
 import {endpoints} from "../commons";
 
 export class RealtyObj {
+  public id?: number;
   public roomsAmount: number;
   public floor: number;
   public totalFloors: number;

@@ -1,0 +1,21 @@
+.realty-obj-pic-container {
+  height: 120px;
+}
+
+.realty-obj-pic {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.realty-obj-pic--main-container {
+  height: 500px;
+}
+
+.realty-obj-pic--main {
+  width: 100%;
+  max-height: 100%;
+}
+
+.realty-obj-interested-btn {
+  text-transform: uppercase;
+}

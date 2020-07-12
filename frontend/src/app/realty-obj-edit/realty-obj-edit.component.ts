@@ -6,7 +6,7 @@ import {endpoints, apiBase} from "../commons";
 import {RealtyObj} from "../domain/realty-obj";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {NotificationsService} from "angular2-notifications";
-import {Photo, RealtyPhotoType} from "../domain/photo";
+import {Photo, RealtyPhoto, RealtyPhotoType} from "../domain/photo";
 import {RealterService} from "../services/realter.service";
 
 
@@ -86,7 +86,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   saveRealtyObject() {
     this.realtyObj.targetOperations = this.targetOperations;
     this.realtyObjService.save(this.realtyObj).subscribe((data: RealtyObj) => {
-      this._notification.success('Success!', 'the object was added!');
+      this._notification.success('Success!', 'the object was saved!');
       this.realtyObj = data;
     }, error => {
       this._notification.error('Failure!', 'the object adding failed!');
@@ -136,5 +136,14 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     });
 
     picture.type = RealtyPhotoType.REALTY_MAIN;
+  }
+
+  deletePhoto(index: number) {
+    this.realtyObj.photos.splice(index, 1);
+    if (this.realtyObj.photos.length > 0) {
+      this.makeMain(this.realtyObj.photos[0]);
+    }
+
+    this.saveRealtyObject();
   }
 }
