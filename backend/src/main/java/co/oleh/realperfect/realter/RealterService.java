@@ -24,4 +24,8 @@ public class RealterService {
     public Realter save(Realter realter) {
         return realterRepository.save(realter);
     }
+
+    public Realter findById(Long objectId) {
+        return realterRepository.findOne(objectId);
+    }
 }

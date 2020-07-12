@@ -18,4 +18,9 @@ export class RealterService {
     return this.http.post(endpoints.realters.single, realter)
       .catch((error:any) => throwError(error));
   }
+
+  public findById(id: any) {
+    return this.http.get(endpoints.realters.single+'/'+id)
+      .catch((error:any) => throwError(error));
+  }
 }

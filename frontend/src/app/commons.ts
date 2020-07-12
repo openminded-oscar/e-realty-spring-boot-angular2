@@ -18,7 +18,7 @@ export const endpoints: any = {
   addressesNearby: apiBase + "/addresses/addresses-nearby",
   supportedCities: apiBase + "/addresses/cities-supported",
   realters:{
-    list: apiBase + "/realter/list",
+    list: apiBase + "/realter",
     single: apiBase + "/realter"
   },
   realtyObj: {
