@@ -17,6 +17,7 @@ public interface RealterRepository extends JpaRepository<Realter, Long> {
 //    @Query(value = QUERY_BY_NAME_OR_SURNAME)
 //    Iterable<Realter> findByUserNameOrSurnameIgnoreCaseLike(@Param("nameOrSurnameQuery") String query);
 
-    List<Realter> findByUser_NameStartingWithOrUser_SurnameStartingWith(String nameStart,
-                                                                        String surnameStart);
+//    List<Realter> findByUser_NameStartingWithOrUser_SurnameStartingWith(String nameStart,
+//                                                                        String surnameStart);
+    List<Realter> findByNameStartingWith(String nameStart);
 }

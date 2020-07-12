@@ -36,7 +36,7 @@ public class RealtyObject {
 
     private Address address;
     private User owner;
-//    private Realter realter;
+    private Realter realter;
 
     private List<RealtyObjectPhoto> photos;
     private ConfirmationDocPhoto confirmationDocPhoto;
@@ -235,15 +235,15 @@ public class RealtyObject {
         this.realterAware = realterAware;
     }
 
-//    @ManyToOne(optional = true)
-//    @JoinColumn(name = "realter_id", nullable = true)
-//    public Realter getRealter() {
-//        return realter;
-//    }
-//
-//    public void setRealter(Realter realter) {
-//        this.realter = realter;
-//    }
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "realter_id", nullable = true)
+    public Realter getRealter() {
+        return realter;
+    }
+
+    public void setRealter(Realter realter) {
+        this.realter = realter;
+    }
 
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

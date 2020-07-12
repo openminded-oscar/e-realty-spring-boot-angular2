@@ -8,6 +8,7 @@ import {RealtyObjService} from "../services/realty-obj.service";
 import {NotificationsService} from "angular2-notifications";
 import {Photo, RealtyPhoto, RealtyPhotoType} from "../domain/photo";
 import {RealterService} from "../services/realter.service";
+import {Realter} from "../domain/realter";
 
 
 @Component({
@@ -19,7 +20,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   @Input()
   public realtyObj: RealtyObj;
 
-  public realters: string[];
+  public realters: Realter[];
   public dwellingTypes: string[];
   public buildingTypes: string[];
   public supportedOperations: any[];
@@ -54,10 +55,8 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
       .map((value, index, array) => <any> {value: value, name: value, checked: false});
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
-    this.realtersService.getRealters().subscribe((gotRealters: any) => {
-      this.realters = ['Andriy Andriyenko'];
-      // ToDo add ui for realters adding
-      // this.realters = gotRealters.map(realtor => realtor.user.name+" "+ realtor.user.surname);
+    this.realtersService.getRealters().subscribe((gotRealters: Realter[]) => {
+      this.realters = gotRealters;
     });
 
     this.realtyObj = new RealtyObj();

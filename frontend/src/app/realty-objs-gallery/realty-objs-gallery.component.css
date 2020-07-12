@@ -3,3 +3,12 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+.add-object-button {
+  position: fixed;
+  height: 85px;
+  width: 85px;
+  right: 50px;
+  bottom: 50px;
+  border-radius: 50%;
+}

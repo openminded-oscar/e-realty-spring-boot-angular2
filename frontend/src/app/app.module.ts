@@ -27,9 +27,12 @@ import {SignupButtonComponent} from "./commons/signup-button/signup-button.compo
 import {SignupService} from "./services/auth/signup.service";
 import {SignoutButtonComponent} from "./commons/signout-button/signout-button.component";
 import { RealtyObjDetailsComponent } from './realty-obj-details/realty-obj-details.component';
+import { AddUpdateRealtorComponent } from './add-update-realtor/add-update-realtor.component';
 
 
 const appRoutes: Routes = [
+  { path: 'realtor', component: AddUpdateRealtorComponent },
+  { path: 'realtor/:id', component: AddUpdateRealtorComponent },
   { path: 'sell', component: RealtyObjEditComponent },
   { path: 'sell/:id', component: RealtyObjEditComponent },
   { path: 'view-obj/:id', component: RealtyObjDetailsComponent },
@@ -51,7 +54,8 @@ const appRoutes: Routes = [
     SigninButtonComponent,
     SignupButtonComponent,
     SignoutButtonComponent,
-    RealtyObjDetailsComponent
+    RealtyObjDetailsComponent,
+    AddUpdateRealtorComponent
   ],
   imports: [
     BrowserModule,

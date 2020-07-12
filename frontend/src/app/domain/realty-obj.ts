@@ -25,7 +25,7 @@ export class RealtyObj {
   public photos: RealtyPhoto[];
   public verificationPhoto: Photo;
   public address: Address;
-  public realter: string;
+  public realter: any;
   public owner: string;
   public mainPhotoPath: string;
 

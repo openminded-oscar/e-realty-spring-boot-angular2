@@ -27,4 +27,9 @@ public class RealterApi {
 
         return new ResponseEntity<>(realters, HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<Realter> saveRealter(@RequestBody Realter realter) {
+        return new ResponseEntity<>(realterService.save(realter), HttpStatus.OK);
+    }
 }

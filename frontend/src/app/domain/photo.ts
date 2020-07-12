@@ -3,7 +3,7 @@ import {endpoints} from "../commons";
 export class Photo {
   public link: string;
   public filename: string;
-  public fullUrl: string;
+  public fullUrl?: string;
   public id: number;
 
   public static getLinkByFilename(filename){

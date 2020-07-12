@@ -14,10 +14,14 @@ public class RealterService {
 
     public List<Realter> findByNameOrSurnameLike(String query) {
         return realterRepository.
-                findByUser_NameStartingWithOrUser_SurnameStartingWith(query, query);
+                findByNameStartingWith(query);
     }
 
     public List<Realter> findAll() {
         return realterRepository.findAll();
+    }
+
+    public Realter save(Realter realter) {
+        return realterRepository.save(realter);
     }
 }

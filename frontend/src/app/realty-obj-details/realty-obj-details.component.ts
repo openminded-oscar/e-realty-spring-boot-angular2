@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {RealtyObj} from "../domain/realty-obj";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {ActivatedRoute} from "@angular/router";
+import {RealtyPhoto} from "../domain/photo";
 
 @Component({
   selector: 'app-realty-obj-details',
@@ -10,7 +11,7 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class RealtyObjDetailsComponent implements OnInit {
   currentObject: RealtyObj;
-  mainPhoto: any;
+  mainPhoto: RealtyPhoto;
 
   constructor(private realtyObjService: RealtyObjService, private route: ActivatedRoute) { }
 
