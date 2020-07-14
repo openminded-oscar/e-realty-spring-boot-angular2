@@ -1,0 +1,13 @@
+<div class="realters row" *ngIf="realters">
+  <div class="realter-block col-4" *ngFor="let realter of realters;">
+    <div class="row realter-photo-container">
+      <img class="realter-photo" *ngIf="realter.photo" [src]="realter.photo.photoFullUrl"/>
+    </div>
+    <div class="row">
+      <a class="btn" (click)="goToRealtor(realter)">{{realter.name}} {{realter.surname}}</a>
+    </div>
+  </div>
+</div>
+<div class="new-realter">
+  <button class="add-realter-btn" (click)="addNewRealtor()">Add realter</button>
+</div>

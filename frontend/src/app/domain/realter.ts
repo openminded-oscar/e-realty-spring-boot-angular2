@@ -1,6 +1,6 @@
 export interface Realter {
+  id?: string;
   name: string;
   surname: string;
-  photoFilename: string;
-  photoFullUrl?: string;
+  photo: any;
 }

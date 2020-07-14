@@ -19,3 +19,12 @@
 .realty-obj-interested-btn {
   text-transform: uppercase;
 }
+
+.realter-photo-container {
+  height: 150px;
+}
+
+.realter-photo {
+  max-width: 100%;
+  max-height: 100%;
+}

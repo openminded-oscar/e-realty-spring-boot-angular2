@@ -31,8 +31,11 @@
       </div>
 
             <div class="col-md-5">
-              <img class="img-responsive"
-                   src="{{currentObject.realter.mainPhotoPath}}" alt=""> <span
+              <div class="realter-photo-container">
+              <img class="realter-photo img-responsive"
+                   src="{{currentObject.realter.photo.photoFullUrl}}" alt="">
+              </div>
+              <span
               class="btn btn-block">{{currentObject.realter.name}}
               {{currentObject.realter.surname}}, realtor</span>
               <button class="btn btn-info btn-block">Contact</button>

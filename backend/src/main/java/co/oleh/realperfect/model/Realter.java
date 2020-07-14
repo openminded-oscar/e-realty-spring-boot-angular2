@@ -1,14 +1,9 @@
 package co.oleh.realperfect.model;
 
+import co.oleh.realperfect.model.photos.UserPhoto;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -18,9 +13,19 @@ public class Realter {
 
 	private String name;
 	private String surname;
-	private String photoFilename;
 
-//	private Set<RealtyObject> realtyObjects;
+
+	private UserPhoto photo;
+
+	@OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
+	@JoinColumn(name = "photo_id")
+	public UserPhoto getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(UserPhoto userPhoto) {
+		this.photo = userPhoto;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,14 +36,4 @@ public class Realter {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "realter")
-//	public Set<RealtyObject> getRealtyObjects() {
-//		return realtyObjects;
-//	}
-//
-//	public void setRealtyObjects(Set<RealtyObject> realtyObjects) {
-//		this.realtyObjects = realtyObjects;
-//	}
 }

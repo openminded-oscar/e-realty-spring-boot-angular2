@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {RealtyObj} from "../domain/realty-obj";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {ActivatedRoute} from "@angular/router";
-import {RealtyPhoto} from "../domain/photo";
+import {Photo, RealtyPhoto} from "../domain/photo";
 
 @Component({
   selector: 'app-realty-obj-details',
@@ -17,7 +17,7 @@ export class RealtyObjDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      const id  = params['id'];
+      const id  = params['realterId'];
       if (id) {
         this.realtyObjService.findById(id)
           .subscribe(realtyObj => {

@@ -45,7 +45,7 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(allObjects, HttpStatus.OK);
     }
 
-    @PostMapping("/realty-object/add")
+    @PostMapping("/realty-object/save")
     public ResponseEntity<RealtyObject> postRealtyObject(@RequestBody RealtyObject realtyObject) {
         RealtyObject addedObject = realtyObjectsService.add(realtyObject);
         return new ResponseEntity<>(addedObject, HttpStatus.OK);

@@ -1,0 +1,33 @@
+<h1>Realter profile</h1>
+<form action="">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+        <input [(ngModel)]="realter.name" name="name" type="text">
+        <input [(ngModel)]="realter.surname" name="surname" type="text">
+
+        <div class="realter-info">
+          <div class="row">
+            <label class="col-form-label">Realter photo (max. 5 MB):&nbsp;</label>
+            <br/>
+            <input type="file" (change)="onRealterPhotoSelecting($event)" placeholder="Upload file"
+                   accept="image/*" required>
+          </div>
+
+          <div class="row" *ngIf="realter.photo">
+            <div class="col-1">
+              <button class="btn btn-block" (click)="deletePhoto()">x</button>
+            </div>
+          </div>
+          <div class="row realter-photo-container">
+            <img *ngIf="realter.photo" class="img-fluid realter-photo" src="{{realter.photo.photoFullUrl}}">
+          </div>
+
+          <div class="row">
+            <button class="btn btn-block btn-info" (click)="save()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

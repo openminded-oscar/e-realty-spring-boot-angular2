@@ -1,6 +1,7 @@
 import {Photo, RealtyPhoto, RealtyPhotoType} from "./photo";
 import {Address} from "./address";
 import {endpoints} from "../commons";
+import {Realter} from "./realter";
 
 export class RealtyObj {
   public id?: number;
@@ -25,7 +26,7 @@ export class RealtyObj {
   public photos: RealtyPhoto[];
   public verificationPhoto: Photo;
   public address: Address;
-  public realter: any;
+  public realter: Realter;
   public owner: string;
   public mainPhotoPath: string;
 

@@ -37,4 +37,9 @@ public class RealterApi {
     public ResponseEntity<Realter> saveRealter(@RequestBody Realter realter) {
         return new ResponseEntity<>(realterService.save(realter), HttpStatus.OK);
     }
+
+    @PutMapping(value = "/{objectId}")
+    public ResponseEntity<Realter> updateRealter(@RequestBody Realter realter, @PathVariable Long objectId) {
+        return new ResponseEntity<>(realterService.save(realter), HttpStatus.OK);
+    }
 }

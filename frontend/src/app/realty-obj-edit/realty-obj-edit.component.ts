@@ -60,10 +60,10 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     });
 
     this.realtyObj = new RealtyObj();
-    // if passed object id in parameter then retrieve that object
+    // if passed object realterId in parameter then retrieve that object
     this.route.params.subscribe(params => {
-      if (params['id']) {
-        this.realtyObjService.findById(+params['id']).subscribe(realtyObj => {
+      if (params['realterId']) {
+        this.realtyObjService.findById(+params['realterId']).subscribe(realtyObj => {
           this.realtyObj = <RealtyObj>realtyObj;
           this.realtyObj.photos.forEach(photo => {
             photo.link = Photo.getLinkByFilename(photo.filename);
@@ -96,7 +96,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       let file: File = fileList[0];
-      this.fileUploadService.upload(file, apiBase + "/upload-photo")
+      this.fileUploadService.upload(file, apiBase + "/upload-photo/object")
         .subscribe(
           data => {
             this.realtyObj.verificationPhoto = {
@@ -115,7 +115,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       let file: File = fileList[0];
-      this.fileUploadService.upload(file, apiBase + "/upload-photo")
+      this.fileUploadService.upload(file, apiBase + "/upload-photo/object")
         .subscribe(
           data => {
             let type = (this.realtyObj.photos.length == 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
@@ -125,7 +125,6 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
           },
           error => console.log(error)
         );
-      ;
     }
   }
 

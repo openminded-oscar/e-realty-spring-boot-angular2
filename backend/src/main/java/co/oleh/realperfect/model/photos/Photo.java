@@ -1,6 +1,5 @@
 package co.oleh.realperfect.model.photos;
 
-import co.oleh.realperfect.model.RealtyPhotoType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
