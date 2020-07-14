@@ -8,7 +8,7 @@ import {SignupService} from "../../services/auth/signup.service";
 @Component({
   selector: 'signup-button',
   templateUrl: './signup-button.component.html',
-  styleUrls: ['./signup-button.component.css']
+  styleUrls: ['./signup-button.component.scss']
 })
 export class SignupButtonComponent {
   login: string;

@@ -7,7 +7,7 @@ import {Photo, RealtyPhoto} from "../domain/photo";
 @Component({
   selector: 'app-realty-obj-details',
   templateUrl: './realty-obj-details.component.html',
-  styleUrls: ['./realty-obj-details.component.css']
+  styleUrls: ['./realty-obj-details.component.scss']
 })
 export class RealtyObjDetailsComponent implements OnInit {
   currentObject: RealtyObj;

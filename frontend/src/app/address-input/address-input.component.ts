@@ -17,7 +17,6 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/for
 @Component({
   selector: 'address-input',
   templateUrl: './address-input.component.html',
-  styleUrls: ['./address-input.component.css'],
   providers: [
     {provide: NG_VALUE_ACCESSOR, useExisting: AddressInputComponent, multi: true}
   ]

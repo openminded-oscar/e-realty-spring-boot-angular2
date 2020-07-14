@@ -5,7 +5,7 @@ import {SigninSignoutService} from "../../services/auth/signin-signout.service";
 @Component({
   selector: 'signout-button',
   templateUrl: './signout-button.component.html',
-  styleUrls: ['./signout-button.component.css']
+  styleUrls: ['./signout-button.component.scss']
 })
 export class SignoutButtonComponent {
   @Output()

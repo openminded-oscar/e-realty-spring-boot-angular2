@@ -6,7 +6,7 @@ import {ConfigService} from "../../services/config.service";
 @Component({
   selector: 'region-input',
   templateUrl: './user-region-input.component.html',
-  styleUrls: ['./user-region-input.component.css']
+  styleUrls: ['./user-region-input.component.scss']
 })
 export class UserRegionInputComponent implements OnInit {
   public baseCities: CityOnMap[];

@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'realtors-gallery',
   templateUrl: './realtors-gallery.component.html',
-  styleUrls: ['./realtors-gallery.component.css']
+  styleUrls: ['./realtors-gallery.component.scss']
 })
 export class RealtorsGalleryComponent implements OnInit {
   realters: Realter[];

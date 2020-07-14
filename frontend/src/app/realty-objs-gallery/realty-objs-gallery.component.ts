@@ -10,7 +10,7 @@ import {UserService} from "../services/user.service";
 @Component({
   selector: 'realty-objs-gallery',
   templateUrl: './realty-objs-gallery.component.html',
-  styleUrls: ['./realty-objs-gallery.component.css']
+  styleUrls: ['./realty-objs-gallery.component.scss']
 })
 export class RealtyObjsGalleryComponent implements OnInit {
   public currentRealtyObjects = [];

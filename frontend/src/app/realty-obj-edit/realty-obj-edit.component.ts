@@ -14,7 +14,7 @@ import {Realter} from "../domain/realter";
 @Component({
   selector: 'new-object',
   templateUrl: './realty-obj-edit.component.html',
-  styleUrls: ['./realty-obj-edit.css']
+  styleUrls: ['./realty-obj-edit.scss']
 })
 export class RealtyObjEditComponent implements OnInit, OnChanges {
   @Input()

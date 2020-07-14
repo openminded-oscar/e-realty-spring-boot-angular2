@@ -10,7 +10,7 @@ import {FileUploadService} from "../../services/file-upload.service";
 @Component({
   selector: 'app-add-update-realter',
   templateUrl: './add-update-realtor.component.html',
-  styleUrls: ['./add-update-realtor.component.css']
+  styleUrls: ['./add-update-realtor.component.scss']
 })
 export class AddUpdateRealtorComponent implements OnInit {
   realter: Realter;
