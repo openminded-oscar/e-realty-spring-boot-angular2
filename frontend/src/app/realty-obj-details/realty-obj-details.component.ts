@@ -27,4 +27,8 @@ export class RealtyObjDetailsComponent implements OnInit {
       }
     });
   }
+
+  setEnlargedPhoto(photo: RealtyPhoto) {
+    this.mainPhoto = Photo.getLinkByFilename(photo.filename);
+  }
 }

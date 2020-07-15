@@ -12,6 +12,7 @@
 
       <div class="col-sm-3 col-xs-6 realty-obj-pic-container" *ngFor="let photo of currentObject.photos">
         <img class="img-responsive realty-obj-pic"
+             (click)="setEnlargedPhoto(photo)"
              [src]="photo.fullUrl" alt="object gallery photo">
       </div>
 
@@ -30,16 +31,16 @@
         </div>
       </div>
 
-            <div class="col-md-5">
-              <div class="realter-photo-container">
-              <img class="realter-photo img-responsive"
-                   src="{{currentObject.realter.photo.photoFullUrl}}" alt="">
-              </div>
-              <span
-              class="btn btn-block">{{currentObject.realter.name}}
-              {{currentObject.realter.surname}}, realtor</span>
-              <button class="btn btn-info btn-block">Contact</button>
-            </div>
+      <div class="col-md-5">
+        <div class="realter-photo-container">
+          <img class="realter-photo img-responsive"
+               src="{{currentObject.realter.photo.photoFullUrl}}" alt="">
+        </div>
+        <span
+          class="btn btn-block">{{currentObject.realter.name}}
+          {{currentObject.realter.surname}}, realtor</span>
+        <button class="btn btn-info btn-block">Contact</button>
+      </div>
 
     </div>
     <div class="row">
