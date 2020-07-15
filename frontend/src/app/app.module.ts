@@ -29,6 +29,7 @@ import {SignoutButtonComponent} from "./commons/signout-button/signout-button.co
 import { RealtyObjDetailsComponent } from './realty-obj-details/realty-obj-details.component';
 import { AddUpdateRealtorComponent } from './realtor/add-update-realtor/add-update-realtor.component';
 import {RealtorsGalleryComponent} from "./realtor/realtors-gallery/realtors-gallery.component";
+import {InterestService} from "./services/interest.service";
 
 
 const appRoutes: Routes = [
@@ -74,7 +75,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot()
   ],
-  providers: [AddressService, ConfigService, FileUploadService, RealtyObjService, RealterService, UserService, SigninSignoutService, SignupService],
+  providers: [AddressService, ConfigService, InterestService, FileUploadService, RealtyObjService, RealterService, UserService, SigninSignoutService, SignupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,7 +2,7 @@
   <div class="col-md-7">
     <div class="realty-obj-pic--main-container">
       <img class="img-responsive realty-obj-pic--main"
-           [src]="mainPhoto?mainPhoto: 'https://i.ytimg.com/vi/Xx6t0gmQ_Tw/maxresdefault.jpg'"
+           [src]="enlargedPhoto?enlargedPhoto: 'https://i.ytimg.com/vi/Xx6t0gmQ_Tw/maxresdefault.jpg'"
            alt="main photo">
     </div>
     <div class="row">
@@ -27,7 +27,10 @@
         <h3 style="text-align: center">est. at ${{currentObject.price}}</h3>
         <p class="">{{currentObject.description}}</p>
         <div id="status-buttons">
-          <button class="btn btn-block btn-success realty-obj-interested-btn">I'm interested!</button>
+          <button (click)="saveInterested()" [disabled]="isInterested" class="btn btn-block btn-success realty-obj-interested-btn">
+            I'm interested!
+          </button>
+          <button *ngIf="isInterested" (click)="removeInterested()" class="btn btn-block btn-warning realty-obj-interested-btn">Remove interested</button>
         </div>
       </div>
 

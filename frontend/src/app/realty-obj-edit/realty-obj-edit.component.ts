@@ -6,7 +6,7 @@ import {endpoints, apiBase} from "../commons";
 import {RealtyObj} from "../domain/realty-obj";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {NotificationsService} from "angular2-notifications";
-import {Photo, RealtyPhoto, RealtyPhotoType} from "../domain/photo";
+import {Photo, RealtyPhotoType} from "../domain/photo";
 import {RealterService} from "../services/realter.service";
 import {Realter} from "../domain/realter";
 

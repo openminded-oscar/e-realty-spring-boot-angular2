@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {endpoints} from "./commons";
 import {UserService} from "./services/user.service";
@@ -27,7 +27,9 @@ export class AppComponent implements OnInit {
     });
 
     this.http.get(endpoints.userStatus, {headers}).subscribe(
-      (isAuthenticated: boolean) => {
+      (userInfo: any) => {
+        const isAuthenticated = !!userInfo;
+        this.userService.user = userInfo;
         this.userService.isAuthenticated = isAuthenticated;
         this.isAuthenticated = isAuthenticated;
         this.dataInitialised = true;
@@ -43,6 +45,7 @@ export class AppComponent implements OnInit {
       this.fetchUserStatus();
     } else {
       this.userService.isAuthenticated = false;
+      this.userService.user = null;
       this.isAuthenticated = false;
       this.dataInitialised = true;
     }

@@ -6,6 +6,7 @@ import co.oleh.realperfect.model.AccountCredentials;
 import co.oleh.realperfect.model.Token;
 import co.oleh.realperfect.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class SigninApi {
 
   private final UserService userService;
-
   private final AuthenticationService tokenAuthenticationService;
 
   @Autowired
@@ -25,12 +25,18 @@ public class SigninApi {
   }
 
   @GetMapping("/with-token")
-  public boolean signedinWithToken() {
-    return SecurityContextHolder.getContext().getAuthentication() != null;
+  public User signedinWithToken() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if(authentication != null) {
+      Long userId = Long.valueOf((String) authentication.getPrincipal());
+      return userService.findById(userId);
+    } else {
+      return null;
+    }
   }
 
   @PostMapping
-  public Token signedinWithToken(@RequestBody AccountCredentials credentials) {
+  public Token signIn(@RequestBody AccountCredentials credentials) {
     User user = userService.verify(credentials);
     String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
     
