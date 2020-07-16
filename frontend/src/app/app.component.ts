@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {endpoints} from "./commons";
 import {UserService} from "./services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,13 @@ export class AppComponent implements OnInit {
   dataInitialised = false;
   isAuthenticated = false;
 
-  constructor(private http: HttpClient, private userService: UserService) {
+  buySelected: boolean = true;
+  rentSelected: boolean = false;
+  realtersSelected: boolean = false;
+
+  constructor(private http: HttpClient,
+              private router: Router,
+              private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -49,5 +56,29 @@ export class AppComponent implements OnInit {
       this.isAuthenticated = false;
       this.dataInitialised = true;
     }
+  }
+
+  resetMenuItemsActive() {
+    this.buySelected = false;
+    this.rentSelected = false;
+    this.realtersSelected = false;
+  }
+
+  goToBuy() {
+    this.router.navigateByUrl('/buy');
+    this.resetMenuItemsActive();
+    this.buySelected = true;
+  }
+
+  goToRent() {
+    this.router.navigateByUrl('/rent');
+    this.resetMenuItemsActive();
+    this.rentSelected = true;
+  }
+
+  goToRealtors() {
+    this.router.navigateByUrl('/realtors');
+    this.resetMenuItemsActive();
+    this.realtersSelected = true;
   }
 }

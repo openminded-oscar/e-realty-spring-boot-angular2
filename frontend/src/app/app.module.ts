@@ -41,6 +41,7 @@ const appRoutes: Routes = [
   { path: 'sell/:realterId', component: RealtyObjEditComponent },
   { path: 'view-obj/:realterId', component: RealtyObjDetailsComponent },
   { path: 'buy', component: RealtyObjsGalleryComponent },
+  { path: 'rent', component: RealtyObjsGalleryComponent },
   { path: '',
     redirectTo: '/buy',
     pathMatch: 'full'

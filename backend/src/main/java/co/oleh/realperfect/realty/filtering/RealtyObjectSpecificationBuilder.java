@@ -11,20 +11,19 @@ public class RealtyObjectSpecificationBuilder {
     private final List<FilterItem> params;
 
     public RealtyObjectSpecificationBuilder() {
-        params = new ArrayList<FilterItem>();
+        params = new ArrayList<>();
     }
 
-    public RealtyObjectSpecificationBuilder with(FilterItem filterItem) {
+    public void with(FilterItem filterItem) {
         params.add(filterItem);
-        return this;
     }
 
     public Specification<RealtyObject> build() {
-        if (params.size() == 0) {
+        if (params.isEmpty()) {
             return null;
         }
 
-        List<Specification<RealtyObject>> specs = new ArrayList<Specification<RealtyObject>>();
+        List<Specification<RealtyObject>> specs = new ArrayList<>();
         for (FilterItem param : params) {
             specs.add(new RealtyObjectSpecification(param));
         }

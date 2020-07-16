@@ -7,20 +7,17 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/buy">Buy</a>
+      <li class="nav-item" [ngClass]="{'active': buySelected}">
+        <a class="nav-link" (click)="goToBuy()">Buy</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link not-yet-supported" routerLink="#">Rent</a>
+      <li class="nav-item" [ngClass]="{'active': rentSelected}">
+        <a class="nav-link" (click)="goToRent()">Rent</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/sell">Sell</a>
+      <li class="nav-item" [ngClass]="{'active': realtersSelected}">
+        <a class="nav-link" (click)="goToRealtors()">Our Realtors</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/realtors">Realtors</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link not-yet-supported" routerLink="#">Find a realtor</a>
+      <li class="nav-item owner-item">
+        <a class="nav-link" routerLink="/sell" style="color: black">I'm an owner!</a>
       </li>
     </ul>
     <signup-button *ngIf="!isAuthenticated"></signup-button>
