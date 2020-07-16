@@ -1,4 +1,4 @@
-package co.oleh.realperfect.interest.realter;
+package co.oleh.realperfect.interest;
 
 
 import co.oleh.realperfect.model.Interest;
@@ -32,6 +32,9 @@ public class InterestApi {
 
     @PostMapping
     public ResponseEntity<Interest> saveInterest(@RequestBody Interest interest) {
+        if(interestService.findInterestForUserAndObject(interest.getUserId(), interest.getRealtyObjId()) != null) {
+            throw new RuntimeException("There is already such interest");
+        }
         return new ResponseEntity<>(interestService.save(interest), HttpStatus.OK);
     }
 

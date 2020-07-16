@@ -14,6 +14,7 @@ export const endpoints: any = {
   userStatus: apiBase + '/signin/with-token',
   signin: apiBase + '/signin',
   interest: apiBase + '/interest',
+  review: apiBase + '/object-review',
   signup: apiBase + '/signup',
   pictures: apiBase + '/files/',
   addressesNearby: apiBase + "/addresses/addresses-nearby",

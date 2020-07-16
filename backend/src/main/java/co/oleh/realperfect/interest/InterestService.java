@@ -1,4 +1,4 @@
-package co.oleh.realperfect.interest.realter;
+package co.oleh.realperfect.interest;
 
 import co.oleh.realperfect.model.Interest;
 import co.oleh.realperfect.repository.InterestRepository;

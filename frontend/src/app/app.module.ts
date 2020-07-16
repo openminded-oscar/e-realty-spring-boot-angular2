@@ -30,6 +30,7 @@ import { RealtyObjDetailsComponent } from './realty-obj-details/realty-obj-detai
 import { AddUpdateRealtorComponent } from './realtor/add-update-realtor/add-update-realtor.component';
 import {RealtorsGalleryComponent} from "./realtor/realtors-gallery/realtors-gallery.component";
 import {InterestService} from "./services/interest.service";
+import {ReviewsService} from "./services/reviews.service";
 
 
 const appRoutes: Routes = [
@@ -75,7 +76,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot()
   ],
-  providers: [AddressService, ConfigService, InterestService, FileUploadService, RealtyObjService, RealterService, UserService, SigninSignoutService, SignupService],
+  providers: [AddressService, ConfigService, InterestService, ReviewsService, FileUploadService, RealtyObjService, RealterService, UserService, SigninSignoutService, SignupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

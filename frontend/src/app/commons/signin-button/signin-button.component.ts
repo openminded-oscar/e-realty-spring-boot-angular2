@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {UserService} from "../../services/user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Credentials} from "../../domain/credentials.model";
 import {SigninSignoutService} from "../../services/auth/signin-signout.service";

@@ -14,7 +14,7 @@
           </p>
           <p>{{trimDescription(realtyObject.description)}}</p>
         </div>
-        <h4 class="pull-right">Price: ${{realtyObject.price}}</h4>
+        <h4>Price: ${{realtyObject.price}}</h4>
         <a [routerLink]="['/view-obj', realtyObject.id]" class="btn btn-block">Watch details</a>
         <a *ngIf="userService.isAuthenticated" [routerLink]="['/sell', realtyObject.id]" class="btn btn-block">Edit</a>
       </div>
