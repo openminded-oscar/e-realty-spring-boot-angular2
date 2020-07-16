@@ -1,10 +1,14 @@
 <div id="itemsContainer" class="row">
   <div *ngFor="let realtyObject of realtyObjects" class="col-4">
     <div class="thumbnail">
-      <img class="img-fluid" src="{{realtyObject.mainPhotoPath?realtyObject.mainPhotoPath:'//www.fgschaub.com/images/2013/03/house-3d-image.jpg'}}">
+      <div class="thumbnail-image-container">
+        <img class="thumbnail-image"
+             src="{{realtyObject.mainPhotoPath?realtyObject.mainPhotoPath:'//www.fgschaub.com/images/2013/03/house-3d-image.jpg'}}"
+        alt="">
+      </div>
       <div class="caption">
         <h4>
-         {{realtyObject.address.street}},&nbsp;{{realtyObject.address.city}}
+          {{realtyObject.address.street}},&nbsp;{{realtyObject.address.city}}
         </h4>
         <div>
           <p>

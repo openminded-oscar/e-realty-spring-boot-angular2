@@ -30,10 +30,6 @@
         <!--<select name="dwellingType" [(ngModel)]="filter.dwellingType.eq" class="form-control">-->
 
         <!--</select>-->
-        <!--Supported operation-->
-        <!--<select name="supportedOperation" [(ngModel)]="filter.supportedOperation.oneOfMany" class="form-control">-->
-
-        <!--</select>-->
       </div>
       <div class="row">
         <div class="col-6">
@@ -46,7 +42,7 @@
     </div>
   </div>
   <div class="col-10">
-    <div class="toast-container">
+    <div class="row toast-container">
       <ngb-toast
         *ngIf="showNotificaton"
         [class]="'bg-info text-light'"

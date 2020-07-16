@@ -1,9 +1,11 @@
 package co.oleh.realperfect.realty.filtering;
 
+import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.RealtyObject;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
+import java.util.Collection;
 
 public class RealtyObjectSpecification implements Specification<RealtyObject> {
     private final FilterItem filterItem;
@@ -17,7 +19,7 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
         String operation = filterItem.getOperation();
         Path<String> keyPath = getField(root, filterItem.getField());
         Class<?> keyPathClass = keyPath.getJavaType();
-        String value = filterItem.getValue().toString();
+        String value = filterItem.getValue();
 
         switch (operation.toLowerCase()) {
             case "ge":
@@ -35,6 +37,11 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
                     }
                     return cb.equal(keyPath, value);
                 }
+            }
+            case "operationtypecontains": {
+                Expression<Collection<OperationType>> operationTypes = root.get(filterItem.getField());
+                OperationType operationType = (OperationType) toEnum(OperationType.class, value);
+                return cb.isMember(operationType, operationTypes);
             }
         }
 

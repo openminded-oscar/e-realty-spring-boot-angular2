@@ -5,7 +5,7 @@ import {UserService} from "../services/user.service";
 @Component({
   selector: 'realty-objs-list',
   templateUrl: './realty-objs-list.component.html',
-  styleUrls: ['./realty-objs-gallery.component.scss']
+  styleUrls: ['./realty-objs-gallery.component.scss', './realty-objs-list.component.scss']
 })
 export class RealtyObjsListComponent implements OnInit {
   @Input()

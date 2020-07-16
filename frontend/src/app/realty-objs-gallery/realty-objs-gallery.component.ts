@@ -4,7 +4,7 @@ import * as _ from "lodash";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {RealtyObj} from "../domain/realty-obj";
 import {ConfigService} from "../services/config.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 
 @Component({
@@ -44,6 +44,9 @@ export class RealtyObjsGalleryComponent implements OnInit {
       le: ""
     }
   };
+
+  targetOperation: string;
+
   public initialPageable: any = {
     page: 0,
     size: 12
@@ -56,9 +59,18 @@ export class RealtyObjsGalleryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.resolveTargetOperations();
     this.buildingTypes = this.config.supportedBuildingTypes;
     this.resetFiltersAndPageable();
     this.loadObjects();
+  }
+
+  private resolveTargetOperations() {
+    if (this.router.url.toUpperCase().endsWith('RENT')) {
+      this.targetOperation = 'RENT';
+    } else {
+      this.targetOperation = 'SELLING';
+    }
   }
 
   public loadObjects() {
@@ -81,6 +93,7 @@ export class RealtyObjsGalleryComponent implements OnInit {
 
   public resetFiltersAndPageable() {
     this.filter = _.cloneDeep(this.initialFilter);
+    this.filter.targetOperations = {operationTypeContains: this.targetOperation};
     this.pageable = _.cloneDeep(this.initialPageable);
   }
 

@@ -34,8 +34,8 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
 
   public set targetOperations(operations: string[]) {
     operations.forEach(value => {
-      this.supportedOperations.forEach((supportedOperation, index) => {
-        if (supportedOperation.value === value && index == 0) {
+      this.supportedOperations.forEach((supportedOperation) => {
+        if (supportedOperation.value === value) {
           supportedOperation.checked = true;
         }
       });
