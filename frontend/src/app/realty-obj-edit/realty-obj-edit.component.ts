@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core"
 import {ActivatedRoute} from '@angular/router';
 import {ConfigService} from "../services/config.service";
 import {FileUploadService} from "../services/file-upload.service";
-import {endpoints, apiBase} from "../commons";
+import {apiBase} from "../commons";
 import {RealtyObj} from "../domain/realty-obj";
 import {RealtyObjService} from "../services/realty-obj.service";
 import {NotificationsService} from "angular2-notifications";

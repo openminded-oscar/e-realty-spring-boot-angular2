@@ -22,3 +22,7 @@ realtypics.storage.root: "D:/realperfect"
 
 jwt:
   secret: 0CVV3xVlsnT4i9dnaRuEOunK7Za8avDO4UK9dLcQDMg2sHtHBO3BcS+mqMUwtUIQypnq74wYJv3dFEO3th93wWwTo8hAsPt/9TeVbdo5VASRzQFFmllOoRlJ3c/dh95HJIUIh3qoT181s93QVywg7I8nRaKwUj1gIOREMa5u36eWEQJ7GS6WJ0h0mLTu7/LuxMz8IwVaBbkKzZLyrb67faikzs5xt7zXDAIVpw==
+
+server:
+  websocket:
+    port: 8081

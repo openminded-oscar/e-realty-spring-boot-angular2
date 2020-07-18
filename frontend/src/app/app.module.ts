@@ -31,6 +31,7 @@ import { AddUpdateRealtorComponent } from './realtor/add-update-realtor/add-upda
 import {RealtorsGalleryComponent} from "./realtor/realtors-gallery/realtors-gallery.component";
 import {InterestService} from "./services/interest.service";
 import {ReviewsService} from "./services/reviews.service";
+import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 
 
 const appRoutes: Routes = [
@@ -47,6 +48,8 @@ const appRoutes: Routes = [
     pathMatch: 'full'
   }
 ];
+
+const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transports: ['websocket', 'polling']} };
 
 @NgModule({
   declarations: [
@@ -75,7 +78,8 @@ const appRoutes: Routes = [
     NgbModule,
     ArchwizardModule,
     BrowserAnimationsModule,
-    SimpleNotificationsModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+    SocketIoModule.forRoot(config)
   ],
   providers: [AddressService, ConfigService, InterestService, ReviewsService, FileUploadService, RealtyObjService, RealterService, UserService, SigninSignoutService, SignupService],
   bootstrap: [AppComponent]
