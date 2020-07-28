@@ -1,15 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {endpoints} from "./commons";
 import {UserService} from "./services/user.service";
 import {Router} from "@angular/router";
+import {SampleSocketService} from "./services/socket/sample-socket.service";
+import {NotificationsService} from "angular2-notifications";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'RealPerfect';
   dataInitialised = false;
   isAuthenticated = false;
@@ -18,13 +21,36 @@ export class AppComponent implements OnInit {
   rentSelected: boolean = false;
   realtersSelected: boolean = false;
 
+  socketSubscription: Subscription;
+
   constructor(private http: HttpClient,
               private router: Router,
+              private socketService: SampleSocketService,
+              private _notification: NotificationsService,
               private userService: UserService) {
   }
 
   ngOnInit(): void {
     this.reset();
+
+    this.socketSubscription = this.socketService.currentDocument.subscribe(object => {
+      this.handleAddToFavoritesSocketUpdate(object);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.socketSubscription.unsubscribe();
+  }
+
+
+  public handleAddToFavoritesSocketUpdate(object: any) {
+    let realter = this.userService.user.realterDetails;
+    if (object.realtyObjId && this.userService.user.realterDetails) {
+      const suitableObjects = realter.realtyObjects.filter(realtyObject => realtyObject.id === object.realtyObjId);
+      if(suitableObjects.length) {
+        this._notification.success('Success!', 'Somebody interested with your object!' + object.realtyObjId);
+      }
+    }
   }
 
   fetchUserStatus() {

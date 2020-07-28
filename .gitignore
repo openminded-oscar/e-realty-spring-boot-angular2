@@ -3,6 +3,7 @@
 /.git
 /.idea
 /frontend/node_modules/
+/backend/src/main/java/co/oleh/realperfect/config/GoogleConfiguration.java
 *~
 .#*
 *#
