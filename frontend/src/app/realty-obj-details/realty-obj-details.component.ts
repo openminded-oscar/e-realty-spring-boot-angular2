@@ -105,7 +105,7 @@ export class RealtyObjDetailsComponent implements OnInit {
     const review = {
       userId: this.userService.user.id,
       realtyObjId: this.currentObject.id,
-      dateTime: new Date(this.reviewDate.year,this.reviewDate.month,this.reviewDate.day,this.reviewTime.hour,this.reviewTime.minute,this.reviewTime.second)
+      dateTime: new Date(this.reviewDate.year,this.reviewDate.month-1,this.reviewDate.day,this.reviewTime.hour,this.reviewTime.minute,this.reviewTime.second)
     };
 
     this.reviewsService.save(review)

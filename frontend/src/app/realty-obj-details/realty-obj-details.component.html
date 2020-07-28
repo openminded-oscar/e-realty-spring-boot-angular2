@@ -28,7 +28,7 @@
 
         <div class="object-review">
           <div *ngIf="currentReview">
-            <i class="fa fa-calendar-check-o" aria-hidden="true"></i> review at {{currentReview.dateTime|date:'MMM/d, h:mm'}}
+            <i class="fa fa-calendar-check-o" aria-hidden="true"></i> review at {{currentReview.dateTime|date:'MMM/d, HH:mm'}}
           </div>
           <button *ngIf="!currentReview" class="btn btn-block btn-primary"
                   (click)="openScheduleReviewModal(scheduleReviewModalContent)">

@@ -5,6 +5,7 @@ import co.oleh.realperfect.repository.ObjectReviewRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,8 +23,20 @@ public class ObjectReviewService {
         return objectReview;
     }
 
-    public ObjectReview findReviewForUserAndObject(Long userId, Long objectId) {
+    public List<ObjectReview> remove(List<ObjectReview> objectReviews) {
+        for(ObjectReview objectReview: objectReviews) {
+            objectReviewRepository.delete(objectReview.getId());
+        }
+
+        return objectReviews;
+    }
+
+    public List<ObjectReview> findReviewForUserAndObject(Long userId, Long objectId) {
         return objectReviewRepository.findByUserIdAndRealtyObjId(userId, objectId);
+    }
+
+    public ObjectReview findFutureReviewForUserAndObject(Long userId, Long objectId) {
+        return objectReviewRepository.findByUserIdAndRealtyObjIdAndDateTimeGreaterThan(userId, objectId, LocalDateTime.now());
     }
 
     public List<ObjectReview> findReviewsForUser(Long userId) {

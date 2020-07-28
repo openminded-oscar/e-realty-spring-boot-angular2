@@ -32,20 +32,20 @@ public class ObjectReviewApi {
 
     @GetMapping(value = "/{userId}/{realtyObjId}")
     public ResponseEntity<ObjectReview> getReview(@PathVariable Long userId, @PathVariable Long realtyObjId) {
-        return new ResponseEntity<>(reviewService.findReviewForUserAndObject(userId, realtyObjId), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.findFutureReviewForUserAndObject(userId, realtyObjId), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<ObjectReview> saveReview(@RequestBody ObjectReview interest) {
-        if(reviewService.findReviewForUserAndObject(interest.getUserId(), interest.getRealtyObjId()) != null) {
+        if(reviewService.findFutureReviewForUserAndObject(interest.getUserId(), interest.getRealtyObjId()) != null) {
             throw new RuntimeException("There is already such review");
         }
         return new ResponseEntity<>(reviewService.save(interest), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{userId}/{realtyObjId}")
-    public ResponseEntity<ObjectReview> removeReview(@PathVariable Long userId, @PathVariable Long realtyObjId) {
-        ObjectReview interest = reviewService.findReviewForUserAndObject(userId, realtyObjId);
-        return new ResponseEntity<>(reviewService.remove(interest), HttpStatus.OK);
+    public ResponseEntity<List<ObjectReview>> removeReviews(@PathVariable Long userId, @PathVariable Long realtyObjId) {
+        List<ObjectReview> reviews = reviewService.findReviewForUserAndObject(userId, realtyObjId);
+        return new ResponseEntity<>(reviewService.remove(reviews), HttpStatus.OK);
     }
 }

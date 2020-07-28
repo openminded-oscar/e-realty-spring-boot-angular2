@@ -2,6 +2,7 @@ package co.oleh.realperfect.model;
 
 
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,4 +20,9 @@ public class ObjectReview {
     private Long realtyObjId;
 
     private LocalDateTime dateTime;
+
+    @Type(type= "org.hibernate.type.LocalDateTimeType")
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
 }
