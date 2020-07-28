@@ -1,6 +1,7 @@
 package co.oleh.realperfect.model;
 
 import javax.persistence.*;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -16,6 +17,7 @@ public class User {
     private String phoneNumber;
     private String email;
     private String profilePic;
+    private Realter realterDetails;
 
 
     @Id
@@ -26,6 +28,16 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "realter_id", referencedColumnName = "id")
+    public Realter getRealterDetails() {
+        return realterDetails;
+    }
+
+    public void setRealterDetails(Realter realterDetails) {
+        this.realterDetails = realterDetails;
     }
 
     public String getLogin() {

@@ -13,7 +13,11 @@ export class SigninSignoutService extends AbstractService<Credentials>{
   }
 
   public signin(credentials: Credentials): Observable<HttpResponse<any>> {
-    return this.sendRequest<any>('post', '', credentials);
+    return this.sendRequest<any>('post', '', credentials)
+      .map(res => {
+        localStorage.setItem('token', res.body.token);
+        return res;
+      });
   }
 
   public signout() {

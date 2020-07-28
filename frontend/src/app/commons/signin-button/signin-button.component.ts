@@ -19,17 +19,17 @@ export class SigninButtonComponent {
   }
 
   openModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((credentials: Credentials) => {
-      this.sendLoginRequest(credentials);
-    }, (reason) => {
-      console.log(reason);
-    });
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result
+      .then((credentials: Credentials) => {
+        this.sendLoginRequest(credentials);
+      }, (reason) => {
+        console.log(reason);
+      });
   }
 
   sendLoginRequest(credentials: Credentials) {
     this.authService.signin(credentials)
       .subscribe(res => {
-        localStorage.setItem('token', res.body.token);
         this.onSignin.emit();
       });
   }

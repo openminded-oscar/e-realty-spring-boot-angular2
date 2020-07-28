@@ -13,6 +13,7 @@ import {SignupService} from "../../services/auth/signup.service";
 export class SignupButtonComponent {
   login: string;
   password: string;
+  isRealter: boolean = false;
 
   constructor(private modalService: NgbModal, private signupService: SignupService) {
   }
@@ -28,7 +29,11 @@ export class SignupButtonComponent {
   sendSignupRequest(credentials: Credentials) {
     this.signupService.signUp(credentials)
       .subscribe(res => {
-        console.log('sign in result!' + res);
+        if(this.isRealter) {
+          console.log('is realter');
+        } else {
+          console.log('is  not  realter');
+        }
       });
   }
 }

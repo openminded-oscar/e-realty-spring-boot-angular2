@@ -18,6 +18,15 @@
         <div class="input-group">
           <input id="password" class="form-control" name="password" type="password" [(ngModel)]="password">
         </div>
+        <div class="is-realter-container" style="display: flex; align-items: center">
+          <label for="isRealter">I'm realter</label>
+          <span class="is-realter-checkbox">
+        <input id="isRealter" name="isRealter"
+               type="checkbox"
+               [(ngModel)]="isRealter"
+               class="big-checkbox">
+        </span>
+        </div>
       </div>
     </form>
   </div>

@@ -235,8 +235,8 @@ public class RealtyObject {
         this.realterAware = realterAware;
     }
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "realter_id", nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "realter_id")
     public Realter getRealter() {
         return realter;
     }
