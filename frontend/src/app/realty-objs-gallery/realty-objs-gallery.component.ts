@@ -6,7 +6,6 @@ import {RealtyObj} from "../domain/realty-obj";
 import {ConfigService} from "../services/config.service";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
-import {SampleSocketService} from "../services/socket/sample-socket.service";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -14,7 +13,7 @@ import {Subscription} from "rxjs";
   templateUrl: './realty-objs-gallery.component.html',
   styleUrls: ['./realty-objs-gallery.component.scss']
 })
-export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
+export class RealtyObjsGalleryComponent implements OnInit {
   public currentRealtyObjects = [];
   public filter: any;
   public pageable: any;
@@ -54,16 +53,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     size: 12
   };
 
-  ngOnDestroy(): void {
-    this.socketSubscription.unsubscribe();
-  }
-
-  private socketSubscription: Subscription;
-
   constructor(private realtyObjService: RealtyObjService,
               private userService: UserService,
               private config: ConfigService,
-              private socketService: SampleSocketService,
               private router: Router,
               ) {
   }
@@ -73,8 +65,6 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     this.buildingTypes = this.config.supportedBuildingTypes;
     this.resetFiltersAndPageable();
     this.loadObjects();
-
-    this.socketSubscription = this.socketService.currentDocument.subscribe(object => console.log(JSON.stringify(object)));
   }
 
   private resolveTargetOperations() {
