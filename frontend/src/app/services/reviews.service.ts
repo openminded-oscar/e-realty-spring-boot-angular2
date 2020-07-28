@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {endpoints} from "../commons";
-import {AbstractService} from "./abstract.service";
+import {AbstractService} from "./common/abstract.service";
 import {Observable} from "rxjs";
 import {Review} from "../domain/review";
 
