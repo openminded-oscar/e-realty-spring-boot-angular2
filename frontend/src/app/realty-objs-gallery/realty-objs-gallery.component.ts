@@ -112,8 +112,4 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   public addObject() {
     this.router.navigateByUrl('/sell');
   }
-
-  public generateEvent() {
-    this.socketService.generateObject();
-  }
 }

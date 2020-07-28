@@ -10,6 +10,7 @@ import {NgbDateStruct, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ReviewsService} from "../services/reviews.service";
 import {Review} from "../domain/review";
 import {HttpResponse} from "@angular/common/http";
+import {SampleSocketService} from "../services/socket/sample-socket.service";
 
 @Component({
   selector: 'app-realty-obj-details',
@@ -32,6 +33,7 @@ export class RealtyObjDetailsComponent implements OnInit {
               private interestService: InterestService,
               private reviewsService: ReviewsService,
               private modalService: NgbModal,
+              private socketService: SampleSocketService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {

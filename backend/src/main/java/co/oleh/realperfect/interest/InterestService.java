@@ -2,6 +2,9 @@ package co.oleh.realperfect.interest;
 
 import co.oleh.realperfect.model.Interest;
 import co.oleh.realperfect.repository.InterestRepository;
+import co.oleh.realperfect.socket.model.Room;
+import co.oleh.realperfect.socket.model.SocketEvent;
+import com.corundumstudio.socketio.SocketIOServer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 public class InterestService {
     private InterestRepository interestRepository;
+    private SocketIOServer server;
 
 
     public Interest save(Interest interest) {
+        server.getRoomOperations(Room.POST_ROOM.name()).sendEvent(SocketEvent.LOAD_POST_PAGE.name(), interest);
         return interestRepository.save(interest);
     }
 
