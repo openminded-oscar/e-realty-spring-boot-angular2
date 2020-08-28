@@ -1,6 +1,6 @@
 package co.oleh.realperfect.mapping;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Log4j
+@Slf4j
 public class MappingService {
     final static Logger LOG = LoggerFactory.getLogger(MappingService.class);
 

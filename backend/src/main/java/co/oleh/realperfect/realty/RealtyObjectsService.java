@@ -46,7 +46,7 @@ public class RealtyObjectsService {
         List<RealtyObjectPhoto> retrievedPhotos = realtyObject.getPhotos()
                 .stream()
                 .map(photoToMap -> {
-                    RealtyObjectPhoto photo = realtyObjectPhotoRepository.findOne(photoToMap.getId());
+                    RealtyObjectPhoto photo = realtyObjectPhotoRepository.findById(photoToMap.getId()).get();
                     photo.setType(photoToMap.getType());
                     return photo;
                 })
@@ -57,7 +57,7 @@ public class RealtyObjectsService {
     }
 
     public RealtyObject getObjectById(Long objectId) {
-        return realtyObjectRepository.findOne(objectId);
+        return realtyObjectRepository.findById(objectId).get();
     }
 
     public Set<BuildingType> getRealtyBuildingTypes() {

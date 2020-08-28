@@ -4,7 +4,8 @@ import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.realty.filtering.FilterItem;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ import java.util.Set;
 @RequestMapping(value = "/api")
 @CrossOrigin(origins = "http://localhost:4200")
 public class RealtyObjectsApi {
-    private static final Logger LOGGER = Logger.getLogger(RealtyObjectsApi.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RealtyObjectsApi.class);
 
     @Autowired
     private RealtyObjectsService realtyObjectsService;

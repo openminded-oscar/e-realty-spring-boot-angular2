@@ -23,7 +23,7 @@ public class InterestService {
     }
 
     public Interest remove(Interest interest) {
-        interestRepository.delete(interest.getId());
+        interestRepository.deleteById(interest.getId());
         return interest;
     }
 
@@ -35,7 +35,7 @@ public class InterestService {
         return interestRepository.findByUserId(userId);
     }
 
-    public Interest findById(Long objectId) {
-        return interestRepository.findOne(objectId);
-    }
+//    public Interest findById(Long objectId) {
+//        return interestRepository.findOne(objectId);
+//    }
 }

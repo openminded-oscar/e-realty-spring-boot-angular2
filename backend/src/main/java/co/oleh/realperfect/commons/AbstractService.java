@@ -1,6 +1,5 @@
 package co.oleh.realperfect.commons;
 
-import co.oleh.realperfect.commons.CustomMongoRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,7 @@ public class AbstractService<T> implements CrudService<T> {
 
     @Override
     public List<T> save(List<T> entities) {
-        return repository.save(entities);
+        return repository.saveAll(entities);
     }
 
     @Override
@@ -34,6 +33,6 @@ public class AbstractService<T> implements CrudService<T> {
 
     @Override
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }

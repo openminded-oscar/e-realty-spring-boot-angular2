@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "tbl_object_review")
 public class ObjectReview {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;

@@ -26,6 +26,6 @@ public class RealterService {
     }
 
     public Realter findById(Long objectId) {
-        return realterRepository.findOne(objectId);
+        return realterRepository.findById(objectId).get();
     }
 }

@@ -3,7 +3,8 @@ package co.oleh.realperfect.interest;
 
 import co.oleh.realperfect.model.Interest;
 import lombok.AllArgsConstructor;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class InterestApi {
-    private static final Logger LOGGER = Logger.
+    private static final Logger LOGGER = LoggerFactory.
             getLogger(InterestApi.class);
 
     private InterestService interestService;

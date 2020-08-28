@@ -19,13 +19,13 @@ public class ObjectReviewService {
     }
 
     public ObjectReview remove(ObjectReview objectReview) {
-        objectReviewRepository.delete(objectReview.getId());
+        objectReviewRepository.deleteById(objectReview.getId());
         return objectReview;
     }
 
     public List<ObjectReview> remove(List<ObjectReview> objectReviews) {
         for(ObjectReview objectReview: objectReviews) {
-            objectReviewRepository.delete(objectReview.getId());
+            objectReviewRepository.deleteById(objectReview.getId());
         }
 
         return objectReviews;
@@ -48,6 +48,6 @@ public class ObjectReviewService {
     }
 
     public ObjectReview findById(Long objectId) {
-        return objectReviewRepository.findOne(objectId);
+        return objectReviewRepository.findById(objectId).get();
     }
 }

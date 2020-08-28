@@ -2,7 +2,6 @@ package co.oleh.realperfect.realty.filtering;
 
 import co.oleh.realperfect.model.RealtyObject;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class RealtyObjectSpecificationBuilder {
 
         Specification<RealtyObject> result = specs.get(0);
         for (int i = 1; i < specs.size(); i++) {
-            result = Specifications.where(result).and(specs.get(i));
+            result = result.and(specs.get(i));
         }
         return result;
     }
