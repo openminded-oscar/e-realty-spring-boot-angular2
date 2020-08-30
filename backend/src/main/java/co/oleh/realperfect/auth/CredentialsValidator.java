@@ -1,6 +1,6 @@
 package co.oleh.realperfect.auth;
 
-import co.oleh.realperfect.model.AccountCredentials;
+import co.oleh.realperfect.model.user.AccountCredentials;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

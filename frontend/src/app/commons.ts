@@ -1,18 +1,10 @@
-export function showLoading() {
-  console.log("loading ...");
-}
-
-export function hideLoading() {
-  console.log("loaded");
-}
-
-export function doNothing() {
-}
-
-export const apiBase: string = 'http://localhost:8080/api';
+export const base: string = 'http://localhost:8080';
+export const apiBase: string = `${base}/api`;
 export const endpoints: any = {
   userStatus: apiBase + '/signin/with-token',
   signin: apiBase + '/signin',
+  signinGoogleData: apiBase + '/signin/google',
+  googleSignIn: base + '/oauth2/authorize-client/google',
   interest: apiBase + '/interest',
   review: apiBase + '/object-review',
   signup: apiBase + '/signup',

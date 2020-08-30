@@ -2,7 +2,6 @@ package co.oleh.realperfect.commons;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.AllArgsConstructor;

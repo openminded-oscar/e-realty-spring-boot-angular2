@@ -1,7 +1,8 @@
-package co.oleh.realperfect.model;
+package co.oleh.realperfect.model.user;
+
+import co.oleh.realperfect.model.Realter;
 
 import javax.persistence.*;
-import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -12,6 +13,7 @@ public class User {
     private String password;
     private String passwordConfirm;
     private Set<Role> roles;
+    private String googleUserIdToken;
     private String name;
     private String surname;
     private String phoneNumber;
@@ -28,6 +30,16 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Lob
+    @Column(length = 2000)
+    public String getGoogleUserIdToken() {
+        return googleUserIdToken;
+    }
+
+    public void setGoogleUserIdToken(String googleUserId) {
+        this.googleUserIdToken = googleUserId;
     }
 
     @OneToOne(cascade = CascadeType.ALL)

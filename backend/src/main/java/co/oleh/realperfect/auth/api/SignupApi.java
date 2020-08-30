@@ -2,8 +2,8 @@ package co.oleh.realperfect.auth.api;
 
 import co.oleh.realperfect.auth.CredentialsValidator;
 import co.oleh.realperfect.auth.UserService;
-import co.oleh.realperfect.model.AccountCredentials;
-import co.oleh.realperfect.model.User;
+import co.oleh.realperfect.model.user.AccountCredentials;
+import co.oleh.realperfect.model.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;

@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {SampleSocketService} from "./services/socket/sample-socket.service";
 import {NotificationsService} from "angular2-notifications";
 import {Subscription} from "rxjs";
+import {GoogleLoginProvider, SocialAuthService} from "angularx-social-login";
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private router: Router,
               private socketService: SampleSocketService,
               private _notification: NotificationsService,
+              public socialAuthService: SocialAuthService,
               private userService: UserService) {
   }
 

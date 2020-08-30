@@ -5,15 +5,24 @@ import {Credentials} from "../../domain/credentials.model";
 import {AbstractService} from "../common/abstract.service";
 import {endpoints} from "../../commons";
 import {Observable} from "rxjs";
+import {SocialUser} from "angularx-social-login";
 
 @Injectable()
 export class SigninSignoutService extends AbstractService<Credentials>{
   constructor(http: HttpClient) {
-    super(http, endpoints.signin);
+    super(http, '');
   }
 
   public signin(credentials: Credentials): Observable<HttpResponse<any>> {
-    return this.sendRequest<any>('post', '', credentials)
+    return this.sendRequest<any>('post', endpoints.signin, credentials)
+      .map(res => {
+        localStorage.setItem('token', res.body.token);
+        return res;
+      });
+  }
+
+  public signinGoogleData(googleCredentialsData: any): Observable<HttpResponse<any>> {
+    return this.sendRequest<any>('post', endpoints.signinGoogleData, googleCredentialsData)
       .map(res => {
         localStorage.setItem('token', res.body.token);
         return res;

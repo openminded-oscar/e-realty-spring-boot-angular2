@@ -1,5 +1,7 @@
 package co.oleh.realperfect.model;
 
+import co.oleh.realperfect.model.user.User;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

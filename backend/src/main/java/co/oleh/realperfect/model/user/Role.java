@@ -1,4 +1,4 @@
-package co.oleh.realperfect.model;
+package co.oleh.realperfect.model.user;
 
 import javax.persistence.*;
 import java.util.Set;

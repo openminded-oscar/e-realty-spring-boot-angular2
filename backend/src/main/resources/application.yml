@@ -9,6 +9,12 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+
 spring.servlet:
   multipart:
     max-file-size: 5MB

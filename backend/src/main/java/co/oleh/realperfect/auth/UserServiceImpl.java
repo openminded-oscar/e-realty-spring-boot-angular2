@@ -1,7 +1,7 @@
 package co.oleh.realperfect.auth;
 
-import co.oleh.realperfect.model.AccountCredentials;
-import co.oleh.realperfect.model.User;
+import co.oleh.realperfect.model.user.AccountCredentials;
+import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,20 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(new HashSet<>(roleRepository.findAll()));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
     public User findById(Long id) {
         return userRepository.findById(id).get();
+    }
+
+    @Override
+    public User findByGoogleUserIdToken(String googleUserId) {
+        return userRepository.findByGoogleUserIdToken(googleUserId).get();
     }
 
     @Override

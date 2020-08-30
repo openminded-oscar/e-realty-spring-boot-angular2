@@ -34,6 +34,7 @@ import {ReviewsService} from "./services/reviews.service";
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {ErrorService} from "./services/common/ErrorService";
 import {AllHttpInterceptor} from "./services/common/HttpInterceptor";
+import {GoogleLoginProvider, SocialLoginModule} from "angularx-social-login";
 
 
 const appRoutes: Routes = [
@@ -73,6 +74,7 @@ const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transpo
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    SocialLoginModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only
@@ -90,7 +92,20 @@ const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transpo
       provide: HTTP_INTERCEPTORS,
       useClass: AllHttpInterceptor,
       multi: true
-    },],
+    },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha'
+            ),
+          },]
+      }
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,6 +2,7 @@ package co.oleh.realperfect.model;
 
 import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
+import co.oleh.realperfect.model.user.User;
 import lombok.ToString;
 
 import java.math.BigDecimal;

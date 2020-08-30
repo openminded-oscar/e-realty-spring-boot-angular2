@@ -74,7 +74,7 @@ export class AllHttpInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
   return next.handle(req)
     .catch((response: any) => {
-      // handle 200 responce empty data. it causes error in angular.
+      // handle 200 response empty data. it causes error in angular.
       if (response.status >= 200 && response.status < 300) {
         const res = new HttpResponse({
           body: null,
