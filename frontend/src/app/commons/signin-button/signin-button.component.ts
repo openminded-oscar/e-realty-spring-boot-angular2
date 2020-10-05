@@ -16,11 +16,14 @@ export class SigninButtonComponent {
   @Output()
   onSignin = new EventEmitter();
 
-  constructor(private modalService: NgbModal, private authService: SigninSignoutService, private socialAuthService: SocialAuthService) {
+  constructor(private modalService: NgbModal,
+              private authService: SigninSignoutService,
+              private socialAuthService: SocialAuthService) {
   }
 
   openModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'})
+      .result
       .then((credentials: Credentials) => {
         this.sendLoginRequest(credentials);
       }, (reason) => {
@@ -41,6 +44,7 @@ export class SigninButtonComponent {
       let {email, idToken, authToken, authorizationCode} = googleUser;
       this.authService.signinGoogleData( {email, idToken, authToken, authorizationCode, type: 'google'})
         .subscribe(res => {
+          this.modalService.dismissAll();
           this.onSignin.emit();
         });
     });

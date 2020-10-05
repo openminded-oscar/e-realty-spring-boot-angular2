@@ -13,7 +13,7 @@ public class User {
     private String password;
     private String passwordConfirm;
     private Set<Role> roles;
-    private String googleUserIdToken;
+    private String googleUserIdTokenSubject;
     private String name;
     private String surname;
     private String phoneNumber;
@@ -32,14 +32,12 @@ public class User {
         this.id = id;
     }
 
-    @Lob
-    @Column(length = 2000)
-    public String getGoogleUserIdToken() {
-        return googleUserIdToken;
+    public String getGoogleUserIdTokenSubject() {
+        return googleUserIdTokenSubject;
     }
 
-    public void setGoogleUserIdToken(String googleUserId) {
-        this.googleUserIdToken = googleUserId;
+    public void setGoogleUserIdTokenSubject(String googleUserId) {
+        this.googleUserIdTokenSubject = googleUserId;
     }
 
     @OneToOne(cascade = CascadeType.ALL)

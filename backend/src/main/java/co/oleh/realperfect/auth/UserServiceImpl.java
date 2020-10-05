@@ -29,12 +29,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
-    public User findByGoogleUserIdToken(String googleUserId) {
-        return userRepository.findByGoogleUserIdToken(googleUserId).get();
+    public User findByGoogleUserIdTokenSubject(String googleUserId) {
+        return userRepository.findByGoogleUserIdTokenSubject(googleUserId).orElse(null);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByLogin(login).orElse(null);
     }
 
-    public User verify(AccountCredentials authentication) {
+    public User findUserAndVerify(AccountCredentials authentication) {
         Optional<User> maybeUser = userRepository.findByLogin(authentication.getLogin());
         if (!maybeUser.isPresent()) {
             throw new RuntimeException("User doesn't exist with this username");

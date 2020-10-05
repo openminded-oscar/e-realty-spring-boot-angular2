@@ -10,7 +10,7 @@ public interface UserService {
 
     User findByLogin(String username);
 
-    User findByGoogleUserIdToken(String username);
+    User findByGoogleUserIdTokenSubject(String username);
 
-    User verify(AccountCredentials authentication);
+    User findUserAndVerify(AccountCredentials authentication);
 }
