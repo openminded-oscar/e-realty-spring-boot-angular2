@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {endpoints} from "./commons";
 import {UserService} from "./services/user.service";
@@ -6,6 +6,8 @@ import {Router} from "@angular/router";
 import {SampleSocketService} from "./services/socket/sample-socket.service";
 import {NotificationsService} from "angular2-notifications";
 import {Subscription} from "rxjs";
+
+declare var gapi: any;
 
 @Component({
   selector: 'app-root',
@@ -27,14 +29,45 @@ export class AppComponent implements OnInit, OnDestroy {
               private router: Router,
               private socketService: SampleSocketService,
               private _notification: NotificationsService,
-              private userService: UserService) {
+              private userService: UserService,
+              private zone: NgZone) {
   }
 
   ngOnInit(): void {
+    this.loadClient().then(
+      result => {
+        gapi.auth2.authorize({
+          client_id: '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha.apps.googleusercontent.com',
+          scope: 'email profile openid https://www.googleapis.com/auth/calendar',
+          response_type: 'email profile openid code'
+        }, function(response) {
+          if (response.error) {
+            return;
+          }
+          console.log(JSON.stringify(response));
+        });
+        console.log('loaded successfully!!!')
+      },
+        err => console.log('loading failure!!!')
+    );
+
     this.reset();
 
     this.socketSubscription = this.socketService.currentDocument.subscribe(object => {
       this.handleAddToFavoritesSocketUpdate(object);
+    });
+  }
+
+  loadClient(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.zone.run(() => {
+        gapi.load('client:auth2', {
+          callback: resolve,
+          onerror: reject,
+          timeout: 1000, // 5 seconds.
+          ontimeout: reject
+        });
+      });
     });
   }
 

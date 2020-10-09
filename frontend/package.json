@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "8.2.14",
     "@angular/router": "8.2.14",
     "@ng-bootstrap/ng-bootstrap": "5.3.1",
+    "@types/gapi": "0.0.39",
+    "@types/gapi.auth2": "0.0.52",
     "angular-archwizard": "^3.0.0",
     "angular2-notifications": "^3.0.0",
     "bootstrap": "^4.5.0",
