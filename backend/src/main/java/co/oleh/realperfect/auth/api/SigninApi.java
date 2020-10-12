@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/api/signin")
@@ -34,7 +35,7 @@ public class SigninApi {
   }
 
   @GetMapping("/with-token")
-  public User signedinWithToken() {
+  public User signedinWithToken(Principal user) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if(authentication != null) {
       Long userId = Long.valueOf((String) authentication.getPrincipal());
@@ -58,7 +59,7 @@ public class SigninApi {
 
     User user = userService.findByGoogleUserIdTokenSubject(tokenSubject);
     if (user == null) {
-      user = createUserForGoogleTokenSubject(googleAccountData, tokenSubject);
+      user = userService.createUserForGoogleTokenSubject(tokenSubject);
     }
 
     String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
@@ -66,12 +67,4 @@ public class SigninApi {
     return new Token(tokenString);
   }
 
-  private User createUserForGoogleTokenSubject(@RequestBody GoogleAccountData googleAccountData, String tokenSubject) {
-    User user = new User();
-    user.setPassword("");
-    user.setEmail(googleAccountData.getEmail());
-    user.setGoogleUserIdTokenSubject(tokenSubject);
-    user = userService.save(user);
-    return user;
-  }
 }

@@ -13,4 +13,6 @@ public interface UserService {
     User findByGoogleUserIdTokenSubject(String username);
 
     User findUserAndVerify(AccountCredentials authentication);
+
+    User createUserForGoogleTokenSubject(String tokenSubject);
 }

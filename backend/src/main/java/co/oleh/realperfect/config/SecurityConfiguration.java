@@ -1,6 +1,10 @@
 package co.oleh.realperfect.config;
 
 import co.oleh.realperfect.auth.JWTAuthenticationFilter;
+import co.oleh.realperfect.config.oauth.CustomAuthorizationRequestRepository;
+import co.oleh.realperfect.config.oauth.CustomOauthFilter;
+import co.oleh.realperfect.config.oauth.ScopeAwareOAuth2AuthorizationRequestResolver;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -8,12 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.endpoint.NimbusAuthorizationCodeTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.endpoint.*;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,19 +23,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// TODO try to modify OAuth2AuthorizationCodeGrantFilter
+
 @Configuration
+@EnableOAuth2Sso
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private JWTAuthenticationFilter jwtAuthenticationFilter;
+    private CustomOauthFilter customOauthFilter;
+    private ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
 
-    public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter,
+                                 ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver,
+                                 CustomOauthFilter customOauthFilter) {
         super();
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        this.oAuth2AuthorizationRequestResolver = oAuth2AuthorizationRequestResolver;
+        this.customOauthFilter = customOauthFilter;
     }
 
     @Override
@@ -51,6 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 // authentication filter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(customOauthFilter, OAuth2LoginAuthenticationFilter.class)
                 .csrf()
                 .disable()
                 .exceptionHandling()
@@ -59,21 +65,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // oauth
                 .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/oauth2/authorize-client")
                 .authorizationRequestRepository(authorizationRequestRepository())
+                .authorizationRequestResolver(this.oAuth2AuthorizationRequestResolver)
                 .and()
                 .tokenEndpoint()
                 .accessTokenResponseClient(accessTokenResponseClient());
+
+        http.oauth2Client();
     }
 
     @Bean
     public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
-        return new NimbusAuthorizationCodeTokenResponseClient();
+        return new DefaultAuthorizationCodeTokenResponseClient();
     }
 
     @Bean
     public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
-        return new HttpSessionOAuth2AuthorizationRequestRepository();
+        return new CustomAuthorizationRequestRepository();
     }
 
     public static class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {

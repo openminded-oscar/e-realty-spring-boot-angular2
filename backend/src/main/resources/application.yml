@@ -15,6 +15,12 @@ spring:
         registration:
           google:
 
+            client-id:
+            client-secret:
+            scope:
+              - profile
+              - openid
+              - email
 spring.servlet:
   multipart:
     max-file-size: 5MB

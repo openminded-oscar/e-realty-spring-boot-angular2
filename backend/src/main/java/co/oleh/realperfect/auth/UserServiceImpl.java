@@ -4,6 +4,7 @@ import co.oleh.realperfect.model.user.AccountCredentials;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,10 @@ import java.util.HashSet;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private RoleRepository roleRepository;
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -40,6 +39,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByLogin(String login) {
         return userRepository.findByLogin(login).orElse(null);
+    }
+
+    public User createUserForGoogleTokenSubject(String tokenSubject) {
+        User user = new User();
+        user.setPassword("");
+        user.setGoogleUserIdTokenSubject(tokenSubject);
+
+        return save(user);
     }
 
     public User findUserAndVerify(AccountCredentials authentication) {
