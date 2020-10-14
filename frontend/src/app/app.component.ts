@@ -7,6 +7,7 @@ import {SampleSocketService} from "./services/socket/sample-socket.service";
 import {NotificationsService} from "angular2-notifications";
 import {Subscription} from "rxjs";
 import {GoogleLoginProvider, SocialAuthService} from "angularx-social-login";
+import {CookieService} from "./services/common/CookieService";
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   socketSubscription: Subscription;
 
   constructor(private http: HttpClient,
+              private cookieService: CookieService,
               private router: Router,
               private socketService: SampleSocketService,
               private _notification: NotificationsService,
@@ -58,7 +60,6 @@ export class AppComponent implements OnInit, OnDestroy {
   fetchUserStatus() {
     let headers = new HttpHeaders({
       'Accept': 'application/json',
-      'Authorization': localStorage.getItem('token') || ''
     });
 
     this.http.get(endpoints.userStatus, {headers}).subscribe(
@@ -76,7 +77,7 @@ export class AppComponent implements OnInit, OnDestroy {
   reset() {
     this.dataInitialised = false;
 
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') || this.cookieService.getCookie('GOOGLE_OAUTH_TOKEN')) {
       this.fetchUserStatus();
     } else {
       this.userService.isAuthenticated = false;

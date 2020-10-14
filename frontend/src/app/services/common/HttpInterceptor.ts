@@ -33,16 +33,6 @@ export class AllHttpInterceptor implements HttpInterceptor {
 
   tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-  /**
-   * Clone request with updated Authorization token.
-   * @param {HttpRequest<any>} req
-   * @param {string} token
-   * @return {HttpRequest<any>}
-   */
-  addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
-    return req.clone({ setHeaders: { Authorization: token }});
-  }
-
   private generateMultipleErrorsMessage(response): string {
     let message = '';
 

@@ -38,3 +38,6 @@ jwt:
 server:
   websocket:
     port: 8081
+  error:
+    whitelabel:
+      enabled: false

@@ -35,6 +35,8 @@ import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {ErrorService} from "./services/common/ErrorService";
 import {AllHttpInterceptor} from "./services/common/HttpInterceptor";
 import {GoogleLoginProvider, SocialLoginModule} from "angularx-social-login";
+import {AuthHttpInterceptor} from "./services/common/AuthHttpInterceptor";
+import {CookieService} from "./services/common/CookieService";
 
 
 const appRoutes: Routes = [
@@ -46,6 +48,11 @@ const appRoutes: Routes = [
   { path: 'view-obj/:realterId', component: RealtyObjDetailsComponent },
   { path: 'buy', component: RealtyObjsGalleryComponent },
   { path: 'rent', component: RealtyObjsGalleryComponent },
+  {
+    path: 'login/oauth2/code/google',
+    redirectTo: '/buy',
+    pathMatch: 'full'
+  },
   { path: '',
     redirectTo: '/buy',
     pathMatch: 'full'
@@ -85,13 +92,18 @@ const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transpo
     SimpleNotificationsModule.forRoot(),
     SocketIoModule.forRoot(config)
   ],
-  providers: [AddressService, ConfigService, InterestService,
+  providers: [AddressService, CookieService, ConfigService, InterestService,
     ReviewsService, FileUploadService, RealtyObjService,
     RealterService, UserService, SigninSignoutService,
     SignupService, ErrorService, {
       provide: HTTP_INTERCEPTORS,
       useClass: AllHttpInterceptor,
       multi: true
+    },{
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true,
+      deps: [CookieService]
     },
     {
       provide: 'SocialAuthServiceConfig',

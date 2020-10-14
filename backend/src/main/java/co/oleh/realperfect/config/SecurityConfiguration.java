@@ -2,7 +2,7 @@ package co.oleh.realperfect.config;
 
 import co.oleh.realperfect.auth.JWTAuthenticationFilter;
 import co.oleh.realperfect.config.oauth.CustomAuthorizationRequestRepository;
-import co.oleh.realperfect.config.oauth.CustomOauthFilter;
+import co.oleh.realperfect.config.oauth.Oauth2TokenSettingFilter;
 import co.oleh.realperfect.config.oauth.ScopeAwareOAuth2AuthorizationRequestResolver;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
@@ -30,16 +30,16 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private JWTAuthenticationFilter jwtAuthenticationFilter;
-    private CustomOauthFilter customOauthFilter;
+    private Oauth2TokenSettingFilter oauth2TokenSettingFilter;
     private ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
 
     public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter,
                                  ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver,
-                                 CustomOauthFilter customOauthFilter) {
+                                 Oauth2TokenSettingFilter oauth2TokenSettingFilter) {
         super();
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.oAuth2AuthorizationRequestResolver = oAuth2AuthorizationRequestResolver;
-        this.customOauthFilter = customOauthFilter;
+        this.oauth2TokenSettingFilter = oauth2TokenSettingFilter;
     }
 
     @Override
@@ -51,12 +51,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // TODO add secured endpoints here
                 .antMatchers("/api/upload-photo/**")
                 .authenticated()
-                .antMatchers("/api/**", "/index.html", "/")
+                .antMatchers("/api/**", "/login/oauth2/**", "/index.html", "/")
                 .permitAll()
                 .and()
                 // authentication filter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(customOauthFilter, OAuth2LoginAuthenticationFilter.class)
+                .addFilterAfter(oauth2TokenSettingFilter, OAuth2LoginAuthenticationFilter.class)
                 .csrf()
                 .disable()
                 .exceptionHandling()
@@ -70,6 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .tokenEndpoint()
                 .accessTokenResponseClient(accessTokenResponseClient());
+
 
         http.oauth2Client();
     }

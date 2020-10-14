@@ -1,7 +1,11 @@
 package co.oleh.realperfect.objectreview;
 
 
+import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.model.ObjectReview;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,6 +27,7 @@ public class ObjectReviewApi {
             getLogger(ObjectReviewApi.class);
 
     private ObjectReviewService reviewService;
+    private GoogleCalendarWrapperService googleCalendarWrapperService;
 
     @GetMapping(value = "/user/{userId}")
     public ResponseEntity<List<ObjectReview>> findReviewsForUser(@PathVariable(required = false) Long userId) {
@@ -37,16 +45,31 @@ public class ObjectReviewApi {
     }
 
     @PostMapping
-    public ResponseEntity<ObjectReview> saveReview(@RequestBody ObjectReview interest) {
-        if(reviewService.findFutureReviewForUserAndObject(interest.getUserId(), interest.getRealtyObjId()) != null) {
+    public ResponseEntity<ObjectReview> saveReview(@RequestBody ObjectReview review) throws IOException {
+        if(reviewService.findFutureReviewForUserAndObject(review.getUserId(), review.getRealtyObjId()) != null) {
             throw new RuntimeException("There is already such review");
         }
-        return new ResponseEntity<>(reviewService.save(interest), HttpStatus.OK);
+
+        Event event = constructEventForObjectReview(review);
+        googleCalendarWrapperService.addEventToPrimaryCalendar(event);
+        return new ResponseEntity<>(reviewService.save(review), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{userId}/{realtyObjId}")
     public ResponseEntity<List<ObjectReview>> removeReviews(@PathVariable Long userId, @PathVariable Long realtyObjId) {
         List<ObjectReview> reviews = reviewService.findReviewForUserAndObject(userId, realtyObjId);
         return new ResponseEntity<>(reviewService.remove(reviews), HttpStatus.OK);
+    }
+
+    private Event constructEventForObjectReview(ObjectReview review) {
+        Event event = new Event();
+        event.setSummary("Realty review from RealPerfect");
+        event.setDescription("Please make sure to be on time!");
+        Date startDateTime = Date.from(review.getDateTime().atZone(ZoneId.systemDefault()).toInstant());
+        Date endDateTime = Date.from(review.getDateTime().plusHours(1).atZone(ZoneId.systemDefault()).toInstant());
+        event.setStart(new EventDateTime().setDateTime(new DateTime(startDateTime)));
+        event.setEnd(new EventDateTime().setDateTime(new DateTime(endDateTime)));
+
+        return event;
     }
 }

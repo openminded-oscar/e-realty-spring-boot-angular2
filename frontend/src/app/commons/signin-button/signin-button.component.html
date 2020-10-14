@@ -34,7 +34,10 @@
         </div>
         <div>
           <div class="pull-right">
-            <img class="btn" src="/assets/btn_google_signin_dark_normal_web.png" (click)="signInViaGoogle()">
+            <a href="/oauth2/authorize-client/google?scope=openid%20email%20profile%20calendar%20calendar.events">
+              <img class="btn" src="/assets/btn_google_signin_dark_normal_web.png">
+<!--              <img class="btn" src="/assets/btn_google_signin_dark_normal_web.png" (click)="signInViaGoogle()">-->
+            </a>
           </div>
         </div>
       </div>

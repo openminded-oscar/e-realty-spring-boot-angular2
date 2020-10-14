@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  * This resolver can resolve custom scope out of 'scope' request parameter
  */
+//http://localhost:8080/oauth2/authorize-client/google?scope=openid%20email%20profile%20calendar%20calendar.events
 public class ScopeAwareOAuth2AuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
     private final ClientRegistrationRepository clientRegistrationRepository;
     private final AntPathRequestMatcher authorizationRequestMatcher;
@@ -33,6 +34,7 @@ public class ScopeAwareOAuth2AuthorizationRequestResolver implements OAuth2Autho
         put("profile", "profile");
         put("openid", "openid");
         put("calendar", "https://www.googleapis.com/auth/calendar");
+        put("calendar.events", "https://www.googleapis.com/auth/calendar.events");
     }};
 
     public ScopeAwareOAuth2AuthorizationRequestResolver(ClientRegistrationRepository clientRegistrationRepository) {

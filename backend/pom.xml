@@ -105,9 +105,29 @@
 
         <dependency>
             <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client-appengine</artifactId>
-            <version>1.20.0</version>
+            <artifactId>google-api-client</artifactId>
+            <version>1.23.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client-appengine</artifactId>
+            <version>1.23.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client-jackson2</artifactId>
+            <version>1.23.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client-jackson2</artifactId>
+            <version>1.23.0</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-calendar -->
         <dependency>
             <groupId>com.google.apis</groupId>

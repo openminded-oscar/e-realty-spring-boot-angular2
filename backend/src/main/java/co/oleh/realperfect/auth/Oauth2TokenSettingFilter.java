@@ -15,19 +15,20 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class CustomOauthFilter extends GenericFilterBean {
+public class Oauth2TokenSettingFilter extends GenericFilterBean {
     private AuthenticationService authenticationService;
     private UserService userService;
     private OAuth2AuthorizedClientRepository authorizedClientRepository;
 
 
-    public CustomOauthFilter(AuthenticationService authenticationService,
-                             OAuth2AuthorizedClientRepository authorizedClientRepository,
-                             UserService userService) {
+    public Oauth2TokenSettingFilter(AuthenticationService authenticationService,
+                                    OAuth2AuthorizedClientRepository authorizedClientRepository,
+                                    UserService userService) {
         this.authenticationService = authenticationService;
         this.userService = userService;
         this.authorizedClientRepository = authorizedClientRepository;
@@ -36,7 +37,7 @@ public class CustomOauthFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication instanceof OAuth2AuthenticationToken) {
+        if (authentication instanceof OAuth2AuthenticationToken) {
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
             DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
             String subject = principal.getSubject();
@@ -46,7 +47,10 @@ public class CustomOauthFilter extends GenericFilterBean {
                 userService.createUserForGoogleTokenSubject(subject);
             }
 
-            httpServletResponse.setHeader("GOOGLE_OAUTH_TOKEN", authenticationService.generateTokenBySubject(subject));
+            String tokenByGoogleSubject = authenticationService.generateTokenBySubject(subject);
+            Cookie cookie = new Cookie("GOOGLE_OAUTH_TOKEN", tokenByGoogleSubject);
+            cookie.setSecure(true);
+            httpServletResponse.addCookie(cookie);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

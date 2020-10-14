@@ -33,7 +33,6 @@ export abstract class AbstractService<T> {
 
   protected sendRequest<T>(method: string, uri: string, body: any, queryParams?: any): Observable<HttpResponse<T>> {
     const headers = new HttpHeaders({
-      'Authorization': localStorage.getItem('token') || '',
       'Accept': 'application/json'
     });
 

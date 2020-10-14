@@ -17,10 +17,8 @@ export class FileUploadService {
 
     let headers = new HttpHeaders({
       'Accept': 'application/json',
-      'Authorization': localStorage.getItem('token') || ''
     });
     const options = {headers};
-    console.log(JSON.stringify(headers.getAll('Authorization')));
 
     return (<any>this.http.post(url, formData, options)
       .map(res => res))
