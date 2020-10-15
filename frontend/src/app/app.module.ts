@@ -84,7 +84,7 @@ const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transpo
     SocialLoginModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: false } // <-- debugging purposes only
+      { enableTracing: false, useHash: true } // <-- debugging purposes only
     ),
     NgbModule,
     ArchwizardModule,

@@ -11,6 +11,7 @@ import {ReviewsService} from "../services/reviews.service";
 import {Review} from "../domain/review";
 import {HttpResponse} from "@angular/common/http";
 import {SampleSocketService} from "../services/socket/sample-socket.service";
+import {convertUTCDateToLocalDate} from "../commons";
 
 @Component({
   selector: 'app-realty-obj-details',
@@ -104,10 +105,11 @@ export class RealtyObjDetailsComponent implements OnInit {
   }
 
   saveReviewAndClose() {
+    const utcDatetime = new Date(this.reviewDate.year,this.reviewDate.month-1,this.reviewDate.day,this.reviewTime.hour,this.reviewTime.minute,this.reviewTime.second);
     const review = {
       userId: this.userService.user.id,
       realtyObjId: this.currentObject.id,
-      dateTime: new Date(this.reviewDate.year,this.reviewDate.month-1,this.reviewDate.day,this.reviewTime.hour,this.reviewTime.minute,this.reviewTime.second)
+      dateTime: convertUTCDateToLocalDate(utcDatetime)
     };
 
     this.reviewsService.save(review)
