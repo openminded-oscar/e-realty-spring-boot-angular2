@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -39,17 +40,22 @@ public class Oauth2TokenSettingFilter extends GenericFilterBean {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof OAuth2AuthenticationToken) {
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-            DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
-            String subject = principal.getSubject();
 
-            User user = userService.findByGoogleUserIdTokenSubject(subject);
-            if (user == null) {
-                userService.createUserForGoogleTokenSubject(subject);
+            String subject = null;
+            if(authentication.getPrincipal() instanceof DefaultOAuth2User) {
+                subject = (String) ((DefaultOAuth2User)authentication.getPrincipal()).getAttributes().get("sub");
+            } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
+                subject = ((DefaultOidcUser) authentication.getPrincipal()).getSubject();
+            }
+            if (subject != null) {
+                User user = userService.findByGoogleUserIdTokenSubject(subject);
+                if (user == null) {
+                    userService.createUserForGoogleTokenSubject(subject);
+                }
             }
 
             String tokenByGoogleSubject = authenticationService.generateTokenBySubject(subject);
             Cookie cookie = new Cookie("GOOGLE_OAUTH_TOKEN", tokenByGoogleSubject);
-            cookie.setSecure(true);
             httpServletResponse.addCookie(cookie);
         }
 

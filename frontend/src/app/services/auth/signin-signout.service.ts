@@ -6,10 +6,12 @@ import {AbstractService} from "../common/abstract.service";
 import {endpoints} from "../../commons";
 import {Observable} from "rxjs";
 import {SocialUser} from "angularx-social-login";
+import {CookieService} from "../common/CookieService";
 
 @Injectable()
 export class SigninSignoutService extends AbstractService<Credentials>{
-  constructor(http: HttpClient) {
+
+  constructor(public http: HttpClient, public cookieService: CookieService) {
     super(http, '');
   }
 
@@ -31,5 +33,6 @@ export class SigninSignoutService extends AbstractService<Credentials>{
 
   public signout() {
     localStorage.removeItem('token');
+    this.cookieService.deleteCookie("GOOGLE_OAUTH_TOKEN");
   }
 }

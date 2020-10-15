@@ -48,8 +48,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   public handleAddToFavoritesSocketUpdate(object: any) {
-    let realter = this.userService.user.realterDetails;
-    if (object.realtyObjId && this.userService.user.realterDetails) {
+    if (object.realtyObjId && this.userService.user && this.userService.user.realterDetails) {
+      let realter = this.userService.user.realterDetails;
       const suitableObjects = realter.realtyObjects.filter(realtyObject => realtyObject.id === object.realtyObjId);
       if(suitableObjects.length) {
         this._notification.success('Success!', 'Somebody interested with your object!' + object.realtyObjId);

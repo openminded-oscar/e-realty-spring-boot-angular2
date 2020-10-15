@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -48,6 +49,9 @@ public class SigninApi {
       if (authentication.getPrincipal() instanceof DefaultOidcUser) {
         DefaultOidcUser defaultOidcUser = (DefaultOidcUser) authentication.getPrincipal();
         return userService.findByGoogleUserIdTokenSubject(defaultOidcUser.getSubject());
+      } else if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
+        DefaultOAuth2User defaultOidcUser = (DefaultOAuth2User) authentication.getPrincipal();
+        return userService.findByGoogleUserIdTokenSubject((String) defaultOidcUser.getAttributes().get("sub"));
       } else if (authentication.getPrincipal() instanceof String) {
         Long userId = Long.valueOf((String) authentication.getPrincipal());
         return userService.findById(userId);
