@@ -17,3 +17,7 @@
 build BackEnd and then build (serve) FrontEnd (access UI by FrontEnd port).
 ## For `prod`:
 build (compile, 'compress', etc) FrontEnd into `dist` folder and then build BackEnd (access UI by BackEnd port).
+
+
+TODO
+- Integrate ElasticSearch for full-text search by realty object description
