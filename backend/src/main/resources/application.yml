@@ -8,13 +8,12 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.MySQL57Dialect
   security:
     oauth2:
       client:
         registration:
           google:
-
             client-id:
             client-secret:
             scope:

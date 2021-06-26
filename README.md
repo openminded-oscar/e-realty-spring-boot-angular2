@@ -1,6 +1,6 @@
 # BackEnd dependencies and build
 ####Dependencies
-* Maven 3, Java 8
+* Maven 3, Java 8, Docker
 ####Build
 * `mvn spring-boot:run -P dev|prod`
 
@@ -13,6 +13,8 @@
 * `ng build` to make files build for `prod`. Builds all to `dist` folder.
 
 #Bootstrapping All Project
+## For `local`:
+_sh ./local/start_resources.sh_
 ## For `dev`:
 build BackEnd and then build (serve) FrontEnd (access UI by FrontEnd port).
 ## For `prod`:
@@ -21,3 +23,5 @@ build (compile, 'compress', etc) FrontEnd into `dist` folder and then build Back
 
 TODO
 - Integrate ElasticSearch for full-text search by realty object description
+- Integrate Swagger
+- Implement RENT feature
