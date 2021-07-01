@@ -40,3 +40,16 @@ server:
   error:
     whitelabel:
       enabled: false
+
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        web: TRACE
+
+springfox:
+  documentation:
+    swagger:
+      v2:
+        enabled: true

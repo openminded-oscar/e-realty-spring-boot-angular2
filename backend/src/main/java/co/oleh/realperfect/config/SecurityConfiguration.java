@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.AuthenticationException;
@@ -33,6 +34,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private Oauth2TokenSettingFilter oauth2TokenSettingFilter;
     private ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api/docs/swagger-resources/**",
+            "/api/docs/swagger-ui.html",
+            "/api/docs/v2/api-docs",
+            "/api/docs/webjars/**",
+
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
+
     public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter,
                                  ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver,
                                  Oauth2TokenSettingFilter oauth2TokenSettingFilter) {
@@ -40,6 +53,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.oAuth2AuthorizationRequestResolver = oAuth2AuthorizationRequestResolver;
         this.oauth2TokenSettingFilter = oauth2TokenSettingFilter;
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(AUTH_WHITELIST);
     }
 
     @Override
@@ -51,6 +69,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // TODO add secured endpoints here
                 .antMatchers("/api/upload-photo/**")
                 .authenticated()
+                .antMatchers(AUTH_WHITELIST)
+                .permitAll()
                 .antMatchers("/api/**", "/login/oauth2/**", "/index.html", "/")
                 .permitAll()
                 .and()
