@@ -3,9 +3,9 @@
 
 # BackEnd build
 ####Dependencies
-* Maven 3, Java 8, Docker, MySQLV8
+* Maven 3, Java 21, Docker, MySQLV8
 ####Build
-* `mvn spring-boot:run -P dev|prod`
+* `mvn spring-boot:run -P dev|prod "-Dspring-boot.run.jvmArguments=--add-opens java.base/java.lang=ALL-UNNAMED"`
 
 # FrontEnd dependencies and build
 ####Dependencies
