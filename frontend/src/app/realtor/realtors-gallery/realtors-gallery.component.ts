@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RealterService} from '../../services/realter.service';
 import {Realter} from '../../domain/realter';
-import {NotificationsService} from 'angular2-notifications';
 import {Router} from '@angular/router';
 
 @Component({
@@ -13,8 +12,7 @@ export class RealtorsGalleryComponent implements OnInit {
   realters: Realter[];
 
   constructor(private realterService: RealterService,
-              private router: Router,
-              private _notification: NotificationsService) {
+              private router: Router) {
   }
 
   ngOnInit() {
