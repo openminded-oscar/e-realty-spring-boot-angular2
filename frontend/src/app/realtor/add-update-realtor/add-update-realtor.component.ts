@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RealterService} from '../../services/realter.service';
 import {Realter} from '../../domain/realter';
-// import {NotificationsService} from 'angular2-notifications';
 import {ActivatedRoute} from '@angular/router';
 import {apiBase} from '../../commons';
 import {Photo} from '../../domain/photo';
@@ -19,7 +18,6 @@ export class AddUpdateRealtorComponent implements OnInit {
   constructor(private realterService: RealterService,
               private fileUploadService: FileUploadService,
               private route: ActivatedRoute,
-              // private _notification: NotificationsService
   ) {
   }
 
@@ -45,12 +43,12 @@ export class AddUpdateRealtorComponent implements OnInit {
     if (this.realterId) {
       this.realterService.updateRealter(this.realter, this.realterId)
         .subscribe(realter => {
-          // this._notification.success('Realter was added');
+          alert('Realter was added');
         });
     } else {
       this.realterService.saveRealter(this.realter)
         .subscribe(realter => {
-          // this._notification.success('Realter was added');
+          alert('Realter was added');
         });
     }
   }

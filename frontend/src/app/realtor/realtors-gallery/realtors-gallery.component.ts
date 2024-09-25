@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RealterService} from '../../services/realter.service';
 import {Realter} from '../../domain/realter';
-// import {NotificationsService} from 'angular2-notifications';
 import {Router} from '@angular/router';
 
 @Component({

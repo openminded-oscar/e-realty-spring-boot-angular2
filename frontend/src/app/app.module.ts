@@ -16,7 +16,6 @@ import {FileUploadService} from './services/file-upload.service';
 import {RealtyObjService} from './services/realty-obj.service';
 import {RealterService} from './services/realter.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-// import {SimpleNotificationsModule} from 'angular2-notifications';
 import { RealtyObjsGalleryComponent } from './realty-objs-gallery/realty-objs-gallery.component';
 import {RouterModule, Routes} from '@angular/router';
 import { RealtyObjsListComponent } from './realty-objs-gallery/realty-objs-list.component';
@@ -89,7 +88,6 @@ const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transpo
     NgbModule,
     ArchwizardModule,
     BrowserAnimationsModule,
-    // SimpleNotificationsModule.forRoot(),
     SocketIoModule.forRoot(config)
   ],
   providers: [AddressService, CookieService, ConfigService, InterestService,
