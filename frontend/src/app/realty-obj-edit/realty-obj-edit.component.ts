@@ -5,7 +5,7 @@ import {FileUploadService} from '../services/file-upload.service';
 import {apiBase} from '../commons';
 import {RealtyObj} from '../domain/realty-obj';
 import {RealtyObjService} from '../services/realty-obj.service';
-import {NotificationsService} from 'angular2-notifications';
+// import {NotificationsService} from 'angular2-notifications';
 import {Photo, RealtyPhotoType} from '../domain/photo';
 import {RealterService} from '../services/realter.service';
 import {Realter} from '../domain/realter';
@@ -46,7 +46,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
                      public fileUploadService: FileUploadService,
                      public realtyObjService: RealtyObjService,
                      public realtersService: RealterService,
-                     public _notification: NotificationsService,
+                     // public _notification: NotificationsService,
                      public route: ActivatedRoute) {
   }
 
@@ -85,10 +85,10 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   saveRealtyObject() {
     this.realtyObj.targetOperations = this.targetOperations;
     this.realtyObjService.save(this.realtyObj).subscribe((data: RealtyObj) => {
-      this._notification.success('Success!', 'the object was saved!');
+      // this._notification.success('Success!', 'the object was saved!');
       this.realtyObj = data;
     }, error => {
-      this._notification.error('Failure!', 'the object adding failed!');
+      // this._notification.error('Failure!', 'the object adding failed!');
     });
   }
 
@@ -107,7 +107,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
           },
           error => console.log(error)
         );
-      
+
     }
   }
 

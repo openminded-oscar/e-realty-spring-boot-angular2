@@ -4,7 +4,7 @@ import {endpoints} from './commons';
 import {UserService} from './services/user.service';
 import {Router} from '@angular/router';
 import {SampleSocketService} from './services/socket/sample-socket.service';
-import {NotificationsService} from 'angular2-notifications';
+// import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs';
 import {SocialAuthService} from 'angularx-social-login';
 import {CookieService} from './services/common/CookieService';
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private cookieService: CookieService,
               private router: Router,
               private socketService: SampleSocketService,
-              private _notification: NotificationsService,
+              // private _notification: NotificationsService,
               public socialAuthService: SocialAuthService,
               private userService: UserService) {
   }
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
       const realter = this.userService.user.realterDetails;
       const suitableObjects = realter.realtyObjects.filter(realtyObject => realtyObject.id === object.realtyObjId);
       if (suitableObjects.length) {
-        this._notification.success('Success!', 'Somebody interested with your object!' + object.realtyObjId);
+        // this._notification.success('Success!', 'Somebody interested with your object!' + object.realtyObjId);
       }
     }
   }
