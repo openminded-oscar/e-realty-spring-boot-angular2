@@ -1,14 +1,14 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core";
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ConfigService} from "../services/config.service";
-import {FileUploadService} from "../services/file-upload.service";
-import {apiBase} from "../commons";
-import {RealtyObj} from "../domain/realty-obj";
-import {RealtyObjService} from "../services/realty-obj.service";
-import {NotificationsService} from "angular2-notifications";
-import {Photo, RealtyPhotoType} from "../domain/photo";
-import {RealterService} from "../services/realter.service";
-import {Realter} from "../domain/realter";
+import {ConfigService} from '../services/config.service';
+import {FileUploadService} from '../services/file-upload.service';
+import {apiBase} from '../commons';
+import {RealtyObj} from '../domain/realty-obj';
+import {RealtyObjService} from '../services/realty-obj.service';
+import {NotificationsService} from 'angular2-notifications';
+import {Photo, RealtyPhotoType} from '../domain/photo';
+import {RealterService} from '../services/realter.service';
+import {Realter} from '../domain/realter';
 
 
 @Component({
@@ -93,10 +93,10 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   }
 
   onVerificationPictureSelecting(event) {
-    let fileList: FileList = event.target.files;
+    const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
-      let file: File = fileList[0];
-      this.fileUploadService.upload(file, apiBase + "/upload-photo/object")
+      const file: File = fileList[0];
+      this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
         .subscribe(
           data => {
             this.realtyObj.verificationPhoto = {
@@ -107,18 +107,18 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
           },
           error => console.log(error)
         );
-      ;
+      
     }
   }
 
   onRealtyObjPictureSelecting(event) {
-    let fileList: FileList = event.target.files;
+    const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
-      let file: File = fileList[0];
-      this.fileUploadService.upload(file, apiBase + "/upload-photo/object")
+      const file: File = fileList[0];
+      this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
         .subscribe(
           data => {
-            let type = (this.realtyObj.photos.length == 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
+            const type = (this.realtyObj.photos.length == 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
             data.type = type;
             data.link = Photo.getLinkByFilename(data.filename);
             this.realtyObj.photos.push(data);

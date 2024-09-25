@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {RealterService} from "../../services/realter.service";
-import {Realter} from "../../domain/realter";
-import {NotificationsService} from "angular2-notifications";
-import {ActivatedRoute} from "@angular/router";
-import {apiBase} from "../../commons";
-import {Photo} from "../../domain/photo";
-import {FileUploadService} from "../../services/file-upload.service";
+import {RealterService} from '../../services/realter.service';
+import {Realter} from '../../domain/realter';
+import {NotificationsService} from 'angular2-notifications';
+import {ActivatedRoute} from '@angular/router';
+import {apiBase} from '../../commons';
+import {Photo} from '../../domain/photo';
+import {FileUploadService} from '../../services/file-upload.service';
 
 @Component({
   selector: 'app-add-update-realter',
@@ -35,13 +35,13 @@ export class AddUpdateRealtorComponent implements OnInit {
         this.realterService.findById(this.realterId)
           .subscribe((realter: Realter) => {
             this.realter = realter;
-          })
+          });
       }
     });
   }
 
   save() {
-    if(this.realterId){
+    if (this.realterId) {
       this.realterService.updateRealter(this.realter, this.realterId)
         .subscribe(realter => {
           this._notification.success('Realter was added');
@@ -55,10 +55,10 @@ export class AddUpdateRealtorComponent implements OnInit {
   }
 
   onRealterPhotoSelecting(event) {
-    let fileList: FileList = event.target.files;
+    const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
-      let file: File = fileList[0];
-      this.fileUploadService.upload(file, apiBase + "/upload-photo/profile")
+      const file: File = fileList[0];
+      this.fileUploadService.upload(file, apiBase + '/upload-photo/profile')
         .subscribe(
           data => {
             this.realter.photo = data;
@@ -70,6 +70,6 @@ export class AddUpdateRealtorComponent implements OnInit {
   }
 
   deletePhoto() {
-    alert('not yet implemented')
+    alert('not yet implemented');
   }
 }
