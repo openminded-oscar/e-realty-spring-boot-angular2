@@ -1,14 +1,8 @@
 package co.oleh.realperfect.address;
 
 import co.oleh.realperfect.model.CityOnMap;
-import com.google.maps.GeoApiContext;
-import com.google.maps.PlaceAutocompleteRequest;
-import com.google.maps.PlacesApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.AutocompletePrediction;
-import com.google.maps.model.LatLng;
-import com.google.maps.model.PlaceAutocompleteType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,8 +12,13 @@ import java.util.List;
 
 @Service
 public class AddressService {
-    @Autowired
-    private GeoApiContext geoApiContext;
+//    private GeoApiContext geoApiContext;
+
+    public AddressService(
+//            GeoApiContext geoApiContext
+    ) {
+//        this.geoApiContext = geoApiContext;
+    }
 
     private static final List<CityOnMap> SUPPORTED_CITIES;
     static {
@@ -36,17 +35,21 @@ public class AddressService {
 
     public List<AutocompletePrediction> getAddressesNearby(String term, Double lat, Double lng)
             throws InterruptedException, ApiException, IOException {
-        if(term.trim().equals("")){
-            return new ArrayList<>();
-        }
-
-        PlaceAutocompleteRequest request = PlacesApi.placeAutocomplete(geoApiContext, term)
-                .types(PlaceAutocompleteType.GEOCODE)
-                .radius(150000)
-                .location(new LatLng(lat, lng))
-                .language("uk");
-
-        AutocompletePrediction[] autocompletePredictions = request.await();
-        return Arrays.asList(autocompletePredictions);
+//        if(term.trim().equals("")){
+//            return new ArrayList<>();
+//        }
+//
+//        QueryAutocompleteRequest request = PlacesApi.queryAutocomplete(geoApiContext, term)
+//                .location(new LatLng(lat, lng))
+//                .radius(150000)
+//                .language("uk");
+//        PlaceAutocompleteRequest request = PlacesApi.placeAutocomplete(geoApiContext, term)
+//                .types(PlaceAutocompleteType.GEOCODE)
+//                .radius(150000)
+//                .location(new LatLng(lat, lng))
+//                .language("uk");
+//
+//        AutocompletePrediction[] autocompletePredictions = request.await();
+        return new ArrayList<>();
     }
 }
