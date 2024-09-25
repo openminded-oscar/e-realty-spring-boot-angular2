@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {endpoints} from "./commons";
-import {UserService} from "./services/user.service";
-import {Router} from "@angular/router";
-import {SampleSocketService} from "./services/socket/sample-socket.service";
-import {NotificationsService} from "angular2-notifications";
-import {Subscription} from "rxjs";
-import {GoogleLoginProvider, SocialAuthService} from "angularx-social-login";
-import {CookieService} from "./services/common/CookieService";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {endpoints} from './commons';
+import {UserService} from './services/user.service';
+import {Router} from '@angular/router';
+import {SampleSocketService} from './services/socket/sample-socket.service';
+// import {NotificationsService} from 'angular2-notifications';
+import {Subscription} from 'rxjs';
+import {SocialAuthService} from 'angularx-social-login';
+import {CookieService} from './services/common/CookieService';
 
 @Component({
   selector: 'app-root',
@@ -19,9 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
   dataInitialised = false;
   isAuthenticated = false;
 
-  buySelected: boolean = true;
-  rentSelected: boolean = false;
-  realtersSelected: boolean = false;
+  buySelected = true;
+  rentSelected = false;
+  realtersSelected = false;
 
   socketSubscription: Subscription;
 
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private cookieService: CookieService,
               private router: Router,
               private socketService: SampleSocketService,
-              private _notification: NotificationsService,
+              // private _notification: NotificationsService,
               public socialAuthService: SocialAuthService,
               private userService: UserService) {
   }
@@ -49,16 +49,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public handleAddToFavoritesSocketUpdate(object: any) {
     if (object.realtyObjId && this.userService.user && this.userService.user.realterDetails) {
-      let realter = this.userService.user.realterDetails;
+      const realter = this.userService.user.realterDetails;
       const suitableObjects = realter.realtyObjects.filter(realtyObject => realtyObject.id === object.realtyObjId);
-      if(suitableObjects.length) {
-        this._notification.success('Success!', 'Somebody interested with your object!' + object.realtyObjId);
+      if (suitableObjects.length) {
+        // this._notification.success('Success!', 'Somebody interested with your object!' + object.realtyObjId);
       }
     }
   }
 
   fetchUserStatus() {
-    let headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       'Accept': 'application/json',
     });
 

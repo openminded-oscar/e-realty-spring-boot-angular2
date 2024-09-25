@@ -1,14 +1,14 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core";
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ConfigService} from "../services/config.service";
-import {FileUploadService} from "../services/file-upload.service";
-import {apiBase} from "../commons";
-import {RealtyObj} from "../domain/realty-obj";
-import {RealtyObjService} from "../services/realty-obj.service";
-import {NotificationsService} from "angular2-notifications";
-import {Photo, RealtyPhotoType} from "../domain/photo";
-import {RealterService} from "../services/realter.service";
-import {Realter} from "../domain/realter";
+import {ConfigService} from '../services/config.service';
+import {FileUploadService} from '../services/file-upload.service';
+import {apiBase} from '../commons';
+import {RealtyObj} from '../domain/realty-obj';
+import {RealtyObjService} from '../services/realty-obj.service';
+// import {NotificationsService} from 'angular2-notifications';
+import {Photo, RealtyPhotoType} from '../domain/photo';
+import {RealterService} from '../services/realter.service';
+import {Realter} from '../domain/realter';
 
 
 @Component({
@@ -46,7 +46,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
                      public fileUploadService: FileUploadService,
                      public realtyObjService: RealtyObjService,
                      public realtersService: RealterService,
-                     public _notification: NotificationsService,
+                     // public _notification: NotificationsService,
                      public route: ActivatedRoute) {
   }
 
@@ -85,18 +85,18 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   saveRealtyObject() {
     this.realtyObj.targetOperations = this.targetOperations;
     this.realtyObjService.save(this.realtyObj).subscribe((data: RealtyObj) => {
-      this._notification.success('Success!', 'the object was saved!');
+      // this._notification.success('Success!', 'the object was saved!');
       this.realtyObj = data;
     }, error => {
-      this._notification.error('Failure!', 'the object adding failed!');
+      // this._notification.error('Failure!', 'the object adding failed!');
     });
   }
 
   onVerificationPictureSelecting(event) {
-    let fileList: FileList = event.target.files;
+    const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
-      let file: File = fileList[0];
-      this.fileUploadService.upload(file, apiBase + "/upload-photo/object")
+      const file: File = fileList[0];
+      this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
         .subscribe(
           data => {
             this.realtyObj.verificationPhoto = {
@@ -107,18 +107,18 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
           },
           error => console.log(error)
         );
-      ;
+
     }
   }
 
   onRealtyObjPictureSelecting(event) {
-    let fileList: FileList = event.target.files;
+    const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
-      let file: File = fileList[0];
-      this.fileUploadService.upload(file, apiBase + "/upload-photo/object")
+      const file: File = fileList[0];
+      this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
         .subscribe(
           data => {
-            let type = (this.realtyObj.photos.length == 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
+            const type = (this.realtyObj.photos.length == 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
             data.type = type;
             data.link = Photo.getLinkByFilename(data.filename);
             this.realtyObj.photos.push(data);
