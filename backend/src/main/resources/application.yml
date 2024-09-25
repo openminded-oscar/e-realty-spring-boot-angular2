@@ -2,7 +2,6 @@ spring.datasource:
   url: jdbc:mysql://localhost:3306/realperfect?autoReconnect=true&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
   username: root
   password: root
-  driverClassName: com.mysql.cj.jdbc.Driver
 spring:
   jpa:
     show-sql: true
@@ -14,8 +13,8 @@ spring:
       client:
         registration:
           google:
-            client-id:
-            client-secret:
+            client-id: dummy #change to real
+            client-secret: dummy #change to real
             scope:
               - profile
               - openid
