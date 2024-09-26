@@ -8,6 +8,7 @@ import {RealtyObjService} from '../services/realty-obj.service';
 import {Photo, RealtyPhotoType} from '../domain/photo';
 import {RealterService} from '../services/realter.service';
 import {Realter} from '../domain/realter';
+import {GlobalNotificationService} from '../services/global-notification.service';
 
 
 @Component({
@@ -45,6 +46,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
                      public fileUploadService: FileUploadService,
                      public realtyObjService: RealtyObjService,
                      public realtersService: RealterService,
+                     public notificationService: GlobalNotificationService,
                      public route: ActivatedRoute) {
   }
 
@@ -83,10 +85,10 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   saveRealtyObject() {
     this.realtyObj.targetOperations = this.targetOperations;
     this.realtyObjService.save(this.realtyObj).subscribe((data: RealtyObj) => {
-      alert('Success! The object was saved!');
+      this.notificationService.showNotification('Success! The object was saved!');
       this.realtyObj = data;
     }, error => {
-      alert('Failure! The object adding failed!');
+      this.notificationService.showNotification('Failure! The object adding failed!');
     });
   }
 

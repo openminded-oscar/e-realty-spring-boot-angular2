@@ -1,0 +1,9 @@
+<div class="toast-container">
+  <ngb-toast
+    #toast
+    [class]="'bg-info text-light'">
+    <div *ngFor="let text of notificationTexts">
+      {{ text }}
+    </div>
+  </ngb-toast>
+</div>
