@@ -13,7 +13,7 @@ export class GlobalNotificationComponent implements OnInit, OnDestroy, AfterView
   @ViewChild('toast', {static: false})
   toast: NgbToast;
   notificationTexts = [];
-  notificationBufferTimeSpan = 3000;
+  notificationBufferTimeSpan = 2500;
   notificationShowTime = 2000;
 
   private destroy$ = new Subject<boolean>();
