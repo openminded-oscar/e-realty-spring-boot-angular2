@@ -14,7 +14,7 @@ export class GlobalNotificationComponent implements OnInit, OnDestroy, AfterView
   toast: NgbToast;
   notificationTexts = [];
   notificationBufferTimeSpan = 3000;
-  notificationShowTime = 1000;
+  notificationShowTime = 2000;
 
   private destroy$ = new Subject<boolean>();
 
