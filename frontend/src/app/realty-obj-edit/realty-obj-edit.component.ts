@@ -63,7 +63,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     // if passed object realterId in parameter then retrieve that object
     this.route.params.subscribe(params => {
       if (params['realterId']) {
-        this.realtyObjService.findById(+params['realterId']).subscribe(realtyObj => {
+        this.realtyObjService.findById(params['realterId']).subscribe(realtyObj => {
           this.realtyObj = <RealtyObj>realtyObj;
           this.realtyObj.photos.forEach(photo => {
             photo.link = Photo.getLinkByFilename(photo.filename);
@@ -118,7 +118,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
       this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
         .subscribe(
           data => {
-            const type = (this.realtyObj.photos.length == 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
+            const type = (this.realtyObj.photos.length === 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
             data.type = type;
             data.link = Photo.getLinkByFilename(data.filename);
             this.realtyObj.photos.push(data);
@@ -129,8 +129,8 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   }
 
   makeMain(picture) {
-    this.realtyObj.photos.forEach(picture => {
-      picture.type = RealtyPhotoType.REALTY_PLAIN;
+    this.realtyObj.photos.forEach(objectPicture => {
+      objectPicture.type = RealtyPhotoType.REALTY_PLAIN;
     });
 
     picture.type = RealtyPhotoType.REALTY_MAIN;
