@@ -1,7 +1,5 @@
 package co.oleh.realperfect.mapping;
 
-import co.oleh.realperfect.model.Realter;
-import co.oleh.realperfect.model.user.Role;
 import lombok.Data;
 
 import java.util.Set;

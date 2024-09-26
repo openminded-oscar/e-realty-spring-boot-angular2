@@ -1,6 +1,7 @@
 package co.oleh.realperfect.realty;
 
-import co.oleh.realperfect.mapping.RealtyObjectDto;
+import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
+import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.RealtyObject;
@@ -48,8 +49,9 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/realty-object/save")
-    public ResponseEntity<RealtyObject> postRealtyObject(@RequestBody RealtyObject realtyObject) {
-        RealtyObject addedObject = realtyObjectsService.add(realtyObject);
+    public ResponseEntity<RealtyObjectDetailsDto> postRealtyObject(@RequestBody RealtyObjectDetailsDto realtyObject) {
+        RealtyObjectDetailsDto addedObject = realtyObjectsService.add(realtyObject);
+
         return new ResponseEntity<>(addedObject, HttpStatus.OK);
     }
 

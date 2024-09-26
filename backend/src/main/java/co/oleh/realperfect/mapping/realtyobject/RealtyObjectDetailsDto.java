@@ -1,6 +1,6 @@
-package co.oleh.realperfect.mapping;
+package co.oleh.realperfect.mapping.realtyobject;
+import co.oleh.realperfect.mapping.RealterDto;
 import co.oleh.realperfect.model.Address;
-import co.oleh.realperfect.model.Realter;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.DwellingType;
 import co.oleh.realperfect.model.OperationType;
