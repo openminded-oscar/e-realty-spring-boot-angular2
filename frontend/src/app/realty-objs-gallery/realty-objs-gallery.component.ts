@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 import * as _ from 'lodash';
-import {RealtyObjService} from '../services/realty-obj.service';
+import {PageableResponse, RealtyObjService} from '../services/realty-obj.service';
 import {RealtyObj} from '../domain/realty-obj';
 import {ConfigService} from '../services/config.service';
 import {Router} from '@angular/router';
@@ -81,7 +81,7 @@ export class RealtyObjsGalleryComponent implements OnInit {
   }
 
   public loadNextObjects() {
-    this.realtyObjService.findByFilterAndPage(this.filter, this.pageable).subscribe((response: any) => {
+    this.realtyObjService.findByFilterAndPage(this.filter, this.pageable).subscribe((response: PageableResponse<RealtyObj>) => {
       this.showNotificaton = true;
       const realtyObjects: RealtyObj[] = response.content;
       realtyObjects.forEach(value => {

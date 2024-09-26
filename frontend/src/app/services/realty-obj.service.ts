@@ -1,9 +1,21 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from "@angular/common/http";
-import {RealtyObj} from "../domain/realty-obj";
-import {endpoints} from "../commons";
-import {Observable} from "rxjs";
-import {Photo, RealtyPhoto} from "../domain/photo";
+import {HttpClient} from '@angular/common/http';
+import {RealtyObj} from '../domain/realty-obj';
+import {endpoints} from '../commons';
+import {Observable} from 'rxjs';
+import {Photo, RealtyPhoto} from '../domain/photo';
+
+export interface PageableResponse<T> {
+  content: T[];
+  pageable: any;
+  sort: any;
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  numberOfElements: number;
+  first: boolean;
+  last: boolean;
+}
 
 @Injectable()
 export class RealtyObjService {
@@ -11,15 +23,15 @@ export class RealtyObjService {
   constructor(private http: HttpClient) {
   }
 
-  findByFilterAndPage(filter, pageable) {
-    let filterItems: any[] = [];
-    for (let field in filter) {
-      for (let operation in filter[field]) {
-        let value = filter[field][operation];
-        let fieldNameToRequest = this.appendFieldNameIfNestedRequired(field);
-        if (value === "") {
-          continue;
-        } else {
+  public findByFilterAndPage(filter: {
+    [filterField: string]: { [operationName: string]: string }
+  }, pageable): Observable<PageableResponse<RealtyObj>> {
+    const filterItems: any[] = [];
+    for (const field in filter) {
+      for (const operation in filter[field]) {
+        const value = filter[field][operation];
+        const fieldNameToRequest = this.appendFieldNameIfNestedRequired(field);
+        if (value !== '') {
           filterItems.push({
             field: fieldNameToRequest,
             operation: operation,
@@ -29,7 +41,7 @@ export class RealtyObjService {
       }
     }
 
-    return this.http.post(endpoints.realtyObj.list, filterItems, {
+    return this.http.post<PageableResponse<RealtyObj>>(endpoints.realtyObj.list, filterItems, {
       params: {
         page: pageable.page,
         size: pageable.size
@@ -38,15 +50,15 @@ export class RealtyObjService {
   }
 
   private appendFieldNameIfNestedRequired(field: string): string {
-    if (field === "street" || field === "city") {
-      field = "address." + field
+    if (field === 'street' || field === 'city') {
+      field = 'address.' + field;
     }
 
     return field;
   }
 
-  findById(id): Observable<RealtyObj> {
-    return <Observable<RealtyObj>>this.http.get(endpoints.realtyObj.byId + "/" + id).map((realtyObj: RealtyObj) => {
+  public findById(id): Observable<RealtyObj> {
+    return <Observable<RealtyObj>>this.http.get(endpoints.realtyObj.byId + '/' + id).map((realtyObj: RealtyObj) => {
       if (realtyObj.realter && realtyObj.realter.photo) {
         realtyObj.realter.photo.photoFullUrl = Photo.getLinkByFilename(realtyObj.realter.photo.filename);
       }
@@ -57,7 +69,7 @@ export class RealtyObjService {
     });
   }
 
-  save(realtyObj: RealtyObj) {
-    return this.http.post(endpoints.realtyObj.add, realtyObj);
+  public save(realtyObj: RealtyObj): Observable<RealtyObj> {
+    return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj);
   }
 }

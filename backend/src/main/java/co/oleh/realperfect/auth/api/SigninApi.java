@@ -4,6 +4,8 @@ import co.oleh.realperfect.auth.AuthenticationService;
 import co.oleh.realperfect.auth.GoogleTokenVerifier;
 import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
+import co.oleh.realperfect.mapping.MappingService;
+import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.model.user.AccountCredentials;
 import co.oleh.realperfect.model.user.GoogleAccountData;
 import co.oleh.realperfect.model.user.Token;
@@ -26,63 +28,69 @@ import java.security.GeneralSecurityException;
 @Slf4j
 public class SigninApi {
 
-  private final UserService userService;
-  private final AuthenticationService tokenAuthenticationService;
-  private final GoogleTokenVerifier googleTokenVerifier;
-  private final GoogleCalendarWrapperService googleCalendarWrapper;
+    private final UserService userService;
+    private final MappingService mappingService;
+    private final AuthenticationService tokenAuthenticationService;
+    private final GoogleTokenVerifier googleTokenVerifier;
+    private final GoogleCalendarWrapperService googleCalendarWrapper;
 
-  public SigninApi(UserService userService,
-                   AuthenticationService tokenAuthenticationService,
-                   GoogleTokenVerifier googleTokenVerifier,
-                   GoogleCalendarWrapperService googleCalendarWrapper) {
-    this.userService = userService;
-    this.tokenAuthenticationService = tokenAuthenticationService;
-    this.googleTokenVerifier = googleTokenVerifier;
-    this.googleCalendarWrapper = googleCalendarWrapper;
-  }
-
-  @GetMapping("/with-token")
-  public User signedinWithToken() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication != null) {
-      if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-        DefaultOidcUser defaultOidcUser = (DefaultOidcUser) authentication.getPrincipal();
-        return userService.findByGoogleUserIdTokenSubject(defaultOidcUser.getSubject());
-      } else if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
-        DefaultOAuth2User defaultOidcUser = (DefaultOAuth2User) authentication.getPrincipal();
-        return userService.findByGoogleUserIdTokenSubject((String) defaultOidcUser.getAttributes().get("sub"));
-      } else if (authentication.getPrincipal() instanceof String) {
-        Long userId = Long.valueOf((String) authentication.getPrincipal());
-        return userService.findById(userId);
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-
-  @PostMapping
-  public Token signIn(@RequestBody AccountCredentials credentials) {
-    User user = userService.findUserAndVerify(credentials);
-    String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
-    
-    return new Token(tokenString);
-  }
-
-  @PostMapping("/google")
-  public Token signInViaGoogle(@RequestBody GoogleAccountData googleAccountData) throws IOException, GeneralSecurityException {
-    String tokenSubject = googleTokenVerifier.verifyGoogleTokenAndGetSubject(googleAccountData.getIdToken());
-
-    User user = userService.findByGoogleUserIdTokenSubject(tokenSubject);
-    if (user == null) {
-      user = userService.createUserForGoogleTokenSubject(tokenSubject);
+    public SigninApi(UserService userService,
+                     MappingService mappingService,
+                     AuthenticationService tokenAuthenticationService,
+                     GoogleTokenVerifier googleTokenVerifier,
+                     GoogleCalendarWrapperService googleCalendarWrapper) {
+        this.userService = userService;
+        this.mappingService = mappingService;
+        this.tokenAuthenticationService = tokenAuthenticationService;
+        this.googleTokenVerifier = googleTokenVerifier;
+        this.googleCalendarWrapper = googleCalendarWrapper;
     }
 
-    String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
+    @GetMapping("/with-token")
+    public UserDto signedinWithToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
 
-    return new Token(tokenString);
-  }
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof DefaultOidcUser) {
+                DefaultOidcUser defaultOidcUser = (DefaultOidcUser) authentication.getPrincipal();
+                user = userService.findByGoogleUserIdTokenSubject(defaultOidcUser.getSubject());
+            } else if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
+                DefaultOAuth2User defaultOidcUser = (DefaultOAuth2User) authentication.getPrincipal();
+                user = userService.findByGoogleUserIdTokenSubject((String) defaultOidcUser.getAttributes().get("sub"));
+            } else if (authentication.getPrincipal() instanceof String) {
+                Long userId = Long.valueOf((String) authentication.getPrincipal());
+                user = userService.findById(userId);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+
+        return this.mappingService.map(user, UserDto.class);
+    }
+
+    @PostMapping
+    public Token signIn(@RequestBody AccountCredentials credentials) {
+        User user = userService.findUserAndVerify(credentials);
+        String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
+
+        return new Token(tokenString);
+    }
+
+    @PostMapping("/google")
+    public Token signInViaGoogle(@RequestBody GoogleAccountData googleAccountData) throws IOException, GeneralSecurityException {
+        String tokenSubject = googleTokenVerifier.verifyGoogleTokenAndGetSubject(googleAccountData.getIdToken());
+
+        User user = userService.findByGoogleUserIdTokenSubject(tokenSubject);
+        if (user == null) {
+            user = userService.createUserForGoogleTokenSubject(tokenSubject);
+        }
+
+        String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
+
+        return new Token(tokenString);
+    }
 
 }

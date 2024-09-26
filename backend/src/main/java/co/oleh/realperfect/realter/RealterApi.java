@@ -1,6 +1,7 @@
 package co.oleh.realperfect.realter;
 
 
+import co.oleh.realperfect.mapping.RealterDto;
 import co.oleh.realperfect.model.Realter;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -22,8 +23,8 @@ public class RealterApi {
     private RealterService realterService;
 
     @GetMapping
-    public ResponseEntity<List<Realter>> findRealter(@RequestParam(required = false) String query) {
-        List<Realter> realters = (query == null) ? realterService.findAll() : realterService.findByNameOrSurnameLike(query);
+    public ResponseEntity<List<RealterDto>> findRealter(@RequestParam(required = false) String query) {
+        List<RealterDto> realters = (query == null) ? realterService.findAll() : realterService.findByNameOrSurnameLike(query);
 
         return new ResponseEntity<>(realters, HttpStatus.OK);
     }

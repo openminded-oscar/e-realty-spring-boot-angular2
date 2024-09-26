@@ -1,5 +1,7 @@
 package co.oleh.realperfect.realty;
 
+import co.oleh.realperfect.mapping.MappingService;
+import co.oleh.realperfect.mapping.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.RealtyObject;
@@ -22,24 +24,33 @@ import java.util.stream.Collectors;
 
 @Service
 public class RealtyObjectsService {
-    @Autowired
     private RealtyObjectRepository realtyObjectRepository;
-
-    @Autowired
     private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
+    private final MappingService mappingService;
 
-    public Page<RealtyObject> getAllObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
+    public RealtyObjectsService(RealtyObjectRepository realtyObjectRepository, RealtyObjectPhotoRepository realtyObjectPhotoRepository,
+                                MappingService mappingService) {
+        this.realtyObjectRepository = realtyObjectRepository;
+        this.realtyObjectPhotoRepository = realtyObjectPhotoRepository;
+        this.mappingService = mappingService;
+    }
+
+    public Page<RealtyObjectDto> getAllObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
         RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
         for(FilterItem filterItem: filterItems){
             builder.with(filterItem);
         }
         Specification<RealtyObject> spec = builder.build();
 
-        return realtyObjectRepository.findAll(spec, pageable);
+        Page<RealtyObject> objects = realtyObjectRepository.findAll(spec, pageable);
+
+        return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
     }
 
-    public Page<RealtyObject> getAllObjects(Pageable pageable) {
-        return realtyObjectRepository.findAll(pageable);
+    public Page<RealtyObjectDto> getAllObjects(Pageable pageable) {
+        Page<RealtyObject> objects = realtyObjectRepository.findAll(pageable);
+
+        return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
     }
 
     public RealtyObject add(RealtyObject realtyObject) {

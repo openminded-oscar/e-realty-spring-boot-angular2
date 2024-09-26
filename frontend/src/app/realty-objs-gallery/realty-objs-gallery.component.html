@@ -47,8 +47,7 @@
         *ngIf="showNotificaton"
         [class]="'bg-info text-light'"
         [autohide]="true"
-        [delay]="1500"
-        (hide)="showNotificaton = false;">
+        [delay]="1500">
         {{currentRealtyObjects.length}} object(s) found!
       </ngb-toast>
     </div>

@@ -1,5 +1,6 @@
 package co.oleh.realperfect.realty;
 
+import co.oleh.realperfect.mapping.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.RealtyObject;
@@ -34,9 +35,9 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping(value = "/realty-objects")
-    public ResponseEntity<Page<RealtyObject>> getRealtyObjects(@RequestBody(required = false) List<FilterItem> filterItems,
-                                                               Pageable pageable) {
-        Page<RealtyObject> allObjects;
+    public ResponseEntity<Page<RealtyObjectDto>> getRealtyObjects(@RequestBody(required = false) List<FilterItem> filterItems,
+                                                                  Pageable pageable) {
+        Page<RealtyObjectDto> allObjects;
         if (filterItems != null) {
             allObjects = realtyObjectsService.getAllObjectsForFilterItems(filterItems, pageable);
         } else {
