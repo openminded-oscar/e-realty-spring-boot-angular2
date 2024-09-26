@@ -1,12 +1,13 @@
-package co.oleh.realperfect.mapping;
+package co.oleh.realperfect.mapping.realtyobject;
+import co.oleh.realperfect.mapping.RealterDto;
+import co.oleh.realperfect.mapping.UserDto;
+import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.model.Address;
-import co.oleh.realperfect.model.Realter;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.DwellingType;
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
-import co.oleh.realperfect.model.user.User;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -35,7 +36,7 @@ public class RealtyObjectDetailsDto {
         Boolean confirmed;
         Boolean realterAware;
         Address address;
-        User owner;
+        UserDto owner;
         RealterDto realter;
         List<RealtyObjectPhoto> photos;
         ConfirmationDocPhoto confirmationDocPhoto;

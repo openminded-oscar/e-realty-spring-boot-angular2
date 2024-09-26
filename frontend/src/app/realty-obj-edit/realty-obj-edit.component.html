@@ -237,7 +237,7 @@
                   <div class="col-3 realty-pic-preview-container" *ngFor="let photo of realtyObj.photos; let i = index">
                     <img class="img-fluid" src="{{photo.link}}">
                     <div *ngIf="photo.type!==photoType.REALTY_MAIN">
-                      <button (click)="makeMain(photo)" class="btn">Make main</button>
+                      <button (click)="makeMain(photo)" class="btn btn-light">Make main</button>
                     </div>
                     <div *ngIf="photo.type===photoType.REALTY_MAIN">
                       <span>Main photo</span>

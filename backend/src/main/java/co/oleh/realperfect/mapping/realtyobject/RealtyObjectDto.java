@@ -1,9 +1,9 @@
-package co.oleh.realperfect.mapping;
+package co.oleh.realperfect.mapping.realtyobject;
 
+import co.oleh.realperfect.mapping.RealterDto;
 import co.oleh.realperfect.model.*;
 import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
-import co.oleh.realperfect.model.user.User;
 import lombok.Data;
 
 import java.math.BigDecimal;
