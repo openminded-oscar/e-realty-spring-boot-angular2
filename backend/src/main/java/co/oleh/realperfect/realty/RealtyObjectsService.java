@@ -8,11 +8,13 @@ import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.Realter;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
+import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.realter.RealterService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
 import co.oleh.realperfect.repository.RealtyObjectPhotoRepository;
 import co.oleh.realperfect.repository.RealtyObjectRepository;
+import co.oleh.realperfect.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,12 +32,15 @@ public class RealtyObjectsService {
     private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
     private final RealterService realterService;
     private final MappingService mappingService;
+    private final UserRepository userRepository;
 
     public RealtyObjectsService(RealtyObjectRepository realtyObjectRepository,
+                                UserRepository userRepository,
                                 RealtyObjectPhotoRepository realtyObjectPhotoRepository,
                                 RealterService realterService,
                                 MappingService mappingService) {
         this.realtyObjectRepository = realtyObjectRepository;
+        this.userRepository = userRepository;
         this.realtyObjectPhotoRepository = realtyObjectPhotoRepository;
         this.realterService = realterService;
         this.mappingService = mappingService;
@@ -43,7 +48,7 @@ public class RealtyObjectsService {
 
     public Page<RealtyObjectDto> getAllObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
         RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
-        for(FilterItem filterItem: filterItems){
+        for (FilterItem filterItem : filterItems) {
             builder.with(filterItem);
         }
         Specification<RealtyObject> spec = builder.build();
@@ -60,10 +65,15 @@ public class RealtyObjectsService {
     }
 
     public RealtyObjectDetailsDto add(RealtyObjectDetailsDto realtyObjectDetailsDto) {
-        Realter realter = this.realterService.findById(realtyObjectDetailsDto.getRealter().getId());
-
         RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
-        realtyObject.setRealter(realter);
+        if (realtyObjectDetailsDto.getRealter() != null) {
+            Realter realter = this.realterService.findById(realtyObjectDetailsDto.getRealter().getId());
+            realtyObject.setRealter(realter);
+        }
+        if (realtyObjectDetailsDto.getOwner() != null) {
+            User owner = this.userRepository.findById(realtyObjectDetailsDto.getOwner().getId()).get();
+            realtyObject.setOwner(owner);
+        }
 
         List<RealtyObjectPhoto> retrievedPhotos = realtyObject.getPhotos()
                 .stream()

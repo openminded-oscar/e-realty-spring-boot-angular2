@@ -6,6 +6,7 @@ import java.util.Set;
 
 @Data
 public class UserDto {
+     Long id;
      Set<RoleDto> roles;
      String name;
      String surname;
