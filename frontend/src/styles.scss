@@ -16,3 +16,7 @@ button.calendar, button.calendar:active {
   background-size: 23px;
   background-position: center;
 }
+
+button.disabled, button:disabled {
+  opacity: .35 !important;
+}
