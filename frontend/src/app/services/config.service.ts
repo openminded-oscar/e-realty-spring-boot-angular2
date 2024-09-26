@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import {CityOnMap} from "../domain/city-on-map";
+import {CityOnMap} from '../domain/city-on-map';
 
 @Injectable()
 export class ConfigService {
   constructor() { }
-  private _userRegion: CityOnMap = {"name": "Львів", "lat": 49.8430008, "lng": 24.0215309};
-  private _supportedOperations: string[] = ["SELLING", "RENT"];
-  private _supportedDwellingTypes: string[] = ["APARTMENT", "HOUSE"];
-  private _supportedBuildingTypes: string[] = ["BLOCK", "BRICK", "WOODEN"];
+  private _userRegion: CityOnMap = {'name': 'Львів', 'lat': 49.8430008, 'lng': 24.0215309};
+  private _supportedOperations: string[] = ['SELLING', 'RENT'];
+  private _supportedDwellingTypes: string[] = ['APARTMENT', 'HOUSE'];
+  private _supportedBuildingTypes: string[] = ['BLOCK', 'BRICK', 'WOODEN'];
 
   get supportedBuildingTypes(): string[] {
     return this._supportedBuildingTypes;

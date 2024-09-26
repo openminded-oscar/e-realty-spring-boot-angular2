@@ -11,6 +11,12 @@ import {Realter} from '../domain/realter';
 import {GlobalNotificationService} from '../services/global-notification.service';
 
 
+export interface SupportedOperation {
+  name: string;
+  value: string;
+  checked: boolean;
+}
+
 @Component({
   selector: 'new-object',
   templateUrl: './realty-obj-edit.component.html',
@@ -19,11 +25,10 @@ import {GlobalNotificationService} from '../services/global-notification.service
 export class RealtyObjEditComponent implements OnInit, OnChanges {
   @Input()
   public realtyObj: RealtyObj;
-
   public realters: Realter[];
   public dwellingTypes: string[];
   public buildingTypes: string[];
-  public supportedOperations: any[];
+  public supportedOperations: SupportedOperation[];
   public photoType = RealtyPhotoType;
 
   public get targetOperations() {
@@ -51,8 +56,8 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    this.supportedOperations = this.config.supportedOperations
-      .map((value, index, array) => <any> {value: value, name: value, checked: false});
+    this.supportedOperations = this.config
+      .supportedOperations.map(value => ({value, name: value, checked: value === 'SELLING'}));
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
     this.realtersService.getRealters().subscribe((gotRealters: Realter[]) => {
@@ -75,11 +80,11 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.supportedOperations = this.config.supportedOperations.map((value, index, array) => <any>{
+    this.supportedOperations = this.config.supportedOperations.map((value, index, array) => ({
       value,
       name: value,
       checked: RealtyObj.checkIfOperationSupported(this.realtyObj, value)
-    });
+    }));
   }
 
   saveRealtyObject() {
