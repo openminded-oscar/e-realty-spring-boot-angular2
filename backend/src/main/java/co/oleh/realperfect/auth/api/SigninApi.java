@@ -5,7 +5,7 @@ import co.oleh.realperfect.auth.GoogleTokenVerifier;
 import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.mapping.MappingService;
-import co.oleh.realperfect.mapping.UserDto;
+import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.model.user.AccountCredentials;
 import co.oleh.realperfect.model.user.GoogleAccountData;
 import co.oleh.realperfect.model.user.Token;
@@ -47,7 +47,7 @@ public class SigninApi {
     }
 
     @GetMapping("/with-token")
-    public UserDto signedinWithToken() {
+    public UserSelfDto signedinWithToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = null;
 
@@ -68,7 +68,7 @@ public class SigninApi {
             return null;
         }
 
-        return this.mappingService.map(user, UserDto.class);
+        return this.mappingService.map(user, UserSelfDto.class);
     }
 
     @PostMapping

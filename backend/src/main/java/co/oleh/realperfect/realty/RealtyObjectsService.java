@@ -80,8 +80,10 @@ public class RealtyObjectsService {
         return this.mappingService.map(createdObject, RealtyObjectDetailsDto.class);
     }
 
-    public RealtyObject getObjectById(Long objectId) {
-        return realtyObjectRepository.findById(objectId).get();
+    public RealtyObjectDetailsDto getObjectById(Long objectId) {
+        RealtyObject realtyObject = realtyObjectRepository.findById(objectId).get();
+
+        return this.mappingService.map(realtyObject, RealtyObjectDetailsDto.class);
     }
 
     public Set<BuildingType> getRealtyBuildingTypes() {

@@ -29,8 +29,8 @@ public class RealtyObjectsApi {
 
 
     @GetMapping(value = "/realty-objects/{objectId}")
-    public ResponseEntity<RealtyObject> getObjectDetails(@PathVariable Long objectId) {
-        RealtyObject realtyObject = realtyObjectsService.getObjectById(objectId);
+    public ResponseEntity<RealtyObjectDetailsDto> getObjectDetails(@PathVariable Long objectId) {
+        RealtyObjectDetailsDto realtyObject = realtyObjectsService.getObjectById(objectId);
 
         return new ResponseEntity<>(realtyObject, HttpStatus.OK);
     }
