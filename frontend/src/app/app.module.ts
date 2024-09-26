@@ -36,6 +36,7 @@ import {AllHttpInterceptor} from './services/common/HttpInterceptor';
 import {GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
 import {AuthHttpInterceptor} from './services/common/AuthHttpInterceptor';
 import {CookieService} from './services/common/CookieService';
+import { GlobalNotificationComponent } from './global-notification/global-notification.component';
 
 
 const appRoutes: Routes = [
@@ -73,7 +74,8 @@ const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transpo
     SignoutButtonComponent,
     RealtyObjDetailsComponent,
     AddUpdateRealtorComponent,
-    RealtorsGalleryComponent
+    RealtorsGalleryComponent,
+    GlobalNotificationComponent
   ],
   imports: [
     BrowserModule,

@@ -1,12 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {endpoints} from './commons';
 import {UserService} from './services/user.service';
 import {Router} from '@angular/router';
 import {SampleSocketService} from './services/socket/sample-socket.service';
-import {Subscription} from 'rxjs';
 import {SocialAuthService} from 'angularx-social-login';
 import {CookieService} from './services/common/CookieService';
+import {GlobalNotificationService} from './services/global-notification.service';
+import {Subject} from 'rxjs/Subject';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -22,26 +24,29 @@ export class AppComponent implements OnInit, OnDestroy {
   rentSelected = false;
   realtersSelected = false;
 
-  socketSubscription: Subscription;
+  private destroy$ = new Subject<boolean>();
 
-  constructor(private http: HttpClient,
-              private cookieService: CookieService,
-              private router: Router,
-              private socketService: SampleSocketService,
+  constructor(public http: HttpClient,
+              public cookieService: CookieService,
+              public router: Router,
+              public socketService: SampleSocketService,
               public socialAuthService: SocialAuthService,
-              private userService: UserService) {
+              public notificationService: GlobalNotificationService,
+              public userService: UserService) {
   }
 
   ngOnInit(): void {
     this.reset();
-
-    this.socketSubscription = this.socketService.currentDocument.subscribe(object => {
+    this.socketService.currentDocument.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(object => {
       this.handleAddToFavoritesSocketUpdate(object);
     });
   }
 
   ngOnDestroy(): void {
-    this.socketSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 
@@ -50,12 +55,12 @@ export class AppComponent implements OnInit, OnDestroy {
       const realter = this.userService.user.realterDetails;
       const suitableObjects = realter.realtyObjects.filter(realtyObject => realtyObject.id === object.realtyObjId);
       if (suitableObjects.length) {
-        alert('Success! Somebody interested with your object!' + object.realtyObjId);
+        this.notificationService.showNotification('Success! Somebody interested with your object!' + object.realtyObjId);
       }
     }
   }
 
-  fetchUserStatus() {
+  public fetchUserStatus() {
     const headers = new HttpHeaders({
       'Accept': 'application/json',
     });

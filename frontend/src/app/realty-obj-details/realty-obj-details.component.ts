@@ -47,7 +47,7 @@ export class RealtyObjDetailsComponent implements OnInit {
             this.currentObject = realtyObj;
 
             this.initObjectRelatedData();
-          })
+          });
       }
     });
   }
