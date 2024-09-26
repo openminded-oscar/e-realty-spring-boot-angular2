@@ -1,7 +1,7 @@
-import {Photo, RealtyPhoto, RealtyPhotoType} from "./photo";
-import {Address} from "./address";
-import {endpoints} from "../commons";
-import {Realter} from "./realter";
+import {Photo, RealtyPhoto, RealtyPhotoType} from './photo';
+import {Address} from './address';
+import {endpoints} from '../commons';
+import {Realter} from './realter';
 
 export class RealtyObj {
   public id?: number;
@@ -42,7 +42,7 @@ export class RealtyObj {
   }
 
   public static getMainPhoto(realty: RealtyObj) {
-    let mainPhotos = realty.photos.filter(value => value.type == RealtyPhotoType.REALTY_MAIN);
+    const mainPhotos = realty.photos.filter(value => value.type == RealtyPhotoType.REALTY_MAIN);
 
     if (mainPhotos && mainPhotos.length > 0) {
       return Photo.getLinkByFilename(mainPhotos[0].filename);

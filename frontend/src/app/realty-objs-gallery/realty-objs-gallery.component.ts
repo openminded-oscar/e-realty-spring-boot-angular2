@@ -1,12 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import * as _ from "lodash";
-import {RealtyObjService} from "../services/realty-obj.service";
-import {RealtyObj} from "../domain/realty-obj";
-import {ConfigService} from "../services/config.service";
-import {Router} from "@angular/router";
-import {UserService} from "../services/user.service";
-import {Subscription} from "rxjs";
+import * as _ from 'lodash';
+import {RealtyObjService} from '../services/realty-obj.service';
+import {RealtyObj} from '../domain/realty-obj';
+import {ConfigService} from '../services/config.service';
+import {Router} from '@angular/router';
+import {UserService} from '../services/user.service';
 
 @Component({
   selector: 'realty-objs-gallery',
@@ -22,27 +21,27 @@ export class RealtyObjsGalleryComponent implements OnInit {
 
   public initialFilter: any = {
     price: {
-      ge: "0",
-      le: "1000000"
+      ge: '0',
+      le: '1000000'
     },
     city: {
-      like: ""
+      like: ''
     },
     street: {
-      like: ""
+      like: ''
     },
     roomsAmount: {
-      eq: ""
+      eq: ''
     },
     description: {
-      like: ""
+      like: ''
     },
     buildingType: {
-      eq: ""
+      eq: ''
     },
-    totalArea:{
-      ge: "",
-      le: ""
+    totalArea: {
+      ge: '',
+      le: ''
     }
   };
 
@@ -53,10 +52,10 @@ export class RealtyObjsGalleryComponent implements OnInit {
     size: 12
   };
 
-  constructor(private realtyObjService: RealtyObjService,
-              private userService: UserService,
-              private config: ConfigService,
-              private router: Router,
+  constructor(public realtyObjService: RealtyObjService,
+              public userService: UserService,
+              public config: ConfigService,
+              public router: Router,
               ) {
   }
 
@@ -84,7 +83,7 @@ export class RealtyObjsGalleryComponent implements OnInit {
   public loadNextObjects() {
     this.realtyObjService.findByFilterAndPage(this.filter, this.pageable).subscribe((response: any) => {
       this.showNotificaton = true;
-      let realtyObjects: RealtyObj[] = response.content;
+      const realtyObjects: RealtyObj[] = response.content;
       realtyObjects.forEach(value => {
         value.mainPhotoPath = RealtyObj.getMainPhoto(value);
       });
