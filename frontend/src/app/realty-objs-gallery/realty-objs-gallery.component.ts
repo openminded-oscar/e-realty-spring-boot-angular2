@@ -71,7 +71,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     this.resolveTargetOperations();
     this.buildingTypes = this.config.supportedBuildingTypes;
     this.resetFiltersAndPageable();
-    this.loadObjects();
+    this.loadInitialObjects();
   }
 
   private resolveTargetOperations() {
@@ -82,7 +82,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     }
   }
 
-  public loadObjects() {
+  public loadInitialObjects() {
     this.currentRealtyObjects = [];
     this.pageable = _.cloneDeep(this.initialPageable);
     this.loadNextObjects();
@@ -123,5 +123,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   public selectOrderingOption(option: string) {
     this.selectedOrderingOption = option;
     alert('Ordering not yet implemented');
+  }
+
+  public onScroll() {
+    this.loadNextObjects();
   }
 }
