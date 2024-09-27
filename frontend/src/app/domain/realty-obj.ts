@@ -1,6 +1,5 @@
 import {Photo, RealtyPhoto, RealtyPhotoType} from './photo';
 import {Address} from './address';
-import {endpoints} from '../commons';
 import {Realter} from './realter';
 
 export class RealtyObj {

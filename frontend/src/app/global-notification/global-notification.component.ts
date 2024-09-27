@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgbToast} from '@ng-bootstrap/ng-bootstrap';
 import {GlobalNotificationService} from '../services/global-notification.service';
 import {bufferTime, takeUntil} from 'rxjs/operators';

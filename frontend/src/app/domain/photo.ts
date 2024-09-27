@@ -1,4 +1,4 @@
-import {endpoints} from "../commons";
+import {endpoints} from '../commons';
 
 export class Photo {
   public link: string;
@@ -6,7 +6,7 @@ export class Photo {
   public fullUrl?: string;
   public id: number;
 
-  public static getLinkByFilename(filename){
+  public static getLinkByFilename(filename) {
     return endpoints.pictures + filename;
   }
 }
@@ -21,5 +21,5 @@ export class RealtyPhoto extends Photo {
 }
 
 export enum RealtyPhotoType {
-  REALTY_PLAIN="REALTY_PLAIN", REALTY_MAIN="REALTY_MAIN"
+  REALTY_PLAIN= 'REALTY_PLAIN', REALTY_MAIN= 'REALTY_MAIN'
 }

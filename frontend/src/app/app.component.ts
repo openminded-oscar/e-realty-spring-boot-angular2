@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {endpoints} from './commons';
 import {UserService} from './services/user.service';
@@ -6,9 +6,9 @@ import {Router} from '@angular/router';
 import {SampleSocketService} from './services/socket/sample-socket.service';
 import {SocialAuthService} from 'angularx-social-login';
 import {CookieService} from './services/common/CookieService';
-import {GlobalNotificationService} from './services/global-notification.service';
 import {Subject} from 'rxjs/Subject';
 import {takeUntil} from 'rxjs/operators';
+import {GlobalNotificationService} from './services/global-notification.service';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
               public userService: UserService) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.reset();
     this.socketService.currentDocument.pipe(
       takeUntil(this.destroy$)
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -77,7 +77,7 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
-  reset() {
+  public reset() {
     this.dataInitialised = false;
 
     if (localStorage.getItem('token') || this.cookieService.getCookie('GOOGLE_OAUTH_TOKEN')) {
@@ -90,13 +90,13 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  resetMenuItemsActive() {
+  public resetMenuItemsActive() {
     this.buySelected = false;
     this.rentSelected = false;
     this.realtersSelected = false;
   }
 
-  goToBuy() {
+  public goToBuy() {
     this.router.navigateByUrl('/buy');
     this.resetMenuItemsActive();
     this.buySelected = true;
@@ -108,7 +108,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.rentSelected = true;
   }
 
-  goToRealtors() {
+  public goToRealtors() {
     this.router.navigateByUrl('/realtors');
     this.resetMenuItemsActive();
     this.realtersSelected = true;

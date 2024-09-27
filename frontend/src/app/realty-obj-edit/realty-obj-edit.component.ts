@@ -5,11 +5,10 @@ import {FileUploadService} from '../services/file-upload.service';
 import {apiBase} from '../commons';
 import {RealtyObj} from '../domain/realty-obj';
 import {RealtyObjService} from '../services/realty-obj.service';
-import {Photo, RealtyPhotoType} from '../domain/photo';
+import {Photo, RealtyPhoto, RealtyPhotoType} from '../domain/photo';
 import {RealterService} from '../services/realter.service';
 import {Realter} from '../domain/realter';
 import {GlobalNotificationService} from '../services/global-notification.service';
-
 
 export interface SupportedOperation {
   name: string;
@@ -23,8 +22,17 @@ export interface SupportedOperation {
   styleUrls: ['./realty-obj-edit.scss']
 })
 export class RealtyObjEditComponent implements OnInit, OnChanges {
+  private _realtyObj: RealtyObj;
+
+  public get realtyObj(): RealtyObj {
+    return this._realtyObj;
+  }
+
   @Input()
-  public realtyObj: RealtyObj;
+  public set realtyObj(object: RealtyObj) {
+    this._realtyObj = object;
+  }
+
   public realters: Realter[];
   public dwellingTypes: string[];
   public buildingTypes: string[];
@@ -69,22 +77,14 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     this.route.params.subscribe(params => {
       if (params['realterId']) {
         this.realtyObjService.findById(params['realterId']).subscribe(realtyObj => {
-          this.realtyObj = <RealtyObj>realtyObj;
+          this.realtyObj = realtyObj;
           this.realtyObj.photos.forEach(photo => {
             photo.link = Photo.getLinkByFilename(photo.filename);
           });
-          this.targetOperations = (<RealtyObj>realtyObj).targetOperations;
+          this.targetOperations = realtyObj.targetOperations;
         });
       }
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.supportedOperations = this.config.supportedOperations.map((value, index, array) => ({
-      value,
-      name: value,
-      checked: RealtyObj.checkIfOperationSupported(this.realtyObj, value)
-    }));
   }
 
   saveRealtyObject() {
@@ -122,9 +122,8 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
       const file: File = fileList[0];
       this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
         .subscribe(
-          data => {
-            const type = (this.realtyObj.photos.length === 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
-            data.type = type;
+          (data: RealtyPhoto) => {
+            data.type = (this.realtyObj.photos.length === 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
             data.link = Photo.getLinkByFilename(data.filename);
             this.realtyObj.photos.push(data);
           },
@@ -133,7 +132,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     }
   }
 
-  makeMain(picture) {
+  public makeMain(picture: RealtyPhoto) {
     this.realtyObj.photos.forEach(objectPicture => {
       objectPicture.type = RealtyPhotoType.REALTY_PLAIN;
     });
@@ -141,12 +140,20 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     picture.type = RealtyPhotoType.REALTY_MAIN;
   }
 
-  deletePhoto(index: number) {
+  public deletePhoto(index: number) {
     this.realtyObj.photos.splice(index, 1);
     if (this.realtyObj.photos.length > 0) {
       this.makeMain(this.realtyObj.photos[0]);
     }
 
     this.saveRealtyObject();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.supportedOperations = this.config.supportedOperations.map((value, index, array) => <any>{
+      value,
+      name: value,
+      checked: RealtyObj.checkIfOperationSupported(this.realtyObj, value)
+    });
   }
 }
