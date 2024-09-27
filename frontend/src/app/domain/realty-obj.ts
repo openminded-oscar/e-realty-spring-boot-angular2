@@ -37,7 +37,7 @@ export class RealtyObj {
   }
 
   public static checkIfOperationSupported(realty: RealtyObj, operation: string) {
-    return realty.targetOperations.indexOf(operation) > 0;
+    return realty.targetOperations.includes(operation);
   }
 
   public static getMainPhoto(realty: RealtyObj) {

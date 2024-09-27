@@ -16,7 +16,7 @@ export class RealtyObjsListComponent implements OnInit {
   ngOnInit() {
   }
 
-  private trimDescription(fullDescr: string) {
+  public trimDescription(fullDescr: string) {
     return fullDescr.substr(0, 75) + '...';
   }
 }
