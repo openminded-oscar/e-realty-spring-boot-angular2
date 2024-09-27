@@ -1,5 +1,5 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {ActivatedRoute, Event} from '@angular/router';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {ConfigService} from '../services/config.service';
 import {FileUploadService} from '../services/file-upload.service';
 import {apiBase} from '../commons';
@@ -23,39 +23,32 @@ export interface SupportedOperation {
   templateUrl: './realty-obj-edit.component.html',
   styleUrls: ['./realty-obj-edit.scss']
 })
-export class RealtyObjEditComponent implements OnInit, OnChanges, OnDestroy {
-  private _realtyObj: RealtyObj;
+export class RealtyObjEditComponent implements OnInit, OnDestroy {
+  public operationsInputs: SupportedOperation[];
 
+  private _realtyObj: RealtyObj;
   public get realtyObj(): RealtyObj {
     return this._realtyObj;
   }
-
-  @Input()
   public set realtyObj(object: RealtyObj) {
     this._realtyObj = object;
+    this.operationsInputs = this.config.supportedOperations.map((value, index, array) => ({
+      value,
+      name: value,
+      checked: RealtyObj.checkIfOperationSupported(this._realtyObj, value)
+    }));
+  }
+
+  public get selectedOperations(): string[] {
+    return this.operationsInputs
+      .filter(opt => opt.checked)
+      .map(opt => opt.value);
   }
 
   public realters: Realter[];
   public dwellingTypes: string[];
   public buildingTypes: string[];
-  public supportedOperations: SupportedOperation[];
   public photoType = RealtyPhotoType;
-
-  public get targetOperations() {
-    return this.supportedOperations
-      .filter(opt => opt.checked)
-      .map(opt => opt.value);
-  }
-
-  public set targetOperations(operations: string[]) {
-    operations.forEach(value => {
-      this.supportedOperations.forEach((supportedOperation) => {
-        if (supportedOperation.value === value) {
-          supportedOperation.checked = true;
-        }
-      });
-    });
-  }
 
   private destroy$ = new Subject<boolean>();
 
@@ -68,7 +61,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    this.supportedOperations = this.config
+    this.operationsInputs = this.config
       .supportedOperations.map(value => ({value, name: value, checked: value === 'SELLING'}));
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
@@ -90,14 +83,14 @@ export class RealtyObjEditComponent implements OnInit, OnChanges, OnDestroy {
           this.realtyObj.photos.forEach(photo => {
             photo.link = Photo.getLinkByFilename(photo.filename);
           });
-          this.targetOperations = realtyObj.targetOperations;
         });
       }
     });
   }
 
   public saveRealtyObject() {
-    this.realtyObj.targetOperations = this.targetOperations;
+    this.realtyObj.targetOperations = this.selectedOperations;
+
     this.realtyObjService.save(this.realtyObj).pipe(
       takeUntil(this.destroy$)
     ).subscribe((data: RealtyObj) => {
@@ -115,7 +108,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges, OnDestroy {
       this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
         .pipe(takeUntil(this.destroy$))
         .subscribe(
-          data => {
+          (data: Photo) => {
             this.realtyObj.verificationPhoto = {
               link: Photo.getLinkByFilename(data.filename),
               filename: data.filename,
@@ -159,14 +152,6 @@ export class RealtyObjEditComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.saveRealtyObject();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.supportedOperations = this.config.supportedOperations.map((value, index, array) => <any>{
-      value,
-      name: value,
-      checked: RealtyObj.checkIfOperationSupported(this.realtyObj, value)
-    });
   }
 
   ngOnDestroy(): void {

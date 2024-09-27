@@ -1,9 +1,21 @@
-.thumbnail-image-container {
-  height: 230px;
-  display: flex;
+.thumbnail {
+  margin-bottom: 15px;
+
+  &-image {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  &-image-container {
+    height: 230px;
+    display: flex;
+  }
 }
 
-.thumbnail-image {
-  max-height: 100%;
-  max-width: 100%;
+
+.caption {
+  &-top-row {
+    display: flex;
+  }
 }
+

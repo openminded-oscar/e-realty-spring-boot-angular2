@@ -7,9 +7,15 @@
              alt="">
       </div>
       <div class="caption">
-        <h4>
-          {{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}
-        </h4>
+        <div class="caption-top-row">
+          <h4 style="flex: 1">
+            {{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}
+          </h4>
+          <div>
+            <a *ngIf="userService.isAuthenticated" [routerLink]="['/sell', realtyObject.id]"
+               class="btn-block">Edit</a>
+          </div>
+        </div>
         <div>
           <p>
             {{ realtyObject.roomsAmount }} rooms, {{ realtyObject.totalArea }}
@@ -20,8 +26,7 @@
           <p>{{ trimDescription(realtyObject.description) }}</p>
         </div>
         <h4>Price: ${{ realtyObject.price }}</h4>
-        <a [routerLink]="['/view-obj', realtyObject.id]" class="btn btn-block">Watch details</a>
-        <a *ngIf="userService.isAuthenticated" [routerLink]="['/sell', realtyObject.id]" class="btn btn-block">Edit</a>
+        <a [routerLink]="['/view-obj', realtyObject.id]" style="border: 1px solid black" class="btn btn-block">Watch details</a>
       </div>
     </div>
   </div>
