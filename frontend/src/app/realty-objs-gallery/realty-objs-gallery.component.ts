@@ -65,7 +65,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   public FILTER_DEBOUNCE_TIME = 1000;
   public selectedOrderingOption: string;
-  public orderingOptions = ['Address', 'Price', 'Area'];
+  public orderingOptions = ['Recently added', 'Newest', 'Address', 'Price', 'Area'];
 
   ngOnInit() {
     this.resolveTargetOperations();
