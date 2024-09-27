@@ -7,7 +7,7 @@ import {ConfigService} from '../services/config.service';
 import {Router} from '@angular/router';
 import {UserService} from '../services/user.service';
 import {Subject} from 'rxjs/Subject';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'realty-objs-gallery',
@@ -15,6 +15,13 @@ import {takeUntil} from 'rxjs/operators';
   styleUrls: ['./realty-objs-gallery.component.scss']
 })
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
+
+  constructor(public realtyObjService: RealtyObjService,
+              public userService: UserService,
+              public config: ConfigService,
+              public router: Router,
+              ) {
+  }
   public currentRealtyObjects = [];
   public filter: any;
   public pageable: any;
@@ -56,12 +63,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     size: 12
   };
 
-  constructor(public realtyObjService: RealtyObjService,
-              public userService: UserService,
-              public config: ConfigService,
-              public router: Router,
-              ) {
-  }
+  public FILTER_DEBOUNCE_TIME = 1000;
+  public selectedOrderingOption: string;
+  public orderingOptions = ['Address', 'Price', 'Area'];
 
   ngOnInit() {
     this.resolveTargetOperations();
@@ -86,7 +90,10 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   public loadNextObjects() {
     this.realtyObjService.findByFilterAndPage(this.filter, this.pageable)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        debounceTime(this.FILTER_DEBOUNCE_TIME),
+        takeUntil(this.destroy$)
+      )
       .subscribe((response: PageableResponse<RealtyObj>) => {
       this.showNotificaton = true;
       const realtyObjects: RealtyObj[] = response.content;
@@ -111,5 +118,10 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  public selectOrderingOption(option: string) {
+    this.selectedOrderingOption = option;
+    alert('Ordering not yet implemented');
   }
 }
