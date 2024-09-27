@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RealtyObj} from "../domain/realty-obj";
-import {UserService} from "../services/user.service";
+import {RealtyObj} from '../domain/realty-obj';
+import {UserService} from '../services/user.service';
 
 @Component({
   selector: 'realty-objs-list',
@@ -9,14 +9,14 @@ import {UserService} from "../services/user.service";
 })
 export class RealtyObjsListComponent implements OnInit {
   @Input()
-  public realtyObjects:RealtyObj[] = [];
+  public realtyObjects: RealtyObj[] = [];
 
-  constructor(private userService: UserService) { }
+  constructor(public userService: UserService) { }
 
   ngOnInit() {
   }
 
-  trimDescription(fullDescr) {
+  private trimDescription(fullDescr: string) {
     return fullDescr.substr(0, 75) + '...';
   }
 }

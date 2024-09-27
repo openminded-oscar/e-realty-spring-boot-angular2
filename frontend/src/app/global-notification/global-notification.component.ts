@@ -43,6 +43,8 @@ export class GlobalNotificationComponent implements OnInit, OnDestroy, AfterView
 
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngAfterViewInit(): void {

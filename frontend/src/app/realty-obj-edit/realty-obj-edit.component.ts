@@ -1,5 +1,5 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ActivatedRoute, Event} from '@angular/router';
 import {ConfigService} from '../services/config.service';
 import {FileUploadService} from '../services/file-upload.service';
 import {apiBase} from '../commons';
@@ -9,6 +9,8 @@ import {Photo, RealtyPhoto, RealtyPhotoType} from '../domain/photo';
 import {RealterService} from '../services/realter.service';
 import {Realter} from '../domain/realter';
 import {GlobalNotificationService} from '../services/global-notification.service';
+import {Subject} from 'rxjs/Subject';
+import {takeUntil} from 'rxjs/operators';
 
 export interface SupportedOperation {
   name: string;
@@ -21,7 +23,7 @@ export interface SupportedOperation {
   templateUrl: './realty-obj-edit.component.html',
   styleUrls: ['./realty-obj-edit.scss']
 })
-export class RealtyObjEditComponent implements OnInit, OnChanges {
+export class RealtyObjEditComponent implements OnInit, OnChanges, OnDestroy {
   private _realtyObj: RealtyObj;
 
   public get realtyObj(): RealtyObj {
@@ -55,6 +57,8 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     });
   }
 
+  private destroy$ = new Subject<boolean>();
+
   public constructor(public config: ConfigService,
                      public fileUploadService: FileUploadService,
                      public realtyObjService: RealtyObjService,
@@ -68,15 +72,20 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
       .supportedOperations.map(value => ({value, name: value, checked: value === 'SELLING'}));
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
-    this.realtersService.getRealters().subscribe((gotRealters: Realter[]) => {
-      this.realters = gotRealters;
-    });
+    this.realtersService.getRealters().pipe(takeUntil(this.destroy$))
+      .subscribe((gotRealters: Realter[]) => {
+        this.realters = gotRealters;
+      });
 
     this.realtyObj = new RealtyObj();
     // if passed object realterId in parameter then retrieve that object
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(params => {
       if (params['realterId']) {
-        this.realtyObjService.findById(params['realterId']).subscribe(realtyObj => {
+        this.realtyObjService.findById(params['realterId']).pipe(
+          takeUntil(this.destroy$)
+        ).subscribe(realtyObj => {
           this.realtyObj = realtyObj;
           this.realtyObj.photos.forEach(photo => {
             photo.link = Photo.getLinkByFilename(photo.filename);
@@ -87,9 +96,11 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     });
   }
 
-  saveRealtyObject() {
+  public saveRealtyObject() {
     this.realtyObj.targetOperations = this.targetOperations;
-    this.realtyObjService.save(this.realtyObj).subscribe((data: RealtyObj) => {
+    this.realtyObjService.save(this.realtyObj).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((data: RealtyObj) => {
       this.notificationService.showNotification('Success! The object was saved!');
       this.realtyObj = data;
     }, error => {
@@ -97,11 +108,12 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     });
   }
 
-  onVerificationPictureSelecting(event) {
-    const fileList: FileList = event.target.files;
+  public onVerificationPictureSelecting(event: InputEvent) {
+    const fileList: FileList = (event.target as HTMLInputElement).files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
       this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
+        .pipe(takeUntil(this.destroy$))
         .subscribe(
           data => {
             this.realtyObj.verificationPhoto = {
@@ -112,7 +124,6 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
           },
           error => console.log(error)
         );
-
     }
   }
 
@@ -121,6 +132,7 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
     if (fileList.length > 0) {
       const file: File = fileList[0];
       this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
+        .pipe(takeUntil(this.destroy$))
         .subscribe(
           (data: RealtyPhoto) => {
             data.type = (this.realtyObj.photos.length === 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
@@ -155,5 +167,10 @@ export class RealtyObjEditComponent implements OnInit, OnChanges {
       name: value,
       checked: RealtyObj.checkIfOperationSupported(this.realtyObj, value)
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

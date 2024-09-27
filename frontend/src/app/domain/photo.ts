@@ -6,7 +6,7 @@ export class Photo {
   public fullUrl?: string;
   public id: number;
 
-  public static getLinkByFilename(filename) {
+  public static getLinkByFilename(filename: string): string {
     return endpoints.pictures + filename;
   }
 }

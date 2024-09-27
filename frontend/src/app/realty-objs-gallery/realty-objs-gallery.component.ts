@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import * as _ from 'lodash';
 import {PageableResponse, RealtyObjService} from '../services/realty-obj.service';
@@ -6,18 +6,22 @@ import {RealtyObj} from '../domain/realty-obj';
 import {ConfigService} from '../services/config.service';
 import {Router} from '@angular/router';
 import {UserService} from '../services/user.service';
+import {Subject} from 'rxjs/Subject';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'realty-objs-gallery',
   templateUrl: './realty-objs-gallery.component.html',
   styleUrls: ['./realty-objs-gallery.component.scss']
 })
-export class RealtyObjsGalleryComponent implements OnInit {
+export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   public currentRealtyObjects = [];
   public filter: any;
   public pageable: any;
   public buildingTypes: string[];
   public showNotificaton = false;
+
+  private destroy$ = new Subject<boolean>();
 
   public initialFilter: any = {
     price: {
@@ -81,7 +85,9 @@ export class RealtyObjsGalleryComponent implements OnInit {
   }
 
   public loadNextObjects() {
-    this.realtyObjService.findByFilterAndPage(this.filter, this.pageable).subscribe((response: PageableResponse<RealtyObj>) => {
+    this.realtyObjService.findByFilterAndPage(this.filter, this.pageable)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response: PageableResponse<RealtyObj>) => {
       this.showNotificaton = true;
       const realtyObjects: RealtyObj[] = response.content;
       realtyObjects.forEach(value => {
@@ -99,6 +105,11 @@ export class RealtyObjsGalleryComponent implements OnInit {
   }
 
   public addObject() {
-    this.router.navigateByUrl('/sell');
+    this.router.navigateByUrl('/sell').then();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
