@@ -10,6 +10,7 @@ import {Subject} from 'rxjs/Subject';
 import {takeUntil} from 'rxjs/operators';
 import {GlobalNotificationService} from './services/global-notification.service';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -19,10 +20,6 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'RealPerfect';
   dataInitialised = false;
   isAuthenticated = false;
-
-  buySelected = true;
-  rentSelected = false;
-  realtersSelected = false;
 
   private destroy$ = new Subject<boolean>();
 
@@ -48,7 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 
   public handleAddToFavoritesSocketUpdate(object: any) {
     if (object.realtyObjId && this.userService.user && this.userService.user.realterDetails) {
@@ -88,29 +84,5 @@ export class AppComponent implements OnInit, OnDestroy {
       this.isAuthenticated = false;
       this.dataInitialised = true;
     }
-  }
-
-  public resetMenuItemsActive() {
-    this.buySelected = false;
-    this.rentSelected = false;
-    this.realtersSelected = false;
-  }
-
-  public goToBuy() {
-    this.router.navigateByUrl('/buy');
-    this.resetMenuItemsActive();
-    this.buySelected = true;
-  }
-
-  goToRent() {
-    this.router.navigateByUrl('/rent');
-    this.resetMenuItemsActive();
-    this.rentSelected = true;
-  }
-
-  public goToRealtors() {
-    this.router.navigateByUrl('/realtors');
-    this.resetMenuItemsActive();
-    this.realtersSelected = true;
   }
 }
