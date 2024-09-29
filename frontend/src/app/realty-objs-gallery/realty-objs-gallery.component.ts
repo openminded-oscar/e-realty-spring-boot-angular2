@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import * as _ from 'lodash';
-import {PageableResponse, RealtyObjService} from '../services/realty-obj.service';
+import {BackendSupportedOperations, PageableResponse, RealtyObjService} from '../services/realty-obj.service';
 import {RealtyObj} from '../domain/realty-obj';
 import {ConfigService} from '../services/config.service';
 import {Router} from '@angular/router';
@@ -75,10 +75,10 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   private resolveTargetOperations() {
-    if (this.router.url.toUpperCase().endsWith('RENT')) {
-      this.targetOperation = 'RENT';
+    if (this.router.url.startsWith('/rent')) {
+      this.targetOperation = BackendSupportedOperations.RENT;
     } else {
-      this.targetOperation = 'SELLING';
+      this.targetOperation = BackendSupportedOperations.BUY;
     }
   }
 

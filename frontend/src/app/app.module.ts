@@ -37,7 +37,6 @@ import {AuthHttpInterceptor} from './services/common/AuthHttpInterceptor';
 import {CookieService} from './services/common/CookieService';
 import {GlobalNotificationComponent} from './global-notification/global-notification.component';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import {TargetOperationResolver} from './realty-objs-gallery/target-operation.resolver';
 
 
 
@@ -53,22 +52,10 @@ const appRoutes: Routes = [
   {
     path: 'buy',
     component: RealtyObjsGalleryComponent,
-    data: {
-      targetOperation: 'buy'
-    },
-    resolve: {
-      targetOperation: TargetOperationResolver
-    }
   },
   {
     path: 'rent',
     component: RealtyObjsGalleryComponent,
-    data: {
-      targetOperation: 'rent'
-    },
-    resolve: {
-      targetOperation: TargetOperationResolver
-    }
   },
   {
     path: 'login/oauth2/code/google',

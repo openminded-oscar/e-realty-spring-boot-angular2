@@ -17,6 +17,11 @@ export interface PageableResponse<T> {
   last: boolean;
 }
 
+export enum BackendSupportedOperations {
+  BUY = 'SELLING',
+  RENT = 'RENT',
+}
+
 @Injectable()
 export class RealtyObjService {
 
