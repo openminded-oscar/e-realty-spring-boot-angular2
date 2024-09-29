@@ -53,6 +53,9 @@ const appRoutes: Routes = [
   {
     path: 'buy',
     component: RealtyObjsGalleryComponent,
+    data: {
+      targetOperation: 'buy'
+    },
     resolve: {
       targetOperation: TargetOperationResolver
     }
@@ -60,6 +63,9 @@ const appRoutes: Routes = [
   {
     path: 'rent',
     component: RealtyObjsGalleryComponent,
+    data: {
+      targetOperation: 'rent'
+    },
     resolve: {
       targetOperation: TargetOperationResolver
     }
