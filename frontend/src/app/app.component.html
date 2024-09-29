@@ -9,13 +9,13 @@
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/buy']" routerLinkActive="active">Buy</a>
+        <a class="nav-link" [class.active]="isActiveRoute('/buy')" [routerLink]="['/buy']" routerLinkActive="active">Buy</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/rent']" routerLinkActive="active">Rent</a>
+        <a class="nav-link" [class.active]="isActiveRoute('/rent')" [routerLink]="['/rent']" routerLinkActive="active">Rent</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/realtors']" routerLinkActive="active">Our Realtors</a>
+        <a class="nav-link" [class.active]="isActiveRoute('/realtors')" [routerLink]="['/realtors']" routerLinkActive="active">Our Realtors</a>
       </li>
       <li class="nav-item owner-item">
         <a class="nav-link" routerLink="/sell" style="color: black">I'm an owner!</a>
