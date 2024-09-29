@@ -41,20 +41,27 @@ import {RealtyObjectFilterComponent} from './realty-object-filter/realty-object-
 import {TargetOperationResolver} from './realty-objs-gallery/target-operation.resolver';
 
 
+
 const appRoutes: Routes = [
-  {path: 'realtors', component: RealtorsGalleryComponent},
+  {
+    path: 'realtors', component: RealtorsGalleryComponent
+  },
   {path: 'realtor', component: AddUpdateRealtorComponent},
   {path: 'realtor/:realterId', component: AddUpdateRealtorComponent},
   {path: 'sell', component: RealtyObjEditComponent},
   {path: 'sell/:realterId', component: RealtyObjEditComponent},
   {path: 'view-obj/:realterId', component: RealtyObjDetailsComponent},
   {
-    path: 'buy', component: RealtyObjsGalleryComponent, resolve: {
+    path: 'buy',
+    component: RealtyObjsGalleryComponent,
+    resolve: {
       targetOperation: TargetOperationResolver
     }
   },
   {
-    path: 'rent', component: RealtyObjsGalleryComponent, resolve: {
+    path: 'rent',
+    component: RealtyObjsGalleryComponent,
+    resolve: {
       targetOperation: TargetOperationResolver
     }
   },
