@@ -38,7 +38,7 @@ import {CookieService} from './services/common/CookieService';
 import {GlobalNotificationComponent} from './global-notification/global-notification.component';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {RealtyObjectFilterComponent} from './realty-object-filter/realty-object-filter.component';
-import {TargetOperationResolver} from "./realty-objs-gallery/target-operation.resolver";
+import {TargetOperationResolver} from './realty-objs-gallery/target-operation.resolver';
 
 
 const appRoutes: Routes = [
