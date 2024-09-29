@@ -37,6 +37,7 @@ import {AuthHttpInterceptor} from './services/common/AuthHttpInterceptor';
 import {CookieService} from './services/common/CookieService';
 import {GlobalNotificationComponent} from './global-notification/global-notification.component';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import {RealtyObjectFilterComponent} from './realty-object-filter/realty-object-filter.component';
 import {TargetOperationResolver} from './realty-objs-gallery/target-operation.resolver';
 
 
@@ -98,7 +99,8 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     RealtyObjDetailsComponent,
     AddUpdateRealtorComponent,
     RealtorsGalleryComponent,
-    GlobalNotificationComponent
+    GlobalNotificationComponent,
+    RealtyObjectFilterComponent
   ],
   imports: [
     BrowserModule,
