@@ -2,12 +2,12 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {endpoints} from './commons';
 import {UserService} from './services/user.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {SampleSocketService} from './services/socket/sample-socket.service';
 import {SocialAuthService} from 'angularx-social-login';
 import {CookieService} from './services/common/CookieService';
 import {Subject} from 'rxjs/Subject';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {GlobalNotificationService} from './services/global-notification.service';
 
 
@@ -22,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
 
   private destroy$ = new Subject<boolean>();
+  private currentRoute: string;
 
   constructor(public http: HttpClient,
               public cookieService: CookieService,
@@ -30,6 +31,15 @@ export class AppComponent implements OnInit, OnDestroy {
               public socialAuthService: SocialAuthService,
               public notificationService: GlobalNotificationService,
               public userService: UserService) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.currentRoute = event.url;
+      });
+  }
+
+  public isActiveRoute(route: string): boolean {
+    return this.currentRoute.startsWith(route);
   }
 
   public ngOnInit(): void {
