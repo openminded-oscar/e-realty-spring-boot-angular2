@@ -37,29 +37,39 @@ import {AuthHttpInterceptor} from './services/common/AuthHttpInterceptor';
 import {CookieService} from './services/common/CookieService';
 import {GlobalNotificationComponent} from './global-notification/global-notification.component';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import {TargetOperationResolver} from './realty-objs-gallery/target-operation.resolver';
 
 
 const appRoutes: Routes = [
-  { path: 'realtors', component: RealtorsGalleryComponent },
-  { path: 'realtor', component: AddUpdateRealtorComponent },
-  { path: 'realtor/:realterId', component: AddUpdateRealtorComponent },
-  { path: 'sell', component: RealtyObjEditComponent },
-  { path: 'sell/:realterId', component: RealtyObjEditComponent },
-  { path: 'view-obj/:realterId', component: RealtyObjDetailsComponent },
-  { path: 'buy', component: RealtyObjsGalleryComponent },
-  { path: 'rent', component: RealtyObjsGalleryComponent },
+  {path: 'realtors', component: RealtorsGalleryComponent},
+  {path: 'realtor', component: AddUpdateRealtorComponent},
+  {path: 'realtor/:realterId', component: AddUpdateRealtorComponent},
+  {path: 'sell', component: RealtyObjEditComponent},
+  {path: 'sell/:realterId', component: RealtyObjEditComponent},
+  {path: 'view-obj/:realterId', component: RealtyObjDetailsComponent},
+  {
+    path: 'buy', component: RealtyObjsGalleryComponent, resolve: {
+      targetOperation: TargetOperationResolver
+    }
+  },
+  {
+    path: 'rent', component: RealtyObjsGalleryComponent, resolve: {
+      targetOperation: TargetOperationResolver
+    }
+  },
   {
     path: 'login/oauth2/code/google',
     redirectTo: '/buy',
     pathMatch: 'full'
   },
-  { path: '',
+  {
+    path: '',
     redirectTo: '/buy',
     pathMatch: 'full'
   }
 ];
 
-const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transports: ['websocket', 'polling']} };
+const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transports: ['websocket', 'polling']}};
 
 @NgModule({
   declarations: [
@@ -86,7 +96,7 @@ const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transpo
     SocialLoginModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: false, useHash: true } // <-- debugging purposes only
+      {enableTracing: false, useHash: true} // <-- debugging purposes only
     ),
     NgbModule,
     ArchwizardModule,
@@ -116,9 +126,10 @@ const config: SocketIoConfig = { url: 'http://localhost:8081', options: {transpo
             provider: new GoogleLoginProvider(
               '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha'
             ),
-          }, ]
+          },]
       }
     }],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
