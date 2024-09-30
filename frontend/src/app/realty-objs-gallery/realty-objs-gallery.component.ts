@@ -12,6 +12,11 @@ import {Observable} from 'rxjs';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
+export interface SortValue {
+  field: string;
+  direction: 'asc'|'desc';
+}
+
 @Component({
   selector: 'realty-objs-gallery',
   templateUrl: './realty-objs-gallery.component.html',
@@ -60,7 +65,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   public FILTER_DEBOUNCE_TIME = 1000;
   public selectedOrderingOption: string;
-  public orderingOptions = ['Recently added', 'Newest', 'Address', 'Price', 'Area'];
+  public orderingOptions = ['Recently added', 'Newest', 'City', 'Price', 'Area'];
 
   ngOnInit() {
     this.resolveTargetOperations();
@@ -89,7 +94,11 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   public loadNextObjects() {
-    this.currentObjects$ = this.realtyObjService.findByFilterAndPage(this.getFilterValue(), this.selectedOrderingOption, this.pageable)
+    this.currentObjects$ = this.realtyObjService.findByFilterAndPage(
+      this.getFilterValue(),
+      this.getSortValue(),
+      this.pageable
+    )
       .pipe(
         debounceTime(this.FILTER_DEBOUNCE_TIME),
         tap(objects => {
@@ -125,6 +134,13 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
       buildingType: { eq: formValues.buildingType },
       totalArea: { ge: formValues.totalAreaMin, le: formValues.totalAreaMax },
       targetOperations: { operationTypeContains: this.targetOperation }
+    };
+  }
+
+  private getSortValue(): SortValue {
+    return {
+      field: this.selectedOrderingOption,
+      direction: 'desc',
     };
   }
 

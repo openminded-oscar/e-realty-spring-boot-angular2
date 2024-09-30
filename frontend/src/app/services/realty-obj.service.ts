@@ -4,7 +4,8 @@ import {RealtyObj} from '../domain/realty-obj';
 import {endpoints} from '../commons';
 import {Observable} from 'rxjs';
 import {Photo, RealtyPhoto} from '../domain/photo';
-import {tap} from "rxjs/operators";
+import {tap} from 'rxjs/operators';
+import {SortValue} from '../realty-objs-gallery/realty-objs-gallery.component';
 
 export interface PageableResponse<T> {
   content: T[];
@@ -31,7 +32,7 @@ export class RealtyObjService {
 
   public findByFilterAndPage(filter: {
     [filterField: string]: { [operationName: string]: string }
-  }, ordering: string, pageable): Observable<PageableResponse<RealtyObj>> {
+  }, ordering: SortValue, pageable): Observable<PageableResponse<RealtyObj>> {
     const filterItems = this.mapFilterInputsToHttpRequest(filter);
 
     return this.http.post<PageableResponse<RealtyObj>>(endpoints.realtyObj.list, filterItems, {
