@@ -1,80 +1,11 @@
 <div class="row">
   <div class="col-2">
-    <div class="row card">
-      <div class="card-header">
-        <div class="card-header--part">
-          {{targetOperation}}
-          <h5>Filters</h5>
-        </div>
-        <div class="card-header--part" ngbDropdown>
-          <button
-            id="orderByDropdownMenuButton"
-            class="btn btn-outline-secondary"
-            ngbDropdownToggle
-          >
-            {{selectedOrderingOption}}
-          </button>
-          <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
-            <button
-              class="dropdown-item"
-              *ngFor="let option of orderingOptions"
-              (click)="selectOrderingOption(option)"
-            >
-              {{ option }}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group card-body">
-        Street
-        <input name="street" [(ngModel)]="filter.street.like" class="form-control">
-        City
-        <input name="city" [(ngModel)]="filter.city.like" class="form-control">
-        <div class="input-row">
-          <div>
-            Price min
-            <input name="minPrice" [(ngModel)]="filter.price.ge" class="form-control">
-          </div>
-          <div>
-            Price max
-            <input name="maxPrice" [(ngModel)]="filter.price.le" class="form-control">
-          </div>
-        </div>
-        <div class="input-row">
-          <div>
-            Area min
-            <input name="minTotalArea" [(ngModel)]="filter.totalArea.ge" class="form-control">
-          </div>
-          <div>
-            Area max
-            <input name="maxTotalArea" [(ngModel)]="filter.totalArea.le" class="form-control">
-          </div>
-        </div>
-        Rooms
-        <input name="rooms" type="number" [(ngModel)]="filter.roomsAmount.eq" class="form-control">
-        Description like
-        <input name="description" [(ngModel)]="filter.description.like" class="form-control">
-        Building type
-        <select [(ngModel)]="filter.buildingType.eq" name="buildingType" class="form-control" required>
-          <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
-          </option>
-        </select>
-        <!--Dwelling type-->
-        <!--<select name="dwellingType" [(ngModel)]="filter.dwellingType.eq" class="form-control">-->
-
-        <!--</select>-->
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <button (click)="resetFiltersAndPageable()" class="btn btn-info btn-block">Reset all</button>
-        </div>
-        <div class="col-6">
-          <button (click)="loadInitialObjects()" class="btn btn-info btn-block">Search</button>
-        </div>
-      </div>
-    </div>
+    <app-realty-object-filter [initialFilter]="initialFilter"
+                              (orderChange)="orderChange($event)"
+                              (filterChange)="filterChange($event)">
+    </app-realty-object-filter>
   </div>
+
   <div class="col-10 main-page-block"
        infiniteScroll
        [infiniteScrollDistance]="2"
@@ -91,7 +22,6 @@
     </div>
 
     <realty-objs-list [realtyObjects]="currentRealtyObjects"></realty-objs-list>
-
     <div class="row">
       <div class="col-2 offset-5">
         <button *ngIf="userService.isAuthenticated" (click)="addObject()"
