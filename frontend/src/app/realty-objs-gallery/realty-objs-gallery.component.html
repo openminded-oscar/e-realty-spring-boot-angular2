@@ -5,26 +5,28 @@
         <div class="card-header--part">
           <h5>Filters</h5>
         </div>
-        <div class="card-header--part" ngbDropdown>
-          <button
-            id="orderByDropdownMenuButton"
-            class="btn btn-outline-secondary"
-            ngbDropdownToggle
-          >
-            {{ selectedOrderingOption }}
-          </button>
-          <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
+        <div>
+          <div style="display: flex; flex-direction: row; align-items: center" class="card-header--part" ngbDropdown>
             <button
-              class="dropdown-item"
-              *ngFor="let option of orderingOptions"
-              (click)="selectOrderingOption(option)"
+              id="orderByDropdownMenuButton"
+              class="btn btn-outline-secondary"
+              ngbDropdownToggle
             >
-              {{ option }}
+              {{ selectedOrderingOption }}
             </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
+              <button
+                class="dropdown-item"
+                *ngFor="let option of orderingOptions"
+                (click)="selectOrderingOption(option)"
+              >
+                {{ option }}
+              </button>
+            </div>
+            <span style="margin-top: 3px" (click)="toggleOrderingDirection()">
+              <i style="cursor: pointer" class="fas fa-arrows-up-down"></i>
+            </span>
           </div>
-          <span (click)="toggleOrderingDirection()">
-            <i class="fas fa-arrows-up-down"></i>
-          </span>
         </div>
       </div>
 
