@@ -90,8 +90,7 @@
       </ngb-toast>
     </div>
 
-    <realty-objs-list [realtyObjects]="currentRealtyObjects"></realty-objs-list>
-
+    <realty-objs-list [realtyObjects]="currentObjects$|async"></realty-objs-list>
     <div class="row">
       <div class="col-2 offset-5">
         <button *ngIf="userService.isAuthenticated" (click)="addObject()"

@@ -1,18 +1,20 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 
 import * as _ from 'lodash';
-import {BackendSupportedOperations, PageableResponse, RealtyObjService} from '../services/realty-obj.service';
+import {BackendSupportedOperations, RealtyObjService} from '../services/realty-obj.service';
 import {RealtyObj} from '../domain/realty-obj';
 import {ConfigService} from '../services/config.service';
 import {Router} from '@angular/router';
 import {UserService} from '../services/user.service';
 import {Subject} from 'rxjs/Subject';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {debounceTime, map, takeUntil, tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'realty-objs-gallery',
   templateUrl: './realty-objs-gallery.component.html',
-  styleUrls: ['./realty-objs-gallery.component.scss']
+  styleUrls: ['./realty-objs-gallery.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
@@ -55,8 +57,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
       le: ''
     }
   };
+  public currentObjects$: Observable<RealtyObj[]>;
 
-  targetOperation: string;
+  public targetOperation: string;
 
   public initialPageable: any = {
     page: 0,
@@ -88,27 +91,29 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     this.loadNextObjects();
   }
 
-  public loadNextObjects() {
-    this.realtyObjService.findByFilterAndPage(this.filter, this.pageable)
-      .pipe(
-        debounceTime(this.FILTER_DEBOUNCE_TIME),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((response: PageableResponse<RealtyObj>) => {
-      this.showNotificaton = true;
-      const realtyObjects: RealtyObj[] = response.content;
-      realtyObjects.forEach(value => {
-        value.mainPhotoPath = RealtyObj.getMainPhoto(value);
-      });
-      this.currentRealtyObjects.push(...realtyObjects);
-      ++this.pageable.page;
-    });
-  }
-
   public resetFiltersAndPageable() {
     this.filter = _.cloneDeep(this.initialFilter);
     this.filter.targetOperations = {operationTypeContains: this.targetOperation};
-    this.pageable = _.cloneDeep(this.initialPageable);
+
+    this.loadInitialObjects();
+  }
+
+  public loadNextObjects() {
+    this.currentObjects$ = this.realtyObjService.findByFilterAndPage(this.filter, this.pageable)
+      .pipe(
+        debounceTime(this.FILTER_DEBOUNCE_TIME),
+        tap(objects => {
+          this.showNotificaton = true;
+          const realtyObjects: RealtyObj[] = objects.content;
+          realtyObjects.forEach(value => {
+            value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+          });
+          this.currentRealtyObjects.push(...realtyObjects);
+          ++this.pageable.page;
+        }),
+        map(o => this.currentRealtyObjects),
+        takeUntil(this.destroy$)
+      );
   }
 
   public addObject() {
