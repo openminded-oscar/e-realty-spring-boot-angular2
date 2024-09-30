@@ -44,11 +44,6 @@ const appRoutes: Routes = [
   {
     path: 'realtors', component: RealtorsGalleryComponent
   },
-  {path: 'realtor', component: AddUpdateRealtorComponent},
-  {path: 'realtor/:realterId', component: AddUpdateRealtorComponent},
-  {path: 'sell', component: RealtyObjEditComponent},
-  {path: 'sell/:realterId', component: RealtyObjEditComponent},
-  {path: 'view-obj/:realterId', component: RealtyObjDetailsComponent},
   {
     path: 'buy',
     component: RealtyObjsGalleryComponent,
@@ -57,6 +52,11 @@ const appRoutes: Routes = [
     path: 'rent',
     component: RealtyObjsGalleryComponent,
   },
+  {path: 'realtor', component: AddUpdateRealtorComponent},
+  {path: 'realtor/:realterId', component: AddUpdateRealtorComponent},
+  {path: 'sell', component: RealtyObjEditComponent},
+  {path: 'sell/:realterId', component: RealtyObjEditComponent},
+  {path: 'view-obj/:realterId', component: RealtyObjDetailsComponent},
   {
     path: 'login/oauth2/code/google',
     redirectTo: '/buy',

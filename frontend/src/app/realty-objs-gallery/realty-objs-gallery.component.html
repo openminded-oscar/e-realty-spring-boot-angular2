@@ -3,7 +3,6 @@
     <div class="row card">
       <div class="card-header">
         <div class="card-header--part">
-          {{targetOperation}}
           <h5>Filters</h5>
         </div>
         <div class="card-header--part" ngbDropdown>
@@ -26,37 +25,37 @@
         </div>
       </div>
 
-      <div class="form-group card-body">
+      <div class="form-group card-body" [formGroup]="filterForm">
         Street
-        <input name="street" [(ngModel)]="filter.street.like" class="form-control">
+        <input name="street" [formControlName]="'street'" class="form-control">
         City
-        <input name="city" [(ngModel)]="filter.city.like" class="form-control">
+        <input name="city" [formControlName]="'city'" class="form-control">
         <div class="input-row">
           <div>
             Price min
-            <input name="minPrice" [(ngModel)]="filter.price.ge" class="form-control">
+            <input type="number" name="minPrice" [formControlName]="'priceMin'" class="form-control">
           </div>
           <div>
             Price max
-            <input name="maxPrice" [(ngModel)]="filter.price.le" class="form-control">
+            <input type="number" name="maxPrice" [formControlName]="'priceMax'" class="form-control">
           </div>
         </div>
         <div class="input-row">
           <div>
             Area min
-            <input name="minTotalArea" [(ngModel)]="filter.totalArea.ge" class="form-control">
+            <input type="number" name="minTotalArea" [formControlName]="'totalAreaMin'" class="form-control">
           </div>
           <div>
             Area max
-            <input name="maxTotalArea" [(ngModel)]="filter.totalArea.le" class="form-control">
+            <input type="number" name="maxTotalArea" [formControlName]="'totalAreaMax'" class="form-control">
           </div>
         </div>
         Rooms
-        <input name="rooms" type="number" [(ngModel)]="filter.roomsAmount.eq" class="form-control">
+        <input name="rooms" type="number" [formControlName]="'roomsAmount'" class="form-control">
         Description like
-        <input name="description" [(ngModel)]="filter.description.like" class="form-control">
+        <input name="description" [formControlName]="'description'" class="form-control">
         Building type
-        <select [(ngModel)]="filter.buildingType.eq" name="buildingType" class="form-control" required>
+        <select [formControlName]="'buildingType'" name="buildingType" class="form-control" required>
           <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
           </option>
         </select>
@@ -67,7 +66,7 @@
       </div>
       <div class="row">
         <div class="col-6">
-          <button (click)="resetFiltersAndPageable()" class="btn btn-info btn-block">Reset all</button>
+          <button (click)="resetFiltersAndLoadInitialObjects()" class="btn btn-info btn-block">Reset all</button>
         </div>
         <div class="col-6">
           <button (click)="loadInitialObjects()" class="btn btn-info btn-block">Search</button>
@@ -75,25 +74,16 @@
       </div>
     </div>
   </div>
+
   <div class="col-10 main-page-block"
        infiniteScroll
        [infiniteScrollDistance]="2"
        [infiniteScrollThrottle]="50"
        (scrolled)="onScroll()">
-    <div class="row toast-container">
-      <ngb-toast
-        *ngIf="showNotificaton"
-        [class]="'bg-info text-light'"
-        [autohide]="true"
-        [delay]="1500">
-        {{ currentRealtyObjects.length }}+ object(s) found!
-      </ngb-toast>
-    </div>
-
     <realty-objs-list [realtyObjects]="currentObjects$|async"></realty-objs-list>
     <div class="row">
       <div class="col-2 offset-5">
-        <button *ngIf="userService.isAuthenticated" (click)="addObject()"
+        <button *ngIf="userService.isAuthenticated" [routerLink]="'/sell'"
                 class="btn btn-block btn-info add-object-button">Add Object
         </button>
       </div>

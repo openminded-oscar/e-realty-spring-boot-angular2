@@ -9,6 +9,8 @@ import {UserService} from '../services/user.service';
 import {Subject} from 'rxjs/Subject';
 import {debounceTime, map, takeUntil, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'realty-objs-gallery',
@@ -17,55 +19,44 @@ import {Observable} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
+  public filterForm: FormGroup;
+
+  public readonly INITIAL_FILTER_FORM = {
+    priceMin: ['0'],
+    priceMax: ['1000000'],
+    city: [''],
+    street: [''],
+    roomsAmount: [''],
+    description: [''],
+    buildingType: [''],
+    totalAreaMin: [''],
+    totalAreaMax: ['']
+  };
 
   constructor(public realtyObjService: RealtyObjService,
               public userService: UserService,
               public config: ConfigService,
               public router: Router,
+              public fb: FormBuilder,
   ) {
   }
 
-  public currentRealtyObjects = [];
-  public filter: any;
   public pageable: any;
   public buildingTypes: string[];
   public showNotificaton = false;
 
   private destroy$ = new Subject<boolean>();
 
-  public initialFilter: any = {
-    price: {
-      ge: '0',
-      le: '1000000'
-    },
-    city: {
-      like: ''
-    },
-    street: {
-      like: ''
-    },
-    roomsAmount: {
-      eq: ''
-    },
-    description: {
-      like: ''
-    },
-    buildingType: {
-      eq: ''
-    },
-    totalArea: {
-      ge: '',
-      le: ''
-    }
-  };
   public currentObjects$: Observable<RealtyObj[]>;
 
   public targetOperation: string;
 
-  public initialPageable: any = {
+  public readonly initialPageable: any = {
     page: 0,
     size: 12
   };
+
+  public currentRealtyObjects = new BehaviorSubject<RealtyObj[]>([]);
 
   public FILTER_DEBOUNCE_TIME = 1000;
   public selectedOrderingOption: string;
@@ -74,8 +65,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.resolveTargetOperations();
     this.buildingTypes = this.config.supportedBuildingTypes;
-    this.resetFiltersAndPageable();
-    this.loadInitialObjects();
+    this.resetFiltersAndLoadInitialObjects();
   }
 
   private resolveTargetOperations() {
@@ -86,40 +76,33 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     }
   }
 
-  public loadInitialObjects() {
-    this.currentRealtyObjects = [];
-    this.pageable = _.cloneDeep(this.initialPageable);
-    this.loadNextObjects();
-  }
-
-  public resetFiltersAndPageable() {
-    this.filter = _.cloneDeep(this.initialFilter);
-    this.filter.targetOperations = {operationTypeContains: this.targetOperation};
-
+  public resetFiltersAndLoadInitialObjects() {
+    this.filterForm = this.fb.group(this.INITIAL_FILTER_FORM);
     this.loadInitialObjects();
   }
 
+  public loadInitialObjects() {
+    this.currentRealtyObjects.next([]);
+    this.pageable = _.cloneDeep(this.initialPageable);
+
+    this.loadNextObjects();
+  }
+
   public loadNextObjects() {
-    this.currentObjects$ = this.realtyObjService.findByFilterAndPage(this.filter, this.selectedOrderingOption, this.pageable)
+    this.currentObjects$ = this.realtyObjService.findByFilterAndPage(this.getFilterValue(), this.selectedOrderingOption, this.pageable)
       .pipe(
         debounceTime(this.FILTER_DEBOUNCE_TIME),
         tap(objects => {
           this.showNotificaton = true;
-          this.currentRealtyObjects.push(...objects.content);
+          this.currentRealtyObjects.next([
+            ...this.currentRealtyObjects.value,
+            ...objects.content
+          ]);
           ++this.pageable.page;
         }),
-        map(o => this.currentRealtyObjects),
+        map(o => this.currentRealtyObjects.value),
         takeUntil(this.destroy$)
       );
-  }
-
-  public addObject() {
-    this.router.navigateByUrl('/sell').then();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public selectOrderingOption(option: string) {
@@ -129,5 +112,24 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   public onScroll() {
     this.loadNextObjects();
+  }
+
+  private getFilterValue() {
+    const formValues = this.filterForm.value;
+    return {
+      price: { ge: formValues.priceMin, le: formValues.priceMax },
+      city: { like: formValues.city },
+      street: { like: formValues.street },
+      roomsAmount: { eq: formValues.roomsAmount },
+      description: { like: formValues.description },
+      buildingType: { eq: formValues.buildingType },
+      totalArea: { ge: formValues.totalAreaMin, le: formValues.totalAreaMax },
+      targetOperations: { operationTypeContains: this.targetOperation }
+    };
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
