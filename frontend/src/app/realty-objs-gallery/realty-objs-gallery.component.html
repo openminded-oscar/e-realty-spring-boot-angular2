@@ -6,13 +6,13 @@
           <h5>Filters</h5>
         </div>
         <div>
-          <div style="display: flex; flex-direction: row; align-items: center" class="card-header--part" ngbDropdown>
+          <div class="filter--value-container card-header--part" ngbDropdown>
             <button
               id="orderByDropdownMenuButton"
               class="btn btn-outline-secondary"
               ngbDropdownToggle
             >
-              {{ selectedOrderingOption }}
+              {{ selectedOrderingOption.display }}
             </button>
             <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
               <button
@@ -20,7 +20,7 @@
                 *ngFor="let option of orderingOptions"
                 (click)="selectOrderingOption(option)"
               >
-                {{ option }}
+                {{ option.display }}
               </button>
             </div>
             <span style="margin-top: 3px" (click)="toggleOrderingDirection()">

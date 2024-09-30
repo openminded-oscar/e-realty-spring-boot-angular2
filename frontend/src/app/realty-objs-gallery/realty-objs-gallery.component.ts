@@ -14,7 +14,12 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 export interface SortValue {
   field: string;
-  direction: 'ASC'|'DESC';
+  direction: 'asc'|'desc';
+}
+
+export interface SortField {
+  display: string;
+  field: string;
 }
 
 @Component({
@@ -64,9 +69,24 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   public currentRealtyObjects = new BehaviorSubject<RealtyObj[]>([]);
 
   public FILTER_DEBOUNCE_TIME = 1000;
-  public selectedOrderingOption = 'price';
+  public selectedOrderingOption: SortField = {
+    display: 'Price',
+    field: 'price',
+  };
   public selectedOrderingDirection: 'asc'|'desc' = 'desc';
-  public orderingOptions = ['Recent', 'Newest', 'City', 'Price', 'Area'];
+  public orderingOptions: SortField[] = [{
+    display: 'Recent',
+    field: 'updatedAt',
+  }, {
+    display: 'Price',
+    field: 'price',
+  }, {
+    display: 'Area',
+    field: 'totalArea',
+  }, {
+    display: 'City',
+    field: 'address.city',
+  }];
 
   ngOnInit() {
     this.resolveTargetOperations();
@@ -116,8 +136,14 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
       );
   }
 
-  public selectOrderingOption(option: string) {
+  public selectOrderingOption(option: SortField) {
     this.selectedOrderingOption = option;
+    this.loadInitialObjects();
+  }
+
+  public toggleOrderingDirection() {
+    this.selectedOrderingDirection = this.selectedOrderingDirection === 'asc' ? 'desc' : 'asc';
+    this.loadInitialObjects();
   }
 
   public onScroll() {
@@ -140,17 +166,13 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   private getSortValue(): SortValue {
     return {
-      field: this.selectedOrderingOption,
-      direction: 'DESC',
+      field: this.selectedOrderingOption.field,
+      direction: this.selectedOrderingDirection,
     };
   }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  public toggleOrderingDirection() {
-    this.selectedOrderingDirection = this.selectedOrderingDirection === 'asc' ? 'desc' : 'asc';
   }
 }

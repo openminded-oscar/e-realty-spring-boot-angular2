@@ -30,7 +30,10 @@
   border: none;
 }
 
-.main-page-block {
-  //max-height: 100vh;
-  //overflow-y: auto
+.filter {
+  &--value-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center
+  }
 }

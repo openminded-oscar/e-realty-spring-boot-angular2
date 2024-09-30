@@ -33,7 +33,6 @@ public class RealtyObject extends AuditableEntity {
     private Set<OperationType> targetOperations;
     private Boolean confirmed = false;
     private Boolean realterAware = false;
-
     private Address address;
     private User owner;
     private Realter realter;
