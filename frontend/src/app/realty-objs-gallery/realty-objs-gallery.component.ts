@@ -107,7 +107,6 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     this.loadInitialObjects();
   }
 
-  // TODO implement this logic also on ordering change
   public loadInitialObjects() {
     this.currentRealtyObjects.next([]);
     this.pageable = _.cloneDeep(this.initialPageable);

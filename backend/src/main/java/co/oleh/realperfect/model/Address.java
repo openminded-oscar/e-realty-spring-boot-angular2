@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.math.BigDecimal;
 
 @Embeddable
 public class Address {
@@ -11,6 +12,8 @@ public class Address {
 	private String street;
 	private String numberOfStreet;
 	private Integer apartmentNumber;
+	private BigDecimal latitude;
+	private BigDecimal longitude;
 
 	@Column(name="city")
 	public String getCity() {
@@ -46,5 +49,23 @@ public class Address {
 
 	public void setNumberOfStreet(String numberOfStreet) {
 		this.numberOfStreet = numberOfStreet;
+	}
+
+	@Column(name="latitude")
+	public BigDecimal getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
+	}
+
+	@Column(name="longitude")
+	public BigDecimal getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
 	}
 }
