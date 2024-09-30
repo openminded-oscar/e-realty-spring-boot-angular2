@@ -5,16 +5,15 @@ import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import co.oleh.realperfect.model.user.User;
 import lombok.ToString;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
-
 @Entity
 @Table(name = "tbl_realty_object")
 @ToString
-public class RealtyObject {
+public class RealtyObject extends AuditableEntity {
     private Long id;
     private Integer roomsAmount;
     private Integer floor;
