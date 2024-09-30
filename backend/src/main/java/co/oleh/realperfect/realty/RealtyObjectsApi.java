@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -50,7 +51,7 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/realty-object/save")
-    public ResponseEntity<RealtyObjectDetailsDto> postRealtyObject(@RequestBody RealtyObjectDetailsDto realtyObject) {
+    public ResponseEntity<RealtyObjectDetailsDto> postRealtyObject(@Valid @RequestBody RealtyObjectDetailsDto realtyObject) {
         RealtyObjectDetailsDto addedObject = realtyObjectsService.add(realtyObject);
 
         return new ResponseEntity<>(addedObject, HttpStatus.OK);
