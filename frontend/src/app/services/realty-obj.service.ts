@@ -30,7 +30,7 @@ export class RealtyObjService {
 
   public findByFilterAndPage(filter: {
     [filterField: string]: { [operationName: string]: string }
-  }, pageable): Observable<PageableResponse<RealtyObj>> {
+  }, ordering: string, pageable): Observable<PageableResponse<RealtyObj>> {
     const filterItems: any[] = [];
     for (const field in filter) {
       for (const operation in filter[field]) {

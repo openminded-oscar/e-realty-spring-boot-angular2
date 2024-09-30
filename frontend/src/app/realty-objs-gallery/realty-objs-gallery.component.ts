@@ -99,7 +99,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   public loadNextObjects() {
-    this.currentObjects$ = this.realtyObjService.findByFilterAndPage(this.filter, this.pageable)
+    this.currentObjects$ = this.realtyObjService.findByFilterAndPage(this.filter, this.selectedOrderingOption, this.pageable)
       .pipe(
         debounceTime(this.FILTER_DEBOUNCE_TIME),
         tap(objects => {

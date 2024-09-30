@@ -11,6 +11,9 @@ import {UserService} from '../services/user.service';
 export class RealtyObjsListComponent implements OnInit {
   @Input()
   public realtyObjects: RealtyObj[] = [];
+  public trackById(index: number, obj: RealtyObj): number {
+    return obj.id;
+  }
 
   constructor(public userService: UserService) { }
 

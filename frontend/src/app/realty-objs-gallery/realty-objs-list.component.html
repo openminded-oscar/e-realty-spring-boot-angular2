@@ -1,5 +1,5 @@
 <div id="itemsContainer" class="row">
-  <div *ngFor="let realtyObject of realtyObjects" class="col-4">
+  <div *ngFor="let realtyObject of realtyObjects; trackBy: trackById" class="col-4">
     <div class="thumbnail">
       <div class="thumbnail-image-container">
         <img class="thumbnail-image"
