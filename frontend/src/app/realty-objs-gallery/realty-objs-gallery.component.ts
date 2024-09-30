@@ -22,8 +22,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
               public userService: UserService,
               public config: ConfigService,
               public router: Router,
-              ) {
+  ) {
   }
+
   public currentRealtyObjects = [];
   public filter: any;
   public pageable: any;
@@ -104,11 +105,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         debounceTime(this.FILTER_DEBOUNCE_TIME),
         tap(objects => {
           this.showNotificaton = true;
-          const realtyObjects: RealtyObj[] = objects.content;
-          realtyObjects.forEach(value => {
-            value.mainPhotoPath = RealtyObj.getMainPhoto(value);
-          });
-          this.currentRealtyObjects.push(...realtyObjects);
+          this.currentRealtyObjects.push(...objects.content);
           ++this.pageable.page;
         }),
         map(o => this.currentRealtyObjects),

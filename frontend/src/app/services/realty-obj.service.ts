@@ -4,6 +4,7 @@ import {RealtyObj} from '../domain/realty-obj';
 import {endpoints} from '../commons';
 import {Observable} from 'rxjs';
 import {Photo, RealtyPhoto} from '../domain/photo';
+import {tap} from "rxjs/operators";
 
 export interface PageableResponse<T> {
   content: T[];
@@ -31,35 +32,21 @@ export class RealtyObjService {
   public findByFilterAndPage(filter: {
     [filterField: string]: { [operationName: string]: string }
   }, ordering: string, pageable): Observable<PageableResponse<RealtyObj>> {
-    const filterItems: any[] = [];
-    for (const field in filter) {
-      for (const operation in filter[field]) {
-        const value = filter[field][operation];
-        const fieldNameToRequest = this.appendFieldNameIfNestedRequired(field);
-        if (value !== '') {
-          filterItems.push({
-            field: fieldNameToRequest,
-            operation: operation,
-            value: value
-          });
-        }
-      }
-    }
+    const filterItems = this.mapFilterInputsToHttpRequest(filter);
 
     return this.http.post<PageableResponse<RealtyObj>>(endpoints.realtyObj.list, filterItems, {
       params: {
         page: pageable.page,
         size: pageable.size
       }
-    });
-  }
-
-  private appendFieldNameIfNestedRequired(field: string): string {
-    if (field === 'street' || field === 'city') {
-      field = 'address.' + field;
-    }
-
-    return field;
+    }).pipe(
+      tap(res => {
+        const realtyObjects = res.content;
+        (realtyObjects ?? []).forEach(value => {
+          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+        });
+      })
+    );
   }
 
   public findById(id: string): Observable<RealtyObj> {
@@ -76,5 +63,31 @@ export class RealtyObjService {
 
   public save(realtyObj: RealtyObj): Observable<RealtyObj> {
     return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj);
+  }
+
+  private mapFilterInputsToHttpRequest(filter: { [p: string]: { [p: string]: string } }) {
+    const filterItems: any[] = [];
+    for (const field in filter) {
+      for (const operation in filter[field]) {
+        const value = filter[field][operation];
+        const fieldNameToRequest = this.appendFieldNameIfNestedRequired(field);
+        if (value !== '') {
+          filterItems.push({
+            field: fieldNameToRequest,
+            operation: operation,
+            value: value
+          });
+        }
+      }
+    }
+    return filterItems;
+  }
+
+  private appendFieldNameIfNestedRequired(field: string): string {
+    if (field === 'street' || field === 'city') {
+      field = 'address.' + field;
+    }
+
+    return field;
   }
 }
