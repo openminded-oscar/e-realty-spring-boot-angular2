@@ -36,7 +36,8 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping(value = "/realty-objects")
-    public ResponseEntity<Page<RealtyObjectDto>> getRealtyObjects(@RequestBody(required = false) List<FilterItem> filterItems,
+    public ResponseEntity<Page<RealtyObjectDto>> getRealtyObjects(@RequestBody(required = false)
+                                                                      List<FilterItem> filterItems,
                                                                   Pageable pageable) {
         Page<RealtyObjectDto> allObjects;
         if (filterItems != null) {

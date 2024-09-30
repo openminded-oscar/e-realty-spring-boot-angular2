@@ -11,7 +11,7 @@
             class="btn btn-outline-secondary"
             ngbDropdownToggle
           >
-            {{selectedOrderingOption}}
+            {{ selectedOrderingOption }}
           </button>
           <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
             <button
@@ -22,6 +22,9 @@
               {{ option }}
             </button>
           </div>
+          <span (click)="toggleOrderingDirection()">
+            <i class="fas fa-arrows-up-down"></i>
+          </span>
         </div>
       </div>
 

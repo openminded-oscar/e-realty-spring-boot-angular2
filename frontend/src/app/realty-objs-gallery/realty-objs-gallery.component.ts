@@ -14,7 +14,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 export interface SortValue {
   field: string;
-  direction: 'asc'|'desc';
+  direction: 'ASC'|'DESC';
 }
 
 @Component({
@@ -64,8 +64,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   public currentRealtyObjects = new BehaviorSubject<RealtyObj[]>([]);
 
   public FILTER_DEBOUNCE_TIME = 1000;
-  public selectedOrderingOption: string;
-  public orderingOptions = ['Recently added', 'Newest', 'City', 'Price', 'Area'];
+  public selectedOrderingOption = 'price';
+  public selectedOrderingDirection: 'asc'|'desc' = 'desc';
+  public orderingOptions = ['Recent', 'Newest', 'City', 'Price', 'Area'];
 
   ngOnInit() {
     this.resolveTargetOperations();
@@ -86,6 +87,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     this.loadInitialObjects();
   }
 
+  // TODO implement this logic also on ordering change
   public loadInitialObjects() {
     this.currentRealtyObjects.next([]);
     this.pageable = _.cloneDeep(this.initialPageable);
@@ -116,7 +118,6 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   public selectOrderingOption(option: string) {
     this.selectedOrderingOption = option;
-    alert('Ordering not yet implemented');
   }
 
   public onScroll() {
@@ -140,12 +141,16 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   private getSortValue(): SortValue {
     return {
       field: this.selectedOrderingOption,
-      direction: 'desc',
+      direction: 'DESC',
     };
   }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  public toggleOrderingDirection() {
+    this.selectedOrderingDirection = this.selectedOrderingDirection === 'asc' ? 'desc' : 'asc';
   }
 }

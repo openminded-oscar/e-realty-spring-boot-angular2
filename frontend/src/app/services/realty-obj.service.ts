@@ -38,7 +38,8 @@ export class RealtyObjService {
     return this.http.post<PageableResponse<RealtyObj>>(endpoints.realtyObj.list, filterItems, {
       params: {
         page: pageable.page,
-        size: pageable.size
+        size: pageable.size,
+        sort: ordering.field + ',' + ordering.direction,
       }
     }).pipe(
       tap(res => {
