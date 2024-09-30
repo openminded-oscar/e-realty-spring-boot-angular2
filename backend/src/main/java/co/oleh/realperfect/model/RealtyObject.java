@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "tbl_realty_object")
+@Table(indexes = @Index(columnList = "city"), name = "tbl_realty_object")
 @ToString
 public class RealtyObject extends AuditableEntity {
     private Long id;
