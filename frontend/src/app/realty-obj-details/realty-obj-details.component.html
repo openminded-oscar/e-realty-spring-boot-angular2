@@ -54,7 +54,7 @@
           <div class="description-block--content">
             <div *ngIf="currentReview">
               <i class="fa fa-calendar-check-o" aria-hidden="true"></i> review
-              at {{ currentReview.dateTime|date:'MMM/d, HH:mm' }}
+              at {{ currentReview.dateTime|date:'MMM/d, HH:mm':'local' }}
             </div>
             <div>
               <button *ngIf="!currentReview" class="btn btn-block btn-primary"
@@ -75,25 +75,31 @@
             </div>
 
             <div class="modal-body">
-              <form class="">
+              <form [formGroup]="reviewTimeForm">
                 <div class="form-group d-flex align-items-center">
                   <div class="input-group mr-2">
                     <input class="form-control" placeholder="yyyy-mm-dd"
-                           name="datePicker" [(ngModel)]="reviewDate" [markDisabled]="isPreviewDateDisabled"
-                           ngbDatepicker #d="ngbDatepicker">
+                           [markDisabled]="isPreviewDateDisabled"
+                           formControlName="reviewDate"
+                           name="datePicker"
+                           ngbDatepicker
+                           #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
                     </div>
                   </div>
-                  <ngb-timepicker name="timePicker"
-                                  [minuteStep]="30"
-                                  [(ngModel)]="reviewTime"></ngb-timepicker>
+                  <ngb-timepicker formControlName="reviewTime"
+                                  [minuteStep]="30"></ngb-timepicker>
+                </div>
+                <div *ngIf="reviewTimeForm.errors?.tooSoon">
+                  <p class="text-danger">Date and time must be at least 3 hours from now.</p>
                 </div>
               </form>
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-dark" [disabled]="!reviewDate || !reviewTime"
+              <button type="button" class="btn btn-outline-dark"
+                      [disabled]="!reviewTimeForm.touched || reviewTimeForm.invalid"
                       (click)="saveReviewAndClose()">Save and close
               </button>
             </div>
