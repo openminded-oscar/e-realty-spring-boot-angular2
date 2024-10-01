@@ -7,7 +7,7 @@
         <span>est. at ${{ currentObject.price }}</span>
       </h1>
       <div style="display: flex; flex-direction: row; gap: 10px; align-items: center">
-        <div *ngIf="userService.isAuthenticated">
+        <div *ngIf="userService.isAuthenticated$|async">
           <a [routerLink]="['/sell', currentObject.id]" style="padding: 0 5px;" class="btn btn-danger btn-block">Edit</a>
         </div>
         <div (click)="toggleInterested()"

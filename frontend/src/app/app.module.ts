@@ -37,36 +37,38 @@ import {AuthHttpInterceptor} from './services/common/AuthHttpInterceptor';
 import {CookieService} from './services/common/CookieService';
 import {GlobalNotificationComponent} from './global-notification/global-notification.component';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-
+import { HeaderComponent } from './header/header.component';
 
 
 const appRoutes: Routes = [
   {
+    path: '',
+    redirectTo: '/home/buy',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home/buy',
+    component: RealtyObjsGalleryComponent,
+  },
+  {
+    path: 'home/rent',
+    component: RealtyObjsGalleryComponent,
+  },
+  {
+    path: 'home/view-obj/:realterId', component: RealtyObjDetailsComponent
+  },
+  {
     path: 'realtors', component: RealtorsGalleryComponent
-  },
-  {
-    path: 'buy',
-    component: RealtyObjsGalleryComponent,
-  },
-  {
-    path: 'rent',
-    component: RealtyObjsGalleryComponent,
   },
   {path: 'realtor', component: AddUpdateRealtorComponent},
   {path: 'realtor/:realterId', component: AddUpdateRealtorComponent},
   {path: 'sell', component: RealtyObjEditComponent},
   {path: 'sell/:realterId', component: RealtyObjEditComponent},
-  {path: 'view-obj/:realterId', component: RealtyObjDetailsComponent},
   {
     path: 'login/oauth2/code/google',
     redirectTo: '/buy',
     pathMatch: 'full'
   },
-  {
-    path: '',
-    redirectTo: '/buy',
-    pathMatch: 'full'
-  }
 ];
 
 const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transports: ['websocket', 'polling']}};
@@ -85,7 +87,8 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     RealtyObjDetailsComponent,
     AddUpdateRealtorComponent,
     RealtorsGalleryComponent,
-    GlobalNotificationComponent
+    GlobalNotificationComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

@@ -1,14 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {endpoints} from './commons';
+import {HttpClient} from '@angular/common/http';
 import {UserService} from './services/user.service';
-import {NavigationEnd, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {SampleSocketService} from './services/socket/sample-socket.service';
 import {SocialAuthService} from 'angularx-social-login';
 import {CookieService} from './services/common/CookieService';
 import {Subject} from 'rxjs/Subject';
-import {filter, takeUntil} from 'rxjs/operators';
+import {map, switchMap, takeUntil} from 'rxjs/operators';
 import {GlobalNotificationService} from './services/global-notification.service';
+import {User} from './domain/user';
+import {RealtyObj} from './domain/realty-obj';
 
 
 @Component({
@@ -17,12 +18,7 @@ import {GlobalNotificationService} from './services/global-notification.service'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'RealPerfect';
-  dataInitialised = false;
-  isAuthenticated = false;
-
   private destroy$ = new Subject<boolean>();
-  private currentRoute: string;
 
   constructor(public http: HttpClient,
               public cookieService: CookieService,
@@ -31,68 +27,42 @@ export class AppComponent implements OnInit, OnDestroy {
               public socialAuthService: SocialAuthService,
               public notificationService: GlobalNotificationService,
               public userService: UserService) {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.currentRoute = event.url;
-      });
-  }
-
-  public isActiveRoute(route: string): boolean {
-    return this.currentRoute.startsWith(route);
   }
 
   public ngOnInit(): void {
-    this.reset();
-    this.socketService.currentDocument.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(object => {
-      this.handleAddToFavoritesSocketUpdate(object);
-    });
+    if (localStorage.getItem('token') || this.cookieService.getCookie('GOOGLE_OAUTH_TOKEN')) {
+      this.userService.fetchUserStatus();
+    }
+    this.userService.user$
+      .pipe(
+        switchMap(user =>
+          this.socketService.currentDocument.pipe(
+            takeUntil(this.destroy$),
+            map(object => ({ object, user }))
+          )
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: ({ object, user }) => this.handleAddToFavoritesSocketUpdate(object, user),
+        error: err => console.error('Error in socket subscription:', err)
+      });
+  }
+
+  public handleAddToFavoritesSocketUpdate(interest: any, user: User) {
+    if (interest.realtyObjId && user && user.realterDetails) {
+      const realter = user.realterDetails;
+      const suitableObjects = realter.realtyObjects.filter((realtyObject: RealtyObj) => {
+        return realtyObject.id === interest.realtyObjId;
+      });
+      if (suitableObjects.length) {
+        this.notificationService.showNotification('Success! Somebody interested with your object!' + interest.realtyObjId);
+      }
+    }
   }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  public handleAddToFavoritesSocketUpdate(object: any) {
-    if (object.realtyObjId && this.userService.user && this.userService.user.realterDetails) {
-      const realter = this.userService.user.realterDetails;
-      const suitableObjects = realter.realtyObjects.filter(realtyObject => realtyObject.id === object.realtyObjId);
-      if (suitableObjects.length) {
-        this.notificationService.showNotification('Success! Somebody interested with your object!' + object.realtyObjId);
-      }
-    }
-  }
-
-  public fetchUserStatus() {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-    });
-
-    this.http.get(endpoints.userStatus, {headers}).subscribe(
-      (userInfo: any) => {
-        const isAuthenticated = !!userInfo;
-        this.userService.user = userInfo;
-        this.userService.isAuthenticated = isAuthenticated;
-        this.isAuthenticated = isAuthenticated;
-        this.dataInitialised = true;
-      }, error => {
-        this.dataInitialised = true;
-      });
-  }
-
-  public reset() {
-    this.dataInitialised = false;
-
-    if (localStorage.getItem('token') || this.cookieService.getCookie('GOOGLE_OAUTH_TOKEN')) {
-      this.fetchUserStatus();
-    } else {
-      this.userService.isAuthenticated = false;
-      this.userService.user = null;
-      this.isAuthenticated = false;
-      this.dataInitialised = true;
-    }
   }
 }

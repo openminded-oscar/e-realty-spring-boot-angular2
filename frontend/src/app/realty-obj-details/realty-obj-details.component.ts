@@ -13,7 +13,8 @@ import {HttpResponse} from '@angular/common/http';
 import {SampleSocketService} from '../services/socket/sample-socket.service';
 import {convertUTCDateToLocalDate} from '../commons';
 import {Subject} from 'rxjs/Subject';
-import {takeUntil} from 'rxjs/operators';
+import {takeUntil, tap} from 'rxjs/operators';
+import {User} from '../domain/user';
 
 @Component({
   selector: 'app-realty-obj-details',
@@ -35,6 +36,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
   public defaultRealtyObjectPhoto = 'https://placehold.co/650x400?text=Main+photo';
   public defaultRealtorPhoto = 'https://placehold.co/600x400?text=Realtor+photo';
+  public user: User;
 
   constructor(public realtyObjService: RealtyObjService,
               public userService: UserService,
@@ -46,6 +48,10 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userService.user$.pipe(
+      tap(user => this.user = user),
+      takeUntil(this.destroy$)
+    );
     this.route.params.pipe(
       takeUntil(this.destroy$)
     ).subscribe(params => {
@@ -69,14 +75,14 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
   public toggleInterested() {
     if (this.isInterested) {
-      this.interestService.remove(this.userService.user.id, this.currentObject.id)
+      this.interestService.remove(this.user.id, this.currentObject.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe(interest => {
           this.isInterested = false;
         });
     } else {
       const interest: Interest = {
-        userId: this.userService.user.id,
+        userId: this.user.id,
         realtyObjId: this.currentObject.id
       };
       this.interestService.save(interest)
@@ -85,10 +91,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
           this.isInterested = true;
         });
     }
-  }
-
-  public removeInterested() {
-
   }
 
   public isPreviewDateDisabled(date: NgbDateStruct) {
@@ -115,7 +117,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         this.reviewTime.second
       );
     const review = {
-      userId: this.userService.user.id,
+      userId: this.user.id,
       realtyObjId: this.currentObject.id,
       dateTime: convertUTCDateToLocalDate(utcDatetime)
     };
@@ -132,7 +134,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   private initObjectRelatedData() {
-    this.interestService.get(this.userService.user.id, this.currentObject.id)
+    this.interestService.get(this.user.id, this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(interestResponse => {
         if (interestResponse.body) {
@@ -140,7 +142,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.reviewsService.get(this.userService.user.id, this.currentObject.id)
+    this.reviewsService.get(this.user.id, this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((reviewsResponse: HttpResponse<Review>) => {
         if (reviewsResponse.body) {

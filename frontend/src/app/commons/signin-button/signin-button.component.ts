@@ -3,6 +3,8 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Credentials} from "../../domain/credentials.model";
 import {SigninSignoutService} from "../../services/auth/signin-signout.service";
 import {GoogleLoginProvider, SocialAuthService, SocialUser} from "angularx-social-login";
+import {User} from '../../domain/user';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'signin-button',
@@ -18,6 +20,7 @@ export class SigninButtonComponent {
 
   constructor(private modalService: NgbModal,
               private authService: SigninSignoutService,
+              private userService: UserService,
               private socialAuthService: SocialAuthService) {
   }
 
@@ -31,20 +34,22 @@ export class SigninButtonComponent {
       });
   }
 
-  sendLoginRequest(credentials) {
+  public sendLoginRequest(credentials) {
     credentials.type = 'plain';
     this.authService.signin(credentials)
       .subscribe(res => {
+        this.userService.fetchUserStatus();
         this.onSignin.emit();
       });
   }
 
-  signInViaGoogle(): void {
+  public signInViaGoogle(): void {
     this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
       let {email, idToken, authToken, authorizationCode} = googleUser;
       this.authService.signinGoogleData( {email, idToken, authToken, authorizationCode, type: 'google'})
         .subscribe(res => {
           this.modalService.dismissAll();
+          this.userService.fetchUserStatus();
           this.onSignin.emit();
         });
     });

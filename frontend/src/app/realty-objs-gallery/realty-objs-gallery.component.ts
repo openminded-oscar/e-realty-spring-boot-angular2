@@ -14,7 +14,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 export interface SortValue {
   field: string;
-  direction: 'asc'|'desc';
+  direction: 'asc' | 'desc';
 }
 
 export interface SortField {
@@ -73,7 +73,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     display: 'Price',
     field: 'price',
   };
-  public selectedOrderingDirection: 'asc'|'desc' = 'desc';
+  public selectedOrderingDirection: 'asc' | 'desc' = 'desc';
   public orderingOptions: SortField[] = [{
     display: 'Recent',
     field: 'updatedAt',
@@ -95,7 +95,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   private resolveTargetOperations() {
-    if (this.router.url.startsWith('/rent')) {
+    if (this.router.url.endsWith('/rent')) {
       this.targetOperation = BackendSupportedOperations.RENT;
     } else {
       this.targetOperation = BackendSupportedOperations.BUY;
@@ -152,14 +152,14 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   private getFilterValue() {
     const formValues = this.filterForm.value;
     return {
-      price: { ge: formValues.priceMin, le: formValues.priceMax },
-      city: { like: formValues.city },
-      street: { like: formValues.street },
-      roomsAmount: { eq: formValues.roomsAmount },
-      description: { like: formValues.description },
-      buildingType: { eq: formValues.buildingType },
-      totalArea: { ge: formValues.totalAreaMin, le: formValues.totalAreaMax },
-      targetOperations: { operationTypeContains: this.targetOperation }
+      price: {ge: formValues.priceMin, le: formValues.priceMax},
+      city: {like: formValues.city},
+      street: {like: formValues.street},
+      roomsAmount: {eq: formValues.roomsAmount},
+      description: {like: formValues.description},
+      buildingType: {eq: formValues.buildingType},
+      totalArea: {ge: formValues.totalAreaMin, le: formValues.totalAreaMax},
+      targetOperations: {operationTypeContains: this.targetOperation}
     };
   }
 
