@@ -1,5 +1,6 @@
 package co.oleh.realperfect.mapping;
 
+import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import lombok.Data;
 
 import java.util.Set;
@@ -15,4 +16,5 @@ public class UserSelfDto {
      String email;
      String profilePic;
      RealterDto realterDetails;
+     Set<RealtyObjectDto> realtyObjects;
 }

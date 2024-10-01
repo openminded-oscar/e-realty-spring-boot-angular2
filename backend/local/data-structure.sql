@@ -154,21 +154,6 @@ CREATE TABLE `tbl_realty_object_photo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `tbl_realty_owner`
---
-
-DROP TABLE IF EXISTS `tbl_realty_owner`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tbl_realty_owner` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKdi2alf1dspyvn8pmueyecmga6` (`user_id`),
-  CONSTRAINT `FKdi2alf1dspyvn8pmueyecmga6` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `tbl_realty_searcher`

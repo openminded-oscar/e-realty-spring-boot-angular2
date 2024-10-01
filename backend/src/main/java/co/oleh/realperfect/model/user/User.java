@@ -1,6 +1,7 @@
 package co.oleh.realperfect.model.user;
 
 import co.oleh.realperfect.model.Realter;
+import co.oleh.realperfect.model.RealtyObject;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,14 +21,21 @@ public class User {
     private String email;
     private String profilePic;
     private Realter realterDetails;
+	private Set<RealtyObject> realtyObjects;
 
+ 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+	public Set<RealtyObject> getRealtyObjects() {
+		return realtyObjects;
+	}
+	public void setRealtyObjects(Set<RealtyObject> realtyObjects) {
+		this.realtyObjects = realtyObjects;
+	}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }

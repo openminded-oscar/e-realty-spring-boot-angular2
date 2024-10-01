@@ -67,10 +67,6 @@ INSERT INTO `tbl_realty_object_photo` (`id`, `filename`, `photo_type`, `realty_o
                                                                                                (1, 'realty_photo_1.jpg', 'REALTY_PLAIN', 1001),
                                                                                                (2, 'realty_photo_2.jpg', 'REALTY_PLAIN', 1002);
 
--- Inserting into tbl_realty_owner
-INSERT INTO `tbl_realty_owner` (`id`, `user_id`) VALUES
-                                                     (1, 2001),
-                                                     (2, 2002);
 
 -- Inserting into tbl_realty_searcher
 INSERT INTO `tbl_realty_searcher` (`id`, `user_id`) VALUES
