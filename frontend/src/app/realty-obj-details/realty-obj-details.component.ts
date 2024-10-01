@@ -60,9 +60,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
       this.route.params
     ]).pipe(takeUntil(this.destroy$))
       .subscribe(([user, params]) => {
-        if (!user || !params['realterId']) {
-          return;
-        }
         const id = params['realterId'];
         if (id) {
           this.realtyObjService.findById(id)
@@ -70,8 +67,11 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
             .subscribe(realtyObj => {
               this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
               this.currentObject = realtyObj;
-
-              this.initObjectRelatedData();
+              if (!user) {
+                return;
+              } else {
+                this.initUserObjectRelatedData();
+              }
             });
         }
       });
@@ -151,7 +151,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     this.modalService.dismissAll();
   }
 
-  private initObjectRelatedData() {
+  private initUserObjectRelatedData() {
     this.interestService.get(this.user.id, this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(interestResponse => {

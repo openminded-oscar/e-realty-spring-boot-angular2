@@ -13,7 +13,7 @@
                class="btn btn-danger btn-block">Edit</a>
           </ng-container>
         </div>
-        <div (click)="toggleInterested()"
+        <div *ngIf="userService.isAuthenticated$|async" (click)="toggleInterested()"
              class="realty-obj-interested-btn">
           <ng-container *ngIf="!isInterested; else removeInterestedButton">
             <i ngbTooltip="Add to Favorites" class="far fa-heart text-danger"></i>

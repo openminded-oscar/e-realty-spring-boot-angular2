@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {RealtyObj} from '../domain/realty-obj';
 import {UserService} from '../services/user.service';
 import {takeUntil} from 'rxjs/operators';
@@ -26,7 +26,8 @@ export class RealtyObjsListComponent implements OnInit, OnDestroy {
     return obj.id;
   }
 
-  constructor(public userService: UserService) {
+  constructor(public userService: UserService,
+              public cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -41,6 +42,7 @@ export class RealtyObjsListComponent implements OnInit, OnDestroy {
       } else {
         this.currentUserObjects = [];
       }
+      this.cdr.detectChanges();
     });
   }
 
