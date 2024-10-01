@@ -55,10 +55,9 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         tap(user => {
           this.user = user;
           this.currentUserObjects = user ? user.realtyObjects : [];
-        }),
-        takeUntil(this.destroy$)
+        })
       ),
-      this.route.params.pipe(takeUntil(this.destroy$))
+      this.route.params
     ]).pipe(takeUntil(this.destroy$))
       .subscribe(([user, params]) => {
         if (!user || !params['realterId']) {
