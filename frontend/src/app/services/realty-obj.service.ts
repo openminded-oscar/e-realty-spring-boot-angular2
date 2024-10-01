@@ -56,7 +56,7 @@ export class RealtyObjService {
       if (realtyObj.realter && realtyObj.realter.photo) {
         realtyObj.realter.photo.photoFullUrl = Photo.getLinkByFilename(realtyObj.realter.photo.filename);
       }
-      realtyObj.photos.forEach(photo => {
+      realtyObj.photos?.forEach(photo => {
         photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
       });
       return realtyObj;
