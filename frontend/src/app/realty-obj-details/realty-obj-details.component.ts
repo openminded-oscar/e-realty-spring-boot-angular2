@@ -33,19 +33,23 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<boolean>();
 
-  constructor(private realtyObjService: RealtyObjService,
-              private userService: UserService,
-              private interestService: InterestService,
-              private reviewsService: ReviewsService,
-              private modalService: NgbModal,
-              private socketService: SampleSocketService,
-              private route: ActivatedRoute) { }
+  public defaultRealtyObjectPhoto = 'https://placehold.co/650x400?text=Main+photo';
+  public defaultRealtorPhoto = 'https://placehold.co/600x400?text=Realtor+photo';
+
+  constructor(public realtyObjService: RealtyObjService,
+              public userService: UserService,
+              public interestService: InterestService,
+              public reviewsService: ReviewsService,
+              public modalService: NgbModal,
+              public socketService: SampleSocketService,
+              public route: ActivatedRoute) {
+  }
 
   ngOnInit() {
     this.route.params.pipe(
       takeUntil(this.destroy$)
     ).subscribe(params => {
-      const id  = params['realterId'];
+      const id = params['realterId'];
       if (id) {
         this.realtyObjService.findById(id)
           .pipe(takeUntil(this.destroy$))
@@ -63,25 +67,28 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     this.enlargedPhoto = Photo.getLinkByFilename(photo.filename);
   }
 
-  public saveInterested() {
-    const interest: Interest = {
-      userId: this.userService.user.id,
-      realtyObjId: this.currentObject.id
-    };
-
-    this.interestService.save(interest)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(interestFromServer => {
-        this.isInterested = true;
-      });
+  public toggleInterested() {
+    if (this.isInterested) {
+      this.interestService.remove(this.userService.user.id, this.currentObject.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(interest => {
+          this.isInterested = false;
+        });
+    } else {
+      const interest: Interest = {
+        userId: this.userService.user.id,
+        realtyObjId: this.currentObject.id
+      };
+      this.interestService.save(interest)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(interestFromServer => {
+          this.isInterested = true;
+        });
+    }
   }
 
   public removeInterested() {
-    this.interestService.remove(this.userService.user.id, this.currentObject.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(interest => {
-        this.isInterested = false;
-      });
+
   }
 
   public isPreviewDateDisabled(date: NgbDateStruct) {
@@ -145,5 +152,15 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  public setDefaultRealtorPhoto(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = this.defaultRealtorPhoto;
+  }
+
+  public setDefaultRealtyObjectPhoto(event: ErrorEvent) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = this.defaultRealtyObjectPhoto;
   }
 }

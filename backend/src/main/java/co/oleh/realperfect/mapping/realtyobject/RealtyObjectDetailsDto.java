@@ -1,7 +1,6 @@
 package co.oleh.realperfect.mapping.realtyobject;
 import co.oleh.realperfect.mapping.RealterDto;
 import co.oleh.realperfect.mapping.UserDto;
-import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.model.Address;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.DwellingType;
@@ -13,6 +12,7 @@ import lombok.Data;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +32,7 @@ public class RealtyObjectDetailsDto {
         @DecimalMin(value = "0.0", inclusive = false, message = "Total area must be greater than 0")
         BigDecimal totalArea;
         BigDecimal livingArea;
+        @Size(max = 255, message = "The string must not exceed 300 characters.")
         String description;
         Boolean hasGarage;
         Boolean hasRepairing;

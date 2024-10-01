@@ -4,9 +4,9 @@
       <h5 class="text-center">Add your realty object</h5>
       <aw-wizard [navBarLayout]="'large-empty'">
         <aw-wizard-step stepTitle="Address and primary info">
-          <div class="text-right mb-2">
+          <div class="text-right mb-2 action-buttons">
             <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-            <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
+            <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
             </button>
           </div>
           <div class="form-horizontal">
@@ -95,9 +95,10 @@
             <div class="col-6 text-left">
               <button type="button" class="btn" awPreviousStep>Previous step</button>
             </div>
-            <div class="col-6 text-right">
+            <div class="col-6 text-right action-buttons">
+              <button type="button" class="btn btn-info" awPreviousStep>Prev Step</button>
               <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-              <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
+              <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
               </button>
             </div>
           </div>
@@ -107,7 +108,7 @@
                 <label for="description-input">Overall description:</label>
               </div>
               <div class="col-5">
-					<textarea rows="4" maxlength="128" [(ngModel)]="realtyObj.description" class="form-control"
+					<textarea rows="4" maxlength="255" [(ngModel)]="realtyObj.description" class="form-control"
                     id="description-input" name="description-input" required></textarea>
               </div>
               <div class="col-1 col-form-label">
@@ -211,8 +212,9 @@
             <div class="col-6 text-left">
               <button type="button" class="btn" awPreviousStep>Previous step</button>
             </div>
-            <div class="col-6 text-right">
-              <button type="button" class="btn" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
+            <div class="col-6 text-right action-buttons">
+              <button type="button" class="btn btn-info" awPreviousStep>Prev Step</button>
+              <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
               </button>
             </div>
           </div>
@@ -251,6 +253,5 @@
         </aw-wizard-step>
       </aw-wizard>
     </form>
-
   </div>
 </div>

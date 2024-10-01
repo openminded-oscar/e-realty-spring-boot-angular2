@@ -1,11 +1,33 @@
 <div class="row" *ngIf="currentObject">
-  <div class="col-md-7">
+  <div class="col-md-7 photo-and-gallery-block">
+    <div style="height: 40px; display: flex; flex-direction: row; justify-content: space-between">
+      <h1 style="font-size: 1.5rem;">
+        <span>Apartment at
+          {{ currentObject.address.street }} str.&nbsp;</span>
+        <span>est. at ${{ currentObject.price }}</span>
+      </h1>
+      <div style="display: flex; flex-direction: row; gap: 10px; align-items: center">
+        <div *ngIf="userService.isAuthenticated">
+          <a [routerLink]="['/sell', currentObject.id]" style="padding: 0 5px;" class="btn btn-danger btn-block">Edit</a>
+        </div>
+        <div (click)="toggleInterested()"
+             class="realty-obj-interested-btn">
+          <ng-container *ngIf="!isInterested; else removeInterestedButton">
+            <i ngbTooltip="Add to Favorites" class="far fa-heart text-danger"></i>
+          </ng-container>
+          <ng-template #removeInterestedButton>
+            <i ngbTooltip="Added to Favorites" class="fa-solid fa-heart text-danger"></i>
+          </ng-template>
+        </div>
+      </div>
+    </div>
     <div class="realty-obj-pic--main-container">
       <img class="img-responsive realty-obj-pic--main"
-           [src]="enlargedPhoto?enlargedPhoto: 'https://i.ytimg.com/vi/Xx6t0gmQ_Tw/maxresdefault.jpg'"
+           (error)="setDefaultRealtyObjectPhoto($event)"
+           [src]="enlargedPhoto?enlargedPhoto: defaultRealtyObjectPhoto"
            alt="main photo">
     </div>
-    <div class="row">
+    <div class="row" *ngIf="currentObject.photos?.length">
       <div class="col-lg-12">
         <h3 class="page-header">Photo gallery</h3>
       </div>
@@ -15,37 +37,32 @@
              (click)="setEnlargedPhoto(photo)"
              [src]="photo.fullUrl" alt="object gallery photo">
       </div>
-
     </div>
   </div>
 
   <div style="font-size: larger" class="col-md-5">
     <div class="row" style="position: relative;">
-      <div class="col-md-7">
-        <h3 style="text-align: center" class="">Apt. at
-          {{currentObject.address.street}} str.</h3>
-        <h3 style="text-align: center">est. at ${{currentObject.price}}</h3>
-
-        <div class="object-review">
-          <div *ngIf="currentReview">
-            <i class="fa fa-calendar-check-o" aria-hidden="true"></i> review at {{currentReview.dateTime|date:'MMM/d, HH:mm'}}
+      <div class="col-md-7 main-info-block">
+        <div class="description-block">
+          <div>
+            <h5 *ngIf="currentObject.description">Description:</h5>
+            <p class="description-block--text" *ngIf="currentObject.description">{{ currentObject.description }}</p>
           </div>
-          <button *ngIf="!currentReview" class="btn btn-block btn-primary"
-                  (click)="openScheduleReviewModal(scheduleReviewModalContent)">
-            Schedule a review
-          </button>
+          <div class="description-block--content">
+            <div *ngIf="currentReview">
+              <i class="fa fa-calendar-check-o" aria-hidden="true"></i> review
+              at {{ currentReview.dateTime|date:'MMM/d, HH:mm' }}
+            </div>
+            <div>
+              <button *ngIf="!currentReview" class="btn btn-block btn-primary"
+                      (click)="openScheduleReviewModal(scheduleReviewModalContent)">
+                Schedule a review
+              </button>
+            </div>
+          </div>
         </div>
 
-        <p class="">{{currentObject.description}}</p>
         <div class="status-buttons">
-
-          <button (click)="saveInterested()" [disabled]="isInterested" class="btn btn-block btn-success realty-obj-interested-btn">
-            I'm interested!
-          </button>
-          <button *ngIf="isInterested" (click)="removeInterested()" class="btn btn-block btn-warning realty-obj-interested-btn">
-            Remove interested
-          </button>
-
           <ng-template #scheduleReviewModalContent let-modal>
             <div class="modal-header">
               <h4 class="modal-title" id="modal-basic-title">Please select the date and time</h4>
@@ -59,7 +76,8 @@
                 <div class="form-group d-flex align-items-center">
                   <div class="input-group mr-2">
                     <input class="form-control" placeholder="yyyy-mm-dd"
-                           name="datePicker" [(ngModel)]="reviewDate" [markDisabled]="isPreviewDateDisabled" ngbDatepicker #d="ngbDatepicker">
+                           name="datePicker" [(ngModel)]="reviewDate" [markDisabled]="isPreviewDateDisabled"
+                           ngbDatepicker #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
                     </div>
@@ -72,21 +90,23 @@
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-dark" [disabled]="!reviewDate || !reviewTime" (click)="saveReviewAndClose()">Save and close</button>
+              <button type="button" class="btn btn-outline-dark" [disabled]="!reviewDate || !reviewTime"
+                      (click)="saveReviewAndClose()">Save and close
+              </button>
             </div>
           </ng-template>
-
         </div>
       </div>
 
-      <div class="col-md-5">
+      <div class="col-md-5 main-info-block">
+        <span>
+          {{ currentObject.realter.name }}&nbsp;{{ currentObject.realter.surname }}, realtor
+        </span>
         <div class="realter-photo-container">
           <img class="realter-photo img-responsive"
-               src="{{currentObject.realter.photo.photoFullUrl}}" alt="">
+               (error)="setDefaultRealtorPhoto($event)"
+               [src]="currentObject.realter?.photo ? currentObject.realter.photo.photoFullUrl: defaultRealtorPhoto">
         </div>
-        <span class="btn btn-block">
-          {{currentObject.realter.name}}&nbsp;{{currentObject.realter.surname}}, realtor
-        </span>
         <button class="btn btn-info btn-block">Contact</button>
       </div>
 
@@ -96,21 +116,26 @@
         <div id="objectCharacteristics">
           <ul class="list-group">
             <li class="list-group-item">Total area:
-              {{currentObject.totalArea}} sq.m.
+              {{ currentObject.totalArea }} sq.m.
             </li>
             <li class="list-group-item">Living area:
-              {{currentObject.livingArea}} sq.m.
+              {{ currentObject.livingArea }} sq.m.
             </li>
             <li class="list-group-item">Rooms:
-              {{currentObject.roomsAmount}}</li>
-            <li class="list-group-item">Floor: {{currentObject.floor}} of
-              {{currentObject.totalFloors}}</li>
+              {{ currentObject.roomsAmount }}
+            </li>
+            <li class="list-group-item">Floor: {{ currentObject.floor }} of
+              {{ currentObject.totalFloors }}
+            </li>
             <li class="list-group-item">Repaired:
-              {{currentObject.hasRepairing ? 'Yes' : 'No'}}</li>
+              {{ currentObject.hasRepairing ? 'Yes' : 'No' }}
+            </li>
             <li class="list-group-item">Garage:
-              {{currentObject.hasGarage ? 'Available' : 'Missing'}}</li>
+              {{ currentObject.hasGarage ? 'Available' : 'Missing' }}
+            </li>
             <li class="list-group-item">Foundation year:
-              {{currentObject.foundationYear}}</li>
+              {{ currentObject.foundationYear }}
+            </li>
           </ul>
         </div>
       </div>
