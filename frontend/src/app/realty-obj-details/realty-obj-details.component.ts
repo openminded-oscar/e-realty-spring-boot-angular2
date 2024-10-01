@@ -15,6 +15,7 @@ import {convertUTCDateToLocalDate} from '../commons';
 import {Subject} from 'rxjs/Subject';
 import {takeUntil, tap} from 'rxjs/operators';
 import {User} from '../domain/user';
+import {combineLatest} from 'rxjs';
 
 @Component({
   selector: 'app-realty-obj-details',
@@ -37,6 +38,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public defaultRealtyObjectPhoto = 'https://placehold.co/650x400?text=Main+photo';
   public defaultRealtorPhoto = 'https://placehold.co/600x400?text=Realtor+photo';
   public user: User;
+  private currentUserObjects: RealtyObj[] = [];
 
   constructor(public realtyObjService: RealtyObjService,
               public userService: UserService,
@@ -48,25 +50,42 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userService.user$.pipe(
-      tap(user => this.user = user),
-      takeUntil(this.destroy$)
-    );
-    this.route.params.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(params => {
-      const id = params['realterId'];
-      if (id) {
-        this.realtyObjService.findById(id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(realtyObj => {
-            this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
-            this.currentObject = realtyObj;
+    combineLatest([
+      this.userService.user$.pipe(
+        tap(user => {
+          this.user = user;
+          this.currentUserObjects = user ? user.realtyObjects : [];
+        }),
+        takeUntil(this.destroy$)
+      ),
+      this.route.params.pipe(takeUntil(this.destroy$))
+    ]).pipe(takeUntil(this.destroy$))
+      .subscribe(([user, params]) => {
+        if (!user || !params['realterId']) {
+          return;
+        }
+        const id = params['realterId'];
+        if (id) {
+          this.realtyObjService.findById(id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(realtyObj => {
+              this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
+              this.currentObject = realtyObj;
 
-            this.initObjectRelatedData();
-          });
-      }
-    });
+              this.initObjectRelatedData();
+            });
+        }
+      });
+
+  }
+
+  public isMyObject(realtyObject: RealtyObj) {
+    const id = realtyObject.id;
+    if (this.currentUserObjects) {
+      const object = this.currentUserObjects.find((obj) => obj.id === id);
+      return !!object;
+    }
+    return false;
   }
 
   public setEnlargedPhoto(photo: RealtyPhoto) {

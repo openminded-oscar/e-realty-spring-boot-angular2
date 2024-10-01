@@ -119,8 +119,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
       this.getFilterValue(),
       this.getSortValue(),
       this.pageable
-    )
-      .pipe(
+    ).pipe(
         debounceTime(this.FILTER_DEBOUNCE_TIME),
         tap(objects => {
           this.showNotificaton = true;

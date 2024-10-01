@@ -3,6 +3,8 @@ import {RealtyObj} from '../domain/realty-obj';
 import {UserService} from '../services/user.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {combineLatest} from 'rxjs';
 
 @Component({
   selector: 'realty-objs-list',
@@ -12,25 +14,43 @@ import {Subject} from 'rxjs/Subject';
 })
 export class RealtyObjsListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+  public currentRealtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
   public currentUserObjects: RealtyObj[];
 
   @Input()
-  public realtyObjects: RealtyObj[] = [];
+  set realtyObjects(value: RealtyObj[]) {
+    this.currentRealtyObjects$.next(value);
+  }
+
   public trackById(index: number, obj: RealtyObj): number {
     return obj.id;
   }
 
-  constructor(public userService: UserService) { }
+  constructor(public userService: UserService) {
+  }
 
   ngOnInit() {
-    this.userService.user$.pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        if (user) {
-          this.currentUserObjects = user.realtyObjects;
-        } else {
-          this.currentUserObjects = [];
-        }
-      });
+    combineLatest([
+      this.userService.user$,
+      this.currentRealtyObjects$
+    ]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(([user, newObjects]) => {
+      if (user) {
+        this.currentUserObjects = user.realtyObjects;
+      } else {
+        this.currentUserObjects = [];
+      }
+    });
+  }
+
+  public isMyObject(realtyObject: RealtyObj) {
+    const id = realtyObject.id;
+    if (this.currentUserObjects) {
+      const object = this.currentUserObjects.find((obj) => obj.id === id);
+      return !!object;
+    }
+    return false;
   }
 
   ngOnDestroy(): void {
