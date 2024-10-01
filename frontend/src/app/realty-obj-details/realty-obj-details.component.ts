@@ -6,7 +6,7 @@ import {Photo, RealtyPhoto} from '../domain/photo';
 import {UserService} from '../services/user.service';
 import {InterestService} from '../services/interest.service';
 import {Interest} from '../domain/interest';
-import {NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateStruct, NgbModal, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {ReviewsService} from '../services/reviews.service';
 import {Review} from '../domain/review';
 import {HttpResponse} from '@angular/common/http';
@@ -16,6 +16,38 @@ import {Subject} from 'rxjs/Subject';
 import {takeUntil, tap} from 'rxjs/operators';
 import {User} from '../domain/user';
 import {combineLatest} from 'rxjs';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+
+import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
+
+export function reviewDateTimeValidator(): ValidatorFn {
+  return (formGroup: AbstractControl): ValidationErrors => {
+    const reviewDate = formGroup.get('reviewDate')?.value;
+    const reviewTime = formGroup.get('reviewTime')?.value;
+
+    if (!reviewDate || !reviewTime) {
+      return {emptyPart: true};
+    }
+
+    const now = new Date();
+    const selectedDateTime = new Date(
+      reviewDate.year,
+      reviewDate.month - 1,
+      reviewDate.day,
+      reviewTime.hour,
+      reviewTime.minute
+    );
+
+    const threeHoursLater = new Date(now.getTime() + 3 * 60 * 60 * 1000); // 3 hours from now
+
+    if (selectedDateTime < threeHoursLater) {
+      return {tooSoon: true};
+    }
+
+    return null;
+  };
+}
+
 
 @Component({
   selector: 'app-realty-obj-details',
@@ -25,9 +57,6 @@ import {combineLatest} from 'rxjs';
 export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   currentObject: RealtyObj;
   enlargedPhoto: string;
-
-  reviewDate: any = null;
-  reviewTime: any = null;
 
   isInterested = false;
 
@@ -40,16 +69,24 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public user: User;
   private currentUserObjects: RealtyObj[] = [];
 
+  public reviewTimeForm: FormGroup;
+
   constructor(public realtyObjService: RealtyObjService,
               public userService: UserService,
               public interestService: InterestService,
               public reviewsService: ReviewsService,
               public modalService: NgbModal,
               public socketService: SampleSocketService,
+              public fb: FormBuilder,
               public route: ActivatedRoute) {
   }
 
   ngOnInit() {
+    this.reviewTimeForm = this.fb.group({
+      reviewDate: new FormControl(null),
+      reviewTime: new FormControl(null),
+    }, {validators: reviewDateTimeValidator()});
+
     combineLatest([
       this.userService.user$.pipe(
         tap(user => {
@@ -111,10 +148,16 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public isPreviewDateDisabled(date: NgbDateStruct) {
-    const d = new Date(date.year, date.month - 1, date.day);
-    return d.getDay() === 0 || d.getDay() === 6;
+  public isPreviewDateDisabled(date: NgbDateStruct): boolean {
+    const now = new Date();
+    const selectedDate = new Date(date.year, date.month - 1, date.day);
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    // Allow today's date and disable past dates and weekends
+    return selectedDate < today || selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
   }
+
+
 
   public openScheduleReviewModal(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(data => {
@@ -125,15 +168,19 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   public saveReviewAndClose() {
+    const reviewDate = this.reviewTimeForm.value.reviewDate;
+    const reviewTime = this.reviewTimeForm.value.reviewTime;
+
     const utcDatetime =
       new Date(
-        this.reviewDate.year,
-        this.reviewDate.month - 1,
-        this.reviewDate.day,
-        this.reviewTime.hour,
-        this.reviewTime.minute,
-        this.reviewTime.second
+        reviewDate.year,
+        reviewDate.month - 1,
+        reviewDate.day,
+        reviewTime.hour,
+        reviewTime.minute,
+        reviewTime.second
       );
+
     const review = {
       userId: this.user.id,
       realtyObjId: this.currentObject.id,

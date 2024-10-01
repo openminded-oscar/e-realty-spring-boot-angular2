@@ -4,7 +4,6 @@ import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
-import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

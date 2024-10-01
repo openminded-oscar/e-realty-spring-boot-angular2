@@ -41,7 +41,7 @@ export class RealtyObj {
   }
 
   public static getMainPhoto(realty: RealtyObj) {
-    const mainPhotos = realty.photos.filter(value => value.type == RealtyPhotoType.REALTY_MAIN);
+    const mainPhotos = realty.photos?.filter(value => value.type == RealtyPhotoType.REALTY_MAIN);
 
     if (mainPhotos && mainPhotos.length > 0) {
       return Photo.getLinkByFilename(mainPhotos[0].filename);

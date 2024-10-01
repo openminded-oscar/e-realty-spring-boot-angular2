@@ -80,7 +80,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy$)
         ).subscribe(realtyObj => {
           this.realtyObj = realtyObj;
-          this.realtyObj.photos.forEach(photo => {
+          this.realtyObj.photos?.forEach(photo => {
             photo.link = Photo.getLinkByFilename(photo.filename);
           });
         });
