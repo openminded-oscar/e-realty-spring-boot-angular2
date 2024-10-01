@@ -52,12 +52,11 @@
             <p class="description-block--text" *ngIf="currentObject.description">{{ currentObject.description }}</p>
           </div>
           <div class="description-block--content">
-            <div *ngIf="currentReview">
-              <i class="fa fa-calendar-check-o" aria-hidden="true"></i> review
-              at {{ currentReview.dateTime|date:'MMM/d, HH:mm':'local' }}
+            <div *ngIf="user && currentReview">
+              <i class="fa fa-calendar" aria-hidden="true"></i> review scheduled for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
             </div>
             <div>
-              <button *ngIf="!currentReview" class="btn btn-block btn-primary"
+              <button *ngIf="user && !currentReview" class="btn btn-block btn-primary"
                       (click)="openScheduleReviewModal(scheduleReviewModalContent)">
                 Schedule a review
               </button>
@@ -116,7 +115,7 @@
                (error)="setDefaultRealtorPhoto($event)"
                [src]="currentObject.realter?.photo ? currentObject.realter.photo.photoFullUrl: defaultRealtorPhoto">
         </div>
-        <button class="btn btn-info btn-block">Contact</button>
+        <button class="btn btn-info btn-block" (click)="alert('Not yet implemented')">Contact</button>
       </div>
 
     </div>

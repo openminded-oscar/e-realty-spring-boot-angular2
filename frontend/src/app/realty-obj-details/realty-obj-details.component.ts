@@ -6,7 +6,7 @@ import {Photo, RealtyPhoto} from '../domain/photo';
 import {UserService} from '../services/user.service';
 import {InterestService} from '../services/interest.service';
 import {Interest} from '../domain/interest';
-import {NgbDateStruct, NgbModal, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ReviewsService} from '../services/reviews.service';
 import {Review} from '../domain/review';
 import {HttpResponse} from '@angular/common/http';
@@ -230,4 +230,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = this.defaultRealtyObjectPhoto;
   }
+
+  protected readonly alert = alert;
 }
