@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {endpoints} from './commons';
 import {UserService} from './services/user.service';
 import {Router} from '@angular/router';
 import {SampleSocketService} from './services/socket/sample-socket.service';
@@ -19,8 +18,6 @@ import {RealtyObj} from './domain/realty-obj';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  dataInitialised = false;
-
   private destroy$ = new Subject<boolean>();
 
   constructor(public http: HttpClient,

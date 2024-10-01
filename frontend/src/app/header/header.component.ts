@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   public user: User;
 
   public isActiveRoute(route: string): boolean {
-    return this.currentRoute.startsWith(route);
+    return this.currentRoute?.startsWith(route);
   }
 
   constructor(public router: Router,
@@ -25,6 +25,9 @@ export class HeaderComponent implements OnInit {
       if (user) {
         this.user = user;
         this.isAuthenticated = !!user;
+      } else {
+        this.user = null;
+        this.isAuthenticated = false;
       }
     });
   }
@@ -35,9 +38,5 @@ export class HeaderComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.url;
       });
-  }
-
-  public fetchUserStatus() {
-    this.userService.fetchUserStatus();
   }
 }

@@ -8,7 +8,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 @Injectable({providedIn: 'root'})
 export class UserService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  private userSubject = new BehaviorSubject<User | null>(null);
+  private userSubject = new BehaviorSubject<User>(null);
 
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   public user$ = this.userSubject.asObservable();
@@ -26,5 +26,14 @@ export class UserService {
         this.userSubject.next(userInfo);
         this.isAuthenticatedSubject.next(!!userInfo);
       });
+  }
+
+  public clearUserInState() {
+    if (this.isAuthenticatedSubject.value) {
+      this.isAuthenticatedSubject.next(false);
+    }
+    if (this.userSubject.value) {
+      this.userSubject.next(null);
+    }
   }
 }
