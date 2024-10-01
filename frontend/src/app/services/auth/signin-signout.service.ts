@@ -33,6 +33,6 @@ export class SigninSignoutService extends AbstractService<Credentials>{
 
   public signout() {
     localStorage.removeItem('token');
-    this.cookieService.deleteCookie("GOOGLE_OAUTH_TOKEN");
+    this.cookieService.deleteCookie('GOOGLE_OAUTH_TOKEN');
   }
 }

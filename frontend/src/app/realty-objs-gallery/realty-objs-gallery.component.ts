@@ -95,7 +95,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   private resolveTargetOperations() {
-    if (this.router.url.startsWith('/rent')) {
+    if (this.router.url.endsWith('/rent')) {
       this.targetOperation = BackendSupportedOperations.RENT;
     } else {
       this.targetOperation = BackendSupportedOperations.BUY;
