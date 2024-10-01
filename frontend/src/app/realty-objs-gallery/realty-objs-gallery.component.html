@@ -23,8 +23,13 @@
                 {{ option.display }}
               </button>
             </div>
-            <span style="margin-top: 3px" (click)="toggleOrderingDirection()">
-              <i style="cursor: pointer" class="fas fa-arrows-up-down"></i>
+            <span style="margin-top: 3px; cursor: pointer" (click)="toggleOrderingDirection()">
+              <ng-container>
+                <i *ngIf="selectedOrderingDirection === 'desc'; else arrowDown" class="fas fa-arrow-down"></i>
+                <ng-template #arrowDown>
+                  <i style="cursor: pointer" class="fas fa-arrow-up"></i>
+                </ng-template>
+              </ng-container>
             </span>
           </div>
         </div>
