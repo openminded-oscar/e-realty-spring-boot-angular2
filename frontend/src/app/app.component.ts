@@ -37,14 +37,14 @@ export class AppComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(user =>
           this.socketService.currentDocument.pipe(
-            takeUntil(this.destroy$),
-            map(object => ({ object, user }))
+            map(object => ({object, user})),
+            takeUntil(this.destroy$)
           )
         ),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: ({ object, user }) => this.handleAddToFavoritesSocketUpdate(object, user),
+        next: ({object, user}) => this.handleAddToFavoritesSocketUpdate(object, user),
         error: err => console.error('Error in socket subscription:', err)
       });
   }

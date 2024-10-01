@@ -1,5 +1,5 @@
 <div id="itemsContainer" class="row">
-  <div *ngFor="let realtyObject of realtyObjects; trackBy: trackById" class="col-4">
+  <div *ngFor="let realtyObject of currentRealtyObjects$|async; trackBy: trackById" class="col-4">
     <div class="thumbnail">
       <div class="thumbnail-image-container">
         <img class="thumbnail-image"
@@ -11,6 +11,11 @@
           <h4 style="flex: 1">
             {{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}
           </h4>
+          <div>
+            <div *ngIf="isMyObject(realtyObject)">
+              <a [routerLink]="['/sell', realtyObject.id]" style="padding: 0 5px;" class="btn btn-danger btn-block">Edit</a>
+            </div>
+          </div>
         </div>
         <div>
           <p>
