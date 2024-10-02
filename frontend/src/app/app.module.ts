@@ -39,7 +39,6 @@ import {GlobalNotificationComponent} from './global-notification/global-notifica
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {HeaderComponent} from './header/header.component';
 import {AuthGuard} from './guargs/auth.guard';
-import {InitializeAppService} from './services/initialize-app.service';
 
 const appRoutes: Routes = [
   {
@@ -100,12 +99,6 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     UserService,
     SigninSignoutService,
     SignupService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (initService: InitializeAppService) => () => initService.init(),
-      multi: true,
-      deps: [InitializeAppService],
-    },
     ErrorService, {
       provide: HTTP_INTERCEPTORS,
       useClass: AllHttpInterceptor,
