@@ -14,8 +14,8 @@ export class RealterService {
     return this.http.get(endpoints.realters.list)
       .map((realters: Realter[]) => {
         realters.forEach(realter => {
-          if (realter.photo) {
-            realter.photo.photoFullUrl = Photo.getLinkByFilename(realter.photo.filename);
+          if (realter.profilePic) {
+            realter.profilePic.photoFullUrl = Photo.getLinkByFilename(realter.profilePic.filename);
           }
         });
 
@@ -27,8 +27,8 @@ export class RealterService {
   public findById(id: any) {
     return this.http.get(endpoints.realters.single + '/' + id)
       .map((realter: Realter) => {
-        if (realter.photo) {
-          realter.photo.photoFullUrl = Photo.getLinkByFilename(realter.photo.filename);
+        if (realter.profilePic) {
+          realter.profilePic.photoFullUrl = Photo.getLinkByFilename(realter.profilePic.filename);
         }
 
         return realter;

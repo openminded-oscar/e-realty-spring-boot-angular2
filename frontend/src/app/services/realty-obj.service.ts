@@ -53,8 +53,8 @@ export class RealtyObjService {
 
   public findById(id: string): Observable<RealtyObj> {
     return this.http.get<RealtyObj>(endpoints.realtyObj.byId + '/' + id).map((realtyObj: RealtyObj) => {
-      if (realtyObj.realter && realtyObj.realter.photo) {
-        realtyObj.realter.photo.photoFullUrl = Photo.getLinkByFilename(realtyObj.realter.photo.filename);
+      if (realtyObj.realter && realtyObj.realter.profilePic) {
+        realtyObj.realter.profilePic.photoFullUrl = Photo.getLinkByFilename(realtyObj.realter.profilePic.filename);
       }
       realtyObj.photos?.forEach(photo => {
         photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);

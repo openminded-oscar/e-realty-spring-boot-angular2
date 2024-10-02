@@ -39,6 +39,7 @@ import {GlobalNotificationComponent} from './global-notification/global-notifica
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {HeaderComponent} from './header/header.component';
 import {AuthGuard} from './guargs/auth.guard';
+import {RealtorContactComponent} from './realtor/realtor-contact/realtor-contact.component';
 
 const appRoutes: Routes = [
   {
@@ -69,6 +70,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     AddUpdateRealtorComponent,
     RealtorsGalleryComponent,
     GlobalNotificationComponent,
+    RealtorContactComponent,
     HeaderComponent
   ],
   imports: [

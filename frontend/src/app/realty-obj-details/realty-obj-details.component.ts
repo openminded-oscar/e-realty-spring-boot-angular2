@@ -19,6 +19,7 @@ import {combineLatest} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {RealtorContactComponent} from '../realtor/realtor-contact/realtor-contact.component';
 
 export function reviewDateTimeValidator(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors => {
@@ -158,7 +159,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
 
-
   public openScheduleReviewModal(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(data => {
 
@@ -231,5 +231,8 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     imgElement.src = this.defaultRealtyObjectPhoto;
   }
 
-  protected readonly alert = alert;
+  public openRealtorContacts() {
+    const modalRef = this.modalService.open(RealtorContactComponent);
+    (modalRef.componentInstance as RealtorContactComponent).realtor = this.currentObject.realter;
+  }
 }
