@@ -52,19 +52,30 @@ export class RealtyObjService {
   }
 
   public findById(id: string): Observable<RealtyObj> {
-    return this.http.get<RealtyObj>(endpoints.realtyObj.byId + '/' + id).map((realtyObj: RealtyObj) => {
-      if (realtyObj.realter && realtyObj.realter.profilePic) {
-        realtyObj.realter.profilePic.photoFullUrl = Photo.getLinkByFilename(realtyObj.realter.profilePic.filename);
-      }
-      realtyObj.photos?.forEach(photo => {
-        photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
-      });
-      return realtyObj;
-    });
+    return this.http.get<RealtyObj>(endpoints.realtyObj.byId + '/' + id).pipe(
+      tap((realtyObj: RealtyObj) => {
+        if (realtyObj.realter && realtyObj.realter.profilePic) {
+          realtyObj.realter.profilePic.photoFullUrl = Photo.getLinkByFilename(realtyObj.realter.profilePic.filename);
+        }
+        realtyObj.photos?.forEach(photo => {
+          photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
+          photo.link = Photo.getLinkByFilename(photo.filename);
+        });
+      }));
   }
 
   public save(realtyObj: RealtyObj): Observable<RealtyObj> {
-    return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj);
+    return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj).pipe(
+      tap((realtyObjReturned: RealtyObj) => {
+        if (realtyObjReturned.realter && realtyObjReturned.realter.profilePic) {
+          realtyObjReturned.realter.profilePic.photoFullUrl =
+            Photo.getLinkByFilename(realtyObjReturned.realter.profilePic.filename);
+        }
+        realtyObjReturned.photos?.forEach(photo => {
+          photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
+          photo.link = Photo.getLinkByFilename(photo.filename);
+        });
+      }));
   }
 
   private mapFilterInputsToHttpRequest(filter: { [p: string]: { [p: string]: string } }) {

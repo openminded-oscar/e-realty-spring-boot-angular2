@@ -2,8 +2,12 @@
   text-align: center
 }
 
-.realty-pic-preview-container img {
+.realty-pic-preview-container img, .realty-confirmation-pic-preview-container img {
   max-height: 150px;
+}
+.realty-pic-preview-container img {
+  width: 100%;
+  object-fit: cover;
 }
 
 input.ng-invalid, select.ng-invalid, textarea.ng-invalid {
@@ -19,4 +23,8 @@ input.ng-valid, select.ng-valid, textarea.ng-valid {
   flex-direction: row;
   gap: 5px;
   justify-content: end;
+}
+
+.main-photo-text {
+  padding: 9px;
 }
