@@ -1,11 +1,12 @@
 package co.oleh.realperfect.auth;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import co.oleh.realperfect.model.user.AccountCredentials;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
         boolean isPasswordValid =
                 bCryptPasswordEncoder.matches(authentication.getPassword(), user.getPassword());
         if (!isPasswordValid) {
-            throw new RuntimeException("Login and password do not match");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login and password do not match");
         }
         return maybeUser.get();
     }
