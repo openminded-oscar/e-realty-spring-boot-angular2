@@ -2,6 +2,7 @@ package co.oleh.realperfect.auth.api;
 
 import co.oleh.realperfect.auth.AuthenticationService;
 import co.oleh.realperfect.auth.GoogleTokenVerifier;
+import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.mapping.MappingService;
@@ -13,6 +14,7 @@ import co.oleh.realperfect.model.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -58,8 +60,8 @@ public class SigninApi {
             } else if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
                 DefaultOAuth2User defaultOidcUser = (DefaultOAuth2User) authentication.getPrincipal();
                 user = userService.findByGoogleUserIdTokenSubject((String) defaultOidcUser.getAttributes().get("sub"));
-            } else if (authentication.getPrincipal() instanceof String) {
-                Long userId = Long.valueOf((String) authentication.getPrincipal());
+            } else if (authentication.getPrincipal() instanceof UserDetails) {
+                Long userId = ((SpringSecurityUser) authentication.getPrincipal()).getId();
                 user = userService.findById(userId);
             } else {
                 return null;

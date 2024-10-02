@@ -46,20 +46,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+/************    HTTP Auth config    *************/
+//                public options requests
                 .antMatchers(HttpMethod.OPTIONS)
                 .permitAll()
+//                private endpoints
                 .antMatchers("/api/upload-photo/**", "/api/object-review/**")
                 .authenticated()
+//                public endpoints
                 .antMatchers("/api/**", "/login/oauth2/**", "/index.html", "/")
                 .permitAll()
                 .and()
-                // authentication filter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(oauth2TokenSettingFilter, OAuth2LoginAuthenticationFilter.class)
                 .csrf()
                 .disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(new RestAuthenticationEntryPoint());
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .and()
+/************    OAuth2 Auth config    *************/
+                .oauth2Login()
+                .authorizationEndpoint()
+                .authorizationRequestRepository(authorizationRequestRepository())
+                .authorizationRequestResolver(this.oAuth2AuthorizationRequestResolver)
+                .and()
+                .tokenEndpoint()
+                .accessTokenResponseClient(accessTokenResponseClient());
 
 
         http.oauth2Client();
