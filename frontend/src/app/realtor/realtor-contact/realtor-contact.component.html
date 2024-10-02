@@ -6,7 +6,7 @@
     <div class="text-center">
       <img [src]="realtor.profilePic" alt="Profile Picture"
            class="img-fluid mb-3" style="width: 150px; height: 150px;">
-      <h5>{{ realtor.name }}</h5>
+      <h5>{{ realtor.name }}&nbsp;{{realtor.surname}}, realtor</h5>
       <ng-container *ngIf="realtor.email">
         <p><strong>Email:&nbsp;</strong>
           <a [href]="'mailto:' + realtor.email">{{ realtor.email }}</a>
