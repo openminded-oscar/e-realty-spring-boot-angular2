@@ -2,5 +2,7 @@ export interface Realter {
   id?: string;
   name: string;
   surname: string;
-  photo: any;
+  profilePic: any;
+  phoneNumber: string;
+  email: string;
 }

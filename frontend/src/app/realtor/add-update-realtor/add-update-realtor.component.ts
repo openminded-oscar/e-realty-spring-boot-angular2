@@ -30,8 +30,10 @@ export class AddUpdateRealtorComponent implements OnInit, OnDestroy {
     this.realter = {
       name: '',
       surname: '',
-      photo: null
-    };
+      profilePic: '',
+      phoneNumber: null,
+      email: null,
+    } as Realter;
 
     this.route.params.pipe(
       takeUntil(this.destroy$)
@@ -73,8 +75,8 @@ export class AddUpdateRealtorComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe(
           (data: Photo) => {
-            this.realter.photo = data;
-            this.realter.photo.photoFullUrl = Photo.getLinkByFilename(data.filename);
+            this.realter.profilePic = data;
+            this.realter.profilePic.photoFullUrl = Photo.getLinkByFilename(data.filename);
           },
           error => console.log(error)
         );

@@ -113,9 +113,9 @@
         <div class="realter-photo-container">
           <img class="realter-photo img-responsive"
                (error)="setDefaultRealtorPhoto($event)"
-               [src]="currentObject.realter?.photo ? currentObject.realter.photo.photoFullUrl: defaultRealtorPhoto">
+               [src]="currentObject.realter?.profilePic ? currentObject.realter.profilePic.photoFullUrl: defaultRealtorPhoto">
         </div>
-        <button class="btn btn-info btn-block" (click)="alert('Not yet implemented')">Contact</button>
+        <button class="btn btn-info btn-block" (click)="openRealtorContacts()">Contact</button>
       </div>
 
     </div>

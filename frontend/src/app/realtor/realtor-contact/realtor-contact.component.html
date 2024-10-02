@@ -1,0 +1,25 @@
+<div class="modal-content" *ngIf="realtor">
+  <div class="modal-header">
+    <h5 class="modal-title" id="realtorModalLabel">Realtor Contact Information</h5>
+  </div>
+  <div class="modal-body">
+    <div class="text-center">
+      <img [src]="realtor.profilePic" alt="Profile Picture"
+           class="img-fluid mb-3" style="width: 150px; height: 150px;">
+      <h5>{{ realtor.name }}</h5>
+      <ng-container *ngIf="realtor.email">
+        <p><strong>Email:&nbsp;</strong>
+          <a [href]="'mailto:' + realtor.email">{{ realtor.email }}</a>
+        </p>
+      </ng-container>
+      <ng-container *ngIf="realtor.email">
+        <p><strong>Phone Number:&nbsp;</strong>
+          <a [href]="'tel:' + realtor.phoneNumber">{{ realtor.phoneNumber }}</a>
+        </p>
+      </ng-container>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Close</button>
+  </div>
+</div>
