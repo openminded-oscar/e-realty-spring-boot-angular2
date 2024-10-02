@@ -46,14 +46,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                // api endpoints security policy
                 .antMatchers(HttpMethod.OPTIONS)
-                .permitAll()
-                // TODO add secured endpoints here
-                .antMatchers("/api/**", "/login/oauth2/**", "/index.html", "/")
                 .permitAll()
                 .antMatchers("/api/upload-photo/**", "/api/object-review/**")
                 .authenticated()
+                .antMatchers("/api/**", "/login/oauth2/**", "/index.html", "/")
+                .permitAll()
                 .and()
                 // authentication filter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
