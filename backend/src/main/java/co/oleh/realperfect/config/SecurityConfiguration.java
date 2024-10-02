@@ -61,16 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-                .and()
-                // oauth
-                .oauth2Login()
-                .authorizationEndpoint()
-                .authorizationRequestRepository(authorizationRequestRepository())
-                .authorizationRequestResolver(this.oAuth2AuthorizationRequestResolver)
-                .and()
-                .tokenEndpoint()
-                .accessTokenResponseClient(accessTokenResponseClient());
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint());
 
 
         http.oauth2Client();
