@@ -37,51 +37,18 @@ import {AuthHttpInterceptor} from './services/common/AuthHttpInterceptor';
 import {CookieService} from './services/common/CookieService';
 import {GlobalNotificationComponent} from './global-notification/global-notification.component';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import { HeaderComponent } from './header/header.component';
-
+import {HeaderComponent} from './header/header.component';
+import {AuthGuard} from './guargs/auth.guard';
 
 const appRoutes: Routes = [
   {
-    path: '',
-    redirectTo: '/home/buy',
-    pathMatch: 'full'
+    path: ``,
+    loadChildren: () => import('./home.module').then((m) => m.HomeModule),
   },
   {
-    path: 'home/buy',
-    component: RealtyObjsGalleryComponent,
-  },
-  {
-    path: 'home/rent',
-    component: RealtyObjsGalleryComponent,
-  },
-  {
-    path: 'home/view-obj/:realterId',
-    component: RealtyObjDetailsComponent
-  },
-  {
-    path: 'sell',
-    component: RealtyObjEditComponent
-  },
-  {
-    path: 'sell/:realterId',
-    component: RealtyObjEditComponent
-  },
-  {
-    path: 'realtors',
-    component: RealtorsGalleryComponent
-  },
-  {
-    path: 'realtor',
-    component: AddUpdateRealtorComponent
-  },
-  {
-    path: 'realtor/:realterId',
-    component: AddUpdateRealtorComponent
-  },
-  {
-    path: 'login/oauth2/code/google',
-    redirectTo: '/buy',
-    pathMatch: 'full'
+    path: 'profile',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./user-cabinet/user-cabinet.module').then((m) => m.UserCabinetModule),
   },
 ];
 
@@ -113,17 +80,26 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     SocialLoginModule,
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: false, useHash: true} // <-- debugging purposes only
+      {enableTracing: false}
     ),
     NgbModule,
     ArchwizardModule,
     BrowserAnimationsModule,
     SocketIoModule.forRoot(config)
   ],
-  providers: [AddressService, CookieService, ConfigService, InterestService,
-    ReviewsService, FileUploadService, RealtyObjService,
-    RealterService, UserService, SigninSignoutService,
-    SignupService, ErrorService, {
+  providers: [
+    AddressService,
+    CookieService,
+    ConfigService,
+    InterestService,
+    ReviewsService,
+    FileUploadService,
+    RealtyObjService,
+    RealterService,
+    UserService,
+    SigninSignoutService,
+    SignupService,
+    ErrorService, {
       provide: HTTP_INTERCEPTORS,
       useClass: AllHttpInterceptor,
       multi: true
