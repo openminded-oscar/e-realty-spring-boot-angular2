@@ -1,3 +1,7 @@
-<p>user-cabinet-container works!</p>
+<div style="display: flex; flex-direction: column">
+  <a [routerLink]="['/profile']">My Profile</a>
+  <a [routerLink]="['objects']">My Objects</a>
+  <a [routerLink]="['reviews']">My Reviews</a>
+</div>
 <router-outlet>
 </router-outlet>
