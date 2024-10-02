@@ -7,10 +7,10 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  private userSubject = new BehaviorSubject<User>(null);
-
+  private isAuthenticatedSubject = new BehaviorSubject<Boolean>(null);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
+  private userSubject = new BehaviorSubject<User>(null);
   public user$ = this.userSubject.asObservable();
 
   constructor(public http: HttpClient) {
@@ -29,11 +29,7 @@ export class UserService {
   }
 
   public clearUserInState() {
-    if (this.isAuthenticatedSubject.value) {
-      this.isAuthenticatedSubject.next(false);
-    }
-    if (this.userSubject.value) {
-      this.userSubject.next(null);
-    }
+    this.isAuthenticatedSubject.next(false);
+    this.userSubject.next(null);
   }
 }

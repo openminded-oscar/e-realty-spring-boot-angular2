@@ -1,21 +1,36 @@
-import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
-import { Observable } from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {CanActivate, Router} from '@angular/router';
+import {Observable} from 'rxjs';
 import {UserService} from '../services/user.service';
-import {User} from '../domain/user';
+import {filter, map, takeUntil, tap} from 'rxjs/operators';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
-  public user: User;
-  constructor(private userService: UserService) {
-    this.userService.user$.subscribe((user) => this.user = user);
+export class AuthGuard implements CanActivate, OnDestroy {
+  private destroy$ = new Subject<Boolean>();
+
+  constructor(private userService: UserService, private router: Router) {
   }
 
-  canActivate(
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('can activate ' + !!this.user);
-    return !!this.user;
+  canActivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return this.userService.isAuthenticated$
+      .pipe(
+        filter(isAuthenticated => isAuthenticated !== null),
+        // convert to boolean
+        map(v => !!v),
+        tap(v => {
+          if (!v) {
+            this.router.navigate(['/']).then();
+          }
+        }),
+        takeUntil(this.destroy$)
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(false);
+    this.destroy$.complete();
   }
 }
