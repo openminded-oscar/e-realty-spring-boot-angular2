@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-cabinet-container.component.css']
 })
 export class UserCabinetContainerComponent implements OnInit {
+  public active = 1;
 
   constructor() { }
 
