@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   public user: User;
 
   public isActiveRoute(route: string): boolean {
-    return this.currentRoute?.startsWith(route);
+    return this.currentRoute?.endsWith(route);
   }
 
   constructor(public router: Router,

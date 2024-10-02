@@ -31,10 +31,11 @@ export interface SortField {
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   public filterForm: FormGroup;
 
+  public readonly DEFAULT_CITY = 'Lviv';
   public readonly INITIAL_FILTER_FORM = {
     priceMin: ['0'],
     priceMax: ['1000000'],
-    city: [''],
+    city: [this.DEFAULT_CITY],
     street: [''],
     roomsAmount: [''],
     description: [''],

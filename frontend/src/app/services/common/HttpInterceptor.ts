@@ -20,8 +20,8 @@ import 'rxjs/add/operator/take';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {ErrorService} from "./ErrorService";
-import {throwError} from "rxjs";
+import {ErrorService} from './ErrorService';
+import {throwError} from 'rxjs';
 
 @Injectable()
 export class AllHttpInterceptor implements HttpInterceptor {
