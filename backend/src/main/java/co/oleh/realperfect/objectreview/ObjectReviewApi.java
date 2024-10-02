@@ -1,6 +1,7 @@
 package co.oleh.realperfect.objectreview;
 
 
+import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.model.ObjectReview;
 import com.google.api.client.util.DateTime;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -29,8 +31,9 @@ public class ObjectReviewApi {
     private ObjectReviewService reviewService;
     private GoogleCalendarWrapperService googleCalendarWrapperService;
 
-    @GetMapping(value = "/user/{userId}")
-    public ResponseEntity<List<ObjectReview>> findReviewsForUser(@PathVariable(required = false) Long userId) {
+    @GetMapping(value = "/user")
+    public ResponseEntity<List<ObjectReview>> findReviewsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
+        Long userId = user.getId();
         return new ResponseEntity<>(reviewService.findReviewsForUser(userId), HttpStatus.OK);
     }
 
@@ -39,8 +42,10 @@ public class ObjectReviewApi {
         return new ResponseEntity<>(reviewService.findReviewsForUser(realtyObjId), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{userId}/{realtyObjId}")
-    public ResponseEntity<ObjectReview> getReview(@PathVariable Long userId, @PathVariable Long realtyObjId) {
+    @GetMapping(value = "/{realtyObjId}")
+    public ResponseEntity<ObjectReview> getReview(@AuthenticationPrincipal SpringSecurityUser user,
+                                                  @PathVariable Long realtyObjId) {
+        Long userId = user.getId();
         return new ResponseEntity<>(reviewService.findFutureReviewForUserAndObject(userId, realtyObjId), HttpStatus.OK);
     }
 
@@ -55,8 +60,10 @@ public class ObjectReviewApi {
         return new ResponseEntity<>(reviewService.save(review), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{userId}/{realtyObjId}")
-    public ResponseEntity<List<ObjectReview>> removeReviews(@PathVariable Long userId, @PathVariable Long realtyObjId) {
+    @DeleteMapping(value = "/{realtyObjId}")
+    public ResponseEntity<List<ObjectReview>> removeReviews(@AuthenticationPrincipal SpringSecurityUser user,
+                                                            @PathVariable Long realtyObjId) {
+        Long userId = user.getId();
         List<ObjectReview> reviews = reviewService.findReviewForUserAndObject(userId, realtyObjId);
         return new ResponseEntity<>(reviewService.remove(reviews), HttpStatus.OK);
     }

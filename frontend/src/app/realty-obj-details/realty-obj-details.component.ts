@@ -130,7 +130,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
   public toggleInterested() {
     if (this.isInterested) {
-      this.interestService.remove(this.user.id, this.currentObject.id)
+      this.interestService.remove(this.currentObject.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe(interest => {
           this.isInterested = false;
@@ -199,7 +199,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   private initUserObjectRelatedData() {
-    this.interestService.get(this.user.id, this.currentObject.id)
+    this.interestService.get(this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(interestResponse => {
         if (interestResponse.body) {
@@ -207,7 +207,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.reviewsService.get(this.user.id, this.currentObject.id)
+    this.reviewsService.get(this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((reviewsResponse: HttpResponse<Review>) => {
         if (reviewsResponse.body) {

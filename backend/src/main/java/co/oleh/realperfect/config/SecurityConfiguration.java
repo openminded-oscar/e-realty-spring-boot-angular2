@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,8 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-// TODO try to modify OAuth2AuthorizationCodeGrantFilter
 
 @Configuration
 @EnableOAuth2Sso
@@ -45,16 +44,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                // api endpoints security policy
+/************    HTTP Auth config    *************/
+//                public options requests
                 .antMatchers(HttpMethod.OPTIONS)
                 .permitAll()
-                // TODO add secured endpoints here
-                .antMatchers("/api/upload-photo/**")
+//                private endpoints
+                .antMatchers("/api/upload-photo/**", "/api/interest/**", "/api/object-review/**")
                 .authenticated()
+//                public endpoints
                 .antMatchers("/api/**", "/login/oauth2/**", "/index.html", "/")
                 .permitAll()
                 .and()
-                // authentication filter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(oauth2TokenSettingFilter, OAuth2LoginAuthenticationFilter.class)
                 .csrf()
@@ -62,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
-                // oauth
+/************    OAuth2 Auth config    *************/
                 .oauth2Login()
                 .authorizationEndpoint()
                 .authorizationRequestRepository(authorizationRequestRepository())

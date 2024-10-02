@@ -2,6 +2,7 @@ package co.oleh.realperfect.auth.api;
 
 import co.oleh.realperfect.auth.AuthenticationService;
 import co.oleh.realperfect.auth.GoogleTokenVerifier;
+import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.mapping.MappingService;
@@ -58,8 +59,8 @@ public class SigninApi {
             } else if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
                 DefaultOAuth2User defaultOidcUser = (DefaultOAuth2User) authentication.getPrincipal();
                 user = userService.findByGoogleUserIdTokenSubject((String) defaultOidcUser.getAttributes().get("sub"));
-            } else if (authentication.getPrincipal() instanceof String) {
-                Long userId = Long.valueOf((String) authentication.getPrincipal());
+            } else if (authentication.getPrincipal() instanceof SpringSecurityUser) {
+                Long userId = ((SpringSecurityUser) authentication.getPrincipal()).getId();
                 user = userService.findById(userId);
             } else {
                 return null;
