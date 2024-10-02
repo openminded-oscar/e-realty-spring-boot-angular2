@@ -6,6 +6,7 @@ import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
 import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
 import {AddUpdateRealtorComponent} from './realtor/add-update-realtor/add-update-realtor.component';
+import {AuthGuard} from './guargs/auth.guard';
 
 const appRoutes: Routes = [
   {
@@ -31,6 +32,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'sell/:realterId',
+    canActivate: [AuthGuard],
     component: RealtyObjEditComponent
   },
   {
