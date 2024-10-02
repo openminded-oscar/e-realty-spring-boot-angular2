@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -40,7 +42,9 @@ public class ObjectReviewApi {
     }
 
     @GetMapping(value = "/{userId}/{realtyObjId}")
-    public ResponseEntity<ObjectReview> getReview(@PathVariable Long userId, @PathVariable Long realtyObjId) {
+    public ResponseEntity<ObjectReview> getReview(@AuthenticationPrincipal UserDetails user,
+                                                  @PathVariable Long userId,
+                                                  @PathVariable Long realtyObjId) {
         return new ResponseEntity<>(reviewService.findFutureReviewForUserAndObject(userId, realtyObjId), HttpStatus.OK);
     }
 
