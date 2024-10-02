@@ -80,9 +80,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy$)
         ).subscribe(realtyObj => {
           this.realtyObj = realtyObj;
-          this.realtyObj.photos?.forEach(photo => {
-            photo.link = Photo.getLinkByFilename(photo.filename);
-          });
         });
       }
     });
@@ -150,8 +147,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     if (this.realtyObj.photos.length > 0) {
       this.makeMain(this.realtyObj.photos[0]);
     }
-
-    this.saveRealtyObject();
+    // this.saveRealtyObject();
   }
 
   ngOnDestroy(): void {

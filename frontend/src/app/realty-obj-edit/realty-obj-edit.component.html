@@ -214,6 +214,7 @@
             </div>
             <div class="col-6 text-right action-buttons">
               <button type="button" class="btn btn-info" awPreviousStep>Prev Step</button>
+              <button type="button" class="btn btn-info" disabled>Next Step</button>
               <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
               </button>
             </div>
@@ -224,12 +225,12 @@
                 <label class="col-form-label">Ownership verification photo:&nbsp;</label>
                 <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
                        accept="image/*" required>
-                <div class="realty-pic-preview-container">
+                <div class="realty-confirmation-pic-preview-container">
                   <img class="img-fluid" src="{{realtyObj?.verificationPhoto?.link}}">
                 </div>
               </div>
               <div class="col-9">
-                <div>
+                <div style="margin-bottom: 5px">
                   <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
                   <br/>
                   <input type="file" (change)="onRealtyObjPictureSelecting($event)" placeholder="Upload file"
@@ -239,12 +240,12 @@
                   <div class="col-3 realty-pic-preview-container" *ngFor="let photo of realtyObj.photos; let i = index">
                     <img class="img-fluid" src="{{photo.link}}">
                     <div *ngIf="photo.type!==photoType.REALTY_MAIN">
-                      <button (click)="makeMain(photo)" class="btn btn-light">Make main</button>
+                      <button (click)="makeMain(photo)" class="btn btn-warning">Set as main</button>
                     </div>
                     <div *ngIf="photo.type===photoType.REALTY_MAIN">
-                      <span>Main photo</span>
+                      <div class="main-photo-text">Main photo</div>
                     </div>
-                    <button (click)="deletePhoto(i)">x</button>
+                    <button class="btn btn-danger" (click)="deletePhoto(i)">x</button>
                   </div>
                 </div>
               </div>
