@@ -25,6 +25,9 @@
     <signup-button *ngIf="!isAuthenticated"></signup-button>
     <signin-button *ngIf="!isAuthenticated"></signin-button>
     <signout-button *ngIf="isAuthenticated"></signout-button>
-    <region-input></region-input>
+<!--    <div class="nav-to-profile" *ngIf="isAuthenticated"-->
+<!--         [routerLink]="['/user/profile']">-->
+<!--      <i class="fa fa-user"></i>-->
+<!--    </div>-->
   </div>
 </nav>

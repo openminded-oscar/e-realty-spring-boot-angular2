@@ -55,15 +55,29 @@ const appRoutes: Routes = [
     component: RealtyObjsGalleryComponent,
   },
   {
-    path: 'home/view-obj/:realterId', component: RealtyObjDetailsComponent
+    path: 'home/view-obj/:realterId',
+    component: RealtyObjDetailsComponent
   },
   {
-    path: 'realtors', component: RealtorsGalleryComponent
+    path: 'sell',
+    component: RealtyObjEditComponent
   },
-  {path: 'realtor', component: AddUpdateRealtorComponent},
-  {path: 'realtor/:realterId', component: AddUpdateRealtorComponent},
-  {path: 'sell', component: RealtyObjEditComponent},
-  {path: 'sell/:realterId', component: RealtyObjEditComponent},
+  {
+    path: 'sell/:realterId',
+    component: RealtyObjEditComponent
+  },
+  {
+    path: 'realtors',
+    component: RealtorsGalleryComponent
+  },
+  {
+    path: 'realtor',
+    component: AddUpdateRealtorComponent
+  },
+  {
+    path: 'realtor/:realterId',
+    component: AddUpdateRealtorComponent
+  },
   {
     path: 'login/oauth2/code/google',
     redirectTo: '/buy',
@@ -129,7 +143,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
             provider: new GoogleLoginProvider(
               '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha'
             ),
-          },]
+          }]
       }
     }],
   bootstrap: [AppComponent]
