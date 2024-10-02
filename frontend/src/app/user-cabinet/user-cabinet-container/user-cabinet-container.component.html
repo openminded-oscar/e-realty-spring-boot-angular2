@@ -1,0 +1,21 @@
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+  <li [ngbNavItem]="1">
+    <a ngbNavLink>My Profile</a>
+    <ng-template ngbNavContent>
+      <app-user-profile></app-user-profile>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="2">
+    <a ngbNavLink>My Objects</a>
+    <ng-template ngbNavContent>
+      <app-user-objects></app-user-objects>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="3">
+    <a ngbNavLink>My Reviews</a>
+    <ng-template ngbNavContent>
+      <app-user-reviews></app-user-reviews>
+    </ng-template>
+  </li>
+</ul>
+<div [ngbNavOutlet]="nav" class="mt-2"></div>
