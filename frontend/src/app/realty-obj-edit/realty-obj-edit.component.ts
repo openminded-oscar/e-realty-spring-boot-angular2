@@ -71,12 +71,12 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       });
 
     this.realtyObj = new RealtyObj();
-    // if passed object realterId in parameter then retrieve that object
+    // if passed object objectId in parameter then retrieve that object
     this.route.params.pipe(
       takeUntil(this.destroy$)
     ).subscribe(params => {
-      if (params['realterId']) {
-        this.realtyObjService.findById(params['realterId']).pipe(
+      if (params['objectId']) {
+        this.realtyObjService.findById(params['objectId']).pipe(
           takeUntil(this.destroy$)
         ).subscribe(realtyObj => {
           this.realtyObj = realtyObj;

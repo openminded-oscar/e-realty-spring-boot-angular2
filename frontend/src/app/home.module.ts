@@ -23,7 +23,7 @@ const appRoutes: Routes = [
     component: RealtyObjsGalleryComponent,
   },
   {
-    path: 'home/view-obj/:realterId',
+    path: 'home/view-obj/:objectId',
     component: RealtyObjDetailsComponent
   },
   {
@@ -31,7 +31,7 @@ const appRoutes: Routes = [
     component: RealtyObjEditComponent
   },
   {
-    path: 'sell/:realterId',
+    path: 'sell/:objectId',
     canActivate: [AuthGuard],
     component: RealtyObjEditComponent
   },
