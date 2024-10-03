@@ -11,7 +11,6 @@ import {ReviewsService} from '../services/reviews.service';
 import {Review} from '../domain/review';
 import {HttpResponse} from '@angular/common/http';
 import {SampleSocketService} from '../services/socket/sample-socket.service';
-import {convertUTCDateToLocalDate} from '../commons';
 import {Subject} from 'rxjs/Subject';
 import {takeUntil, tap} from 'rxjs/operators';
 import {User} from '../domain/user';
@@ -184,7 +183,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     const review = {
       userId: this.user.id,
       realtyObjId: this.currentObject.id,
-      dateTime: convertUTCDateToLocalDate(utcDatetime)
+      dateTime: utcDatetime
     };
 
     this.reviewsService.save(review)

@@ -3,6 +3,8 @@ package co.oleh.realperfect.objectreview;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
+import co.oleh.realperfect.mapping.ObjectReviewDto;
+import co.oleh.realperfect.mapping.ObjectReviewDetailsForUserDto;
 import co.oleh.realperfect.model.ObjectReview;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
@@ -16,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -31,33 +34,29 @@ public class ObjectReviewApi {
     private ObjectReviewService reviewService;
     private GoogleCalendarWrapperService googleCalendarWrapperService;
 
-    @GetMapping(value = "/user")
-    public ResponseEntity<List<ObjectReview>> findReviewsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
+    @GetMapping(value = "/user-reviews-list")
+    public ResponseEntity<List<ObjectReviewDetailsForUserDto>> findReviewsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
         Long userId = user.getId();
-        return new ResponseEntity<>(reviewService.findReviewsForUser(userId), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/object/{realtyObjId}")
-    public ResponseEntity<List<ObjectReview>> findReviewsForObject(@PathVariable(required = false) Long realtyObjId) {
-        return new ResponseEntity<>(reviewService.findReviewsForUser(realtyObjId), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{realtyObjId}")
-    public ResponseEntity<ObjectReview> getReview(@AuthenticationPrincipal SpringSecurityUser user,
-                                                  @PathVariable Long realtyObjId) {
-        Long userId = user.getId();
-        return new ResponseEntity<>(reviewService.findFutureReviewForUserAndObject(userId, realtyObjId), HttpStatus.OK);
+        List<ObjectReviewDetailsForUserDto> objectReviewDtos = reviewService.findReviewsForUser(userId);
+        return new ResponseEntity<>(objectReviewDtos, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ObjectReview> saveReview(@RequestBody ObjectReview review) throws IOException {
-        if(reviewService.findFutureReviewForUserAndObject(review.getUserId(), review.getRealtyObjId()) != null) {
+    public ResponseEntity<ObjectReviewDto> saveReview(@RequestBody ObjectReviewDto review) throws IOException {
+        if (reviewService.findFutureReviewForUserAndObject(review.getUserId(), review.getRealtyObjId()) != null) {
             throw new RuntimeException("There is already such review");
         }
-
         Event event = constructEventForObjectReview(review);
         googleCalendarWrapperService.addEventToPrimaryCalendar(event);
+
         return new ResponseEntity<>(reviewService.save(review), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{realtyObjId}")
+    public ResponseEntity<ObjectReviewDto> getReviewForObjectAndUser(@AuthenticationPrincipal SpringSecurityUser user,
+                                                                     @PathVariable Long realtyObjId) {
+        ObjectReviewDto objectReview = reviewService.findFutureReviewForUserAndObject(user.getId(), realtyObjId);
+        return new ResponseEntity<>(objectReview, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{realtyObjId}")
@@ -68,12 +67,16 @@ public class ObjectReviewApi {
         return new ResponseEntity<>(reviewService.remove(reviews), HttpStatus.OK);
     }
 
-    private Event constructEventForObjectReview(ObjectReview review) {
+    private Event constructEventForObjectReview(ObjectReviewDto review) {
         Event event = new Event();
         event.setSummary("Realty review from RealPerfect");
         event.setDescription("Please make sure to be on time!");
         Date startDateTime = Date.from(review.getDateTime().atZone(ZoneId.systemDefault()).toInstant());
-        Date endDateTime = Date.from(review.getDateTime().plusHours(1).atZone(ZoneId.systemDefault()).toInstant());
+        Instant plusOneHour = review.getDateTime()
+                .atZone(ZoneId.systemDefault())  // Convert to ZonedDateTime using the system default zone
+                .plusHours(1)                    // Add 1 hour
+                .toInstant();                    // Convert back to Instant
+        Date endDateTime = Date.from(plusOneHour);
         event.setStart(new EventDateTime().setDateTime(new DateTime(startDateTime)));
         event.setEnd(new EventDateTime().setDateTime(new DateTime(endDateTime)));
 

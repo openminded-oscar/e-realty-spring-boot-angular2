@@ -1,28 +1,54 @@
 package co.oleh.realperfect.model;
 
-
-import lombok.Data;
+import co.oleh.realperfect.model.user.User;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
-@Data
 @Table(name = "tbl_object_review")
 public class ObjectReview {
+    private Long id;
+    private User user;
+    private RealtyObject realtyObj;
+    private Instant dateTime;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public Long getId() {
+        return id;
+    }
 
-    private Long userId;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    private Long realtyObjId;
+    @ManyToOne()
+    @JoinColumn(name = "user_id", nullable = false)
+    public User getUser() {
+        return this.user;
+    }
 
-    private LocalDateTime dateTime;
+    @ManyToOne()
+    @JoinColumn(name = "realty_obj_id", nullable = false)
+    public RealtyObject getRealtyObj() {
+        return this.realtyObj;
+    }
 
-    @Type(type= "org.hibernate.type.LocalDateTimeType")
-    public LocalDateTime getDateTime() {
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setRealtyObj(RealtyObject realtyObj) {
+        this.realtyObj = realtyObj;
+    }
+    
+    public Instant getDateTime() {
         return dateTime;
+    }
+
+    public void setDateTime(Instant dateTime) {
+        this.dateTime = dateTime;
     }
 }

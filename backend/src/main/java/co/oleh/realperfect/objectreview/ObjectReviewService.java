@@ -1,21 +1,37 @@
 package co.oleh.realperfect.objectreview;
 
+import co.oleh.realperfect.mapping.MappingService;
+import co.oleh.realperfect.mapping.ObjectReviewDto;
+import co.oleh.realperfect.mapping.ObjectReviewDetailsForUserDto;
 import co.oleh.realperfect.model.ObjectReview;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
+import co.oleh.realperfect.repository.RealtyObjectRepository;
+import co.oleh.realperfect.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ObjectReviewService {
+    private final RealtyObjectRepository realtyObjectRepository;
+    private UserRepository userRepository;
     private ObjectReviewRepository objectReviewRepository;
+    private MappingService mappingService;
 
 
-    public ObjectReview save(ObjectReview objectReview) {
-        return objectReviewRepository.save(objectReview);
+    public ObjectReviewDto save(ObjectReviewDto objectReview) {
+        ObjectReview objectReviewEntity = mappingService.map(objectReview, ObjectReview.class);
+
+        objectReviewEntity.setUser(userRepository.findById(objectReview.getUserId()).get());
+        objectReviewEntity.setRealtyObj(realtyObjectRepository.findById(objectReview.getRealtyObjId()).get());
+
+        objectReviewRepository.save(objectReviewEntity);
+
+        return objectReview;
     }
 
     public ObjectReview remove(ObjectReview objectReview) {
@@ -24,7 +40,7 @@ public class ObjectReviewService {
     }
 
     public List<ObjectReview> remove(List<ObjectReview> objectReviews) {
-        for(ObjectReview objectReview: objectReviews) {
+        for (ObjectReview objectReview : objectReviews) {
             objectReviewRepository.deleteById(objectReview.getId());
         }
 
@@ -35,12 +51,18 @@ public class ObjectReviewService {
         return objectReviewRepository.findByUserIdAndRealtyObjId(userId, objectId);
     }
 
-    public ObjectReview findFutureReviewForUserAndObject(Long userId, Long objectId) {
-        return objectReviewRepository.findByUserIdAndRealtyObjIdAndDateTimeGreaterThan(userId, objectId, LocalDateTime.now());
+    public ObjectReviewDto findFutureReviewForUserAndObject(Long userId, Long objectId) {
+        ObjectReview objectReview =
+                objectReviewRepository.findByUserIdAndRealtyObjIdAndDateTimeGreaterThan(userId, objectId, Instant.now());
+
+        return this.mappingService.map(objectReview, ObjectReviewDto.class);
     }
 
-    public List<ObjectReview> findReviewsForUser(Long userId) {
-        return objectReviewRepository.findByUserId(userId);
+    public List<ObjectReviewDetailsForUserDto> findReviewsForUser(Long userId) {
+        List<ObjectReview> objectReviews = objectReviewRepository.findByUserId(userId);
+        return objectReviews.stream()
+                .map(objectReview -> this.mappingService.map(objectReview, ObjectReviewDetailsForUserDto.class))
+                .collect(Collectors.toList());
     }
 
     public List<ObjectReview> findReviewsForObject(Long realtyObjId) {
