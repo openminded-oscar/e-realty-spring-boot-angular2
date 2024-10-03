@@ -13,7 +13,7 @@
           </h4>
           <div>
             <div *ngIf="isMyObject(realtyObject)">
-              <a [routerLink]="['/sell', realtyObject.id]" style="padding: 0 5px;" class="btn btn-danger btn-block">Edit</a>
+              <a [routerLink]="['/obj/editor', realtyObject.id]" style="padding: 0 5px;" class="btn btn-danger btn-block">Edit</a>
             </div>
           </div>
         </div>
@@ -27,7 +27,7 @@
           <p class="description-content--text">{{ realtyObject.description }}</p>
         </div>
         <h4>Price: ${{ realtyObject.price }}</h4>
-        <a [routerLink]="['/home/view-obj', realtyObject.id]" style="border: 1px solid black" class="btn btn-block">Watch details</a>
+        <a [routerLink]="['/obj', realtyObject.id]" style="border: 1px solid black" class="btn btn-block">Watch details</a>
       </div>
     </div>
   </div>

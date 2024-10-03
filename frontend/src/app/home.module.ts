@@ -15,23 +15,23 @@ const appRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'home/buy',
+    path: 'buy',
     component: RealtyObjsGalleryComponent,
   },
   {
-    path: 'home/rent',
+    path: 'rent',
     component: RealtyObjsGalleryComponent,
   },
   {
-    path: 'home/view-obj/:objectId',
+    path: 'obj/:objectId',
     component: RealtyObjDetailsComponent
   },
   {
-    path: 'sell',
+    path: 'obj/editor',
     component: RealtyObjEditComponent
   },
   {
-    path: 'sell/:objectId',
+    path: 'obj/editor/:objectId',
     canActivate: [AuthGuard],
     component: RealtyObjEditComponent
   },
@@ -49,7 +49,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'login/oauth2/code/google',
-    redirectTo: 'home/buy',
+    redirectTo: 'buy',
     pathMatch: 'full'
   },
 ];
