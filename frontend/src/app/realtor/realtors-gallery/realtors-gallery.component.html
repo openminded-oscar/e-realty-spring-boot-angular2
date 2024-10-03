@@ -9,5 +9,5 @@
   </div>
 </div>
 <div class="new-realter">
-  <button class="add-realter-btn" (click)="addNewRealtor()">Add realter</button>
+  <button *ngIf="user" class="add-realter-btn" (click)="addNewRealtor()">Add realtor</button>
 </div>

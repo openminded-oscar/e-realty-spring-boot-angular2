@@ -41,6 +41,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'realtor',
+    canActivate: [AuthGuard],
     component: AddUpdateRealtorComponent
   },
   {
