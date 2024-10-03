@@ -11,6 +11,10 @@ export class InterestService extends AbstractService <Interest> {
     super(http, endpoints.interest);
   }
 
+  public getMyInterests(): Observable<HttpResponse<Interest>> {
+    return this.sendRequest('get', `/my`, {});
+  }
+
   public save(interest: Interest): Observable<HttpResponse<Interest>> {
     return this.sendRequest('post', '', interest);
   }

@@ -12,12 +12,12 @@ import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.realter.RealterService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
+import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import co.oleh.realperfect.repository.RealtyObjectPhotoRepository;
 import co.oleh.realperfect.repository.RealtyObjectRepository;
 import co.oleh.realperfect.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class RealtyObjectsService {
+    private final RealtyObjectCrudRepository realtyObjectCrudRepository;
     private RealtyObjectRepository realtyObjectRepository;
     private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
     private final RealterService realterService;
@@ -38,9 +39,11 @@ public class RealtyObjectsService {
     public RealtyObjectsService(RealtyObjectRepository realtyObjectRepository,
                                 UserRepository userRepository,
                                 RealtyObjectPhotoRepository realtyObjectPhotoRepository,
+                                RealtyObjectCrudRepository realtyObjectCrudRepository,
                                 RealterService realterService,
                                 MappingService mappingService) {
         this.realtyObjectRepository = realtyObjectRepository;
+        this.realtyObjectCrudRepository = realtyObjectCrudRepository;
         this.userRepository = userRepository;
         this.realtyObjectPhotoRepository = realtyObjectPhotoRepository;
         this.realterService = realterService;
@@ -57,6 +60,12 @@ public class RealtyObjectsService {
         Page<RealtyObject> objects = realtyObjectRepository.findAll(spec, pageable);
 
         return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
+    }
+
+    public List<RealtyObjectDetailsDto> getMyAllObjects(Long userId) {
+        List<RealtyObject> objects = realtyObjectCrudRepository.findByOwnerId(userId);
+
+        return objects.stream().map(o -> this.mappingService.map(o, RealtyObjectDetailsDto.class)).collect(Collectors.toList());
     }
 
     public Page<RealtyObjectDto> getAllObjects(Pageable pageable) {

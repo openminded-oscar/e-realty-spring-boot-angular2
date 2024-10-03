@@ -12,4 +12,6 @@ import java.util.List;
 public interface RealtyObjectRepository extends JpaRepository<RealtyObject, Long>,
         JpaSpecificationExecutor<RealtyObject> {
     List<RealtyObject> findRealtyObjectByTargetOperationsContaining(OperationType operationType);
+
+    List<RealtyObject> findByOwnerId(Long userId);
 }

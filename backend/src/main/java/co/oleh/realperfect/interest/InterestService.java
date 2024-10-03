@@ -1,7 +1,13 @@
 package co.oleh.realperfect.interest;
 
+import co.oleh.realperfect.mapping.InterestDto;
+import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.model.Interest;
+import co.oleh.realperfect.model.RealtyObject;
+import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.InterestRepository;
+import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
+import co.oleh.realperfect.repository.UserRepository;
 import co.oleh.realperfect.socket.model.Room;
 import co.oleh.realperfect.socket.model.SocketEvent;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -13,22 +19,34 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class InterestService {
+    private UserRepository userRepository;
+    private RealtyObjectCrudRepository realtyObjectRepository;
     private InterestRepository interestRepository;
     private SocketIOServer server;
+    private MappingService mappingService;
 
 
-    public Interest save(Interest interest) {
-        server.getRoomOperations(Room.POST_ROOM.name()).sendEvent(SocketEvent.LOAD_POST_PAGE.name(), interest);
+    public Interest save(InterestDto interestDto) {
+        server.getRoomOperations(Room.POST_ROOM.name()).sendEvent(SocketEvent.LOAD_POST_PAGE.name(), interestDto);
+        Interest interest = this.mappingService.map(interestDto, Interest.class);
+
+        User user = this.userRepository.findById(interestDto.getUserId()).get();
+        RealtyObject realtyObject = this.realtyObjectRepository.findById(interestDto.getRealtyObjId()).get();
+
+        interest.setUser(user);
+        interest.setRealtyObj(realtyObject);
+
         return interestRepository.save(interest);
     }
 
-    public Interest remove(Interest interest) {
+    public InterestDto remove(InterestDto interest) {
         interestRepository.deleteById(interest.getId());
         return interest;
     }
 
-    public Interest findInterestForUserAndObject(Long userId, Long objectId) {
-        return interestRepository.findByUserIdAndRealtyObjId(userId, objectId);
+    public InterestDto findInterestForUserAndObject(Long userId, Long objectId) {
+        Interest interest = interestRepository.findByUserIdAndRealtyObjId(userId, objectId);
+        return this.mappingService.map(interest, InterestDto.class);
     }
 
     public List<Interest> findInterestsForUser(Long userId) {
