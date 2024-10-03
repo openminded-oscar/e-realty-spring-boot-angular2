@@ -1,22 +1,26 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {Credentials} from "../../domain/credentials.model";
-import {SigninSignoutService} from "../../services/auth/signin-signout.service";
-import {GoogleLoginProvider, SocialAuthService, SocialUser} from "angularx-social-login";
-import {User} from '../../domain/user';
+import {Component, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Credentials} from '../../domain/credentials.model';
+import {SigninSignoutService} from '../../services/auth/signin-signout.service';
+import {GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {UserService} from '../../services/user.service';
+import {takeUntil, tap} from 'rxjs/operators';
+import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'signin-button',
   templateUrl: './signin-button.component.html',
   styleUrls: ['./signin-button.component.scss']
 })
-export class SigninButtonComponent {
+export class SigninButtonComponent implements OnInit, OnDestroy {
   login: string;
   password: string;
 
+  @ViewChild('content', { static: true })
+  public content: TemplateRef<any>;
   @Output()
-  onSignin = new EventEmitter();
+  public onSignin = new EventEmitter();
+  private destroy$ = new Subject<boolean>();
 
   constructor(private modalService: NgbModal,
               private authService: SigninSignoutService,
@@ -24,8 +28,19 @@ export class SigninButtonComponent {
               private socialAuthService: SocialAuthService) {
   }
 
-  openModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'})
+  public ngOnInit() {
+    this.authService.signinPromptSubscribe().pipe(
+      takeUntil(this.destroy$),
+      tap(v => {
+        if (v) {
+          this.openModal();
+        }
+      })
+    ).subscribe();
+  }
+
+  public openModal() {
+    this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'})
       .result
       .then((credentials: Credentials) => {
         this.sendLoginRequest(credentials);
@@ -34,7 +49,7 @@ export class SigninButtonComponent {
       });
   }
 
-  public sendLoginRequest(credentials) {
+  public sendLoginRequest(credentials: Credentials) {
     credentials.type = 'plain';
     this.authService.signin(credentials)
       .subscribe(res => {
@@ -45,7 +60,7 @@ export class SigninButtonComponent {
 
   public signInViaGoogle(): void {
     this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
-      let {email, idToken, authToken, authorizationCode} = googleUser;
+      const {email, idToken, authToken, authorizationCode} = googleUser;
       this.authService.signinGoogleData( {email, idToken, authToken, authorizationCode, type: 'google'})
         .subscribe(res => {
           this.modalService.dismissAll();
@@ -55,5 +70,10 @@ export class SigninButtonComponent {
     });
 
     this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

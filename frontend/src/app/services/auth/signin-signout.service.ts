@@ -8,8 +8,17 @@ import {Observable} from 'rxjs';
 import {CookieService} from '../common/CookieService';
 import {tap} from 'rxjs/operators';
 
+import {Subject} from 'rxjs/Subject';
+
 @Injectable()
 export class SigninSignoutService extends AbstractService<Credentials> {
+  private signInPrompt = new Subject<boolean>();
+  public signinPrompt() {
+    this.signInPrompt.next(true);
+  }
+  public signinPromptSubscribe() {
+    return this.signInPrompt.asObservable();
+  }
 
   constructor(public http: HttpClient, public cookieService: CookieService) {
     super(http, '');
