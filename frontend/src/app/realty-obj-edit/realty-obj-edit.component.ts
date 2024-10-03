@@ -106,19 +106,15 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe(
           (data: Photo) => {
-            this.realtyObj.verificationPhoto = {
-              link: Photo.getLinkByFilename(data.filename),
-              filename: data.filename,
-              id: data.id
-            };
+            this.realtyObj.confirmationDocPhoto = data;
           },
           error => console.log(error)
         );
     }
   }
 
-  onRealtyObjPictureSelecting(event) {
-    const fileList: FileList = event.target.files;
+  public onRealtyObjPictureSelecting(event: InputEvent) {
+    const fileList: FileList = (event.target as HTMLInputElement).files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
       this.fileUploadService.upload(file, apiBase + '/upload-photo/object')
@@ -126,7 +122,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         .subscribe(
           (data: RealtyPhoto) => {
             data.type = (this.realtyObj.photos.length === 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
-            data.link = Photo.getLinkByFilename(data.filename);
             this.realtyObj.photos.push(data);
           },
           error => console.log(error)
