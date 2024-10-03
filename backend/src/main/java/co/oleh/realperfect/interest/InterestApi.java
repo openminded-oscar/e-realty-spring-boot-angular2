@@ -2,6 +2,7 @@ package co.oleh.realperfect.interest;
 
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
+import co.oleh.realperfect.mapping.InterestDto;
 import co.oleh.realperfect.model.Interest;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -30,13 +31,14 @@ public class InterestApi {
     }
 
     @GetMapping(value = "/{realtyObjId}")
-    public ResponseEntity<Interest> getInterest(@AuthenticationPrincipal SpringSecurityUser user, @PathVariable Long realtyObjId) {
+    public ResponseEntity<InterestDto> getInterest(@AuthenticationPrincipal SpringSecurityUser user, @PathVariable Long realtyObjId) {
         Long userId = user.getId();
-        return new ResponseEntity<>(interestService.findInterestForUserAndObject(userId, realtyObjId), HttpStatus.OK);
+        InterestDto interestDto = interestService.findInterestForUserAndObject(userId, realtyObjId);
+        return new ResponseEntity<>(interestDto, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Interest> saveInterest(@RequestBody Interest interest) {
+    public ResponseEntity<Interest> saveInterest(@RequestBody InterestDto interest) {
         if (interestService.findInterestForUserAndObject(interest.getUserId(), interest.getRealtyObjId()) != null) {
             throw new RuntimeException("There is already such interest");
         }
@@ -44,9 +46,9 @@ public class InterestApi {
     }
 
     @DeleteMapping(value = "/{realtyObjId}")
-    public ResponseEntity<Interest> removeInterest(@AuthenticationPrincipal SpringSecurityUser user, @PathVariable Long realtyObjId) {
+    public ResponseEntity<InterestDto> removeInterest(@AuthenticationPrincipal SpringSecurityUser user, @PathVariable Long realtyObjId) {
         Long userId = user.getId();
-        Interest interest = interestService.findInterestForUserAndObject(userId, realtyObjId);
+        InterestDto interest = interestService.findInterestForUserAndObject(userId, realtyObjId);
         return new ResponseEntity<>(interestService.remove(interest), HttpStatus.OK);
     }
 }

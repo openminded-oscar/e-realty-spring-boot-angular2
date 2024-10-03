@@ -30,6 +30,16 @@ export class RealtyObjService {
   constructor(private http: HttpClient) {
   }
 
+  public findMyObjects(): Observable<RealtyObj[]> {
+    return this.http.get<RealtyObj[]>(`${endpoints.realtyObj.list}/my`).pipe(
+        tap((res: RealtyObj[]) => {
+          (res ?? []).forEach(value => {
+            value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+          });
+        })
+      );
+  }
+
   public findByFilterAndPage(filter: {
     [filterField: string]: { [operationName: string]: string }
   }, ordering: SortValue, pageable): Observable<PageableResponse<RealtyObj>> {
