@@ -1,7 +1,7 @@
 <div class="realters row" *ngIf="realters">
   <div class="realter-block col-4" *ngFor="let realter of realters;">
     <div class="row realter-photo-container">
-      <img class="realter-photo" *ngIf="realter.photo" [src]="realter.photo.photoFullUrl"/>
+      <img class="realter-photo" *ngIf="realter.profilePic" [src]="realter.profilePic.fullUrl"/>
     </div>
     <div class="row">
       <a class="btn" (click)="goToRealtor(realter)">{{realter.name}} {{realter.surname}}</a>

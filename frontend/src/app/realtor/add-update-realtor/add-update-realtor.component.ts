@@ -33,7 +33,7 @@ export class AddUpdateRealtorComponent implements OnInit, OnDestroy {
       profilePic: '',
       phoneNumber: null,
       email: null,
-    } as Realter;
+    } as Omit<Realter, 'profilePic'>;
 
     this.route.params.pipe(
       takeUntil(this.destroy$)
@@ -67,7 +67,7 @@ export class AddUpdateRealtorComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onRealterPhotoSelecting(event: InputEvent) {
+  public onRealterPhotoSelecting(event: Event) {
     const fileList: FileList = (event.target as HTMLInputElement).files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
@@ -76,7 +76,7 @@ export class AddUpdateRealtorComponent implements OnInit, OnDestroy {
         .subscribe(
           (data: Photo) => {
             this.realter.profilePic = data;
-            this.realter.profilePic.photoFullUrl = Photo.getLinkByFilename(data.filename);
+            this.realter.profilePic.fullUrl = Photo.getLinkByFilename(data.filename);
           },
           error => console.log(error)
         );

@@ -14,13 +14,13 @@
                    accept="image/*" required>
           </div>
 
-          <div class="row" *ngIf="realter.photo">
+          <div class="row" *ngIf="realter.profilePic">
             <div class="col-1">
               <button class="btn btn-block" (click)="deletePhoto()">x</button>
             </div>
           </div>
           <div class="row realter-photo-container">
-            <img *ngIf="realter.photo" class="img-fluid realter-photo" src="{{realter.photo.photoFullUrl}}">
+            <img *ngIf="realter.profilePic" class="img-fluid realter-photo" src="{{realter.profilePic.fullUrl}}">
           </div>
 
           <div class="row">
