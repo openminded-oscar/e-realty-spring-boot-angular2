@@ -22,7 +22,7 @@ input.ng-valid, select.ng-valid, textarea.ng-valid {
   display: flex;
   flex-direction: row;
   gap: 5px;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .main-photo-text {
