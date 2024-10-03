@@ -9,14 +9,7 @@ import {
 } from '@angular/common/http';
 
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/take';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -62,7 +55,7 @@ export class AllHttpInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-  return next.handle(req)
+  return (<any>next.handle(req))
     .catch((response: any) => {
       // handle 200 response empty data. it causes error in angular.
       if (response.status >= 200 && response.status < 300) {
@@ -84,6 +77,7 @@ export class AllHttpInterceptor implements HttpInterceptor {
             this.redirectToLoginPage();
             return;
           }
+          break;
         }
         case 404: {
           this.redirectToMainPage();

@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 
-import * as _ from 'lodash';
 import {BackendSupportedOperations, RealtyObjService} from '../services/realty-obj.service';
 import {RealtyObj} from '../domain/realty-obj';
 import {ConfigService} from '../services/config.service';
@@ -11,6 +10,7 @@ import {debounceTime, map, takeUntil, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import * as _ from 'lodash';
 
 export interface SortValue {
   field: string;
