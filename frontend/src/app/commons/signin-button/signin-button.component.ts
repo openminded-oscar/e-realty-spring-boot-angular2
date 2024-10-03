@@ -13,10 +13,11 @@ import {Subject} from 'rxjs/Subject';
   styleUrls: ['./signin-button.component.scss']
 })
 export class SigninButtonComponent implements OnInit, OnDestroy {
-  login: string;
-  password: string;
+  public customSignInText = null;
+  public login: string;
+  public password: string;
 
-  @ViewChild('content', { static: true })
+  @ViewChild('content', {static: true})
   public content: TemplateRef<any>;
   @Output()
   public onSignin = new EventEmitter();
@@ -31,10 +32,9 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.authService.signinPromptSubscribe().pipe(
       takeUntil(this.destroy$),
-      tap(v => {
-        if (v) {
-          this.openModal();
-        }
+      tap(text => {
+        this.customSignInText = text;
+        this.openModal();
       })
     ).subscribe();
   }
@@ -43,8 +43,10 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
     this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'})
       .result
       .then((credentials: Credentials) => {
+        this.customSignInText = null;
         this.sendLoginRequest(credentials);
       }, (reason) => {
+        this.customSignInText = null;
         console.log(reason);
       });
   }
@@ -61,7 +63,7 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
   public signInViaGoogle(): void {
     this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
       const {email, idToken, authToken, authorizationCode} = googleUser;
-      this.authService.signinGoogleData( {email, idToken, authToken, authorizationCode, type: 'google'})
+      this.authService.signinGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
         .subscribe(res => {
           this.modalService.dismissAll();
           this.userService.fetchUserStatus();

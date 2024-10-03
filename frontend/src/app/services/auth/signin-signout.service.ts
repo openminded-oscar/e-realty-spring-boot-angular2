@@ -12,9 +12,9 @@ import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class SigninSignoutService extends AbstractService<Credentials> {
-  private signInPrompt = new Subject<boolean>();
-  public signinPrompt() {
-    this.signInPrompt.next(true);
+  private signInPrompt = new Subject<string>();
+  public signinPrompt(text?: string) {
+    this.signInPrompt.next(text);
   }
   public signinPromptSubscribe() {
     return this.signInPrompt.asObservable();
