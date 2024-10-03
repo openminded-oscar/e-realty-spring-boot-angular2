@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -50,6 +49,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
 //                private endpoints
                 .antMatchers("/api/upload-photo/**", "/api/interest/**", "/api/object-review/**")
+                .authenticated()
+                .antMatchers(HttpMethod.POST, "/realty-objects/save")
                 .authenticated()
 //                public endpoints
                 .antMatchers("/api/**", "/login/oauth2/**", "/index.html", "/")
