@@ -23,7 +23,7 @@ const appRoutes: Routes = [
     component: RealtyObjsGalleryComponent,
   },
   {
-    path: 'obj/:objectId',
+    path: 'object-details/:objectId',
     component: RealtyObjDetailsComponent
   },
   {
