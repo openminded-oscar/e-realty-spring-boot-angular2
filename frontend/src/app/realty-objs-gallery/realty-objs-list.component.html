@@ -8,8 +8,8 @@
       </div>
       <div class="caption">
         <div class="caption-top-row">
-          <h4 style="flex: 1">
-            {{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}
+          <h4 style="flex: 1;">
+            <span [routerLink]="['/object-details', realtyObject.id]" style="cursor: pointer">{{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}</span>
           </h4>
           <div>
             <div *ngIf="isMyObject(realtyObject)">
