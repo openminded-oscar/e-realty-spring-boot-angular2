@@ -98,7 +98,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
       this.route.params
     ]).pipe(takeUntil(this.destroy$))
       .subscribe(([user, params]) => {
-        const id = params['realterId'];
+        const id = params['objectId'];
         if (id) {
           this.realtyObjService.findById(id)
             .pipe(takeUntil(this.destroy$))
