@@ -16,7 +16,7 @@ export const endpoints: any = {
     single: apiBase + '/realter'
   },
   realtyObj: {
-    add: apiBase + '/realty-object/save',
+    add: apiBase + '/realty-objects/save',
     list: apiBase + '/realty-objects',
     byId: apiBase + '/realty-objects'
   }
