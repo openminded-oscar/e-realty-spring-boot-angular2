@@ -67,8 +67,8 @@ export class AddUpdateRealtorComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onRealterPhotoSelecting(event) {
-    const fileList: FileList = event.target.files;
+  public onRealterPhotoSelecting(event: InputEvent) {
+    const fileList: FileList = (event.target as HTMLInputElement).files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
       this.fileUploadService.upload(file, apiBase + '/upload-photo/profile')

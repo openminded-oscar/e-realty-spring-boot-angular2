@@ -5,6 +5,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import {throwError} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {Photo} from '../domain/photo';
 
 @Injectable()
 export class FileUploadService {
@@ -20,8 +22,10 @@ export class FileUploadService {
     });
     const options = {headers};
 
-    return (<any>this.http.post(url, formData, options)
-      .map(res => res))
+    return (this.http.post<Photo>(url, formData, options)
+      .pipe(tap(res => {
+        res.fullUrl = Photo.getLinkByFilename(res.filename);
+      })))
       .catch(error => throwError(error));
   }
 }

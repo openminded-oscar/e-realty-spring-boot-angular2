@@ -59,7 +59,6 @@ export class RealtyObjService {
         }
         realtyObj.photos?.forEach(photo => {
           photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
-          photo.link = Photo.getLinkByFilename(photo.filename);
         });
       }));
   }
@@ -73,8 +72,11 @@ export class RealtyObjService {
         }
         realtyObjReturned.photos?.forEach(photo => {
           photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
-          photo.link = Photo.getLinkByFilename(photo.filename);
         });
+        if (realtyObjReturned.confirmationDocPhoto) {
+          const photo = realtyObjReturned.confirmationDocPhoto;
+          photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
+        }
       }));
   }
 

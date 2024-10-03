@@ -226,7 +226,7 @@
                 <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
                        accept="image/*" required>
                 <div class="realty-confirmation-pic-preview-container">
-                  <img class="img-fluid" src="{{realtyObj?.verificationPhoto?.link}}">
+                  <img class="img-fluid" src="{{realtyObj?.confirmationDocPhoto?.fullUrl}}">
                 </div>
               </div>
               <div class="col-9">
@@ -238,7 +238,7 @@
                 </div>
                 <div class="row">
                   <div class="col-3 realty-pic-preview-container" *ngFor="let photo of realtyObj.photos; let i = index">
-                    <img class="img-fluid" src="{{photo.link}}">
+                    <img class="img-fluid" src="{{photo.fullUrl}}">
                     <div *ngIf="photo.type!==photoType.REALTY_MAIN">
                       <button (click)="makeMain(photo)" class="btn btn-warning">Set as main</button>
                     </div>

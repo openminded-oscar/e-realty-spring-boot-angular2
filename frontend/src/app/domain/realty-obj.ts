@@ -23,7 +23,7 @@ export class RealtyObj {
   public realterAware: boolean;
   public dwellingType: string;
   public photos: RealtyPhoto[];
-  public verificationPhoto: Photo;
+  public confirmationDocPhoto: Photo;
   public address: Address;
   public realter: Realter;
   public owner: string;
