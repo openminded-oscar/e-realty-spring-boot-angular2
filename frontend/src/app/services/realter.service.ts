@@ -18,7 +18,7 @@ export class RealterService {
         tap((realters: Realter[]) => {
           realters.forEach(realter => {
             if (realter.profilePic) {
-              realter.profilePic.photoFullUrl = Photo.getLinkByFilename(realter.profilePic.filename);
+              realter.profilePic.fullUrl = Photo.getLinkByFilename(realter.profilePic.filename);
             }
           });
         }));
@@ -29,7 +29,7 @@ export class RealterService {
       .pipe(
         tap((realter: Realter) => {
           if (realter?.profilePic) {
-            realter.profilePic.photoFullUrl = Photo.getLinkByFilename(realter.profilePic.filename);
+            realter.profilePic.fullUrl = Photo.getLinkByFilename(realter.profilePic.filename);
           }
         }));
   }
