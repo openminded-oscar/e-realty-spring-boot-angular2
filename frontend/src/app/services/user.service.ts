@@ -4,6 +4,8 @@ import {User} from '../domain/user';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {endpoints} from '../commons';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Realter} from '../domain/realter';
+import {Observable, throwError} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
@@ -14,6 +16,11 @@ export class UserService {
   public user$ = this.userSubject.asObservable();
 
   constructor(public http: HttpClient) {
+  }
+
+  public updateUserProfileOnServer(user: User): Observable<any> {
+    return this.http.patch(`${endpoints.userUpdate}`, user)
+      .catch((error: any) => throwError(error));
   }
 
   public fetchUserStatus() {

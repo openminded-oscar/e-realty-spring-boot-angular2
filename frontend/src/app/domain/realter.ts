@@ -1,7 +1,7 @@
 import {Photo} from './photo';
 
 export interface Realter {
-  id?: string;
+  id?: number;
   name: string;
   surname: string;
   profilePic?: Photo;

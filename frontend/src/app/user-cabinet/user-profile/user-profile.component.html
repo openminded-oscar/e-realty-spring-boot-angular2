@@ -1,1 +1,66 @@
-<p>user-profile works!</p>
+<div class="profile-container" style="width: 400px">
+    <div class="profile-title">
+        <h1 style="font-size: 2rem">User profile</h1>
+        <a *ngIf="!isEditMode" (click)="goToEditMode()" class="btn btn-danger">Edit</a>
+    </div>
+
+    <div *ngIf="!isEditMode">
+        <div class="profile-user-title">
+            <div>
+                {{ user.name }}&nbsp;{{ user.surname }}{{ !isRealter ? ', Realter' : '' }}
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isEditMode">
+        <form>
+            <div class="container-fluid">
+                <div class="row">
+                    <div>
+                        <div>
+                            <input style="width: 100%" [(ngModel)]="user.name" name="name" type="text">
+                            <input style="width: 100%" [(ngModel)]="user.surname" name="surname" type="text">
+                        </div>
+                        <div *ngIf="user.login">Login: {{ user.login }}</div>
+                        <div class="is-realtor-checkbox">
+                            <div>
+                                <label for="isRealter">Realtor&nbsp;</label>
+                            </div>
+                            <div>
+                                <input id="isRealter" name="isRealter"
+                                       type="checkbox"
+                                       [(ngModel)]="isRealter"
+                                       class="big-checkbox">
+                            </div>
+                        </div>
+                        <div class="user-info">
+                            <div style="display: flex; flex-direction: row; align-items: center;">
+                                <div>
+                                    <label class="col-form-label">User photo:&nbsp;</label>
+                                </div>
+                                <div>
+                                    <input type="file"
+                                           style="max-width: 250px"
+                                           (change)="onUserPhotoSelecting($event)"
+                                           placeholder="Upload file"
+                                           accept="image/*" required>
+                                </div>
+                            </div>
+                            <!--                    <div class="row" *ngIf="user.profilePic">-->
+                            <!--                        <div class="col-1">-->
+                            <!--                            <button class="btn btn-block" (click)="deletePhoto()">x</button>-->
+                            <!--                        </div>-->
+                            <!--                    </div>-->
+                            <!--                    <div class="row user-photo-container">-->
+                            <!--                        <img *ngIf="user.profilePic" class="img-fluid user-photo" src="{{user.profilePic.fullUrl}}">-->
+                            <!--                    </div>-->
+                            <div style="display: flex; justify-content: center">
+                                <button *ngIf="isEditMode" class="btn btn-info" (click)="save()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -5,7 +5,6 @@ import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gall
 import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
 import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
-import {AddUpdateRealtorComponent} from './realtor/add-update-realtor/add-update-realtor.component';
 import {AuthGuard} from './guargs/auth.guard';
 
 const appRoutes: Routes = [
@@ -39,15 +38,10 @@ const appRoutes: Routes = [
     path: 'realtors',
     component: RealtorsGalleryComponent
   },
-  {
-    path: 'realtor',
-    canActivate: [AuthGuard],
-    component: AddUpdateRealtorComponent
-  },
-  {
-    path: 'realtor/:realterId',
-    component: AddUpdateRealtorComponent
-  },
+  // {
+  //   path: 'realtor/:realterId',
+  //   component: AddUpdateRealtorComponent
+  // },
   {
     path: 'login/oauth2/code/google',
     redirectTo: 'buy',

@@ -13,7 +13,7 @@ import {SignupService} from "../../services/auth/signup.service";
 export class SignupButtonComponent {
   login: string;
   password: string;
-  isRealter: boolean = false;
+  isRealter = false;
 
   constructor(private modalService: NgbModal, private signupService: SignupService) {
   }

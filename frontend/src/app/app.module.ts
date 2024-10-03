@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
@@ -25,7 +25,6 @@ import {SignupButtonComponent} from './commons/signup-button/signup-button.compo
 import {SignupService} from './services/auth/signup.service';
 import {SignoutButtonComponent} from './commons/signout-button/signout-button.component';
 import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
-import {AddUpdateRealtorComponent} from './realtor/add-update-realtor/add-update-realtor.component';
 import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
 import {InterestService} from './services/interest.service';
 import {ReviewsService} from './services/reviews.service';
@@ -67,7 +66,6 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     SignupButtonComponent,
     SignoutButtonComponent,
     RealtyObjDetailsComponent,
-    AddUpdateRealtorComponent,
     RealtorsGalleryComponent,
     GlobalNotificationComponent,
     RealtorContactComponent,
