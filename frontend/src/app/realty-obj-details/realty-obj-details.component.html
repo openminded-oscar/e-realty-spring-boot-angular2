@@ -9,7 +9,7 @@
       <div style="display: flex; flex-direction: row; gap: 10px; align-items: center">
         <div *ngIf="userService.isAuthenticated$|async">
           <ng-container *ngIf="isMyObject(currentObject)">
-            <a [routerLink]="['/sell', currentObject.id]" style="padding: 0 5px;"
+            <a [routerLink]="['/obj/editor', currentObject.id]" style="padding: 0 5px;"
                class="btn btn-danger btn-block">Edit</a>
           </ng-container>
         </div>
