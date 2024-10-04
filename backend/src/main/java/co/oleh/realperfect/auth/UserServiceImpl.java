@@ -1,6 +1,9 @@
 package co.oleh.realperfect.auth;
 
+import co.oleh.realperfect.mapping.MappingService;
+import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
+import co.oleh.realperfect.mapping.UserSelfDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import co.oleh.realperfect.model.user.AccountCredentials;
@@ -17,15 +20,19 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+    private MappingService mappingService;
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public User patchProfile(Long id, UserProfileDto userDto) {
+    public UserSelfDto patchProfile(Long id, UserProfileDto userDto) {
         User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         mergePatch(userDto, user);
-        return userRepository.save(user);
+
+        User updatedUser = userRepository.save(user);
+        UserSelfDto updatedUserDto = this.mappingService.map(updatedUser, UserSelfDto.class);
+        return updatedUserDto;
     }
 
     @Override

@@ -4,6 +4,7 @@ import co.oleh.realperfect.auth.CredentialsValidator;
 import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.mapping.UserProfileDto;
+import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.model.user.AccountCredentials;
 import co.oleh.realperfect.model.user.User;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public class UserApi {
 
   private CredentialsValidator credentialsValidator;
 
-  @InitBinder
+  @InitBinder("credentials")
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(credentialsValidator);
   }
@@ -38,8 +39,8 @@ public class UserApi {
   }
 
   @PatchMapping
-  public User updateMyProfile(@AuthenticationPrincipal SpringSecurityUser currentUser,
-                              @Valid @RequestBody UserProfileDto user) {
+  public UserSelfDto updateMyProfile(@AuthenticationPrincipal SpringSecurityUser currentUser,
+                                     @Valid @RequestBody UserProfileDto user) {
     return userService.patchProfile(currentUser.getId(), user);
   }
 }
