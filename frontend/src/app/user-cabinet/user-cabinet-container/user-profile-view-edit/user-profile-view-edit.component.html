@@ -1,0 +1,65 @@
+<div class="profile-container">
+    <div class="profile-title">
+        <h1 style="font-size: 2rem">User profile</h1>
+
+        <div class="form-row" style="display: flex; justify-content: center">
+            <a *ngIf="!isEditMode" (click)="goToEditMode()" class="btn btn-danger">Edit</a>
+            <button *ngIf="isEditMode" class="btn btn-light" (click)="cancelChanges()">Cancel</button>
+            <button *ngIf="isEditMode" class="btn btn-info" (click)="save()">Save</button>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: row; gap: 10px;">
+        <div style="width: 180px" class="user-photo-container">
+            <img *ngIf="user" (error)="setDefaultUserPhoto($event)" class="user-photo"
+                 src="{{user.profilePic?.fullUrl ? user.profilePic.fullUrl: defaultUserPhoto}}">
+        </div>
+
+        <div style="display: flex; flex-direction: column; justify-content: space-between"
+             class="user-title-container">
+            <div>
+                <div class="form-row">
+                    <input [attr.disabled]="!isEditMode?true:null" placeholder="Name"
+                           [(ngModel)]="user.name"
+                           name="name" type="text">
+                </div>
+                <div class="form-row">
+                    <input [attr.disabled]="!isEditMode?true:null" placeholder="Surname"
+                           [(ngModel)]="user.surname" name="surname" type="text">
+                </div>
+
+                <div class="form-row">
+                    <input [attr.disabled]="!isEditMode?true:null" placeholder="Email"
+                           [(ngModel)]="user.email"
+                           name="email" type="email">
+                </div>
+
+                <div class="form-row">
+                    <input [attr.disabled]="!isEditMode?true:null" placeholder="Phone Number"
+                           [(ngModel)]="user.phoneNumber" name="email" type="text">
+                </div>
+
+                <div class="form-row"
+                     style="display: flex; flex-direction: row; justify-content: space-between">
+                    <select id="role" name="role"
+                            [(ngModel)]="role"
+                            [attr.disabled]="!isEditMode ? true : null"
+                            class="role-selector">
+                        <option value="User">User</option>
+                        <option value="Realtor">Realtor</option>
+                    </select>
+                </div>
+            </div>
+
+            <div *ngIf="isEditMode">
+                <input style="display: none" type="file" id="fileInput"
+                       (change)="onUserPhotoSelecting($event)"/>
+                <label for="fileInput" class="avatar-change-link">
+                    Change
+                </label>
+                or <span class="avatar-change-link" (click)="clearAvatar()">Clear</span> avatar
+            </div>
+
+        </div>
+    </div>
+</div>
