@@ -1,5 +1,18 @@
 .navbar {
-  height: 50px;
+  height: 60px;
+}
+
+li.nav-item {
+  font-size: 1.1rem;
+}
+
+.navbar-brand {
+  font-size: 1.4rem !important;
+}
+
+.nav-link {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 
 li.nav-item.owner-item {
@@ -8,6 +21,7 @@ li.nav-item.owner-item {
   font-weight: bolder;
   border-radius: 8%;
   margin-left: 25px;
+  font-size: 1rem;
 }
 
 .navbar-nav {

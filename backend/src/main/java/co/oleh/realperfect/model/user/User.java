@@ -1,5 +1,6 @@
 package co.oleh.realperfect.model.user;
 
+import co.oleh.realperfect.model.AuditableEntity;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tbl_user")
-public class User {
+public class User extends AuditableEntity {
     private Long id;
     private String login;
     private String password;
@@ -21,21 +22,23 @@ public class User {
     private String email;
     private String profilePic;
     private Realtor realtorDetails;
-	private Set<RealtyObject> realtyObjects;
+    private Set<RealtyObject> realtyObjects;
 
- 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
-	public Set<RealtyObject> getRealtyObjects() {
-		return realtyObjects;
-	}
-	public void setRealtyObjects(Set<RealtyObject> realtyObjects) {
-		this.realtyObjects = realtyObjects;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    public Set<RealtyObject> getRealtyObjects() {
+        return realtyObjects;
+    }
+
+    public void setRealtyObjects(Set<RealtyObject> realtyObjects) {
+        this.realtyObjects = realtyObjects;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -73,15 +76,19 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getSurname() {
         return surname;
     }
+
     public void setSurname(String surname) {
         this.surname = surname;
     }
