@@ -15,4 +15,6 @@ export interface User {
 
   realtorDetails?: any;
   realtyObjects?: RealtyObj[];
+
+  createdAt: Date;
 }

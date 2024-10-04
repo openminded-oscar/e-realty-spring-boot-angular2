@@ -12,5 +12,4 @@ export class UserCabinetContainerComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }
