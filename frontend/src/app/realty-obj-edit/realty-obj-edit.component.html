@@ -198,9 +198,9 @@
                 <label>Select a Realtor:</label>
               </div>
               <div class="col-10">
-                <select class="form-control" [(ngModel)]="realtyObj.realter" name="selected-realter" required>
-                  <option *ngFor="let realter of realters" [ngValue]="realter">
-                    {{realter.name + ' ' + realter.surname}}
+                <select class="form-control" [(ngModel)]="realtyObj.realtor" name="selected-realtor" required>
+                  <option *ngFor="let realtor of realtors" [ngValue]="realtor">
+                    {{realtor.name + ' ' + realtor.surname}}
                   </option>
                 </select>
               </div>

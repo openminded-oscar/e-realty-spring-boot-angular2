@@ -6,14 +6,14 @@ INSERT INTO `tbl_user_photo` (`id`, `filename`) VALUES
                                                     (1, 'user_photo_1.jpg'),
                                                     (2, 'user_photo_2.jpg');
 
-INSERT INTO `tbl_realter` (`id`, `name`, `surname`, `photo_id`) VALUES
+INSERT INTO `tbl_realtor` (`id`, `name`, `surname`, `photo_id`) VALUES
                                                                     (1, 'John', 'Doe', 1),
                                                                     (2, 'Jane', 'Smith', 2);
 
 
 INSERT INTO `tbl_user` (
     `id`, `email`, `google_user_id_token_subject`, `login`, `name`, `password`,
-    `phone_number`, `profile_pic`, `surname`, `realter_id`
+    `phone_number`, `profile_pic`, `surname`, `realtor_id`
 ) VALUES
       (2001, 'user1@example.com', 'abc123', 'user1', 'John', 'password1', '1234567890', 'profile_pic1.jpg', 'Doe', 1),
       (2002, 'user2@example.com', 'def456', 'user2', 'Jane', 'password2', '0987654321', 'profile_pic2.jpg', 'Smith', 2);
@@ -34,8 +34,8 @@ INSERT INTO `tbl_realty_object` (
     `id`, `apt_number`, `city`, `number_of_street`, `street`, `building_type`,
     `confirmed`, `description`, `dwelling_type`, `floor`, `foundation_year`,
     `has_cellar`, `has_garage`, `has_loft`, `has_repairing`, `living_area`,
-    `other_info`, `price`, `realter_aware`, `rooms_amount`, `total_area`,
-    `total_floors`, `realty_object_id`, `owner_id`, `realter_id`
+    `other_info`, `price`, `realtor_aware`, `rooms_amount`, `total_area`,
+    `total_floors`, `realty_object_id`, `owner_id`, `realtor_id`
 ) VALUES
       (1001, 5, 'New York', '123', 'Main St', 'BRICK', b'1', 'Nice apartment',
        'APARTMENT', 2, 2001, b'0', b'1', b'0', b'1', 50.75, 'Near park', 300000.00,

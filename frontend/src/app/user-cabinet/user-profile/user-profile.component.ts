@@ -17,7 +17,7 @@ import {UserService} from '../../services/user.service';
 export class UserProfileComponent implements OnInit, OnDestroy {
     public user: User;
     private destroy$ = new Subject<boolean>();
-    public isRealter = false;
+    public isRealtor = false;
     public isEditMode = false;
 
     constructor(

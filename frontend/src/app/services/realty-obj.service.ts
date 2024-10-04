@@ -64,8 +64,8 @@ export class RealtyObjService {
   public findById(id: string): Observable<RealtyObj> {
     return this.http.get<RealtyObj>(endpoints.realtyObj.byId + '/' + id).pipe(
       tap((realtyObj: RealtyObj) => {
-        if (realtyObj.realter && realtyObj.realter.profilePic) {
-          realtyObj.realter.profilePic.fullUrl = Photo.getLinkByFilename(realtyObj.realter.profilePic.filename);
+        if (realtyObj.realtor && realtyObj.realtor.profilePic) {
+          realtyObj.realtor.profilePic.fullUrl = Photo.getLinkByFilename(realtyObj.realtor.profilePic.filename);
         }
         realtyObj.photos?.forEach(photo => {
           photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
@@ -76,9 +76,9 @@ export class RealtyObjService {
   public save(realtyObj: RealtyObj): Observable<RealtyObj> {
     return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj).pipe(
       tap((realtyObjReturned: RealtyObj) => {
-        if (realtyObjReturned.realter && realtyObjReturned.realter.profilePic) {
-          realtyObjReturned.realter.profilePic.fullUrl =
-            Photo.getLinkByFilename(realtyObjReturned.realter.profilePic.filename);
+        if (realtyObjReturned.realtor && realtyObjReturned.realtor.profilePic) {
+          realtyObjReturned.realtor.profilePic.fullUrl =
+            Photo.getLinkByFilename(realtyObjReturned.realtor.profilePic.filename);
         }
         realtyObjReturned.photos?.forEach(photo => {
           photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);

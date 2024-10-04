@@ -1,6 +1,6 @@
 package co.oleh.realperfect.model.user;
 
-import co.oleh.realperfect.model.Realter;
+import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 
 import javax.persistence.*;
@@ -20,7 +20,7 @@ public class User {
     private String phoneNumber;
     private String email;
     private String profilePic;
-    private Realter realterDetails;
+    private Realtor realtorDetails;
 	private Set<RealtyObject> realtyObjects;
 
  	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
@@ -49,13 +49,13 @@ public class User {
     }
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "realter_id", referencedColumnName = "id")
-    public Realter getRealterDetails() {
-        return realterDetails;
+    @JoinColumn(name = "realtor_id", referencedColumnName = "id")
+    public Realtor getRealtorDetails() {
+        return realtorDetails;
     }
 
-    public void setRealterDetails(Realter realterDetails) {
-        this.realterDetails = realterDetails;
+    public void setRealtorDetails(Realtor realtorDetails) {
+        this.realtorDetails = realtorDetails;
     }
 
     public String getLogin() {

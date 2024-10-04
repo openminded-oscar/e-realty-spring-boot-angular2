@@ -1,6 +1,6 @@
 import {Photo, RealtyPhoto, RealtyPhotoType} from './photo';
 import {Address} from './address';
-import {Realter} from './realter';
+import {Realtor} from './realtor';
 
 export class RealtyObj {
   public id?: number;
@@ -20,12 +20,12 @@ export class RealtyObj {
   public buildingType: string;
   public targetOperations: string[];
   public confirmed: boolean;
-  public realterAware: boolean;
+  public realtorAware: boolean;
   public dwellingType: string;
   public photos: RealtyPhoto[];
   public confirmationDocPhoto: Photo;
   public address: Address;
-  public realter: Realter;
+  public realtor: Realtor;
   public owner: string;
   public mainPhotoPath: string;
 

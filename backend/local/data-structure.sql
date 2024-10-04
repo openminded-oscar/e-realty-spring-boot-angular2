@@ -76,13 +76,13 @@ CREATE TABLE `tbl_object_supported_operations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `tbl_realter`
+-- Table structure for table `tbl_realtor`
 --
 
-DROP TABLE IF EXISTS `tbl_realter`;
+DROP TABLE IF EXISTS `tbl_realtor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tbl_realter` (
+CREATE TABLE `tbl_realtor` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `surname` varchar(255) DEFAULT NULL,
@@ -119,18 +119,18 @@ CREATE TABLE `tbl_realty_object` (
   `living_area` decimal(19,2) DEFAULT NULL,
   `other_info` varchar(255) DEFAULT NULL,
   `price` decimal(19,2) DEFAULT NULL,
-  `realter_aware` bit(1) DEFAULT NULL,
+  `realtor_aware` bit(1) DEFAULT NULL,
   `rooms_amount` int DEFAULT NULL,
   `total_area` decimal(19,2) DEFAULT NULL,
   `total_floors` int DEFAULT NULL,
   `realty_object_id` bigint DEFAULT NULL,
   `owner_id` bigint DEFAULT NULL,
-  `realter_id` bigint DEFAULT NULL,
+  `realtor_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK7ujvwekhjj7mip1e53tmlwtjc` (`realty_object_id`),
   KEY `FKghvmecgfl56awhev42qtql1cd` (`owner_id`),
-  KEY `FK4puv7o3577yfw40g3y06ta5e9` (`realter_id`),
-  CONSTRAINT `FK4puv7o3577yfw40g3y06ta5e9` FOREIGN KEY (`realter_id`) REFERENCES `tbl_realter` (`id`),
+  KEY `FK4puv7o3577yfw40g3y06ta5e9` (`realtor_id`),
+  CONSTRAINT `FK4puv7o3577yfw40g3y06ta5e9` FOREIGN KEY (`realtor_id`) REFERENCES `tbl_realtor` (`id`),
   CONSTRAINT `FK7ujvwekhjj7mip1e53tmlwtjc` FOREIGN KEY (`realty_object_id`) REFERENCES `tbl_confirmation_doc_photo` (`id`),
   CONSTRAINT `FKghvmecgfl56awhev42qtql1cd` FOREIGN KEY (`owner_id`) REFERENCES `tbl_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -202,10 +202,10 @@ CREATE TABLE `tbl_user` (
   `phone_number` varchar(255) DEFAULT NULL,
   `profile_pic` varchar(255) DEFAULT NULL,
   `surname` varchar(255) DEFAULT NULL,
-  `realter_id` bigint DEFAULT NULL,
+  `realtor_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKrj96m2s4qg3gfls7bskw7t9dw` (`realter_id`),
-  CONSTRAINT `FKrj96m2s4qg3gfls7bskw7t9dw` FOREIGN KEY (`realter_id`) REFERENCES `tbl_realter` (`id`)
+  KEY `FKrj96m2s4qg3gfls7bskw7t9dw` (`realtor_id`),
+  CONSTRAINT `FKrj96m2s4qg3gfls7bskw7t9dw` FOREIGN KEY (`realtor_id`) REFERENCES `tbl_realtor` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

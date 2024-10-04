@@ -9,8 +9,8 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "tbl_realter")
-public class Realter {
+@Table(name = "tbl_realtor")
+public class Realtor {
 	private Long id;
 
 	private String name;
@@ -21,8 +21,8 @@ public class Realter {
 	private List<RealtyObject> realtyObjects;
 
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
-	@JoinColumn(name = "realter_id")
-	@JsonIgnoreProperties("realter")
+	@JoinColumn(name = "realtor_id")
+	@JsonIgnoreProperties("realtor")
 	public List<RealtyObject> getRealtyObjects() {
 		return realtyObjects;
 	}

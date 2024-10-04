@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Realter} from '../../domain/realter';
+import {Realtor} from '../../domain/realtor';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -8,7 +8,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./realtor-contact.component.scss']
 })
 export class RealtorContactComponent implements OnInit {
-  public realtor: Realter;
+  public realtor: Realtor;
 
   constructor(public activeModal: NgbActiveModal) { }
 

@@ -39,7 +39,7 @@ const appRoutes: Routes = [
     component: RealtorsGalleryComponent
   },
   // {
-  //   path: 'realtor/:realterId',
+  //   path: 'realtor/:realtorId',
   //   component: AddUpdateRealtorComponent
   // },
   {

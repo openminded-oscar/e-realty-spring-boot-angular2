@@ -13,7 +13,7 @@ import {UserRegionInputComponent} from './commons/user-region-input/user-region-
 import {ConfigService} from './services/config.service';
 import {FileUploadService} from './services/file-upload.service';
 import {RealtyObjService} from './services/realty-obj.service';
-import {RealterService} from './services/realter.service';
+import {RealtorService} from './services/realtor.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
 import {RouterModule, Routes} from '@angular/router';
@@ -95,7 +95,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     ReviewsService,
     FileUploadService,
     RealtyObjService,
-    RealterService,
+    RealtorService,
     UserService,
     SigninSignoutService,
     SignupService,

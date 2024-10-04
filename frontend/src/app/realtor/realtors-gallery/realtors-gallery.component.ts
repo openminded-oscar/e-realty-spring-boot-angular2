@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RealterService} from '../../services/realter.service';
-import {Realter} from '../../domain/realter';
+import {RealtorService} from '../../services/realtor.service';
+import {Realtor} from '../../domain/realtor';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 import {UserService} from '../../services/user.service';
@@ -14,19 +14,19 @@ import {User} from '../../domain/user';
 })
 export class RealtorsGalleryComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
-  public realters: Realter[];
+  public realtors: Realtor[];
   public defaultRealtorPhoto = 'https://placehold.co/600x400?text=Realtor+photo';
   public user: User;
 
-  constructor(private realterService: RealterService,
+  constructor(private realtorService: RealtorService,
               private userService: UserService,
               private router: Router) {
   }
 
   ngOnInit() {
-    this.realterService.getRealters()
-      .subscribe((realters: Realter[]) => {
-        this.realters = realters;
+    this.realtorService.getRealtors()
+      .subscribe((realtors: Realtor[]) => {
+        this.realtors = realtors;
       });
 
     this.userService.user$.pipe(
@@ -41,9 +41,9 @@ export class RealtorsGalleryComponent implements OnInit, OnDestroy {
     imgElement.src = this.defaultRealtorPhoto;
   }
 
-  public goToRealtor(realter: Realter) {
+  public goToRealtor(realtor: Realtor) {
     if (this.user) {
-      this.router.navigateByUrl(`/realtor/${realter.id}`);
+      this.router.navigateByUrl(`/realtor/${realtor.id}`);
     }
   }
 

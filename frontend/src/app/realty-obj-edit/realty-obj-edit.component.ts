@@ -6,8 +6,8 @@ import {apiBase} from '../commons';
 import {RealtyObj} from '../domain/realty-obj';
 import {RealtyObjService} from '../services/realty-obj.service';
 import {Photo, RealtyPhoto, RealtyPhotoType} from '../domain/photo';
-import {RealterService} from '../services/realter.service';
-import {Realter} from '../domain/realter';
+import {RealtorService} from '../services/realtor.service';
+import {Realtor} from '../domain/realtor';
 import {GlobalNotificationService} from '../services/global-notification.service';
 import {Subject} from 'rxjs/Subject';
 import {takeUntil} from 'rxjs/operators';
@@ -45,7 +45,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       .map(opt => opt.value);
   }
 
-  public realters: Realter[];
+  public realtors: Realtor[];
   public dwellingTypes: string[];
   public buildingTypes: string[];
   public photoType = RealtyPhotoType;
@@ -55,7 +55,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public constructor(public config: ConfigService,
                      public fileUploadService: FileUploadService,
                      public realtyObjService: RealtyObjService,
-                     public realtersService: RealterService,
+                     public realtorsService: RealtorService,
                      public notificationService: GlobalNotificationService,
                      public route: ActivatedRoute) {
   }
@@ -65,9 +65,9 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       .supportedOperations.map(value => ({value, name: value, checked: value === 'SELLING'}));
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
-    this.realtersService.getRealters().pipe(takeUntil(this.destroy$))
-      .subscribe((gotRealters: Realter[]) => {
-        this.realters = gotRealters;
+    this.realtorsService.getRealtors().pipe(takeUntil(this.destroy$))
+      .subscribe((gotRealtors: Realtor[]) => {
+        this.realtors = gotRealtors;
       });
 
     this.realtyObj = new RealtyObj();

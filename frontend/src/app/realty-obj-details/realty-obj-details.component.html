@@ -108,12 +108,12 @@
 
       <div class="col-md-5 main-info-block">
         <span>
-          {{ currentObject.realter.name }}&nbsp;{{ currentObject.realter.surname }}, realtor
+          {{ currentObject.realtor.name }}&nbsp;{{ currentObject.realtor.surname }}, realtor
         </span>
-        <div class="realter-photo-container">
-          <img class="realter-photo img-responsive"
+        <div class="realtor-photo-container">
+          <img class="realtor-photo img-responsive"
                (error)="setDefaultRealtorPhoto($event)"
-               [src]="currentObject.realter?.profilePic ? currentObject.realter.profilePic.fullUrl: defaultRealtorPhoto">
+               [src]="currentObject.realtor?.profilePic ? currentObject.realtor.profilePic.fullUrl: defaultRealtorPhoto">
         </div>
         <button class="btn btn-info btn-block" (click)="openRealtorContacts()">Contact</button>
       </div>

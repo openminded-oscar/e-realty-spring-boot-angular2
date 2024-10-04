@@ -5,11 +5,11 @@ import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
-import co.oleh.realperfect.model.Realter;
+import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import co.oleh.realperfect.model.user.User;
-import co.oleh.realperfect.realter.RealterService;
+import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
 import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
@@ -32,7 +32,7 @@ public class RealtyObjectsService {
     private final RealtyObjectCrudRepository realtyObjectCrudRepository;
     private RealtyObjectRepository realtyObjectRepository;
     private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
-    private final RealterService realterService;
+    private final RealtorService realtorService;
     private final MappingService mappingService;
     private final UserRepository userRepository;
 
@@ -40,13 +40,13 @@ public class RealtyObjectsService {
                                 UserRepository userRepository,
                                 RealtyObjectPhotoRepository realtyObjectPhotoRepository,
                                 RealtyObjectCrudRepository realtyObjectCrudRepository,
-                                RealterService realterService,
+                                RealtorService realtorService,
                                 MappingService mappingService) {
         this.realtyObjectRepository = realtyObjectRepository;
         this.realtyObjectCrudRepository = realtyObjectCrudRepository;
         this.userRepository = userRepository;
         this.realtyObjectPhotoRepository = realtyObjectPhotoRepository;
-        this.realterService = realterService;
+        this.realtorService = realtorService;
         this.mappingService = mappingService;
     }
 
@@ -76,9 +76,9 @@ public class RealtyObjectsService {
 
     public RealtyObjectDetailsDto add(RealtyObjectDetailsDto realtyObjectDetailsDto) {
         RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
-        if (realtyObjectDetailsDto.getRealter() != null) {
-            Realter realter = this.realterService.findById(realtyObjectDetailsDto.getRealter().getId());
-            realtyObject.setRealter(realter);
+        if (realtyObjectDetailsDto.getRealtor() != null) {
+            Realtor realtor = this.realtorService.findById(realtyObjectDetailsDto.getRealtor().getId());
+            realtyObject.setRealtor(realtor);
         }
         if (realtyObjectDetailsDto.getOwner() != null) {
             User owner = this.userRepository.findById(realtyObjectDetailsDto.getOwner().getId()).get();

@@ -13,7 +13,7 @@ import {SignupService} from "../../services/auth/signup.service";
 export class SignupButtonComponent {
   login: string;
   password: string;
-  isRealter = false;
+  isRealtor = false;
 
   constructor(private modalService: NgbModal, private signupService: SignupService) {
   }
@@ -29,10 +29,10 @@ export class SignupButtonComponent {
   sendSignupRequest(credentials: Credentials) {
     this.signupService.signUp(credentials)
       .subscribe(res => {
-        if(this.isRealter) {
-          console.log('is realter');
+        if(this.isRealtor) {
+          console.log('is realtor');
         } else {
-          console.log('is  not  realter');
+          console.log('is  not  realtor');
         }
       });
   }

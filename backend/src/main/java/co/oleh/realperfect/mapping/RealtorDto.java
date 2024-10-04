@@ -4,7 +4,7 @@ import co.oleh.realperfect.model.photos.UserPhoto;
 import lombok.Data;
 
 @Data
-public class RealterDto {
+public class RealtorDto {
     private Long id;
 
     private String name;

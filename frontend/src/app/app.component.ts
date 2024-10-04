@@ -52,9 +52,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public handleAddToFavoritesSocketUpdate(interest: any, user: User) {
-    if (interest.realtyObjId && user && user.realterDetails) {
-      const realter = user.realterDetails;
-      const suitableObjects = realter.realtyObjects.filter((realtyObject: RealtyObj) => {
+    if (interest.realtyObjId && user && user.realtorDetails) {
+      const realtor = user.realtorDetails;
+      const suitableObjects = realtor.realtyObjects.filter((realtyObject: RealtyObj) => {
         return realtyObject.id === interest.realtyObjId;
       });
       if (suitableObjects.length) {

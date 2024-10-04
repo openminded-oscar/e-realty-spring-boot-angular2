@@ -15,6 +15,6 @@ public class UserSelfDto {
      String phoneNumber;
      String email;
      String profilePic;
-     RealterDto realterDetails;
+     RealtorDto realtorDetails;
      Set<RealtyObjectDto> realtyObjects;
 }

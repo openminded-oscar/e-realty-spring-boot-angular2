@@ -4,7 +4,7 @@ import {User} from '../domain/user';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {endpoints} from '../commons';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Realter} from '../domain/realter';
+import {Realtor} from '../domain/realtor';
 import {Observable, throwError} from 'rxjs';
 
 @Injectable({providedIn: 'root'})

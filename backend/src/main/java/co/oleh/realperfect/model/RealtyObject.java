@@ -32,10 +32,10 @@ public class RealtyObject extends AuditableEntity {
     private DwellingType dwellingType;
     private Set<OperationType> targetOperations;
     private Boolean confirmed = false;
-    private Boolean realterAware = false;
+    private Boolean realtorAware = false;
     private Address address;
     private User owner;
-    private Realter realter;
+    private Realtor realtor;
 
     private List<RealtyObjectPhoto> photos;
     private ConfirmationDocPhoto confirmationDocPhoto;
@@ -225,23 +225,23 @@ public class RealtyObject extends AuditableEntity {
         this.confirmed = confirmed;
     }
 
-    @Column(name = "realter_aware")
-    public Boolean getRealterAware() {
-        return realterAware;
+    @Column(name = "realtor_aware")
+    public Boolean getRealtorAware() {
+        return realtorAware;
     }
 
-    public void setRealterAware(Boolean realterAware) {
-        this.realterAware = realterAware;
+    public void setRealtorAware(Boolean realtorAware) {
+        this.realtorAware = realtorAware;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "realter_id")
-    public Realter getRealter() {
-        return realter;
+    @JoinColumn(name = "realtor_id")
+    public Realtor getRealtor() {
+        return realtor;
     }
 
-    public void setRealter(Realter realter) {
-        this.realter = realter;
+    public void setRealtor(Realtor realtor) {
+        this.realtor = realtor;
     }
 
 

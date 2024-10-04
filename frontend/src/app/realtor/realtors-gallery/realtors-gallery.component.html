@@ -1,10 +1,10 @@
-<div class="realters row" *ngIf="realters">
-  <div class="realter-block col-4" *ngFor="let realter of realters;">
-    <div class="row realter-photo-container">
-      <img class="realter-photo" (error)="setDefaultRealtorPhoto($event)" [src]="realter?.profilePic ? realter.profilePic.fullUrl: defaultRealtorPhoto"/>
+<div class="realtors row" *ngIf="realtors">
+  <div class="realtor-block col-4" *ngFor="let realtor of realtors;">
+    <div class="row realtor-photo-container">
+      <img class="realtor-photo" (error)="setDefaultRealtorPhoto($event)" [src]="realtor?.profilePic ? realtor.profilePic.fullUrl: defaultRealtorPhoto"/>
     </div>
     <div class="row">
-      <a class="btn" (click)="goToRealtor(realter)">{{realter.name}} {{realter.surname}}</a>
+      <a class="btn" (click)="goToRealtor(realtor)">{{realtor.name}} {{realtor.surname}}</a>
     </div>
   </div>
 </div>

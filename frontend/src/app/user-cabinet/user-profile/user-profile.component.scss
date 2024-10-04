@@ -12,6 +12,10 @@
   flex-direction: column;
 }
 
+.profile-container {
+  width: 400px;
+}
+
 .profile-title {
   display: flex;
   align-items: center;
@@ -28,4 +32,8 @@
 .is-realtor-checkbox {
   display: flex;
   align-items: center;
+}
+
+.form-row {
+  margin-bottom: 15px;
 }

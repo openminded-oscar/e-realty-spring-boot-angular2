@@ -232,6 +232,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
   public openRealtorContacts() {
     const modalRef = this.modalService.open(RealtorContactComponent);
-    (modalRef.componentInstance as RealtorContactComponent).realtor = this.currentObject.realter;
+    (modalRef.componentInstance as RealtorContactComponent).realtor = this.currentObject.realtor;
   }
 }

@@ -1,6 +1,6 @@
 import {Photo} from './photo';
 
-export interface Realter {
+export interface Realtor {
   id?: number;
   name: string;
   surname: string;

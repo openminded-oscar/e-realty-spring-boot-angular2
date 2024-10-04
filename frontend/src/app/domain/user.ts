@@ -11,6 +11,6 @@ export interface User {
   phoneNumber: string;
   email: string;
 
-  realterDetails?: any;
+  realtorDetails?: any;
   realtyObjects?: RealtyObj[];
 }
