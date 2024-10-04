@@ -6,6 +6,7 @@ import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
 import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
 import {AuthGuard} from './guargs/auth.guard';
+import {SharedModule} from './common/shared.module';
 
 const appRoutes: Routes = [
   {

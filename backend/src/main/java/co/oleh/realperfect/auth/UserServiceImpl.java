@@ -31,8 +31,7 @@ public class UserServiceImpl implements UserService {
         mergePatch(userDto, user);
 
         User updatedUser = userRepository.save(user);
-        UserSelfDto updatedUserDto = this.mappingService.map(updatedUser, UserSelfDto.class);
-        return updatedUserDto;
+        return this.mappingService.map(updatedUser, UserSelfDto.class);
     }
 
     @Override
@@ -95,6 +94,10 @@ public class UserServiceImpl implements UserService {
         if (patchDto.getEmail() != null) {
             existingUser.setEmail(patchDto.getEmail());
         }
-        existingUser.setProfilePic(patchDto.getProfilePic());
+        if(patchDto.getProfilePic() != null) {
+            existingUser.setProfilePic(patchDto.getProfilePic().getFilename());
+        } else {
+            existingUser.setProfilePic(null);
+        }
     }
 }
