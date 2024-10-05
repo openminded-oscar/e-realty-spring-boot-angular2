@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_interest")
-public class Interest {
+public class Interest extends AuditableEntity {
     private Long id;
     private User user;
     private RealtyObject realtyObj;

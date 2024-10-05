@@ -5,10 +5,10 @@ import {ActivatedRoute} from '@angular/router';
 import {Photo, RealtyPhoto} from '../domain/photo';
 import {UserService} from '../services/user.service';
 import {InterestService} from '../services/interest.service';
-import {Interest} from '../domain/interest';
+import {InterestDto} from '../domain/interest';
 import {NgbDateStruct, NgbModal, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {ReviewsService} from '../services/reviews.service';
-import {Review} from '../domain/review';
+import {ReviewDto} from '../domain/review';
 import {HttpResponse} from '@angular/common/http';
 import {SampleSocketService} from '../services/socket/sample-socket.service';
 import {Subject} from 'rxjs/Subject';
@@ -30,7 +30,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   currentObject: RealtyObj;
   enlargedPhoto: string;
   isInterested = false;
-  currentReview: Review = null;
+  currentReview: ReviewDto = null;
 
   private destroy$ = new Subject<boolean>();
 
@@ -99,7 +99,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
           this.isInterested = false;
         });
     } else {
-      const interest: Interest = {
+      const interest: InterestDto = {
         userId: this.user.id,
         realtyObjId: this.currentObject.id
       };
@@ -122,7 +122,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
     this.reviewsService.get(this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((reviewsResponse: HttpResponse<Review>) => {
+      .subscribe((reviewsResponse: HttpResponse<ReviewDto>) => {
         if (reviewsResponse.body) {
           this.currentReview = reviewsResponse.body;
         }

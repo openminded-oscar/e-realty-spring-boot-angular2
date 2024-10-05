@@ -59,7 +59,7 @@ public class ObjectReviewService {
     }
 
     public List<ObjectReviewDetailsForUserDto> findReviewsForUser(Long userId) {
-        List<ObjectReview> objectReviews = objectReviewRepository.findByUserId(userId);
+        List<ObjectReview> objectReviews = objectReviewRepository.findByUserIdOrderByDateTimeDesc(userId);
         return objectReviews.stream()
                 .map(objectReview -> this.mappingService.map(objectReview, ObjectReviewDetailsForUserDto.class))
                 .collect(Collectors.toList());

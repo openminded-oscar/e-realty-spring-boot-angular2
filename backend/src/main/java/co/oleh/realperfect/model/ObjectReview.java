@@ -7,7 +7,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "tbl_object_review")
-public class ObjectReview {
+public class ObjectReview extends AuditableEntity {
     private Long id;
     private User user;
     private RealtyObject realtyObj;

@@ -7,6 +7,7 @@ import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.UserSelfDto;
+import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.AccountCredentials;
 import co.oleh.realperfect.model.user.GoogleAccountData;
 import co.oleh.realperfect.model.user.Token;
@@ -21,6 +22,9 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestScope
@@ -67,6 +71,12 @@ public class SigninApi {
             }
         } else {
             return null;
+        }
+        if (!user.getRealtyObjects().isEmpty()) {
+            List<RealtyObject> sortedRealtyObjects = user.getRealtyObjects().stream()
+                    .sorted(Comparator.comparing(RealtyObject::getCreatedAt, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                    .collect(Collectors.toList());
+            user.setRealtyObjects(sortedRealtyObjects);
         }
 
         return this.mappingService.map(user, UserSelfDto.class);

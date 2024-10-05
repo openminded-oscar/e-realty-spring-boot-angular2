@@ -5,6 +5,7 @@ import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,14 +23,14 @@ public class User extends AuditableEntity {
     private String email;
     private String profilePic;
     private Realtor realtorDetails;
-    private Set<RealtyObject> realtyObjects;
+    private List<RealtyObject> realtyObjects;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
-    public Set<RealtyObject> getRealtyObjects() {
+    public List<RealtyObject> getRealtyObjects() {
         return realtyObjects;
     }
 
-    public void setRealtyObjects(Set<RealtyObject> realtyObjects) {
+    public void setRealtyObjects(List<RealtyObject> realtyObjects) {
         this.realtyObjects = realtyObjects;
     }
 

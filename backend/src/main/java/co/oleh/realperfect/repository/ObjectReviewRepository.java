@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ObjectReviewRepository extends JpaRepository<ObjectReview, Long> {
-    List<ObjectReview> findByUserId(Long userId);
+    List<ObjectReview> findByUserIdOrderByDateTimeDesc(Long userId);
     List<ObjectReview> findByRealtyObjId(Long realtyObjId);
     List<ObjectReview> findByRealtyObjIdAndDateTimeAfter(Long realtyObjId, Instant dateTime);
     List<ObjectReview> findByUserIdAndRealtyObjId(Long userId, Long realtyObjId);
