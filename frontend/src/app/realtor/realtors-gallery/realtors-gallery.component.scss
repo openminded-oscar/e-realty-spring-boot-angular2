@@ -1,3 +1,9 @@
+@import "../../variables";
+:host {
+  display: block;
+  padding-top: $padding-below-header;
+}
+
 .realtor-block {
   width: 20%;
   margin-bottom: 20px;

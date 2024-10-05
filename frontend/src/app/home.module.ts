@@ -6,7 +6,6 @@ import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
 import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
 import {AuthGuard} from './guargs/auth.guard';
-import {SharedModule} from './shared/shared.module';
 
 const appRoutes: Routes = [
   {
@@ -39,10 +38,6 @@ const appRoutes: Routes = [
     path: 'realtors',
     component: RealtorsGalleryComponent
   },
-  // {
-  //   path: 'realtor/:realtorId',
-  //   component: AddUpdateRealtorComponent
-  // },
   {
     path: 'login/oauth2/code/google',
     redirectTo: 'buy',

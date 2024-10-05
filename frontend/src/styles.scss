@@ -1,4 +1,13 @@
-body { padding-top: 70px; }
+@import 'app/variables';
+body { padding-top: $header-height; }
+
+.side-section {
+  position: sticky;
+  top: $header-height;
+  height: calc(100vh - #{$header-height});
+  overflow-y: auto; /* Allow scrolling within the filter section if needed */
+}
+
 
 .big-checkbox {
   width: 20px;

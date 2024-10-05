@@ -1,5 +1,7 @@
+@import 'app/variables';
+
 .navbar {
-  height: 60px;
+  height: $header-height;
 }
 
 li.nav-item {
