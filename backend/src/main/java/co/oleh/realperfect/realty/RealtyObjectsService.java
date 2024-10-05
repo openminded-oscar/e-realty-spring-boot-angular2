@@ -12,10 +12,7 @@ import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
-import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
-import co.oleh.realperfect.repository.RealtyObjectPhotoRepository;
-import co.oleh.realperfect.repository.RealtyObjectRepository;
-import co.oleh.realperfect.repository.UserRepository;
+import co.oleh.realperfect.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +32,7 @@ import java.util.stream.Collectors;
 public class RealtyObjectsService {
     private final RealtyObjectCrudRepository realtyObjectCrudRepository;
     private RealtyObjectRepository realtyObjectRepository;
+    private ObjectReviewRepository objectReviewRepository;
     private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
     private final RealtorService realtorService;
     private final MappingService mappingService;
@@ -40,10 +40,12 @@ public class RealtyObjectsService {
 
     public RealtyObjectsService(RealtyObjectRepository realtyObjectRepository,
                                 UserRepository userRepository,
+                                ObjectReviewRepository objectReviewRepository,
                                 RealtyObjectPhotoRepository realtyObjectPhotoRepository,
                                 RealtyObjectCrudRepository realtyObjectCrudRepository,
                                 RealtorService realtorService,
                                 MappingService mappingService) {
+        this.objectReviewRepository = objectReviewRepository;
         this.realtyObjectRepository = realtyObjectRepository;
         this.realtyObjectCrudRepository = realtyObjectCrudRepository;
         this.userRepository = userRepository;
@@ -125,6 +127,10 @@ public class RealtyObjectsService {
     }
 
     public Boolean delete(Long objectId) {
+        Instant oneWeekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
+        if (!objectReviewRepository.findByRealtyObjIdAndDateTimeAfter(objectId, oneWeekAgo).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You Can Not Remove Objects With Future Or Recent Reviews");
+        }
         this.realtyObjectCrudRepository.deleteById(objectId);
         return true;
     }

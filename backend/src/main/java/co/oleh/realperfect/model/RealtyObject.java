@@ -47,9 +47,17 @@ public class RealtyObject extends AuditableEntity {
     public List<Interest> getInterests() {
         return interests;
     }
-
     public void setInterests(List<Interest> interests) {
         this.interests = interests;
+    }
+
+    private List<ObjectReview> objectReviews;
+    @OneToMany(mappedBy = "realtyObj", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    public List<ObjectReview> getObjectReviews() {
+        return objectReviews;
+    }
+    public void setObjectReviews(List<ObjectReview> objectReviews) {
+        this.objectReviews = objectReviews;
     }
 
     @Id

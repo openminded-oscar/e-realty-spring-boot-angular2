@@ -1,7 +1,6 @@
 package co.oleh.realperfect.model;
 
 import co.oleh.realperfect.model.user.User;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.Instant;

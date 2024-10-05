@@ -6,6 +6,7 @@ import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.realty.filtering.FilterItem;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,10 @@ import java.util.Set;
 @RestController
 @RequestMapping(value = "/api")
 @CrossOrigin(origins = "http://localhost:4200")
+@AllArgsConstructor()
 public class RealtyObjectsApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(RealtyObjectsApi.class);
 
-    @Autowired
     private RealtyObjectsService realtyObjectsService;
 
 
