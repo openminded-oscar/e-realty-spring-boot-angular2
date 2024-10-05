@@ -40,6 +40,18 @@ public class RealtyObject extends AuditableEntity {
     private List<RealtyObjectPhoto> photos;
     private ConfirmationDocPhoto confirmationDocPhoto;
 
+
+    private List<Interest> interests;
+
+    @OneToMany(mappedBy = "realtyObj", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    public List<Interest> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(List<Interest> interests) {
+        this.interests = interests;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
