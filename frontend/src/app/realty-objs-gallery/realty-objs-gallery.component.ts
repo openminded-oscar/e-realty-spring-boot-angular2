@@ -43,6 +43,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     totalAreaMin: [''],
     totalAreaMax: ['']
   };
+  private lastPage = false;
 
   constructor(public realtyObjService: RealtyObjService,
               public userService: UserService,
@@ -123,6 +124,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     ).pipe(
         debounceTime(this.FILTER_DEBOUNCE_TIME),
         tap(objects => {
+          this.lastPage = objects.last;
           this.showNotificaton = true;
           this.currentRealtyObjects.next([
             ...this.currentRealtyObjects.value,
@@ -146,7 +148,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   public onScroll() {
-    this.loadNextObjects();
+    if(!this.lastPage) {
+      this.loadNextObjects();
+    }
   }
 
   private getFilterValue() {
