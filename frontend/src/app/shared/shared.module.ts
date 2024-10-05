@@ -6,10 +6,11 @@ import {DeleteRealtyModalComponent} from './delete-realty-modal/delete-realty-mo
 import {ScheduleFormModalComponent} from './schedule-form-modal/schedule-form-modal.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ReactiveFormsModule} from '@angular/forms';
+import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 
 @NgModule({
-  declarations: [RealtyObjsListComponent, DeleteRealtyModalComponent, ScheduleFormModalComponent],
+  declarations: [RealtyObjsListComponent, DeleteRealtyModalComponent, ScheduleFormModalComponent, ConfirmModalComponent],
   exports: [
     RealtyObjsListComponent
   ],

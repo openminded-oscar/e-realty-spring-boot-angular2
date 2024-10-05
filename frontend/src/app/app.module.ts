@@ -38,7 +38,7 @@ import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {HeaderComponent} from './header/header.component';
 import {AuthGuard} from './guargs/auth.guard';
 import {RealtorContactComponent} from './realtor/realtor-contact/realtor-contact.component';
-import {SharedModule} from './common/shared.module';
+import {SharedModule} from './shared/shared.module';
 
 const appRoutes: Routes = [
   {

@@ -27,7 +27,11 @@
     <signout-button *ngIf="isAuthenticated"></signout-button>
     <div class="nav-to-profile" *ngIf="isAuthenticated"
          [routerLink]="['/profile']">
-      <i class="fa fa-user"></i>
+      <img style="height: 100%; border-radius: 50%;" *ngIf="user?.profilePicUrl;else avatarIcon"
+           [src]="user.profilePicUrl" alt="">
+      <ng-template #avatarIcon>
+        <i class="fa fa-user"></i>
+      </ng-template>
     </div>
   </div>
 </nav>

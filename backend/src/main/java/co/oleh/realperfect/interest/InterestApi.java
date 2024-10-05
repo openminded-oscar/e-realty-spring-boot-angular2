@@ -3,6 +3,7 @@ package co.oleh.realperfect.interest;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.mapping.InterestDto;
+import co.oleh.realperfect.mapping.MyInterestDto;
 import co.oleh.realperfect.model.Interest;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -24,8 +25,8 @@ public class InterestApi {
 
     private InterestService interestService;
 
-    @GetMapping(value = "/")
-    public ResponseEntity<List<Interest>> findInterestsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
+    @GetMapping(value = "/my-interests-list")
+    public ResponseEntity<List<MyInterestDto>> findInterestsForMe(@AuthenticationPrincipal SpringSecurityUser user) {
         Long userId = user.getId();
         return new ResponseEntity<>(interestService.findInterestsForUser(userId), HttpStatus.OK);
     }

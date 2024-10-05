@@ -4,7 +4,7 @@ package co.oleh.realperfect.objectreview;
 import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
-import co.oleh.realperfect.mapping.ObjectReviewDetailsForUserDto;
+import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.model.ObjectReview;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
@@ -34,10 +34,10 @@ public class ObjectReviewApi {
     private ObjectReviewService reviewService;
     private GoogleCalendarWrapperService googleCalendarWrapperService;
 
-    @GetMapping(value = "/user-reviews-list")
-    public ResponseEntity<List<ObjectReviewDetailsForUserDto>> findReviewsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
+    @GetMapping(value = "/my-reviews-list")
+    public ResponseEntity<List<MyObjectReviewDto>> findReviewsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
         Long userId = user.getId();
-        List<ObjectReviewDetailsForUserDto> objectReviewDtos = reviewService.findReviewsForUser(userId);
+        List<MyObjectReviewDto> objectReviewDtos = reviewService.findReviewsForUser(userId);
         return new ResponseEntity<>(objectReviewDtos, HttpStatus.OK);
     }
 

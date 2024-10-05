@@ -2,6 +2,7 @@ package co.oleh.realperfect.interest;
 
 import co.oleh.realperfect.mapping.InterestDto;
 import co.oleh.realperfect.mapping.MappingService;
+import co.oleh.realperfect.mapping.MyInterestDto;
 import co.oleh.realperfect.model.Interest;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.User;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -49,11 +51,8 @@ public class InterestService {
         return this.mappingService.map(interest, InterestDto.class);
     }
 
-    public List<Interest> findInterestsForUser(Long userId) {
-        return interestRepository.findByUserId(userId);
+    public List<MyInterestDto> findInterestsForUser(Long userId) {
+        List<Interest> interests = interestRepository.findByUserId(userId);
+        return interests.stream().map(i -> this.mappingService.map(i, MyInterestDto.class)).collect(Collectors.toList());
     }
-
-//    public Interest findById(Long objectId) {
-//        return interestRepository.findOne(objectId);
-//    }
 }

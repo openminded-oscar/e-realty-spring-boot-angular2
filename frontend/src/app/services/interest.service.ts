@@ -12,7 +12,7 @@ export class InterestService extends AbstractService <InterestDto> {
   }
 
   public getAllInterestsForUser(): Observable<HttpResponse<Interest[]>> {
-    return this.sendRequest('get', `/my`, {});
+    return this.sendRequest('get', `/my-interests-list`, {});
   }
 
   public save(interest: InterestDto): Observable<HttpResponse<InterestDto>> {

@@ -17,7 +17,7 @@ export class ReviewsService extends AbstractService <ReviewDto> {
   }
 
   public getAllReviewsForUser(): Observable<HttpResponse<Review[]>> {
-    return this.sendRequest('get', `/user-reviews-list`, {});
+    return this.sendRequest('get', `/my-reviews-list`, {});
   }
 
   public get(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {

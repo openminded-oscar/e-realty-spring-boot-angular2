@@ -7,7 +7,7 @@ import {Subject} from 'rxjs/Subject';
 @Component({
   selector: 'app-user-reviews',
   templateUrl: './user-reviews.component.html',
-  styleUrls: ['./user-reviews.component.css']
+  styleUrls: ['./user-reviews.component.scss']
 })
 export class UserReviewsComponent implements OnInit, OnDestroy {
   public reviews: Review[] = [];

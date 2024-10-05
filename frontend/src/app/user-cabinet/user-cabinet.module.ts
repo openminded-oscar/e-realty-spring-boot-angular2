@@ -7,7 +7,7 @@ import {UserObjectsComponent} from './user-objects/user-objects.component';
 import {UserReviewsComponent} from './user-reviews/user-reviews.component';
 import {UserCabinetContainerComponent} from './user-cabinet-container/user-cabinet-container.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {SharedModule} from '../common/shared.module';
+import {SharedModule} from '../shared/shared.module';
 import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
 
 const routes: Routes = [

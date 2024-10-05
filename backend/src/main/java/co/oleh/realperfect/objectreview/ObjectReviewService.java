@@ -2,7 +2,7 @@ package co.oleh.realperfect.objectreview;
 
 import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
-import co.oleh.realperfect.mapping.ObjectReviewDetailsForUserDto;
+import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.model.ObjectReview;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
 import co.oleh.realperfect.repository.RealtyObjectRepository;
@@ -58,10 +58,10 @@ public class ObjectReviewService {
         return this.mappingService.map(objectReview, ObjectReviewDto.class);
     }
 
-    public List<ObjectReviewDetailsForUserDto> findReviewsForUser(Long userId) {
+    public List<MyObjectReviewDto> findReviewsForUser(Long userId) {
         List<ObjectReview> objectReviews = objectReviewRepository.findByUserIdOrderByDateTimeDesc(userId);
         return objectReviews.stream()
-                .map(objectReview -> this.mappingService.map(objectReview, ObjectReviewDetailsForUserDto.class))
+                .map(objectReview -> this.mappingService.map(objectReview, MyObjectReviewDto.class))
                 .collect(Collectors.toList());
     }
 

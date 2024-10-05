@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.Instant;
 
 @Data
-public class ObjectReviewDetailsForUserDto {
+public class MyObjectReviewDto {
     Long id;
     Long userId;
     RealtyObjectDetailsDto realtyObj;

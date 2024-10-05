@@ -17,8 +17,9 @@ import {User} from '../domain/user';
 import {combineLatest} from 'rxjs';
 
 import {RealtorContactComponent} from '../realtor/realtor-contact/realtor-contact.component';
-import {DeleteRealtyModalComponent} from '../common/delete-realty-modal/delete-realty-modal.component';
-import {ScheduleFormModalComponent} from '../common/schedule-form-modal/schedule-form-modal.component';
+import {DeleteRealtyModalComponent} from '../shared/delete-realty-modal/delete-realty-modal.component';
+import {ScheduleFormModalComponent} from '../shared/schedule-form-modal/schedule-form-modal.component';
+import {ConfirmModalComponent} from '../shared/confirm-modal/confirm-modal.component';
 
 
 @Component({
@@ -202,5 +203,22 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
           this.currentReview = reviewsResponse.body;
         }
       });
+  }
+
+  public removeReview() {
+    this.reviewsService.remove(this.currentObject.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.currentReview = null);
+  }
+
+  public openReviewRemoveDialog() {
+    const modalRef = this.modalService.open(ConfirmModalComponent);
+    modalRef.componentInstance.message = 'Are you sure you want to delete this review?';  // Passing custom message
+    modalRef.result.then((result) => {
+      if (result) {
+        this.removeReview();
+      }
+    }).catch((error) => {
+    });
   }
 }

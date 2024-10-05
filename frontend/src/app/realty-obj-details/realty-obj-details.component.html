@@ -67,7 +67,7 @@
                 for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
               </div>
               <div>
-                <button class="btn btn-danger">Cancel</button>
+                <button class="btn btn-danger" (click)="openReviewRemoveDialog()">Cancel</button>
               </div>
             </div>
             <div>
