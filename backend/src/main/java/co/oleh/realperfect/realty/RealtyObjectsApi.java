@@ -64,6 +64,11 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(addedObject, HttpStatus.OK);
     }
 
+    @DeleteMapping("/realty-objects/{objectId}")
+    public ResponseEntity<Boolean> deleteRealtyObject(@PathVariable Long objectId) {
+        return new ResponseEntity<>(realtyObjectsService.delete(objectId), HttpStatus.OK);
+    }
+
     @GetMapping("/realty-objects/building-types")
     public ResponseEntity<Set<BuildingType>> getRealtyBuildingTypes() {
         Set<BuildingType> buildingTypes = realtyObjectsService.getRealtyBuildingTypes();

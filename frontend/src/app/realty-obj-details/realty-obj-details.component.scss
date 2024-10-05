@@ -67,3 +67,29 @@
     overflow: auto;
   }
 }
+
+.details-title {
+  &--left {
+    display: flex;
+    height: 40px;
+    flex-direction: row;
+    justify-content: space-between
+  }
+
+  &--right {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center
+  }
+}
+
+.btn-manage {
+  padding: 0 5px;
+  &--container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+  }
+}

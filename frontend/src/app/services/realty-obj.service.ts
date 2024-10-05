@@ -32,12 +32,12 @@ export class RealtyObjService {
 
   public findMyObjects(): Observable<RealtyObj[]> {
     return this.http.get<RealtyObj[]>(`${endpoints.realtyObj.list}/my`).pipe(
-        tap((res: RealtyObj[]) => {
-          (res ?? []).forEach(value => {
-            value.mainPhotoPath = RealtyObj.getMainPhoto(value);
-          });
-        })
-      );
+      tap((res: RealtyObj[]) => {
+        (res ?? []).forEach(value => {
+          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+        });
+      })
+    );
   }
 
   public findByFilterAndPage(filter: {
@@ -88,6 +88,10 @@ export class RealtyObjService {
           photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
         }
       }));
+  }
+
+  public deleteById(id: number): Observable<ArrayBuffer> {
+    return this.http.delete<ArrayBuffer>(endpoints.realtyObj.delete + '/' + id).pipe();
   }
 
   private mapFilterInputsToHttpRequest(filter: { [p: string]: { [p: string]: string } }) {

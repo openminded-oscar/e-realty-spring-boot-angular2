@@ -19,6 +19,7 @@ export const endpoints: any = {
   realtyObj: {
     add: apiBase + '/realty-objects/save',
     list: apiBase + '/realty-objects',
+    delete: apiBase + '/realty-objects',
     byId: apiBase + '/realty-objects'
   }
 };

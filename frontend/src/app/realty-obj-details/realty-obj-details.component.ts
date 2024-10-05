@@ -157,46 +157,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     return selectedDate < today || selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
   }
 
-
-  public openScheduleReviewModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(data => {
-
-    }, (reason) => {
-      console.log(reason);
-    });
-  }
-
-  public saveReviewAndClose() {
-    const reviewDate = this.reviewTimeForm.value.reviewDate;
-    const reviewTime = this.reviewTimeForm.value.reviewTime;
-
-    const utcDatetime =
-      new Date(
-        reviewDate.year,
-        reviewDate.month - 1,
-        reviewDate.day,
-        reviewTime.hour,
-        reviewTime.minute,
-        reviewTime.second
-      );
-
-    const review = {
-      userId: this.user.id,
-      realtyObjId: this.currentObject.id,
-      dateTime: utcDatetime
-    };
-
-    this.reviewsService.save(review)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(reviewsResponse => {
-        if (reviewsResponse.body) {
-          this.currentReview = reviewsResponse.body;
-        }
-      });
-
-    this.modalService.dismissAll();
-  }
-
   private initUserObjectRelatedData() {
     this.interestService.get(this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
@@ -233,5 +193,56 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public openRealtorContacts() {
     const modalRef = this.modalService.open(RealtorContactComponent);
     (modalRef.componentInstance as RealtorContactComponent).realtor = this.currentObject.realtor;
+  }
+
+  public promptDelete(content) {
+    this.modalService.open(content).result.then(data => {
+      if (data) {
+        this.realtyObjService.deleteById(this.currentObject.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe();
+      }
+    }, error => {
+      console.log('data dismissed');
+    });
+  }
+
+  public openScheduleReviewModal(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(data => {
+      this.saveReviewAndClose();
+    }, error => {
+      console.log('data dismissed');
+    });
+  }
+
+  public saveReviewAndClose() {
+    const reviewDate = this.reviewTimeForm.value.reviewDate;
+    const reviewTime = this.reviewTimeForm.value.reviewTime;
+
+    const utcDatetime =
+      new Date(
+        reviewDate.year,
+        reviewDate.month - 1,
+        reviewDate.day,
+        reviewTime.hour,
+        reviewTime.minute,
+        reviewTime.second
+      );
+
+    const review = {
+      userId: this.user.id,
+      realtyObjId: this.currentObject.id,
+      dateTime: utcDatetime
+    };
+
+    this.reviewsService.save(review)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(reviewsResponse => {
+        if (reviewsResponse.body) {
+          this.currentReview = reviewsResponse.body;
+        }
+      });
+
+    this.modalService.dismissAll();
   }
 }

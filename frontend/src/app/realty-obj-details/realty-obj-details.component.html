@@ -1,27 +1,35 @@
 <div class="row" *ngIf="currentObject">
   <div class="col-md-7 photo-and-gallery-block">
-    <div style="height: 40px; display: flex; flex-direction: row; justify-content: space-between">
+    <div class="details-title--left">
       <h1 style="font-size: 1.5rem;">
         <span>Apartment at
           {{ currentObject.address.street }} str.&nbsp;</span>
         <span>est. at ${{ currentObject.price }}</span>
       </h1>
-      <div style="display: flex; flex-direction: row; gap: 10px; align-items: center">
-        <div *ngIf="userService.isAuthenticated$|async">
+      <div class="details-title--right">
+        <div class="btn-manage--container" *ngIf="userService.isAuthenticated$|async">
           <ng-container *ngIf="isMyObject(currentObject)">
-            <a [routerLink]="['/obj/editor', currentObject.id]" style="padding: 0 5px;"
-               class="btn btn-danger btn-block">Edit</a>
+            <div>
+              <a (click)="promptDelete(deleteObject)"
+                 class="btn btn-danger btn-block btn-manage">Delete</a>
+            </div>
           </ng-container>
-        </div>
-        <div *ngIf="userService.isAuthenticated$|async" (click)="toggleInterested()"
-             class="realty-obj-interested-btn">
-          <ng-container *ngIf="!isInterested; else removeInterestedButton">
-            <i ngbTooltip="Add to Favorites" class="far fa-heart text-danger"></i>
+          <ng-container *ngIf="isMyObject(currentObject)">
+            <div>
+              <a [routerLink]="['/obj/editor', currentObject.id]"
+                 class="btn btn-info btn-block btn-manage">Edit</a>
+            </div>
           </ng-container>
-          <ng-template #removeInterestedButton>
-            <i ngbTooltip="Added to Favorites" class="fa-solid fa-heart text-danger"></i>
-          </ng-template>
+          <div class="realty-obj-interested-btn">
+            <ng-container *ngIf="!isInterested; else removeInterestedButton">
+              <i (click)="toggleInterested()" ngbTooltip="Add to Favorites" class="far fa-heart text-danger"></i>
+            </ng-container>
+            <ng-template #removeInterestedButton>
+              <i ngbTooltip="Added to Favorites" class="fa-solid fa-heart text-danger"></i>
+            </ng-template>
+          </div>
         </div>
+
       </div>
     </div>
     <div class="realty-obj-pic--main-container">
@@ -43,7 +51,7 @@
     </div>
   </div>
 
-  <div style="font-size: larger" class="col-md-5">
+  <div class="col-md-5" style="font-size: larger">
     <div class="row" style="position: relative;">
       <div class="col-md-7 main-info-block">
         <div class="description-block">
@@ -53,7 +61,8 @@
           </div>
           <div class="description-block--content">
             <div *ngIf="user && currentReview">
-              <i class="fa fa-calendar" aria-hidden="true"></i> review scheduled for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
+              <i class="fa fa-calendar" aria-hidden="true"></i> review scheduled
+              for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
             </div>
             <div>
               <button *ngIf="user && !currentReview" class="btn btn-block btn-primary"
@@ -62,47 +71,6 @@
               </button>
             </div>
           </div>
-        </div>
-
-        <div class="status-buttons">
-          <ng-template #scheduleReviewModalContent let-modal>
-            <div class="modal-header">
-              <h4 class="modal-title" id="modal-basic-title">Please select the date and time</h4>
-              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <div class="modal-body">
-              <form [formGroup]="reviewTimeForm">
-                <div class="form-group d-flex align-items-center">
-                  <div class="input-group mr-2">
-                    <input class="form-control" placeholder="yyyy-mm-dd"
-                           [markDisabled]="isPreviewDateDisabled"
-                           formControlName="reviewDate"
-                           name="datePicker"
-                           ngbDatepicker
-                           #d="ngbDatepicker">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
-                    </div>
-                  </div>
-                  <ngb-timepicker formControlName="reviewTime"
-                                  [minuteStep]="30"></ngb-timepicker>
-                </div>
-                <div *ngIf="reviewTimeForm.errors?.tooSoon">
-                  <p class="text-danger">Date and time must be at least 3 hours from now.</p>
-                </div>
-              </form>
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-dark"
-                      [disabled]="!reviewTimeForm.touched || reviewTimeForm.invalid"
-                      (click)="saveReviewAndClose()">Save and close
-              </button>
-            </div>
-          </ng-template>
         </div>
       </div>
 
@@ -151,4 +119,55 @@
   </div>
 </div>
 
-<hr>
+<ng-template #deleteObject let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to delete the object forever?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.close('delete')">Delete</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss(false)">Cancel</button>
+  </div>
+</ng-template>
+<ng-template #scheduleReviewModalContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Please select the date and time</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="reviewTimeForm">
+      <div class="form-group d-flex align-items-center">
+        <div class="input-group mr-2">
+          <input class="form-control" placeholder="yyyy-mm-dd"
+                 [markDisabled]="isPreviewDateDisabled"
+                 formControlName="reviewDate"
+                 name="datePicker"
+                 ngbDatepicker
+                 #d="ngbDatepicker">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+          </div>
+        </div>
+        <ngb-timepicker formControlName="reviewTime"
+                        [minuteStep]="30"></ngb-timepicker>
+      </div>
+      <div *ngIf="reviewTimeForm.errors?.tooSoon">
+        <p class="text-danger">Date and time must be at least 3 hours from now.</p>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark"
+            [disabled]="!reviewTimeForm.touched || reviewTimeForm.invalid"
+            (click)="modal.close()">Save and close
+    </button>
+  </div>
+</ng-template>
