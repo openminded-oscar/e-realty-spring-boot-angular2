@@ -8,6 +8,7 @@ import {UserReviewsComponent} from './user-reviews/user-reviews.component';
 import {UserCabinetContainerComponent} from './user-cabinet-container/user-cabinet-container.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { UserInfoComponent } from './user-info/user-info.component';
+import {SharedModule} from '../common/shared.module';
 
 const routes: Routes = [
   {
@@ -24,13 +25,14 @@ const routes: Routes = [
     UserCabinetContainerComponent,
     UserInfoComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    NgbNavModule,
-    ReactiveFormsModule,
-    FormsModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        NgbNavModule,
+        ReactiveFormsModule,
+        FormsModule,
+        SharedModule
+    ]
 })
 export class UserCabinetModule {
 }

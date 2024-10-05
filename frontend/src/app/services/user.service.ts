@@ -6,6 +6,9 @@ import {endpoints} from '../commons';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Realtor} from '../domain/realtor';
 import {Observable, throwError} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {Photo} from '../domain/photo';
+import {RealtyObj} from '../domain/realty-obj';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
@@ -20,6 +23,9 @@ export class UserService {
 
   public updateUserProfileOnServer(user: User): Observable<any> {
     return this.http.patch(`${endpoints.userUpdate}`, user)
+      .pipe(tap((userFromServer: User) => {
+        userFromServer.profilePicUrl = Photo.getLinkByFilename(userFromServer.profilePic as unknown as string);
+      }))
       .catch((error: any) => throwError(error));
   }
 
@@ -29,7 +35,9 @@ export class UserService {
     });
 
     this.http.get(endpoints.userStatus, {headers}).subscribe(
-      (userInfo: any) => {
+      (userInfo: User) => {
+        userInfo.profilePicUrl = Photo.getLinkByFilename(userInfo.profilePic as unknown as string);
+        userInfo.realtyObjects.forEach(o => o.mainPhotoPath = RealtyObj.getMainPhoto(o));
         this.userSubject.next(userInfo);
         this.isAuthenticatedSubject.next(!!userInfo);
       });

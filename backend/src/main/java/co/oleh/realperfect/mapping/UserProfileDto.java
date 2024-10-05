@@ -1,8 +1,7 @@
 package co.oleh.realperfect.mapping;
 
+import co.oleh.realperfect.model.photos.UserPhoto;
 import lombok.Data;
-
-import java.util.Set;
 
 @Data
 public class UserProfileDto {
@@ -10,5 +9,5 @@ public class UserProfileDto {
      String surname;
      String phoneNumber;
      String email;
-     String profilePic;
+     UserPhoto profilePic;
 }

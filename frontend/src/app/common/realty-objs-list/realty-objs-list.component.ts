@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {RealtyObj} from '../domain/realty-obj';
-import {UserService} from '../services/user.service';
+import {RealtyObj} from '../../domain/realty-obj';
+import {UserService} from '../../services/user.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -9,7 +9,7 @@ import {combineLatest} from 'rxjs';
 @Component({
   selector: 'realty-objs-list',
   templateUrl: './realty-objs-list.component.html',
-  styleUrls: ['./realty-objs-gallery.component.scss', './realty-objs-list.component.scss'],
+  styleUrls: ['../../realty-objs-gallery/realty-objs-gallery.component.scss', './realty-objs-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RealtyObjsListComponent implements OnInit, OnDestroy {

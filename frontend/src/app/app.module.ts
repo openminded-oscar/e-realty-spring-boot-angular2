@@ -17,7 +17,6 @@ import {RealtorService} from './services/realtor.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
 import {RouterModule, Routes} from '@angular/router';
-import {RealtyObjsListComponent} from './realty-objs-gallery/realty-objs-list.component';
 import {UserService} from './services/user.service';
 import {SigninButtonComponent} from './commons/signin-button/signin-button.component';
 import {SigninSignoutService} from './services/auth/signin-signout.service';
@@ -39,6 +38,7 @@ import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {HeaderComponent} from './header/header.component';
 import {AuthGuard} from './guargs/auth.guard';
 import {RealtorContactComponent} from './realtor/realtor-contact/realtor-contact.component';
+import {SharedModule} from './common/shared.module';
 
 const appRoutes: Routes = [
   {
@@ -61,7 +61,6 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     AddressInputComponent,
     UserRegionInputComponent,
     RealtyObjsGalleryComponent,
-    RealtyObjsListComponent,
     SigninButtonComponent,
     SignupButtonComponent,
     SignoutButtonComponent,
@@ -74,6 +73,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
   imports: [
     BrowserModule,
     FormsModule,
+    SharedModule,
     ReactiveFormsModule,
     InfiniteScrollModule,
     HttpClientModule,
@@ -122,6 +122,9 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
           }]
       }
     }],
+  exports: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

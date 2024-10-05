@@ -55,6 +55,7 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
           (data: Photo) => {
             this.user.profilePic = data;
             this.user.profilePic.fullUrl = Photo.getLinkByFilename(data.filename);
+            this.user.profilePicUrl = Photo.getLinkByFilename(data.filename);
           },
           error => console.log(error)
         );
@@ -80,6 +81,7 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
   }
 
   public clearAvatar() {
-    alert('not yet implemented');
+    this.user.profilePic = null;
+    this.user.profilePicUrl = null;
   }
 }
