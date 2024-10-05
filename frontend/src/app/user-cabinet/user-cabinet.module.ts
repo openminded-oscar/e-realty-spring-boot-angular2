@@ -7,8 +7,8 @@ import {UserObjectsComponent} from './user-objects/user-objects.component';
 import {UserReviewsComponent} from './user-reviews/user-reviews.component';
 import {UserCabinetContainerComponent} from './user-cabinet-container/user-cabinet-container.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { UserInfoComponent } from './user-info/user-info.component';
 import {SharedModule} from '../common/shared.module';
+import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
 
 const routes: Routes = [
   {
@@ -23,7 +23,7 @@ const routes: Routes = [
     UserObjectsComponent,
     UserReviewsComponent,
     UserCabinetContainerComponent,
-    UserInfoComponent
+    UserFavoritesComponent
   ],
     imports: [
         CommonModule,
