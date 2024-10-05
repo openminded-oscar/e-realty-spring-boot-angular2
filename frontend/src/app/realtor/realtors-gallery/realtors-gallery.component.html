@@ -1,5 +1,5 @@
 <div class="realtors row" *ngIf="realtors">
-  <div class="realtor-block col-4" *ngFor="let realtor of realtors;">
+  <div class="realtor-block col-2" *ngFor="let realtor of realtors;">
     <div class="row realtor-photo-container">
       <img class="realtor-photo" (error)="setDefaultRealtorPhoto($event)" [src]="realtor?.profilePic ? realtor.profilePic.fullUrl: defaultRealtorPhoto"/>
     </div>
