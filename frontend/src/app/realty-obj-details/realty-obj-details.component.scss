@@ -86,10 +86,22 @@
 
 .btn-manage {
   padding: 0 5px;
+
   &--container {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 5px;
+  }
+}
+
+.scheduled-review-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  button {
+    padding: 0
   }
 }

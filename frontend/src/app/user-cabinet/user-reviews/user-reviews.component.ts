@@ -3,6 +3,7 @@ import {ReviewsService} from '../../services/reviews.service';
 import {Review} from '../../domain/review';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
+import {RealtyObj} from '../../domain/realty-obj';
 
 @Component({
   selector: 'app-user-reviews',
@@ -11,6 +12,7 @@ import {Subject} from 'rxjs/Subject';
 })
 export class UserReviewsComponent implements OnInit, OnDestroy {
   public reviews: Review[] = [];
+  public reviewMappedObjects: RealtyObj[] = [];
   private destroy$ = new Subject<boolean>();
 
   constructor(public reviewService: ReviewsService) {
@@ -21,7 +23,10 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$)
       )
-      .subscribe(reviewsResponse => this.reviews = reviewsResponse.body);
+      .subscribe(reviewsResponse => {
+        this.reviews = reviewsResponse.body;
+        this.reviewMappedObjects = this.reviews.map(review => review.realtyObj);
+      });
   }
 
   ngOnDestroy(): void {

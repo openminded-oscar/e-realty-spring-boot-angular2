@@ -14,6 +14,7 @@ import {combineLatest} from 'rxjs';
 })
 export class RealtyObjsListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+
   public currentRealtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
   public currentUserObjects: RealtyObj[];
 
@@ -36,8 +37,8 @@ export class RealtyObjsListComponent implements OnInit, OnDestroy {
       this.currentRealtyObjects$
     ]).pipe(
       takeUntil(this.destroy$)
-    ).subscribe(([user, newObjects]) => {
-      if (user) {
+    ).subscribe(([user, currentObjects]) => {
+      if (user && currentObjects?.length) {
         this.currentUserObjects = user.realtyObjects;
       } else {
         this.currentUserObjects = [];

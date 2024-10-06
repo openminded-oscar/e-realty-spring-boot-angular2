@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
-import {NgbNavModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbNavModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {UserProfileViewEditComponent} from './user-cabinet-container/user-profile-view-edit/user-profile-view-edit.component';
 import {UserObjectsComponent} from './user-objects/user-objects.component';
 import {UserReviewsComponent} from './user-reviews/user-reviews.component';
@@ -25,14 +25,15 @@ const routes: Routes = [
     UserCabinetContainerComponent,
     UserFavoritesComponent
   ],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        NgbNavModule,
-        ReactiveFormsModule,
-        FormsModule,
-        SharedModule
-    ]
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    NgbNavModule,
+    ReactiveFormsModule,
+    FormsModule,
+    SharedModule,
+    NgbTooltipModule
+  ]
 })
 export class UserCabinetModule {
 }

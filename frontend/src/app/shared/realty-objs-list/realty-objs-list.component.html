@@ -1,34 +1,4 @@
 <div id="itemsContainer" class="row">
   <div *ngFor="let realtyObject of currentRealtyObjects$|async; trackBy: trackById" class="col-4">
-    <div class="thumbnail">
-      <div class="thumbnail-image-container">
-        <img class="thumbnail-image"
-             src="{{realtyObject.mainPhotoPath?realtyObject.mainPhotoPath:'https://placehold.co/600x400'}}"
-             alt="">
-      </div>
-      <div class="caption">
-        <div class="caption-top-row">
-          <h4 style="flex: 1;">
-            <span [routerLink]="['/object-details', realtyObject.id]" style="cursor: pointer">{{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}</span>
-          </h4>
-          <div>
-            <div *ngIf="isMyObject(realtyObject)">
-              <a [routerLink]="['/obj/editor', realtyObject.id]" style="padding: 0 5px;" class="btn btn-info btn-block">Edit</a>
-            </div>
-          </div>
-        </div>
-        <div>
-          <p>
-            {{ realtyObject.roomsAmount }} rooms, {{ realtyObject.totalArea }}
-            sq.m., {{ realtyObject.floor }} floor of
-            {{ realtyObject.totalFloors }} <span
-            class="pull-right">{{ realtyObject.hasRepairing ? 'Repaired' : '' }}</span>
-          </p>
-          <p class="description-content--text">{{ realtyObject.description }}</p>
-        </div>
-        <h4>Price: ${{ realtyObject.price }}</h4>
-        <a [routerLink]="['/object-details', realtyObject.id]" style="border: 1px solid black" class="btn btn-block">Watch details</a>
-      </div>
-    </div>
-  </div>
+    <app-realty-obj-card [realtyObject]="realtyObject" [isMyObject]="isMyObject(realtyObject)"></app-realty-obj-card>  </div>
 </div>

@@ -60,14 +60,13 @@
             <p class="description-block--text" *ngIf="currentObject.description">{{ currentObject.description }}</p>
           </div>
           <div class="description-block--content">
-            <div *ngIf="user && currentReview"
-                 style="display: flex; flex-direction: row; justify-content: space-between">
+            <div class="scheduled-review-block" *ngIf="user && currentReview">
               <div>
                 <i class="fa fa-calendar" aria-hidden="true"></i> review
                 for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
               </div>
               <div>
-                <button class="btn btn-danger" (click)="openReviewRemoveDialog()">Cancel</button>
+                <button class="btn btn-link" (click)="openReviewRemoveDialog()">Cancel</button>
               </div>
             </div>
             <div>
