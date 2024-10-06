@@ -1,4 +1,4 @@
 <div id="itemsContainer" class="row">
-  <div *ngFor="let realtyObject of currentRealtyObjects$|async; trackBy: trackById" class="col-4">
-    <app-realty-obj-card [realtyObject]="realtyObject" [isMyObject]="isMyObject(realtyObject)"></app-realty-obj-card>  </div>
+  <div *ngFor="let realtyObject of realtyObjects$|async; trackBy: trackById" class="col-4">
+    <app-realty-obj-card [realtyObject]="realtyObject"></app-realty-obj-card>  </div>
 </div>

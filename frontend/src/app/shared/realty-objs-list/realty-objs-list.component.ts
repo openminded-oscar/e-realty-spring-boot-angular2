@@ -1,10 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {RealtyObj} from '../../domain/realty-obj';
-import {UserService} from '../../services/user.service';
-import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {combineLatest} from 'rxjs';
 
 @Component({
   selector: 'realty-objs-list',
@@ -12,53 +9,26 @@ import {combineLatest} from 'rxjs';
   styleUrls: ['../../realty-objs-gallery/realty-objs-gallery.component.scss', './realty-objs-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RealtyObjsListComponent implements OnInit, OnDestroy {
+export class RealtyObjsListComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
-  public currentRealtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
-  public currentUserObjects: RealtyObj[];
 
+  public realtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
   @Input()
   set realtyObjectsPortion(values: RealtyObj[]) {
-    const currentValues = [...this.currentRealtyObjects$.value, ...(values?.length ? values : [])];
-    this.currentRealtyObjects$.next(currentValues);
+    const currentValues = [...this.realtyObjects$.value, ...(values?.length ? values : [])];
+    this.realtyObjects$.next(currentValues);
   }
 
   public trackById(index: number, obj: RealtyObj): number {
     return obj.id;
   }
 
-  constructor(public userService: UserService,
-              public cdr: ChangeDetectorRef) {
-  }
-
-  ngOnInit() {
-    combineLatest([
-      this.userService.user$,
-      this.currentRealtyObjects$
-    ]).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(([user, currentObjects]) => {
-      if (user && currentObjects?.length) {
-        this.currentUserObjects = user.realtyObjects;
-      } else {
-        this.currentUserObjects = [];
-      }
-      this.cdr.detectChanges();
-    });
-  }
-
-  public isMyObject(realtyObject: RealtyObj) {
-    const id = realtyObject.id;
-    if (this.currentUserObjects) {
-      const object = this.currentUserObjects.find((obj) => obj.id === id);
-      return !!object;
-    }
-    return false;
+  constructor() {
   }
 
   public resetObjects() {
     this.realtyObjectsPortion = [];
-    this.currentRealtyObjects$.next([]);
+    this.realtyObjects$.next([]);
   }
 
   ngOnDestroy(): void {
