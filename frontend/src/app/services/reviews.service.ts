@@ -5,6 +5,7 @@ import {AbstractService} from './common/abstract.service';
 import {Observable} from 'rxjs';
 import {Review, ReviewDto} from '../domain/review';
 import {tap} from 'rxjs/operators';
+import {RealtyObj} from '../domain/realty-obj';
 
 @Injectable()
 export class ReviewsService extends AbstractService <ReviewDto> {
@@ -17,7 +18,14 @@ export class ReviewsService extends AbstractService <ReviewDto> {
   }
 
   public getAllReviewsForUser(): Observable<HttpResponse<Review[]>> {
-    return this.sendRequest('get', `/my-reviews-list`, {});
+    return this.sendRequest<Review[]>('get', `/my-reviews-list`, {}).pipe(
+      tap(res => {
+        const realtyObjects = res.body.map(r => r.realtyObj);
+        (realtyObjects ?? []).forEach(value => {
+          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+        });
+      })
+    );
   }
 
   public get(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {

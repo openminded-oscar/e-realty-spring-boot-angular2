@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
-import {UserService} from "../../services/user.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {Credentials} from "../../domain/credentials.model";
-import {SigninSignoutService} from "../../services/auth/signin-signout.service";
-import {SignupService} from "../../services/auth/signup.service";
+import {Component} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Credentials} from '../../domain/credentials.model';
+import {SignupService} from '../../services/auth/signup.service';
 
 @Component({
   selector: 'signup-button',

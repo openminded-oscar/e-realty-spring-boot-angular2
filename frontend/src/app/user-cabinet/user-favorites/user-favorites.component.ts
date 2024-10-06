@@ -12,10 +12,13 @@ import {RealtyObj} from '../../domain/realty-obj';
 })
 export class UserFavoritesComponent implements OnInit, OnDestroy {
   public interests: Interest[] = [];
-  public interestMappedObjects: RealtyObj[] = [];
   private destroy$ = new Subject<boolean>();
 
   constructor(public interestService: InterestService) {
+  }
+
+  public trackById(index: number, obj: Interest): number {
+    return obj.id;
   }
 
   ngOnInit(): void {
@@ -25,7 +28,6 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
       )
       .subscribe(interestsResponse => {
         this.interests = interestsResponse.body;
-        this.interestMappedObjects = this.interests.map(interest => interest.realtyObj);
       });
   }
 

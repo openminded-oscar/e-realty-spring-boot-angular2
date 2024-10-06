@@ -1,1 +1,5 @@
-<realty-objs-list [realtyObjectsPortion]="reviewMappedObjects"></realty-objs-list>
+<div id="itemsContainer" class="row" *ngIf="reviews.length">
+  <div *ngFor="let review of reviews; trackBy: trackById" class="col-4">
+    <app-realty-obj-card [realtyObject]="review.realtyObj"></app-realty-obj-card>
+  </div>
+</div>

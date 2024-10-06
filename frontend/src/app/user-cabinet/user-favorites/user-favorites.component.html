@@ -1,1 +1,5 @@
-<realty-objs-list [realtyObjectsPortion]="interestMappedObjects"></realty-objs-list>
+<div id="itemsContainer" class="row" *ngIf="interests.length">
+  <div *ngFor="let interest of interests; trackBy: trackById" class="col-4">
+    <app-realty-obj-card [realtyObject]="interest.realtyObj"></app-realty-obj-card>
+  </div>
+</div>

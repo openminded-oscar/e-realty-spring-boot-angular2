@@ -18,6 +18,10 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
   constructor(public reviewService: ReviewsService) {
   }
 
+  public trackById(index: number, obj: Review): number {
+    return obj.id;
+  }
+
   ngOnInit(): void {
     this.reviewService.getAllReviewsForUser()
       .pipe(
