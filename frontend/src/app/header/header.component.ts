@@ -19,6 +19,10 @@ export class HeaderComponent implements OnInit {
     return this.currentRoute?.endsWith(route);
   }
 
+  public isDefaultRoute() {
+    return this.currentRoute === '/';
+  }
+
   constructor(public router: Router,
               public userService: UserService) {
     this.userService.user$.subscribe(user => {
