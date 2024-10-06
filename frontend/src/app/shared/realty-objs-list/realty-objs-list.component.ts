@@ -14,13 +14,13 @@ import {combineLatest} from 'rxjs';
 })
 export class RealtyObjsListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
-
   public currentRealtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
   public currentUserObjects: RealtyObj[];
 
   @Input()
-  set realtyObjects(value: RealtyObj[]) {
-    this.currentRealtyObjects$.next(value);
+  set realtyObjectsPortion(values: RealtyObj[]) {
+    const currentValues = [...this.currentRealtyObjects$.value, ...(values?.length ? values : [])];
+    this.currentRealtyObjects$.next(currentValues);
   }
 
   public trackById(index: number, obj: RealtyObj): number {
@@ -54,6 +54,11 @@ export class RealtyObjsListComponent implements OnInit, OnDestroy {
       return !!object;
     }
     return false;
+  }
+
+  public resetObjects() {
+    this.realtyObjectsPortion = [];
+    this.currentRealtyObjects$.next([]);
   }
 
   ngOnDestroy(): void {

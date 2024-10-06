@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
 import {BackendSupportedOperations, RealtyObjService} from '../services/realty-obj.service';
 import {RealtyObj} from '../domain/realty-obj';
@@ -11,6 +11,7 @@ import {Observable} from 'rxjs';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import * as _ from 'lodash';
+import {RealtyObjsListComponent} from '../shared/realty-objs-list/realty-objs-list.component';
 
 export interface SortValue {
   field: string;
@@ -30,7 +31,6 @@ export interface SortField {
 })
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   public filterForm: FormGroup;
-
   public readonly DEFAULT_CITY = 'Lviv';
   public readonly INITIAL_FILTER_FORM = {
     priceMin: ['0'],
@@ -44,6 +44,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     totalAreaMax: ['']
   };
   private lastPage = false;
+
+  @ViewChild(RealtyObjsListComponent)
+  public listComponent: RealtyObjsListComponent;
 
   constructor(public realtyObjService: RealtyObjService,
               public userService: UserService,
@@ -59,7 +62,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<boolean>();
 
-  public currentObjects$: Observable<RealtyObj[]>;
+  public currentObjectsPortion$: Observable<RealtyObj[]>;
 
   public targetOperation: string;
 
@@ -68,7 +71,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     size: 12
   };
 
-  public currentRealtyObjects = new BehaviorSubject<RealtyObj[]>([]);
+  public currentRealtyObjectsPortion = new BehaviorSubject<RealtyObj[]>([]);
 
   public FILTER_DEBOUNCE_TIME = 1000;
   public selectedOrderingOption: SortField = {
@@ -110,31 +113,33 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   public loadInitialObjects() {
-    this.currentRealtyObjects.next([]);
+    this.currentRealtyObjectsPortion.next([]);
     this.pageable = _.cloneDeep(this.initialPageable);
+    if (this.listComponent) {
+      this.listComponent.resetObjects();
+    }
 
     this.loadNextObjects();
   }
 
   public loadNextObjects() {
-    this.currentObjects$ = this.realtyObjService.findByFilterAndPage(
+    this.currentObjectsPortion$ = this.realtyObjService.findByFilterAndPage(
       this.getFilterValue(),
       this.getSortValue(),
       this.pageable
     ).pipe(
-        debounceTime(this.FILTER_DEBOUNCE_TIME),
-        tap(objects => {
-          this.lastPage = objects.last;
-          this.showNotificaton = true;
-          this.currentRealtyObjects.next([
-            ...this.currentRealtyObjects.value,
-            ...objects.content
-          ]);
-          ++this.pageable.page;
-        }),
-        map(o => this.currentRealtyObjects.value),
-        takeUntil(this.destroy$)
-      );
+      debounceTime(this.FILTER_DEBOUNCE_TIME),
+      tap(objects => {
+        this.lastPage = objects.last;
+        this.showNotificaton = true;
+        this.currentRealtyObjectsPortion.next([
+          ...objects.content
+        ]);
+        ++this.pageable.page;
+      }),
+      map(o => this.currentRealtyObjectsPortion.value),
+      takeUntil(this.destroy$)
+    );
   }
 
   public selectOrderingOption(option: SortField) {
@@ -148,7 +153,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   public onScroll() {
-    if(!this.lastPage) {
+    if (!this.lastPage) {
       this.loadNextObjects();
     }
   }
