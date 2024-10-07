@@ -1,4 +1,4 @@
-<div id="itemsContainer" class="row" *ngIf="reviews.length">
+<div id="itemsContainer" class="row" *ngIf="reviews.length; else noReviews">
   <div *ngFor="let review of reviews; trackBy: trackById" class="col-4">
     <app-realty-obj-card [realtyObject]="review.realtyObj">
       <ng-container *ngIf="review.dateTime">
@@ -24,3 +24,9 @@
     </app-realty-obj-card>
   </div>
 </div>
+
+<ng-template #noReviews>
+  <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
+    <div>For Now You Didn't Schedule Any Reviews. Enjoy Using Our Service!</div>
+  </div>
+</ng-template>

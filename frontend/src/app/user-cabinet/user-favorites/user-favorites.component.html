@@ -1,4 +1,4 @@
-<div id="itemsContainer" class="row" *ngIf="interests.length">
+<div id="itemsContainer" class="row" *ngIf="interests.length; else noInterests">
   <div *ngFor="let interest of interests; trackBy: trackById" class="col-4">
     <app-realty-obj-card [realtyObject]="interest.realtyObj">
       <div class style="width: 100%; display: flex; justify-content: space-between">
@@ -30,3 +30,9 @@
     </app-realty-obj-card>
   </div>
 </div>
+
+<ng-template #noInterests>
+  <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
+    <div>For Now You Didn't Like Any Realty. Enjoy Using Our Service!</div>
+  </div>
+</ng-template>

@@ -31,6 +31,7 @@ public class UserApi {
   @PostMapping
   public User create(@Valid @RequestBody AccountCredentials credentials) {
     User user = new User();
+
     user.setLogin(credentials.getLogin());
     user.setPassword(credentials.getPassword());
     userService.save(user);

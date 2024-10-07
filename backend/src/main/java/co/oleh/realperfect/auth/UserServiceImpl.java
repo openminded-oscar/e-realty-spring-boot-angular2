@@ -36,6 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
+        if (this.userRepository.findByLogin(user.getLogin()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists!");
+        }
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(new HashSet<>(roleRepository.findAll()));
 
@@ -94,7 +98,7 @@ public class UserServiceImpl implements UserService {
         if (patchDto.getEmail() != null) {
             existingUser.setEmail(patchDto.getEmail());
         }
-        if(patchDto.getProfilePic() != null) {
+        if (patchDto.getProfilePic() != null) {
             existingUser.setProfilePic(patchDto.getProfilePic().getFilename());
         } else {
             existingUser.setProfilePic(null);
