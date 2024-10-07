@@ -161,7 +161,9 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   public openScheduleReviewModal() {
-    this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'}).result.then((value: {
+    const modalRef =
+      this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
+    modalRef.result.then((value: {
       reviewDate: NgbDateStruct,
       reviewTime: NgbTimeStruct
     }) => {
@@ -169,6 +171,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     }, error => {
       console.log('data dismissed');
     });
+    modalRef.componentInstance.realtyObject = this.currentObject;
   }
 
   public saveReviewAndClose(value: {

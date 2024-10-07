@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {NgbActiveModal, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import {dateTimeBasedOnNGBDateTimePicker} from '../../services/reviews.service';
+import {RealtyObj} from '../../domain/realty-obj';
 
 export function reviewDateTimeValidator(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors => {
@@ -37,6 +38,7 @@ export function reviewDateTimeValidator(): ValidatorFn {
   styleUrls: ['./schedule-form-modal.component.scss']
 })
 export class ScheduleFormModalComponent implements OnInit {
+  public realtyObject: RealtyObj;
   public reviewTimeForm: FormGroup;
 
   public get googleCalendarLink() {
@@ -44,7 +46,14 @@ export class ScheduleFormModalComponent implements OnInit {
     const endTime = new Date(startTime);
     endTime.setUTCHours(endTime.getUTCHours() + 1);
 
-    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Realperfect+Realty+Review` +
+    let titleObjectPart = '';
+    if (this.realtyObject) {
+      titleObjectPart = encodeURIComponent(` Apartment at ` +
+        `${this.realtyObject.address?.street} str. est. at ${this.realtyObject.price}`);
+    }
+
+    // TODO add realter contacts and phone number!
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Realperfect+Review` + titleObjectPart +
       `&dates=${this.formatToGoogleCalendarUTC(startTime)}/${this.formatToGoogleCalendarUTC(endTime)}` +
       `&location=To+Be+Contacted&sf=true&output=xml`;
   }

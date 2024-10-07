@@ -63,15 +63,17 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
       });
   }
 
-  public openScheduleReviewModal(id: number) {
-    this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'}).result.then((value: {
+  public openScheduleReviewModal(object: RealtyObj) {
+    const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'})
+    modalRef.result.then((value: {
       reviewDate: NgbDateStruct,
       reviewTime: NgbTimeStruct
     }) => {
-      this.saveReviewAndClose(id, value);
+      this.saveReviewAndClose(object.id, value);
     }, error => {
       console.log('data dismissed');
     });
+    modalRef.componentInstance.realtyObject = object;
   }
 
   public saveReviewAndClose(objectId: number, value: {
