@@ -7,9 +7,24 @@ import {Review, ReviewDto, ReviewPostDto, ReviewSelectTimeDto} from '../domain/r
 import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {RealtorService} from './realtor.service';
 import {UserService} from './user.service';
 import {RealtyObjService} from './realty-obj.service';
+
+
+export const dateTimeBasedOnNGBDateTimePicker = (reviewSelectTimeDto: ReviewSelectTimeDto) => {
+  const reviewDate = reviewSelectTimeDto.reviewDate;
+  const reviewTime = reviewSelectTimeDto.reviewTime;
+  const utcDatetime = new Date(
+    reviewDate.year,
+    reviewDate.month - 1,
+    reviewDate.day,
+    reviewTime.hour,
+    reviewTime.minute,
+    reviewTime.second
+  );
+  return utcDatetime;
+};
+
 
 
 @Injectable()
@@ -24,16 +39,7 @@ export class ReviewsService extends AbstractService<ReviewDto> {
   }
 
   public save(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<HttpResponse<ReviewPostDto>> {
-    const reviewDate = reviewSelectTimeDto.reviewDate;
-    const reviewTime = reviewSelectTimeDto.reviewTime;
-    const utcDatetime = new Date(
-      reviewDate.year,
-      reviewDate.month - 1,
-      reviewDate.day,
-      reviewTime.hour,
-      reviewTime.minute,
-      reviewTime.second
-    );
+    const utcDatetime = dateTimeBasedOnNGBDateTimePicker(reviewSelectTimeDto);
 
     const review = {
       realtyObjId: reviewSelectTimeDto.realtyObjId,
