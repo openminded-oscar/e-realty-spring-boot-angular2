@@ -3,26 +3,11 @@
     <app-user-profile></app-user-profile>
   </div>
   <div class="col-9">
-    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-      <li [ngbNavItem]="1">
-        <a ngbNavLink>My Objects</a>
-        <ng-template ngbNavContent>
-          <app-user-objects></app-user-objects>
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="2">
-        <a ngbNavLink>My Reviews</a>
-        <ng-template ngbNavContent>
-          <app-user-reviews></app-user-reviews>
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="3">
-        <a ngbNavLink>My Favorites</a>
-        <ng-template ngbNavContent>
-          <app-user-favorites></app-user-favorites>
-        </ng-template>
+    <ul ngbNav class="nav-tabs">
+      <li [ngbNavItem]="link.route" *ngFor="let link of links">
+        <a ngbNavLink [routerLink]="link.route">{{ link.title }}</a>
       </li>
     </ul>
-    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    <router-outlet></router-outlet>
   </div>
 </div>

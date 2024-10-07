@@ -32,16 +32,12 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.fetchUserReviews();
-  }
-
-  private fetchUserReviews() {
-    this.reviewService.getAllReviewsForUser()
+    this.reviewService.currentUserReviews$
       .pipe(
         takeUntil(this.destroy$)
       )
       .subscribe(reviewsResponse => {
-        this.reviews = reviewsResponse.body;
+        this.reviews = reviewsResponse;
         this.reviewMappedObjects = this.reviews.map(review => review.realtyObj);
       });
   }
@@ -50,11 +46,7 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(ConfirmModalComponent);
     modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';
     modalRef.result.then(res => {
-      this.reviewService.remove(realtyObj.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
-          this.fetchUserReviews();
-        });
+      this.reviewService.remove(realtyObj.id).subscribe();
     });
   }
 

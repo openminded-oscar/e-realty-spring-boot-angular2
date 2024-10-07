@@ -6,9 +6,14 @@ import {Interest, InterestDto} from '../domain/interest';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class InterestService extends AbstractService <InterestDto> {
+  private currentUserInterests = new BehaviorSubject<Interest[]>([]);
+  public currentUserInterest$ = this.currentUserInterests.asObservable();
+
+
   constructor(http: HttpClient) {
     super(http, endpoints.interest);
   }
@@ -20,20 +25,35 @@ export class InterestService extends AbstractService <InterestDto> {
         (realtyObjects ?? []).forEach(value => {
           value.mainPhotoPath = RealtyObj.getMainPhoto(value);
         });
+        this.currentUserInterests.next(res.body);
       })
     );
   }
 
-  public save(interest: InterestDto): Observable<HttpResponse<InterestDto>> {
-    return this.sendRequest('post', '', interest);
+  public save(interest: InterestDto): Observable<HttpResponse<Interest>> {
+    return this.sendRequest<Interest>('post', '', interest).pipe(
+      tap(res => {
+        const currentInterests = this.currentUserInterests.value;
+        const updatedInterests = [...currentInterests, res.body as Interest];
+        this.currentUserInterests.next(updatedInterests);
+      })
+    );
+  }
+
+  public remove(realtyObjId: number): Observable<HttpResponse<InterestDto>> {
+    return this.sendRequest<InterestDto>('delete', `/${realtyObjId}`, {}).pipe(
+      tap(() => {
+        const currentInterests = this.currentUserInterests.value;
+        const updatedInterests = currentInterests.filter(
+          interest => interest.realtyObj.id !== realtyObjId
+        );
+        this.currentUserInterests.next(updatedInterests);
+      })
+    );
   }
 
   public get(realtyObjId: number): Observable<HttpResponse<InterestDto>> {
     return this.sendRequest('get', `/${realtyObjId}`, {});
-  }
-
-  public remove(realtyObjId: number): Observable<HttpResponse<InterestDto>> {
-    return this.sendRequest('delete', `/${realtyObjId}`, {});
   }
 }
 

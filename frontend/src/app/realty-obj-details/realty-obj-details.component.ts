@@ -10,7 +10,6 @@ import {NgbDateStruct, NgbModal, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap
 import {ReviewsService} from '../services/reviews.service';
 import {ReviewDto} from '../domain/review';
 import {HttpResponse} from '@angular/common/http';
-import {SampleSocketService} from '../services/socket/sample-socket.service';
 import {Subject} from 'rxjs/Subject';
 import {takeUntil, tap} from 'rxjs/operators';
 import {User} from '../domain/user';
@@ -182,7 +181,11 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     }).pipe(takeUntil(this.destroy$))
       .subscribe(reviewsResponse => {
         if (reviewsResponse.body) {
-          this.currentReview = reviewsResponse.body;
+          this.currentReview = {
+            ...reviewsResponse.body,
+            userId: this.user.id,
+            realtyObjId: this.currentObject.id,
+          };
         }
       });
   }

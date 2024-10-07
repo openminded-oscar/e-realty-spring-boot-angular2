@@ -26,7 +26,6 @@ export enum BackendSupportedOperations {
 
 @Injectable()
 export class RealtyObjService {
-
   constructor(private http: HttpClient) {
   }
 
