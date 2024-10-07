@@ -1,5 +1,26 @@
 <div id="itemsContainer" class="row" *ngIf="reviews.length">
   <div *ngFor="let review of reviews; trackBy: trackById" class="col-4">
-    <app-realty-obj-card [realtyObject]="review.realtyObj"></app-realty-obj-card>
+    <app-realty-obj-card [realtyObject]="review.realtyObj">
+      <ng-container *ngIf="review.dateTime">
+        <ng-container *ngIf="isFutureDate(review.dateTime); else pastDate">
+          <div style="display: flex; flex-direction: row; justify-content: space-between">
+            <div>
+              Scheduled for {{ review.dateTime | date: 'MMM d, HH:mm':'local' }}
+            </div>
+            <div>
+              <button (click)="cancelReview(review.realtyObj)">Cancel</button>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #pastDate>
+          <div>
+            Reviewed on {{ review.dateTime | date: 'MMM d, HH:mm':'local' }}
+          </div>
+<!--          <div>-->
+<!--            <button (click)="rateReview(review.realtyObj)">Rate</button>-->
+<!--          </div>-->
+        </ng-template>
+      </ng-container>
+    </app-realty-obj-card>
   </div>
 </div>

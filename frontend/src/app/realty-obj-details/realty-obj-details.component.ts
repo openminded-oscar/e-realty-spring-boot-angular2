@@ -46,7 +46,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
               public interestService: InterestService,
               public reviewsService: ReviewsService,
               public modalService: NgbModal,
-              public socketService: SampleSocketService,
               public route: ActivatedRoute) {
   }
 

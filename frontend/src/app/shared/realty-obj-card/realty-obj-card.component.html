@@ -1,8 +1,11 @@
 <div class="thumbnail">
-  <div class="thumbnail-image-container">
+  <div class="thumbnail-image-container" style="position: relative;">
     <img class="thumbnail-image"
          src="{{realtyObject.mainPhotoPath?realtyObject.mainPhotoPath:'https://placehold.co/600x400'}}"
          alt="">
+    <div class="image-overlay-text">
+      <ng-content></ng-content>
+    </div>
   </div>
   <div class="caption">
     <div class="caption-top-row">

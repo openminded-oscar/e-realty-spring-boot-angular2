@@ -31,3 +31,11 @@
     margin-bottom: 0.3rem;
   }
 }
+
+.image-overlay-text {
+  position: absolute;
+  bottom: 10px;
+  background-color: rgba(0, 0, 0, 53%);
+  color: white;
+  width: 100%
+}

@@ -13,7 +13,6 @@ import {UserService} from '../../services/user.service';
 export class RealtyObjCardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   public isMyObject: boolean;
-
   private _realtyObject: RealtyObj;
   @Input()
   public set realtyObject(value: RealtyObj) {

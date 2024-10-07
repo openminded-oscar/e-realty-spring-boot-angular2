@@ -18,11 +18,21 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
   constructor(public reviewService: ReviewsService) {
   }
 
+
+  public isFutureDate(dateTime: Date): boolean {
+    const currentDate = new Date();
+    return new Date(dateTime) > currentDate;
+  }
+
   public trackById(index: number, obj: Review): number {
     return obj.id;
   }
 
   ngOnInit(): void {
+    this.fetchUserReviews();
+  }
+
+  private fetchUserReviews() {
     this.reviewService.getAllReviewsForUser()
       .pipe(
         takeUntil(this.destroy$)
@@ -33,8 +43,17 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
       });
   }
 
+  public cancelReview(realtyObj: RealtyObj): void {
+    this.reviewService.remove(realtyObj.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.fetchUserReviews();
+      });
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  // public rateReview(realtyObj: RealtyObj) {}
 }
