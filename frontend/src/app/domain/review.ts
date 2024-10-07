@@ -16,6 +16,13 @@ export interface ReviewDto {
   dateTime: Date;
 }
 
+export interface ReviewPostDto {
+  id?: number;
+  userId: number;
+  realtyObj: RealtyObj;
+  dateTime: Date;
+}
+
 export interface ReviewSelectTimeDto {
   realtyObjId?: number;
   reviewDate?: NgbDateStruct;

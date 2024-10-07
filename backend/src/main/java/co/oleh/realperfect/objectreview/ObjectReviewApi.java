@@ -42,7 +42,7 @@ public class ObjectReviewApi {
     }
 
     @PostMapping
-    public ResponseEntity<ObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user, @RequestBody ObjectReviewDto review) throws IOException {
+    public ResponseEntity<MyObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user, @RequestBody ObjectReviewDto review) throws IOException {
         if (reviewService.findFutureReviewForUserAndObject(user.getId(), review.getRealtyObjId()) != null) {
             throw new RuntimeException("There is already such review");
         }

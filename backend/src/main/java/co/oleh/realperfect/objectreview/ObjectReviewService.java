@@ -4,6 +4,8 @@ import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.model.ObjectReview;
+import co.oleh.realperfect.model.RealtyObject;
+import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
 import co.oleh.realperfect.repository.RealtyObjectRepository;
 import co.oleh.realperfect.repository.UserRepository;
@@ -23,15 +25,17 @@ public class ObjectReviewService {
     private MappingService mappingService;
 
 
-    public ObjectReviewDto save(ObjectReviewDto objectReview) {
+    public MyObjectReviewDto save(ObjectReviewDto objectReview) {
         ObjectReview objectReviewEntity = mappingService.map(objectReview, ObjectReview.class);
+        RealtyObject realtyObject = realtyObjectRepository.findById(objectReview.getRealtyObjId()).get();
+        User user = userRepository.findById(objectReview.getUserId()).get();
 
-        objectReviewEntity.setUser(userRepository.findById(objectReview.getUserId()).get());
-        objectReviewEntity.setRealtyObj(realtyObjectRepository.findById(objectReview.getRealtyObjId()).get());
+        objectReviewEntity.setUser(user);
+        objectReviewEntity.setRealtyObj(realtyObject);
 
-        objectReviewRepository.save(objectReviewEntity);
+        ObjectReview savedEntity = objectReviewRepository.save(objectReviewEntity);
 
-        return objectReview;
+        return mappingService.map(savedEntity, MyObjectReviewDto.class);
     }
 
     public ObjectReview remove(ObjectReview objectReview) {

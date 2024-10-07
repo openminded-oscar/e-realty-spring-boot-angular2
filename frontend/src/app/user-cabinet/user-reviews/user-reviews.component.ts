@@ -35,8 +35,7 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
     this.reviewService.currentUserReviews$
       .pipe(
         takeUntil(this.destroy$)
-      )
-      .subscribe(reviewsResponse => {
+      ).subscribe(reviewsResponse => {
         this.reviews = reviewsResponse;
         this.reviewMappedObjects = this.reviews.map(review => review.realtyObj);
       });

@@ -36,11 +36,16 @@ export class UserService {
 
     this.http.get(endpoints.userStatus, {headers}).subscribe(
       (userInfo: User) => {
-        userInfo.profilePicUrl = Photo.getLinkByFilename(userInfo.profilePic as unknown as string);
+        userInfo.profilePicUrl = userInfo.profilePic ?
+          Photo.getLinkByFilename(userInfo.profilePic as unknown as string) : null;
         userInfo.realtyObjects.forEach(o => o.mainPhotoPath = RealtyObj.getMainPhoto(o));
         this.userSubject.next(userInfo);
         this.isAuthenticatedSubject.next(!!userInfo);
       });
+  }
+
+  public getCurrentUserValue(): User | null {
+    return this.userSubject.getValue();
   }
 
   public clearUserInState() {

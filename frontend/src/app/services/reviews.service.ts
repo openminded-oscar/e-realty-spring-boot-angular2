@@ -3,11 +3,13 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import {endpoints} from '../commons';
 import {AbstractService} from './common/abstract.service';
 import {Observable} from 'rxjs';
-import {Review, ReviewDto, ReviewSelectTimeDto} from '../domain/review';
+import {Review, ReviewDto, ReviewPostDto, ReviewSelectTimeDto} from '../domain/review';
 import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-
+import {RealtorService} from './realtor.service';
+import {UserService} from './user.service';
+import {RealtyObjService} from './realty-obj.service';
 
 
 @Injectable()
@@ -15,11 +17,13 @@ export class ReviewsService extends AbstractService<ReviewDto> {
   private currentUserReviews = new BehaviorSubject<Review[]>([]);
   public currentUserReviews$ = this.currentUserReviews.asObservable();
 
-  constructor(http: HttpClient) {
+  constructor(public http: HttpClient,
+              public objectsService: RealtyObjService,
+              public userService: UserService) {
     super(http, endpoints.review);
   }
 
-  public save(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<HttpResponse<Review>> {
+  public save(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<HttpResponse<ReviewPostDto>> {
     const reviewDate = reviewSelectTimeDto.reviewDate;
     const reviewTime = reviewSelectTimeDto.reviewTime;
     const utcDatetime = new Date(
@@ -36,10 +40,18 @@ export class ReviewsService extends AbstractService<ReviewDto> {
       dateTime: utcDatetime
     };
 
-    return this.sendRequest<Review>('post', '', review).pipe(
+    return this.sendRequest<ReviewPostDto>('post', '', review).pipe(
       tap(res => {
         const currentReviews = this.currentUserReviews.value;
-        const updatedReviews = [...currentReviews, res.body as Review];
+        const updatedReview = {
+          ...res.body,
+          realtyObj: {
+            ...res.body.realtyObj,
+            mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
+          },
+          user: this.userService.getCurrentUserValue()
+        };
+        const updatedReviews = [updatedReview, ...currentReviews];
         this.currentUserReviews.next(updatedReviews);
       })
     );
@@ -48,7 +60,6 @@ export class ReviewsService extends AbstractService<ReviewDto> {
   public remove(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
     return this.sendRequest<ReviewDto>('delete', `/${realtyObjId}`, {}).pipe(
       tap(() => {
-        // Remove the review from the current list and update the BehaviorSubject
         const currentReviews = this.currentUserReviews.value;
         const updatedReviews = currentReviews.filter(
           review => review.realtyObj.id !== realtyObjId
