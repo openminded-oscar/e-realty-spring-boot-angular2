@@ -4,6 +4,8 @@ import {Review} from '../../domain/review';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 import {RealtyObj} from '../../domain/realty-obj';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-user-reviews',
@@ -15,7 +17,8 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
   public reviewMappedObjects: RealtyObj[] = [];
   private destroy$ = new Subject<boolean>();
 
-  constructor(public reviewService: ReviewsService) {
+  constructor(public reviewService: ReviewsService,
+              public modalService: NgbModal) {
   }
 
 
@@ -44,16 +47,21 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
   }
 
   public cancelReview(realtyObj: RealtyObj): void {
-    this.reviewService.remove(realtyObj.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.fetchUserReviews();
-      });
+    const modalRef = this.modalService.open(ConfirmModalComponent);
+    modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';
+    modalRef.result.then(res => {
+      this.reviewService.remove(realtyObj.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.fetchUserReviews();
+        });
+    });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
   // public rateReview(realtyObj: RealtyObj) {}
 }

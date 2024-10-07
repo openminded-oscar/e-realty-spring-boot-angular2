@@ -176,27 +176,10 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     reviewDate: NgbDateStruct,
     reviewTime: NgbTimeStruct
   }) {
-    const reviewDate = value.reviewDate;
-    const reviewTime = value.reviewTime;
-
-    const utcDatetime =
-      new Date(
-        reviewDate.year,
-        reviewDate.month - 1,
-        reviewDate.day,
-        reviewTime.hour,
-        reviewTime.minute,
-        reviewTime.second
-      );
-
-    const review = {
-      userId: this.user.id,
+    this.reviewsService.save({
+      ...value,
       realtyObjId: this.currentObject.id,
-      dateTime: utcDatetime
-    };
-
-    this.reviewsService.save(review)
-      .pipe(takeUntil(this.destroy$))
+    }).pipe(takeUntil(this.destroy$))
       .subscribe(reviewsResponse => {
         if (reviewsResponse.body) {
           this.currentReview = reviewsResponse.body;
@@ -212,7 +195,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
   public openReviewRemoveDialog() {
     const modalRef = this.modalService.open(ConfirmModalComponent);
-    modalRef.componentInstance.message = 'Are you sure you want to delete this review?';  // Passing custom message
+    modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';  // Passing custom message
     modalRef.result.then((result) => {
       if (result) {
         this.removeReview();

@@ -3,7 +3,7 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import {endpoints} from '../commons';
 import {AbstractService} from './common/abstract.service';
 import {Observable} from 'rxjs';
-import {Review, ReviewDto} from '../domain/review';
+import {Review, ReviewDto, ReviewSelectTimeDto} from '../domain/review';
 import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
 
@@ -13,7 +13,23 @@ export class ReviewsService extends AbstractService <ReviewDto> {
     super(http, endpoints.review);
   }
 
-  public save(review: ReviewDto): Observable<HttpResponse<ReviewDto>> {
+  public save(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<HttpResponse<ReviewDto>> {
+    const reviewDate = reviewSelectTimeDto.reviewDate;
+    const reviewTime = reviewSelectTimeDto.reviewTime;
+    const utcDatetime =
+      new Date(
+        reviewDate.year,
+        reviewDate.month - 1,
+        reviewDate.day,
+        reviewTime.hour,
+        reviewTime.minute,
+        reviewTime.second
+      );
+    const review = {
+      realtyObjId: reviewSelectTimeDto.realtyObjId,
+      dateTime: utcDatetime
+    };
+
     return this.sendRequest('post', '', review);
   }
 

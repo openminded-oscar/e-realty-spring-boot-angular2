@@ -42,10 +42,12 @@ public class ObjectReviewApi {
     }
 
     @PostMapping
-    public ResponseEntity<ObjectReviewDto> saveReview(@RequestBody ObjectReviewDto review) throws IOException {
-        if (reviewService.findFutureReviewForUserAndObject(review.getUserId(), review.getRealtyObjId()) != null) {
+    public ResponseEntity<ObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user, @RequestBody ObjectReviewDto review) throws IOException {
+        if (reviewService.findFutureReviewForUserAndObject(user.getId(), review.getRealtyObjId()) != null) {
             throw new RuntimeException("There is already such review");
         }
+        review.setUserId(user.getId());
+
         Event event = constructEventForObjectReview(review);
         googleCalendarWrapperService.addEventToPrimaryCalendar(event);
 
