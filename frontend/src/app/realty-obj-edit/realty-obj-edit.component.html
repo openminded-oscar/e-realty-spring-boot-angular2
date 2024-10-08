@@ -47,7 +47,7 @@
               <label class="col-1 col-form-label text-right" for="rooms-amount-input">Rooms
                 amount:</label>
               <div class="col-3">
-                <input id="rooms-amount-input" name="rooms" type="text"
+                <input id="rooms-amount-input" name="rooms" type="number"
                        class="form-control"
                        [formControlName]="'roomsAmount'">
               </div>
@@ -55,12 +55,12 @@
             <div class="form-group row">
               <label class="col-form-label col-1 text-right" for="building-floors-input">Floors in building:</label>
               <div class="col-3">
-                <input id="building-floors-input" name="buildNum" type="text"
+                <input id="building-floors-input" name="buildNum" type="number"
                        class="form-control" [formControlName]="'totalFloors'">
               </div>
               <label class="col-form-label col-1 text-right" for="floor-input">Floor:</label>
               <div class="col-3">
-                <input id="floor-input" name="floor" type="text"
+                <input id="floor-input" name="floor" type="number"
                        class="form-control" [formControlName]="'floor'">
               </div>
               <div class="col-form-label text-right col-1">
@@ -77,13 +77,13 @@
               <label class="col-form-label col-1 text-right" for="total-area-input">Total
                 area:</label>
               <div class="col-3">
-                <input id="total-area-input" name="total-area" type="text"
+                <input id="total-area-input" name="total-area" type="number"
                        class="form-control" [formControlName]="'totalArea'">
               </div>
               <label class="col-form-label col-1 text-right" for="textinput">Living
                 area:</label>
               <div class="col-3">
-                <input id="textinput" name="buildNum" type="text"
+                <input id="textinput" name="buildNum" type="number"
                        class="form-control"
                        [formControlName]="'livingArea'">
               </div>
