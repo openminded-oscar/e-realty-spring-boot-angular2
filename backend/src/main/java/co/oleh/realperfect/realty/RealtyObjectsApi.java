@@ -1,6 +1,7 @@
 package co.oleh.realperfect.realty;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
+import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
@@ -46,7 +47,7 @@ public class RealtyObjectsApi {
 
     @PostMapping(value = "/realty-objects")
     public ResponseEntity<Page<RealtyObjectDto>> getRealtyObjects(@RequestBody(required = false)
-                                                                      List<FilterItem> filterItems,
+                                                                  List<FilterItem> filterItems,
                                                                   Pageable pageable) {
         Page<RealtyObjectDto> allObjects;
         if (filterItems != null) {
@@ -59,7 +60,11 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/realty-objects/save")
-    public ResponseEntity<RealtyObjectDetailsDto> postRealtyObject(@Valid @RequestBody RealtyObjectDetailsDto realtyObject) {
+    public ResponseEntity<RealtyObjectDetailsDto> postRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
+                                                                   @Valid @RequestBody RealtyObjectDetailsDto realtyObject) {
+        realtyObject.setOwner(new UserDto() {{
+            setId(user.getId());
+        }});
         RealtyObjectDetailsDto addedObject = realtyObjectsService.add(realtyObject);
 
         return new ResponseEntity<>(addedObject, HttpStatus.OK);
