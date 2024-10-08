@@ -1,4 +1,28 @@
 @import 'app/variables';
+
+$aw-colors: (
+  '_': (
+    'done': (
+      'border-color-default': #d0efff,
+      'background-color-default': #d0efff,
+      'symbol-color-default': #d0efff,
+      'border-color-hover': #d0efff,
+      'background-color-hover': #d0efff,
+      'symbol-color-hover': #d0efff,
+    ),
+    'current': (
+      'border-color-default': #17a2b8,
+      'background-color-default': #17a2b8,
+      'symbol-color-default': #17a2b8,
+      'border-color-hover': #17a2b8,
+      'background-color-hover': #17a2b8,
+      'symbol-color-hover': #17a2b8,
+    )
+  )
+);
+
+@import '../node_modules/angular-archwizard/styles/archwizard.scss';
+
 body { padding-top: $header-height; }
 
 .side-section {
