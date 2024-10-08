@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "11.2.14",
     "@angular/router": "11.2.14",
     "@ng-bootstrap/ng-bootstrap": "9.0.0",
-    "angular-archwizard": "^3.0.0",
+    "angular-archwizard": "7.0.0",
     "angularx-social-login": "^3.2.2",
     "bootstrap": "^4.5.0",
     "core-js": "3.23.3",

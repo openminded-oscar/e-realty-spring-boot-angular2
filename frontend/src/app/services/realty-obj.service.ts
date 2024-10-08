@@ -66,6 +66,9 @@ export class RealtyObjService {
         if (realtyObj.realtor && realtyObj.realtor.profilePic) {
           realtyObj.realtor.profilePic.fullUrl = Photo.getLinkByFilename(realtyObj.realtor.profilePic.filename);
         }
+        if (realtyObj.confirmationDocPhoto) {
+          realtyObj.confirmationDocPhoto.fullUrl = RealtyPhoto.getLinkByFilename(realtyObj.confirmationDocPhoto.filename);
+        }
         realtyObj.photos?.forEach(photo => {
           photo.fullUrl = RealtyPhoto.getLinkByFilename(photo.filename);
         });

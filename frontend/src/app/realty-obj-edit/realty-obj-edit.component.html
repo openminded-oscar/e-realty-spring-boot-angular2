@@ -1,91 +1,93 @@
 <div class="row">
   <div class="col-12">
-    <form #realtyForm="ngForm">
+    <form [formGroup]="realtyForm">
       <h5 class="text-center">Please Fill Information On The Object:</h5>
       <aw-wizard [navBarLayout]="'large-empty'">
-        <aw-wizard-step stepTitle="Address and primary info">
+        <aw-wizard-step [formGroup]="basicInfoFormGroup" stepTitle="Address and primary info">
           <div class="text-right mb-2 action-buttons">
             <button type="button" class="btn btn-info" awNextStep>Next Step</button>
             <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
             </button>
           </div>
           <div class="form-horizontal">
-            <div class="form-group row">
-              <label class="col-1 col-form-label">City:</label>
-              <div class="col-5">
-                <address-input [(ngModel)]="realtyObj.address.city" name="city" required></address-input>
+            <div class="form-group row" [formGroupName]="'address'">
+              <label class="col-1 col-form-label text-right">City:</label>
+              <div class="col-3">
+                <input style="width: 100%" [formControlName]="'city'">
               </div>
-              <label class="col-1 col-form-label">Street:</label>
-              <div class="col-5">
-                <address-input [(ngModel)]="realtyObj.address.street" name="street" required></address-input>
+              <label class="col-1 col-form-label text-right">Street:</label>
+              <div class="col-3">
+                <input style="width: 100%" [formControlName]="'street'">
               </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-1 col-form-label" for="number-of-street-input">Building number:</label>
+              <label class="col-1 col-form-label text-right" for="number-of-street-input">Building number:</label>
               <div class="col-3">
                 <input id="number-of-street-input" name="buildingNumber" type="text"
                        class="form-control"
-                       [(ngModel)]="realtyObj.address.numberOfStreet" required minlength="1">
-              </div>
-              <label class="col-1 col-form-label" for="apt-number-input">Apt.
-                number:</label>
-              <div class="col-3">
-                <input id="apt-number-input" [(ngModel)]="realtyObj.address.apartmentNumber"
-                       name="flatNum" type="text" class="form-control"
-                       [disabled]="realtyObj.dwellingType!=='APARTMENT'" required>
-              </div>
-              <label class="col-2 col-form-label text-right">Dwelling type:</label>
-              <div class="col-2">
-                <select [(ngModel)]="realtyObj.dwellingType" name="dwellingType" class="form-control" required>
-                  <option *ngFor="let dwellingType of dwellingTypes" [ngValue]="dwellingType">{{dwellingType}}
-                  </option>
-                </select>
+                       [formControlName]="'numberOfStreet'">
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-1" for="floor-input">Floor:</label>
+              <ng-container [formGroupName]="'address'">
+                <label class="col-1 col-form-label text-right" for="apt-number-input">Apt.
+                  number:</label>
+                <div class="col-3">
+                  <input id="apt-number-input" [formControlName]="'apartmentNumber'"
+                         name="flatNum"
+                         type="text"
+                         class="form-control">
+                </div>
+              </ng-container>
+              <label class="col-1 col-form-label text-right">Dwelling type:</label>
               <div class="col-3">
-                <input id="floor-input" name="floor" type="text"
-                       class="form-control" [(ngModel)]="realtyObj.floor" required>
+                <select [formControlName]="'dwellingType'" name="dwellingType" class="form-control">
+                  <option *ngFor="let dwellingType of dwellingTypes" [value]="dwellingType">{{ dwellingType }}
+                  </option>
+                </select>
               </div>
-              <label class="col-form-label col-1" for="building-floors-input">Floors in building:</label>
+              <label class="col-1 col-form-label text-right" for="rooms-amount-input">Rooms
+                amount:</label>
+              <div class="col-3">
+                <input id="rooms-amount-input" name="rooms" type="text"
+                       class="form-control"
+                       [formControlName]="'roomsAmount'">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-form-label col-1 text-right" for="building-floors-input">Floors in building:</label>
               <div class="col-3">
                 <input id="building-floors-input" name="buildNum" type="text"
-                       class="form-control" [(ngModel)]="realtyObj.totalFloors" required>
+                       class="form-control" [formControlName]="'totalFloors'">
+              </div>
+              <label class="col-form-label col-1 text-right" for="floor-input">Floor:</label>
+              <div class="col-3">
+                <input id="floor-input" name="floor" type="text"
+                       class="form-control" [formControlName]="'floor'">
               </div>
               <div class="col-form-label text-right col-1">
                 <label>Building type:</label>
               </div>
               <div class="col-3">
-                <select [(ngModel)]="realtyObj.buildingType" name="buildingType" class="form-control" required>
-                  <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{buildingType}}
+                <select [formControlName]="'buildingType'" name="buildingType" class="form-control">
+                  <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
                   </option>
                 </select>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-1 col-form-label" for="rooms-amount-input">Rooms
-                amount:</label>
-              <div class="col-3">
-                <input id="rooms-amount-input" name="rooms" type="text"
-                       class="form-control"
-                       [(ngModel)]="realtyObj.roomsAmount"
-                       required>
-              </div>
-              <label class="col-form-label col-1" for="total-area-input">Total
+              <label class="col-form-label col-1 text-right" for="total-area-input">Total
                 area:</label>
               <div class="col-3">
                 <input id="total-area-input" name="total-area" type="text"
-                       class="form-control" [(ngModel)]="realtyObj.totalArea"
-                       required>
+                       class="form-control" [formControlName]="'totalArea'">
               </div>
               <label class="col-form-label col-1 text-right" for="textinput">Living
                 area:</label>
               <div class="col-3">
                 <input id="textinput" name="buildNum" type="text"
-                       class="form-control" [(ngModel)]="realtyObj.livingArea"
-                       required>
+                       class="form-control"
+                       [formControlName]="'livingArea'">
               </div>
+
             </div>
           </div>
         </aw-wizard-step>
@@ -98,26 +100,28 @@
             <div class="col-6 text-right action-buttons">
               <button type="button" class="btn btn-info" awPreviousStep>Prev Step</button>
               <button type="button" class="btn btn-info" awNextStep>Next Step</button>
-              <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
+              <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">
+                Save
               </button>
             </div>
           </div>
-          <div class="form-horizontal">
+          <div [formGroup]="importantInfoFormGroup" class="form-horizontal">
             <div class="form-group row">
               <div class="col-1 col-form-label">
                 <label for="description-input">Overall description:</label>
               </div>
               <div class="col-5">
-					<textarea rows="4" maxlength="255" [(ngModel)]="realtyObj.description" class="form-control"
-                    id="description-input" name="description-input" required></textarea>
+        					<textarea rows="4" maxlength="255" [formControlName]="'description'" class="form-control"
+                            id="description-input" name="description-input"></textarea>
               </div>
               <div class="col-1 col-form-label">
                 <label for="other-info-input">Other info:</label>
               </div>
               <div class="col-5">
-					<textarea rows="3" maxlength="64" name="otherInfo" [(ngModel)]="realtyObj.otherInfo" class="form-control"
-                    id="other-info-input"
-          ></textarea>
+        					<textarea rows="3" maxlength="64" name="otherInfo" [formControlName]="'otherInfo'"
+                            class="form-control"
+                            id="other-info-input"
+                  ></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -126,14 +130,13 @@
               </div>
               <div class="col-2">
                 <input class="form-control" id="foundation-year-input"
-                       [(ngModel)]="realtyObj.foundationYear" name="foundationYear"
-                       required>
+                       [formControlName]="'foundationYear'" name="foundationYear">
               </div>
               <div class="col-3">
                 <label>Recently repaired</label>
                 <input name="repairing"
                        type="checkbox"
-                       [(ngModel)]="realtyObj.hasRepairing"
+                       [formControlName]="'hasRepairing'"
                        class="big-checkbox">
               </div>
               <div class="col-2">
@@ -142,7 +145,7 @@
                 </label>
                 <input type="checkbox"
                        name="garage"
-                       [(ngModel)]="realtyObj.hasGarage"
+                       [formControlName]="'hasGarage'"
                        class="big-checkbox">
               </div>
               <div class="col-2">
@@ -151,7 +154,7 @@
                 </label>
                 <input type="checkbox"
                        name="cellar"
-                       [(ngModel)]="realtyObj.hasCellar"
+                       [formControlName]="'hasCellar'"
                        class="big-checkbox">
               </div>
               <div class="col-2">
@@ -160,7 +163,7 @@
                 </label>
                 <input type="checkbox"
                        name="loft"
-                       [(ngModel)]="realtyObj.hasLoft"
+                       [formControlName]="'hasLoft'"
                        class="big-checkbox">
               </div>
             </div>
@@ -169,15 +172,15 @@
               <div class="col-2 mr-0 ml-0">
                 <label class="col-form-label">Supported operations:</label>
               </div>
-              <div class="col-10">
-                <ng-container *ngFor="let operation of operationsInputs">
+              <div class="col-10" [formArrayName]="'operations'">
+                <ng-container *ngFor="let operation of operationsInputValues; let i = index">
                   <label>
                     <input class="big-checkbox"
                            type="checkbox"
+                           [formControlName]="i"
                            [name]="operation.name"
-                           value="{{operation.value}}"
-                           [(ngModel)]="operation.checked"/>
-                    {{operation.name}}
+                           [value]="operation.checked"/>
+                    {{ operation.name }}
                   </label>
                 </ng-container>
               </div>
@@ -188,26 +191,29 @@
               </div>
               <div class="col-10">
                 <input id="price-input" name="price" type="text"
-                       class="form-control" [(ngModel)]="realtyObj.price"
-                       required>
+                       class="form-control"
+                       [formControlName]="'price'">
               </div>
             </div>
             <hr/>
             <div class="row">
               <div class="col-2 col-form-label">
-                <label>Select a Realtor:</label>
+                <label>Realtor:</label>
               </div>
               <div class="col-10">
-                <select class="form-control" [(ngModel)]="realtyObj.realtor" name="selected-realtor" required>
-                  <option *ngFor="let realtor of realtors" [ngValue]="realtor">
-                    {{realtor.name + ' ' + realtor.surname}}
+                <select class="form-control"
+                        [formControlName]="'realtor'"
+                        name="selected-realtor">
+                  <option value="" disabled>Select Realtor For Your Object</option> <!-- Placeholder option -->
+                  <option *ngFor="let realtor of realtors" [value]="realtor">
+                    {{ realtor.name + ' ' + realtor.surname }}
                   </option>
                 </select>
               </div>
             </div>
           </div>
         </aw-wizard-step>
-        <aw-wizard-step stepTitle="Photos and ownership confirmation">
+        <aw-wizard-step [formGroupName]="'photosFormGroup'" stepTitle="Photos and ownership confirmation">
           <div class="row mb-2">
             <div class="col-6 text-left">
               <button type="button" class="btn" awPreviousStep>Previous step</button>
@@ -215,7 +221,8 @@
             <div class="col-6 text-right action-buttons">
               <button type="button" class="btn btn-info" awPreviousStep>Prev Step</button>
               <button type="button" class="btn btn-info" disabled>Next Step</button>
-              <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
+              <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">
+                Save
               </button>
             </div>
           </div>
@@ -224,9 +231,9 @@
               <div class="col-3">
                 <label class="col-form-label">Ownership verification photo:&nbsp;</label>
                 <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
-                       accept="image/*" required>
+                       accept="image/*">
                 <div class="realty-confirmation-pic-preview-container">
-                  <img class="img-fluid" src="{{realtyObj?.confirmationDocPhoto?.fullUrl}}">
+                  <img class="img-fluid" [src]="photosFormGroup.get('confirmationDocPhoto')?.value?.fullUrl || ''">
                 </div>
               </div>
               <div class="col-9">
@@ -237,10 +244,11 @@
                          accept="image/*" required>
                 </div>
                 <div class="row">
-                  <div class="col-3 realty-pic-preview-container" *ngFor="let photo of realtyObj.photos; let i = index">
-                    <img class="img-fluid" src="{{photo.fullUrl}}">
+                  <div class="col-3 realty-pic-preview-container"
+                       *ngFor="let photo of photosFormGroup.get('photos')?.value; let i = index">
+                    <img class="img-fluid" [src]="photo.fullUrl || ''">
                     <div *ngIf="photo.type!==photoType.REALTY_MAIN">
-                      <button (click)="makeMain(photo)" class="btn btn-warning">Set as main</button>
+                      <button (click)="makeMain(i)" class="btn btn-warning">Set as main</button>
                     </div>
                     <div *ngIf="photo.type===photoType.REALTY_MAIN">
                       <div class="main-photo-text">Main photo</div>
