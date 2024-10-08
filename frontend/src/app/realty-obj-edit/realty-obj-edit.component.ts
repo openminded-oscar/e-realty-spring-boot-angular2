@@ -84,11 +84,11 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       }),
       dwellingType: [DWELLING_TYPES.APARTMENT, Validators.required],
       buildingType: [BUILDING_TYPES.BRICK, Validators.required],
-      floor: ['', Validators.required],
-      totalFloors: ['', Validators.required],
-      totalArea: ['', Validators.required],
-      livingArea: ['', Validators.required],
-      roomsAmount: ['', Validators.required]
+      floor: [null, Validators.required],
+      totalFloors: [null, Validators.required],
+      totalArea: [null, Validators.required],
+      livingArea: [null, Validators.required],
+      roomsAmount: [null, Validators.required]
     }, {validators: [valueGteAreaTotal(), valueGteFloorTotal()]});
     const operationsFormArray = new FormArray([]);
     this.operationsInputValues.forEach(operation => {
