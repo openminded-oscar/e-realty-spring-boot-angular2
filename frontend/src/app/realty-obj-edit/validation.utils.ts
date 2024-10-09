@@ -1,48 +1,41 @@
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 
-export function valueGteAreaTotal(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const totalAreaFormControl = control.get('totalArea');
-    const livingAreaFormControl = control.get('livingArea');
+function patchErrors(formControl: AbstractControl, errorKey: string, errorValue: any): void {
+  const existingErrors = formControl.errors || {};
 
-    const totalArea = totalAreaFormControl.value;
-    const livingArea = livingAreaFormControl.value;
-
-    if (totalArea === undefined || livingArea === undefined) {
-      return null;
-    }
-
-    const error =
-      Number(totalArea) < Number(livingArea) ? {totalAreaLessThenCurrent: true} : null;
-    if (error) {
-      totalAreaFormControl.setErrors({ invalid: true });
-      livingAreaFormControl.setErrors({ invalid: true });
-      totalAreaFormControl.markAsDirty();
-      livingAreaFormControl.markAsDirty();
-    }
-
-    return error;
-  };
+  if (errorValue) {
+    existingErrors[errorKey] = errorValue;
+    formControl.setErrors(existingErrors);
+  } else {
+    delete existingErrors[errorKey];
+    formControl.setErrors(Object.keys(existingErrors).length ? existingErrors : null);
+  }
 }
 
-export function valueGteFloorTotal(): ValidatorFn {
+export function valueGteThanTotal(keyCurrentValue: string, keyTotalValue: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const floorFormControl = control.get('floor');
-    const totalFloorsFormControl = control.get('totalFloors');
+    const currentValueFormControl = control.get(keyCurrentValue);
+    const totalValueFormControl = control.get(keyTotalValue);
 
-    const floor = floorFormControl.value;
-    const totalFloors = totalFloorsFormControl.value;
+    if (!totalValueFormControl || !currentValueFormControl) {
+      return null;
+    }
+    const totalArea = totalValueFormControl.value;
+    const livingArea = currentValueFormControl.value;
 
-    if (floor === undefined || totalFloors === undefined) {
+    if (totalArea == null || livingArea == null) {
       return null;
     }
 
-    const error = Number(totalFloors) < Number(floor) ? {totalFloorLessThenCurrent: true} : null;
+    const error = Number(totalArea) < Number(livingArea) ? {
+      totalLessThenCurrent: true
+    } : undefined;
     if (error) {
-      floorFormControl.setErrors({ invalid: true });
-      totalFloorsFormControl.setErrors({ invalid: true });
-      floorFormControl.markAsDirty();
-      totalFloorsFormControl.markAsDirty();
+      patchErrors(totalValueFormControl, 'totalLessThenCurrent', true);
+      patchErrors(currentValueFormControl, 'totalLessThenCurrent', true);
+    } else {
+      patchErrors(totalValueFormControl, 'totalLessThenCurrent', undefined);
+      patchErrors(currentValueFormControl, 'totalLessThenCurrent', undefined);
     }
 
     return error;
