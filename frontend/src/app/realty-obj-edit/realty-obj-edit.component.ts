@@ -166,7 +166,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       });
       (this.photosFormGroup.controls.photos as FormArray).push(control);
     });
-    // Update the supported operations
     this.operationsInputValues.forEach((op, index) => {
       const operationName = op.value;
       (this.importantInfoFormGroup.controls.targetOperations as FormArray).at(index).setValue(
@@ -177,30 +176,30 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
   public saveRealtyObject(): void {
     if (this.realtyForm.valid) {
-      const realtyObjData = {
+      const realtyObjFormData = {
         ...this.objectId ? {id: this.objectId} : {},
         ...this.realtyForm.controls.basicInfoFormGroup.value,
         ...this.realtyForm.controls.importantInfoFormGroup.value,
         ...this.realtyForm.controls.photosFormGroup.value
       };
       const includedOperations = [];
-      if (realtyObjData.targetOperations) {
-        realtyObjData.targetOperations.forEach((allowedAtIndex: boolean, index: number) => {
+      if (realtyObjFormData.targetOperations) {
+        realtyObjFormData.targetOperations.forEach((allowedAtIndex: boolean, index: number) => {
             if (allowedAtIndex) {
               includedOperations.push(this.operationsInputValues[index].name);
             }
           }
         );
       }
-      realtyObjData.targetOperations = includedOperations;
-      if (realtyObjData.realtor) {
-        const realtorId = Number(realtyObjData.realtor as string);
-        realtyObjData.realtor = this.realtors.find(r => {
+      realtyObjFormData.targetOperations = includedOperations;
+      if (realtyObjFormData.realtor) {
+        const realtorId = Number(realtyObjFormData.realtor as string);
+        realtyObjFormData.realtor = this.realtors.find(r => {
           return r.id === realtorId;
         });
       }
 
-      this.realtyObjService.save(realtyObjData)
+      this.realtyObjService.save(realtyObjFormData)
         .pipe(takeUntil(this.destroy$))
         .subscribe(
           (savedRealtyObj: RealtyObj) => {
