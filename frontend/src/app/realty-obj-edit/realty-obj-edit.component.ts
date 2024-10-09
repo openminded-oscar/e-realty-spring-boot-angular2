@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Event} from '@angular/router';
-import {ConfigService} from '../services/config.service';
+import {ConfigService, OPERATION_TYPES} from '../services/config.service';
 import {FileUploadService} from '../services/file-upload.service';
 import {RealtyObjService} from '../services/realty-obj.service';
 import {RealtorService} from '../services/realtor.service';
@@ -52,7 +52,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.operationsInputValues = this.config.supportedOperations.map(value => ({
-      value, name: value, checked: value === 'SELLING'
+      value, name: value, checked: value === OPERATION_TYPES.SELLING
     }));
     this.dwellingTypes = this.config.supportedDwellingTypes;
     this.buildingTypes = this.config.supportedBuildingTypes;
@@ -63,7 +63,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(realtors => this.realtors = realtors);
 
-    // Fetch and populate realty object if there's an object ID
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       if (params['objectId']) {
         this.objectId = params['objectId'];
@@ -93,7 +92,9 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       validators: [
         valueGteThanTotal('floor', 'totalFloors'),
         valueGteThanTotal('livingArea', 'totalArea')
-      ]});
+      ]
+    });
+
     const operationsFormArray = new FormArray([]);
     this.operationsInputValues.forEach(operation => {
       const control = this.fb.control(operation.checked);
@@ -102,12 +103,12 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     this.importantInfoFormGroup = this.fb.group({
       description: ['', [Validators.required, Validators.maxLength(255)]],
       otherInfo: ['', Validators.maxLength(64)],
-      foundationYear: ['', Validators.required],
+      foundationYear: ['', [Validators.required, Validators.min(1500)]],
       hasRepairing: [false],
       hasGarage: [false],
       hasCellar: [false],
       hasLoft: [false],
-      operations: operationsFormArray,
+      targetOperations: operationsFormArray,
       price: ['', Validators.required],
       realtor: ['', Validators.required]
     });
@@ -166,8 +167,11 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       (this.photosFormGroup.controls.photos as FormArray).push(control);
     });
     // Update the supported operations
-    this.operationsInputValues.forEach(op => {
-      op.checked = realtyObj.targetOperations.includes(op.value);
+    this.operationsInputValues.forEach((op, index) => {
+      const operationName = op.value;
+      (this.importantInfoFormGroup.controls.targetOperations as FormArray).at(index).setValue(
+        realtyObj.targetOperations.includes(operationName)
+      );
     });
   }
 
@@ -179,13 +183,22 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         ...this.realtyForm.controls.importantInfoFormGroup.value,
         ...this.realtyForm.controls.photosFormGroup.value
       };
+      const includedOperations = [];
+      if (realtyObjData.targetOperations) {
+        realtyObjData.targetOperations.forEach((allowedAtIndex: boolean, index: number) => {
+            if (allowedAtIndex) {
+              includedOperations.push(this.operationsInputValues[index].name);
+            }
+          }
+        );
+      }
+      realtyObjData.targetOperations = includedOperations;
       if (realtyObjData.realtor) {
         const realtorId = Number(realtyObjData.realtor as string);
         realtyObjData.realtor = this.realtors.find(r => {
           return r.id === realtorId;
         });
       }
-      realtyObjData.targetOperations = this.getSelectedOperations();
 
       this.realtyObjService.save(realtyObjData)
         .pipe(takeUntil(this.destroy$))
@@ -196,10 +209,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
           error => this.notificationService.showNotification('Failure! The object adding failed!')
         );
     }
-  }
-
-  private getSelectedOperations(): string[] {
-    return this.operationsInputValues.filter(op => op.checked).map(op => op.value);
   }
 
   public onVerificationPictureSelecting(event: Event): void {
