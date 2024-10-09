@@ -100,6 +100,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       const control = this.fb.control(operation.checked);
       operationsFormArray.push(control);
     });
+
     this.importantInfoFormGroup = this.fb.group({
       description: ['', [Validators.required, Validators.maxLength(255)]],
       otherInfo: ['', Validators.maxLength(64)],
