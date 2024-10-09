@@ -1,5 +1,6 @@
 package co.oleh.realperfect.pictures;
 
+import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.Photo;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import co.oleh.realperfect.model.photos.UserPhoto;
@@ -37,6 +38,8 @@ public class FileUploadController {
         Photo photo = null;
         if (type.equals("object")) {
             photo = pictureInfoService.save(new RealtyObjectPhoto(filename));
+        }  else if (type.equals("confirm-object")) {
+            photo = pictureInfoService.save(new ConfirmationDocPhoto(filename));
         } else if (type.equals("profile")) {
             photo = pictureInfoService.save(new UserPhoto(filename));
         }

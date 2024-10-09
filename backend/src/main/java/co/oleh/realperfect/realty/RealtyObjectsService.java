@@ -7,6 +7,7 @@ import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
+import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.realtor.RealtorService;
@@ -34,17 +35,20 @@ public class RealtyObjectsService {
     private RealtyObjectRepository realtyObjectRepository;
     private ObjectReviewRepository objectReviewRepository;
     private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
+    private ConfirmationDocPhotoRepository confirmationDocPhotoRepository;
     private final RealtorService realtorService;
     private final MappingService mappingService;
     private final UserRepository userRepository;
 
     public RealtyObjectsService(RealtyObjectRepository realtyObjectRepository,
                                 UserRepository userRepository,
+                                ConfirmationDocPhotoRepository confirmationDocPhotoRepository,
                                 ObjectReviewRepository objectReviewRepository,
                                 RealtyObjectPhotoRepository realtyObjectPhotoRepository,
                                 RealtyObjectCrudRepository realtyObjectCrudRepository,
                                 RealtorService realtorService,
                                 MappingService mappingService) {
+        this.confirmationDocPhotoRepository = confirmationDocPhotoRepository;
         this.objectReviewRepository = objectReviewRepository;
         this.realtyObjectRepository = realtyObjectRepository;
         this.realtyObjectCrudRepository = realtyObjectCrudRepository;
@@ -98,6 +102,11 @@ public class RealtyObjectsService {
                 })
                 .collect(Collectors.toList());
         realtyObject.setPhotos(retrievedPhotos);
+        if (realtyObjectDetailsDto.getConfirmationDocPhoto() != null) {
+            ConfirmationDocPhoto confPhoto =
+                    confirmationDocPhotoRepository.findById(realtyObjectDetailsDto.getConfirmationDocPhoto().getId()).get();
+            realtyObject.setConfirmationDocPhoto(confPhoto);
+        }
 
         RealtyObject createdObject = realtyObjectRepository.save(realtyObject);
 
