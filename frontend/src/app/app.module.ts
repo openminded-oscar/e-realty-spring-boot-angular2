@@ -16,7 +16,7 @@ import {RealtyObjService} from './services/realty-obj.service';
 import {RealtorService} from './services/realtor.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
-import {RouterModule, Routes} from '@angular/router';
+import {Routes} from '@angular/router';
 import {UserService} from './services/user.service';
 import {SigninButtonComponent} from './commons/signin-button/signin-button.component';
 import {SigninSignoutService} from './services/auth/signin-signout.service';
@@ -30,7 +30,6 @@ import {ReviewsService} from './services/reviews.service';
 import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
 import {ErrorService} from './services/common/ErrorService';
 import {AllHttpInterceptor} from './services/common/HttpInterceptor';
-import {GoogleLoginProvider, SocialLoginModule} from 'angularx-social-login';
 import {AuthHttpInterceptor} from './services/common/AuthHttpInterceptor';
 import {CookieService} from './services/common/CookieService';
 import {GlobalNotificationComponent} from './global-notification/global-notification.component';
@@ -40,6 +39,7 @@ import {AuthGuard} from './guargs/auth.guard';
 import {RealtorContactComponent} from './realtor/realtor-contact/realtor-contact.component';
 import {SharedModule} from './shared/shared.module';
 import {AppRoutesModule} from './app.routes.module';
+import {GoogleLoginProvider, SocialLoginModule} from '@abacritt/angularx-social-login';
 
 const appRoutes: Routes = [
   {

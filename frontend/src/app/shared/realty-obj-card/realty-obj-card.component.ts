@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/c
 import {RealtyObj} from '../../domain/realty-obj';
 import {combineLatest} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {UserService} from '../../services/user.service';
 
 @Component({
@@ -43,7 +43,7 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 }

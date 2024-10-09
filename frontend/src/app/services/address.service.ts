@@ -1,9 +1,8 @@
-import {Injectable} from "@angular/core";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import "rxjs/add/observable/of";
-import {ReplaySubject} from "rxjs/ReplaySubject";
-import {Subject} from "rxjs/Subject";
-import {endpoints} from "../commons";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+
+import {endpoints} from '../commons';
+import {ReplaySubject, Subject} from 'rxjs';
 
 @Injectable()
 export class AddressService {
@@ -16,10 +15,10 @@ export class AddressService {
   public getAddressesByTerm(term: string, lat: number, lng: number) {
     term = term.trim();
 
-    let params = new HttpParams()
-      .set("lat", lat.toString())
-      .set("lng", lng.toString())
-      .set("term", term);
+    const params = new HttpParams()
+      .set('lat', lat.toString())
+      .set('lng', lng.toString())
+      .set('term', term);
     this.http.get(endpoints.addressesNearby, {params: params}).subscribe(
       (data: any[]) => {
         data = data.map(data => data.description);

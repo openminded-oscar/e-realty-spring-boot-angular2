@@ -3,10 +3,9 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import {endpoints} from '../commons';
 import {AbstractService} from './common/abstract.service';
 import {Interest, InterestDto} from '../domain/interest';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class InterestService extends AbstractService <InterestDto> {

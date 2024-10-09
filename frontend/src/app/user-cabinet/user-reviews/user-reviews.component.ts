@@ -2,10 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ReviewsService} from '../../services/reviews.service';
 import {Review} from '../../domain/review';
 import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
 import {RealtyObj} from '../../domain/realty-obj';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
+import {Subject} from 'rxjs';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-user-reviews',
@@ -50,7 +50,7 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 
