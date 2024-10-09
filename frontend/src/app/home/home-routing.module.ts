@@ -1,19 +1,19 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
-import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
-import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
-import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
-import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
-import {AuthGuard} from './guargs/auth.guard';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {SharedModule} from './shared/shared.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import {AddressInputComponent} from './address-input/address-input.component';
-import {UserRegionInputComponent} from './commons/user-region-input/user-region-input.component';
-import {RealtorContactComponent} from './realtor/realtor-contact/realtor-contact.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ArchwizardModule} from 'angular-archwizard';
+import {RealtyObjsGalleryComponent} from '../realty-objs-gallery/realty-objs-gallery.component';
+import {RealtyObjDetailsComponent} from '../realty-obj-details/realty-obj-details.component';
+import {RealtyObjEditComponent} from '../realty-obj-edit/realty-obj-edit.component';
+import {AuthGuard} from '../guargs/auth.guard';
+import {RealtorsGalleryComponent} from '../realtor/realtors-gallery/realtors-gallery.component';
+import {AddressInputComponent} from '../address-input/address-input.component';
+import {UserRegionInputComponent} from '../commons/user-region-input/user-region-input.component';
+import {RealtorContactComponent} from '../realtor/realtor-contact/realtor-contact.component';
+import {SharedModule} from '../shared/shared.module';
 
 const appRoutes: Routes = [
   {
@@ -53,6 +53,7 @@ const appRoutes: Routes = [
   },
 ];
 
+
 @NgModule({
   declarations: [
     RealtyObjEditComponent,
@@ -74,7 +75,6 @@ const appRoutes: Routes = [
       appRoutes
     ),
     CommonModule
-  ]
+  ], exports: [RouterModule]
 })
-export class HomeModule {
-}
+export class HomeRoutingModule { }

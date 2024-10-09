@@ -6,7 +6,7 @@ import {AuthGuard} from './guargs/auth.guard';
 const appRoutes: Routes = [
   {
     path: ``,
-    loadChildren: () => import('./home.module').then((m) => m.HomeModule),
+    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
   {
     path: 'profile',
