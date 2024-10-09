@@ -21,12 +21,10 @@ const components = [
   exports: [
     ...components,
     CommonModule,
-    NgbModule
   ],
   imports: [
     CommonModule,
     RouterModule,
-    NgbModule
   ]
 })
 export class SharedModule {

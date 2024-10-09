@@ -9,6 +9,10 @@ const appRoutes: Routes = [
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
   {
+    path: `realtors`,
+    loadChildren: () => import('./realtors/realtors.module').then((m) => m.RealtorsModule),
+  },
+  {
     path: 'profile',
     canActivate: [AuthGuard],
     loadChildren: () => import('./user-cabinet/user-cabinet.module').then((m) => m.UserCabinetModule),

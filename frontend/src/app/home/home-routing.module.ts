@@ -1,19 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {ArchwizardModule} from 'angular-archwizard';
 import {RealtyObjsGalleryComponent} from '../realty-objs-gallery/realty-objs-gallery.component';
 import {RealtyObjDetailsComponent} from '../realty-obj-details/realty-obj-details.component';
 import {RealtyObjEditComponent} from '../realty-obj-edit/realty-obj-edit.component';
 import {AuthGuard} from '../guargs/auth.guard';
-import {RealtorsGalleryComponent} from '../realtor/realtors-gallery/realtors-gallery.component';
-import {AddressInputComponent} from '../address-input/address-input.component';
-import {UserRegionInputComponent} from '../commons/user-region-input/user-region-input.component';
-import {RealtorContactComponent} from '../realtor/realtor-contact/realtor-contact.component';
-import {SharedModule} from '../shared/shared.module';
 
 const appRoutes: Routes = [
   {
@@ -43,10 +34,6 @@ const appRoutes: Routes = [
     component: RealtyObjEditComponent
   },
   {
-    path: 'realtors',
-    component: RealtorsGalleryComponent
-  },
-  {
     path: 'login/oauth2/code/google',
     redirectTo: 'buy',
     pathMatch: 'full'
@@ -56,25 +43,10 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    RealtyObjEditComponent,
-    AddressInputComponent,
-    UserRegionInputComponent,
-    RealtyObjsGalleryComponent,
-    RealtyObjDetailsComponent,
-    RealtorsGalleryComponent,
-    RealtorContactComponent,
   ],
   imports: [
-    ArchwizardModule,
-    SharedModule,
-    NgbModule,
-    InfiniteScrollModule,
-    ReactiveFormsModule,
-    FormsModule,
-    RouterModule.forChild(
-      appRoutes
-    ),
-    CommonModule
+    CommonModule,
+    RouterModule.forChild(appRoutes)
   ], exports: [RouterModule]
 })
 export class HomeRoutingModule { }
