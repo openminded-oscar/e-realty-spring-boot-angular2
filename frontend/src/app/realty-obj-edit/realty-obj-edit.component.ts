@@ -122,7 +122,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       importantInfoFormGroup: this.importantInfoFormGroup,
       photosFormGroup: this.photosFormGroup,
     });
-    this.realtyForm.get('basicInfoFormGroup').get('dwellingType').valueChanges.subscribe(value => {
+    this.realtyForm.get('basicInfoFormGroup.dwellingType').valueChanges.subscribe(value => {
       const aptControl = this.basicInfoFormGroup.get('address.apartmentNumber');
       if (value !== 'APARTMENT') {
         aptControl.disable();
@@ -183,9 +183,9 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         ...this.realtyForm.controls.importantInfoFormGroup.value,
         ...this.realtyForm.controls.photosFormGroup.value
       };
-      const includedOperations = [];
+      const includedOperations: string[] = [];
       if (realtyObjFormData.targetOperations) {
-        realtyObjFormData.targetOperations.forEach((allowedAtIndex: boolean, index: number) => {
+        (realtyObjFormData.targetOperations as boolean[]).forEach((allowedAtIndex: boolean, index: number) => {
             if (allowedAtIndex) {
               includedOperations.push(this.operationsInputValues[index].name);
             }
