@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {NgbNavModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {
   UserProfileViewEditComponent
 } from './user-cabinet-container/user-profile-view-edit/user-profile-view-edit.component';
@@ -24,11 +24,10 @@ import {UserCabinetRoutingModule} from './user-cabinet.routing/user-cabinet.rout
   imports: [
     UserCabinetRoutingModule,
     CommonModule,
-    NgbNavModule,
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
-    NgbTooltipModule
+    NgbModule,
   ]
 })
 export class UserCabinetModule {

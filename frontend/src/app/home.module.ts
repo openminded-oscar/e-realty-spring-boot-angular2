@@ -6,6 +6,14 @@ import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
 import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
 import {AuthGuard} from './guargs/auth.guard';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {SharedModule} from './shared/shared.module';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import {AddressInputComponent} from './address-input/address-input.component';
+import {UserRegionInputComponent} from './commons/user-region-input/user-region-input.component';
+import {RealtorContactComponent} from './realtor/realtor-contact/realtor-contact.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {ArchwizardModule} from 'angular-archwizard';
 
 const appRoutes: Routes = [
   {
@@ -46,8 +54,22 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    RealtyObjEditComponent,
+    AddressInputComponent,
+    UserRegionInputComponent,
+    RealtyObjsGalleryComponent,
+    RealtyObjDetailsComponent,
+    RealtorsGalleryComponent,
+    RealtorContactComponent,
+  ],
   imports: [
+    ArchwizardModule,
+    SharedModule,
+    NgbModule,
+    InfiniteScrollModule,
+    ReactiveFormsModule,
+    FormsModule,
     RouterModule.forChild(
       appRoutes
     ),
