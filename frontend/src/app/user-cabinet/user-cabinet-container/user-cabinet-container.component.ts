@@ -1,9 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {NgbNav} from '@ng-bootstrap/ng-bootstrap';
+import {ActivatedRoute} from '@angular/router';
+import {MyFavoritesTabPath, MyObjectsTabPath, MyReviewsTabPath} from '../utils';
 import {ReviewsService} from '../../services/reviews.service';
 import {InterestService} from '../../services/interest.service';
-import {ActivatedRoute} from '@angular/router';
-import {NgbNav} from '@ng-bootstrap/ng-bootstrap';
-import {MyFavoritesTabPath, MyObjectsTabPath, MyReviewsTabPath} from '../user-cabinet.module';
+
 
 @Component({
   selector: 'app-user-cabinet-container',
@@ -11,11 +12,8 @@ import {MyFavoritesTabPath, MyObjectsTabPath, MyReviewsTabPath} from '../user-ca
   styleUrls: ['./user-cabinet-container.component.scss']
 })
 export class UserCabinetContainerComponent implements OnInit {
-  public active = 1;
-
   @ViewChild(NgbNav, {static: true})
   public ngbNav: NgbNav;
-
   public links = [
     { title: 'My Objects', route: MyObjectsTabPath },
     { title: 'My Reviews', route: MyReviewsTabPath },

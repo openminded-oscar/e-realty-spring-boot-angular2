@@ -39,11 +39,12 @@ import {HeaderComponent} from './header/header.component';
 import {AuthGuard} from './guargs/auth.guard';
 import {RealtorContactComponent} from './realtor/realtor-contact/realtor-contact.component';
 import {SharedModule} from './shared/shared.module';
+import {AppRoutesModule} from './app.routes.module';
 
 const appRoutes: Routes = [
   {
     path: ``,
-    loadChildren: () => import('./home.module').then((m) => m.HomeModule),
+    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
   {
     path: 'profile',
@@ -78,10 +79,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     InfiniteScrollModule,
     HttpClientModule,
     SocialLoginModule,
-    RouterModule.forRoot(
-      appRoutes,
-      {enableTracing: false}
-    ),
+    AppRoutesModule,
     NgbModule,
     ArchwizardModule,
     BrowserAnimationsModule,

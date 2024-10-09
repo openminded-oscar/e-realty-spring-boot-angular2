@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {RouterModule, Routes} from '@angular/router';
 import {NgbNavModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {
   UserProfileViewEditComponent
@@ -11,36 +10,8 @@ import {UserCabinetContainerComponent} from './user-cabinet-container/user-cabin
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {UserFavoritesComponent} from './user-favorites/user-favorites.component';
+import {UserCabinetRoutingModule} from './user-cabinet.routing/user-cabinet.routing.module';
 
-
-export const MyObjectsTabPath = 'my-objects';
-export const MyReviewsTabPath = 'reviews';
-export const MyFavoritesTabPath = 'favorites';
-
-const routes: Routes = [
-  {
-    path: '', component: UserCabinetContainerComponent,
-    children: [
-      {
-        path: '',
-        redirectTo: MyObjectsTabPath,
-      },
-      {
-        path: MyObjectsTabPath,
-        component: UserObjectsComponent,
-      },
-      {
-        path: MyReviewsTabPath,
-        component: UserReviewsComponent,
-      },
-      {
-        path: MyFavoritesTabPath,
-        component: UserFavoritesComponent,
-      }
-    ]
-  },
-
-];
 
 @NgModule({
   declarations: [
@@ -51,8 +22,8 @@ const routes: Routes = [
     UserFavoritesComponent
   ],
   imports: [
+    UserCabinetRoutingModule,
     CommonModule,
-    RouterModule.forChild(routes),
     NgbNavModule,
     ReactiveFormsModule,
     FormsModule,
