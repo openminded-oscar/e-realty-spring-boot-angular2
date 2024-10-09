@@ -1,3 +1,5 @@
+@import 'app/variables';
+
 .realty-pic-preview-container {
   text-align: center
 }
@@ -11,11 +13,11 @@
 }
 
 input.ng-invalid, select.ng-invalid, textarea.ng-invalid {
-  border: 1px solid #ffeb6b !important;
+  border: 1px solid #ffc87f !important;
 }
 
 input.ng-valid, select.ng-valid, textarea.ng-valid {
-  border: 1px solid green !important;
+  border: 1px solid $app-border-color !important;
 }
 
 .action-buttons {

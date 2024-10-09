@@ -19,12 +19,12 @@ $aw-colors: (
       'symbol-color-hover': #d0efff,
     ),
     'current': (
-      'border-color-default': #17a2b8,
-      'background-color-default': #17a2b8,
-      'symbol-color-default': #17a2b8,
-      'border-color-hover': #17a2b8,
-      'background-color-hover': #17a2b8,
-      'symbol-color-hover': #17a2b8,
+      'border-color-default': $app-border-color,
+      'background-color-default': $app-border-color,
+      'symbol-color-default': $app-border-color,
+      'border-color-hover': $app-border-color,
+      'background-color-hover': $app-border-color,
+      'symbol-color-hover': $app-border-color,
     )
   )
 );

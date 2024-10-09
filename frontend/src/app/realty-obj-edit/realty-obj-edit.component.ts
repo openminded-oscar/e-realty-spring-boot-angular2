@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Event} from '@angular/router';
-import {BUILDING_TYPES, ConfigService, DWELLING_TYPES} from '../services/config.service';
+import {ConfigService} from '../services/config.service';
 import {FileUploadService} from '../services/file-upload.service';
 import {RealtyObjService} from '../services/realty-obj.service';
 import {RealtorService} from '../services/realtor.service';
@@ -12,7 +12,7 @@ import {RealtyObj} from '../domain/realty-obj';
 import {Photo, RealtyPhoto, RealtyPhotoType} from '../domain/photo';
 import {Realtor} from '../domain/realtor';
 import {apiBase} from '../commons';
-import {valueGteAreaTotal, valueGteFloorTotal} from './validation.utils';
+import {valueGteThanTotal} from './validation.utils';
 
 export interface SupportedOperation {
   name: string;
@@ -82,14 +82,18 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         numberOfStreet: ['', [Validators.required, Validators.minLength(1)]],
         apartmentNumber: ['', [Validators.required]],
       }),
-      dwellingType: [DWELLING_TYPES.APARTMENT, Validators.required],
-      buildingType: [BUILDING_TYPES.BRICK, Validators.required],
+      dwellingType: ['', Validators.required],
+      buildingType: ['', Validators.required],
       floor: [null, Validators.required],
       totalFloors: [null, Validators.required],
       totalArea: [null, Validators.required],
       livingArea: [null, Validators.required],
       roomsAmount: [null, Validators.required]
-    }, {validators: [valueGteAreaTotal(), valueGteFloorTotal()]});
+    }, {
+      validators: [
+        valueGteThanTotal('floor', 'totalFloors'),
+        valueGteThanTotal('livingArea', 'totalArea')
+      ]});
     const operationsFormArray = new FormArray([]);
     this.operationsInputValues.forEach(operation => {
       const control = this.fb.control(operation.checked);
