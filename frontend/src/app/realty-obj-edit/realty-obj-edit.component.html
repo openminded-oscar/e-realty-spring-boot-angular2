@@ -205,7 +205,7 @@
                         [formControlName]="'realtor'"
                         name="selected-realtor">
                   <option value="" disabled>Select Realtor For Your Object</option> <!-- Placeholder option -->
-                  <option *ngFor="let realtor of realtors" [value]="realtor">
+                  <option *ngFor="let realtor of realtors" [value]="realtor.id">
                     {{ realtor.name + ' ' + realtor.surname }}
                   </option>
                 </select>

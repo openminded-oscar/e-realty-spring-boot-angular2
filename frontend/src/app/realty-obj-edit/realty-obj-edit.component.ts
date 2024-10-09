@@ -147,7 +147,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         hasCellar: realtyObj.hasCellar,
         hasLoft: realtyObj.hasLoft,
         price: realtyObj.price,
-        realtor: realtyObj.realtor,
+        realtor: realtyObj.realtor?.id,
       },
       photosFormGroup: {
         confirmationDocPhoto: realtyObj.confirmationDocPhoto
@@ -175,6 +175,12 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         ...this.realtyForm.controls.importantInfoFormGroup.value,
         ...this.realtyForm.controls.photosFormGroup.value
       };
+      if (realtyObjData.realtor) {
+        const realtorId = Number(realtyObjData.realtor as string);
+        realtyObjData.realtor = this.realtors.find(r => {
+          return r.id === realtorId;
+        });
+      }
       realtyObjData.targetOperations = this.getSelectedOperations();
 
       this.realtyObjService.save(realtyObjData)
