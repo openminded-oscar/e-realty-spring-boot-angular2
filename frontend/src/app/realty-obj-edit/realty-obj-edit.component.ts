@@ -201,7 +201,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public onVerificationPictureSelecting(event: Event): void {
     const fileList = (event as any).target.files;
     if (fileList.length > 0) {
-      this.uploadFile(fileList[0], '/upload-photo/object')
+      this.uploadFile(fileList[0], '/upload-photo/confirm-object')
         .pipe(takeUntil(this.destroy$))
         .subscribe(
           (data: RealtyPhoto) => {
