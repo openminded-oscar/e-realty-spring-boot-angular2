@@ -1,11 +1,11 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
-import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
-import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
-import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
-import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
-import {AuthGuard} from './guargs/auth.guard';
+import {RealtyObjsGalleryComponent} from '../realty-objs-gallery/realty-objs-gallery.component';
+import {RealtyObjDetailsComponent} from '../realty-obj-details/realty-obj-details.component';
+import {RealtyObjEditComponent} from '../realty-obj-edit/realty-obj-edit.component';
+import {AuthGuard} from '../guargs/auth.guard';
+import {RealtorsGalleryComponent} from '../realtor/realtors-gallery/realtors-gallery.component';
 
 const appRoutes: Routes = [
   {
@@ -45,6 +45,7 @@ const appRoutes: Routes = [
   },
 ];
 
+
 @NgModule({
   declarations: [],
   imports: [
@@ -52,7 +53,6 @@ const appRoutes: Routes = [
       appRoutes
     ),
     CommonModule
-  ]
+  ], exports: [RouterModule]
 })
-export class HomeModule {
-}
+export class HomeRoutingModule { }
