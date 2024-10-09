@@ -183,16 +183,16 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         ...this.realtyForm.controls.importantInfoFormGroup.value,
         ...this.realtyForm.controls.photosFormGroup.value
       };
-      const includedOperations: string[] = [];
+      const includedOperationsNames: string[] = [];
       if (realtyObjFormData.targetOperations) {
         (realtyObjFormData.targetOperations as boolean[]).forEach((allowedAtIndex: boolean, index: number) => {
             if (allowedAtIndex) {
-              includedOperations.push(this.operationsInputValues[index].name);
+              includedOperationsNames.push(this.operationsInputValues[index].name);
             }
           }
         );
       }
-      realtyObjFormData.targetOperations = includedOperations;
+      realtyObjFormData.targetOperations = includedOperationsNames;
       if (realtyObjFormData.realtor) {
         const realtorId = Number(realtyObjFormData.realtor as string);
         realtyObjFormData.realtor = this.realtors.find(r => {
