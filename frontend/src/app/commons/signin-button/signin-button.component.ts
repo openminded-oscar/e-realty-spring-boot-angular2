@@ -2,10 +2,10 @@ import {Component, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChi
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Credentials} from '../../domain/credentials.model';
 import {SigninSignoutService} from '../../services/auth/signin-signout.service';
-import {GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {UserService} from '../../services/user.service';
 import {takeUntil, tap} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
+import {GoogleLoginProvider, SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'signin-button',
@@ -75,7 +75,7 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 }

@@ -8,13 +8,11 @@ import {
   HttpResponse
 } from '@angular/common/http';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {ErrorService} from './ErrorService';
-import {throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class AllHttpInterceptor implements HttpInterceptor {
@@ -51,46 +49,45 @@ export class AllHttpInterceptor implements HttpInterceptor {
     this.errorService.emitError(message);
   }
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-  return (<any>next.handle(req))
-    .catch((response: any) => {
-      // handle 200 response empty data. it causes error in angular.
-      if (response.status >= 200 && response.status < 300) {
-        const res = new HttpResponse({
-          body: null,
-          headers: response.headers,
-          status: response.status,
-          statusText: response.statusText,
-          url: response.url
-        });
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      catchError((response: any) => {
+        // Handle 200 response with empty data
+        if (response.status >= 200 && response.status < 300) {
+          const res = new HttpResponse({
+            body: null,
+            headers: response.headers,
+            status: response.status,
+            statusText: response.statusText,
+            url: response.url
+          });
 
-        return Observable.of(res);
-      }
+          return of(res);
+        }
 
-      switch (response.status) {
-        case 401: {
-          // unauthorize response, try to refresh session.
-          if (req.url.indexOf('/api/signin') !== -1) {
-            this.redirectToLoginPage();
-            return;
+        switch (response.status) {
+          case 401: {
+            // Unauthorized response, try to refresh session.
+            if (req.url.indexOf('/api/signin') !== -1) {
+              this.redirectToLoginPage();
+              return of(null);  // return an observable
+            }
+            break;
           }
-          break;
+          case 404: {
+            this.redirectToMainPage();
+            break;
+          }
+          default: {
+            this.showError(response);
+          }
         }
-        case 404: {
-          this.redirectToMainPage();
-          break;
-        }
-        default: {
-          this.showError(response);
-        }
-      }
 
-      return throwError(response);
-    });
+        return throwError(response);
+      })
+    );
   }
+
 
   redirectToLoginPage(): void {
     localStorage.removeItem('token');

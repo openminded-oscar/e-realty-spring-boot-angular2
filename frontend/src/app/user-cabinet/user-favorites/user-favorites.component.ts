@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {InterestService} from '../../services/interest.service';
 import {Interest} from '../../domain/interest';
@@ -32,12 +32,12 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
   }
 
   private fetchUserInterests() {
-    combineLatest([
+    combineLatest(
       this.interestService.currentUserInterest$, this.reviewsService.currentUserReviews$
-    ]).pipe(takeUntil(this.destroy$))
+    ).pipe(takeUntil(this.destroy$))
       .subscribe(([interests, reviews]) => {
-        this.interests = interests ?? [];
-        for (const interest of interests) {
+        this.interests = interests as Interest[] ?? [];
+        for (const interest of this.interests) {
           if (interest.id) {
             interest.reviewScheduled = (reviews ?? []).find(r => r.realtyObj?.id === interest.realtyObj?.id);
           }
@@ -46,7 +46,7 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 
@@ -64,7 +64,7 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
   }
 
   public openScheduleReviewModal(object: RealtyObj) {
-    const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'})
+    const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
     modalRef.result.then((value: {
       reviewDate: NgbDateStruct,
       reviewTime: NgbTimeStruct

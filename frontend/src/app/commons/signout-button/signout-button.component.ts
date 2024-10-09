@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {UserService} from "../../services/user.service";
-import {SigninSignoutService} from "../../services/auth/signin-signout.service";
-import {SocialAuthService} from 'angularx-social-login';
+import {UserService} from '../../services/user.service';
+import {SigninSignoutService} from '../../services/auth/signin-signout.service';
 
 @Component({
   selector: 'signout-button',

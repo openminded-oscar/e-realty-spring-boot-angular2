@@ -5,7 +5,7 @@ import {endpoints} from '../commons';
 import {Observable, throwError} from 'rxjs';
 import {Realtor} from '../domain/realtor';
 import {Photo} from '../domain/photo';
-import {tap} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 
 @Injectable()
 export class RealtorService {
@@ -36,11 +36,15 @@ export class RealtorService {
 
   public updateRealtor(realtor: Realtor, realtorId: string): Observable<any> {
     return this.http.put(`${endpoints.realtors.single}/${realtorId}`, realtor)
-      .catch((error: any) => throwError(error));
+      .pipe(
+        catchError((error: any) => throwError(error))
+      );
   }
 
   public saveRealtor(realtor: Realtor): Observable<any> {
     return this.http.post(endpoints.realtors.single, realtor)
-      .catch((error: any) => throwError(error));
+      .pipe(
+        catchError((error: any) => throwError(error))
+      );
   }
 }

@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/c
 import {NgbToast} from '@ng-bootstrap/ng-bootstrap';
 import {GlobalNotificationService} from '../services/global-notification.service';
 import {bufferTime, takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-global-notification',
@@ -43,7 +43,7 @@ export class GlobalNotificationComponent implements OnInit, OnDestroy, AfterView
 
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 

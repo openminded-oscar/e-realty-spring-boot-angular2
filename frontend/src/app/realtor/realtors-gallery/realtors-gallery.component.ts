@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RealtorService} from '../../services/realtor.service';
 import {Realtor} from '../../domain/realtor';
 import {Router} from '@angular/router';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {UserService} from '../../services/user.service';
 import {takeUntil} from 'rxjs/operators';
 import {User} from '../../domain/user';
@@ -54,7 +54,7 @@ export class RealtorsGalleryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 }

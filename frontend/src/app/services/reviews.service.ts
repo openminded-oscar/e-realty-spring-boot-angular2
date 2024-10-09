@@ -6,7 +6,7 @@ import {Observable} from 'rxjs';
 import {Review, ReviewDto, ReviewPostDto, ReviewSelectTimeDto} from '../domain/review';
 import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import {UserService} from './user.service';
 import {RealtyObjService} from './realty-obj.service';
 

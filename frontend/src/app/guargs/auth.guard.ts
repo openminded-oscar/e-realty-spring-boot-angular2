@@ -3,7 +3,7 @@ import {CanActivate, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {UserService} from '../services/user.service';
 import {filter, map, takeUntil, tap} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {SigninSignoutService} from '../services/auth/signin-signout.service';
 
 @Injectable({

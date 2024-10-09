@@ -4,7 +4,7 @@ import {apiBase} from '../../../commons';
 import {Photo} from '../../../domain/photo';
 import {FileUploadService} from '../../../services/file-upload.service';
 import {GlobalNotificationService} from '../../../services/global-notification.service';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {User} from '../../../domain/user';
 import {UserService} from '../../../services/user.service';
@@ -63,7 +63,7 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 
