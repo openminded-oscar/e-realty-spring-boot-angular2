@@ -10,7 +10,7 @@ import {NgbDateStruct, NgbModal, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap
 import {ReviewsService} from '../services/reviews.service';
 import {ReviewDto} from '../domain/review';
 import {HttpResponse} from '@angular/common/http';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {User} from '../domain/user';
 import {combineLatest} from 'rxjs';
@@ -129,7 +129,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 
@@ -162,7 +162,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
   public openScheduleReviewModal() {
     const modalRef =
-      this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
+      this.modalService.open(ScheduleFormModalComponent);
     modalRef.result.then((value: {
       reviewDate: NgbDateStruct,
       reviewTime: NgbTimeStruct

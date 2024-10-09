@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
-import 'rxjs/add/observable/of';
 import {User} from '../domain/user';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {endpoints} from '../commons';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Realtor} from '../domain/realtor';
+import {BehaviorSubject} from 'rxjs';
+
 import {Observable, throwError} from 'rxjs';
-import {tap} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 import {Photo} from '../domain/photo';
 import {RealtyObj} from '../domain/realty-obj';
 
@@ -23,10 +22,12 @@ export class UserService {
 
   public updateUserProfileOnServer(user: User): Observable<any> {
     return this.http.patch(`${endpoints.userUpdate}`, user)
-      .pipe(tap((userFromServer: User) => {
-        userFromServer.profilePicUrl = Photo.getLinkByFilename(userFromServer.profilePic as unknown as string);
-      }))
-      .catch((error: any) => throwError(error));
+      .pipe(
+        catchError((error: any) => throwError(error)),
+        tap((userFromServer: User) => {
+          userFromServer.profilePicUrl = Photo.getLinkByFilename(userFromServer.profilePic as unknown as string);
+        })
+      );
   }
 
   public fetchUserStatus() {

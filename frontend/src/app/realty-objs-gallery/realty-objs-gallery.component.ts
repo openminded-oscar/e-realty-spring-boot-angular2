@@ -5,11 +5,9 @@ import {RealtyObj} from '../domain/realty-obj';
 import {ConfigService} from '../services/config.service';
 import {Router} from '@angular/router';
 import {UserService} from '../services/user.service';
-import {Subject} from 'rxjs/Subject';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {debounceTime, map, takeUntil, tap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import * as _ from 'lodash';
 import {RealtyObjsListComponent} from '../shared/realty-objs-list/realty-objs-list.component';
 
@@ -180,7 +178,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 }

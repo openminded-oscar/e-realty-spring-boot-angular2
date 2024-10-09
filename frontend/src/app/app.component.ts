@@ -3,13 +3,13 @@ import {HttpClient} from '@angular/common/http';
 import {UserService} from './services/user.service';
 import {Router} from '@angular/router';
 import {SampleSocketService} from './services/socket/sample-socket.service';
-import {SocialAuthService} from 'angularx-social-login';
 import {CookieService} from './services/common/CookieService';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {map, switchMap, takeUntil} from 'rxjs/operators';
 import {GlobalNotificationService} from './services/global-notification.service';
 import {User} from './domain/user';
 import {RealtyObj} from './domain/realty-obj';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
 
 
 @Component({
@@ -64,7 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 }

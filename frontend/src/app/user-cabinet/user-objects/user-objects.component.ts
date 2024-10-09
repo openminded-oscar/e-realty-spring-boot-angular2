@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {User} from '../../domain/user';
 import {UserService} from '../../services/user.service';
 import {takeUntil} from 'rxjs/operators';
@@ -29,7 +29,7 @@ export class UserObjectsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 }

@@ -31,6 +31,10 @@ $aw-colors: (
 
 @import '../node_modules/angular-archwizard/styles/archwizard.scss';
 
+.btn-block {
+  width: 100%;
+}
+
 body { padding-top: $header-height; }
 
 .side-section {

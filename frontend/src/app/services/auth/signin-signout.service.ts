@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import 'rxjs/add/observable/of';
 import {Credentials} from '../../domain/credentials.model';
 import {AbstractService} from '../common/abstract.service';
 import {endpoints} from '../../commons';
@@ -8,7 +7,7 @@ import {Observable} from 'rxjs';
 import {CookieService} from '../common/CookieService';
 import {tap} from 'rxjs/operators';
 
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 
 @Injectable()
 export class SigninSignoutService extends AbstractService<Credentials> {
