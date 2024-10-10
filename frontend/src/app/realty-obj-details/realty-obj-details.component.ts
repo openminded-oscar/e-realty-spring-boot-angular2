@@ -119,7 +119,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.reviewsService.get(this.currentObject.id)
+    this.reviewsService.getForObjectAndUser(this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((reviewsResponse: HttpResponse<ReviewDto>) => {
         if (reviewsResponse.body) {
@@ -163,23 +163,17 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public openScheduleReviewModal() {
     const modalRef =
       this.modalService.open(ScheduleFormModalComponent);
-    modalRef.result.then((value: {
-      reviewDate: NgbDateStruct,
-      reviewTime: NgbTimeStruct
-    }) => {
-      this.saveReviewAndClose(value);
+    modalRef.result.then((dateTimeSelected: Date) => {
+      this.saveReviewAndClose(dateTimeSelected);
     }, error => {
       console.log('data dismissed');
     });
     modalRef.componentInstance.realtyObject = this.currentObject;
   }
 
-  public saveReviewAndClose(value: {
-    reviewDate: NgbDateStruct,
-    reviewTime: NgbTimeStruct
-  }) {
+  public saveReviewAndClose(dateTime: Date) {
     this.reviewsService.save({
-      ...value,
+      dateTime,
       realtyObjId: this.currentObject.id,
     }).pipe(takeUntil(this.destroy$))
       .subscribe(reviewsResponse => {

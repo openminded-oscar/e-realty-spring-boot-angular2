@@ -12,16 +12,13 @@ import com.google.api.services.calendar.model.EventDateTime;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -46,15 +43,13 @@ public class ObjectReviewApi {
     }
 
     @GetMapping(value = "/for-object/{realtyObjId}/{date}")
-    public ResponseEntity<List<ObjectReviewDto>>
-    findReviewsForObject(@AuthenticationPrincipal SpringSecurityUser user,
-                         @PathVariable Long realtyObjId,
+    public ResponseEntity<List<Instant>>
+    findReviewsForObject(@PathVariable Long realtyObjId,
                          @PathVariable Instant date,
                          @RequestParam String timezone) {
-        Long userId = user.getId();
         ZonedDateTime zonedDateTime = date.atZone(ZoneId.of(timezone));
 
-        List<ObjectReviewDto> objectReviewDtos = reviewService.findReviewsForObjectAndDate(
+        List<Instant> objectReviewDtos = reviewService.timeslotsForObjectAndDate(
                 realtyObjId, zonedDateTime
         );
 

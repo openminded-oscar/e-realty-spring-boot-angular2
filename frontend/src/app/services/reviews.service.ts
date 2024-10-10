@@ -2,30 +2,23 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {endpoints} from '../commons';
 import {AbstractService} from './common/abstract.service';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Review, ReviewDto, ReviewPostDto, ReviewSelectTimeDto} from '../domain/review';
 import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
-import {BehaviorSubject} from 'rxjs';
 import {UserService} from './user.service';
-import {RealtyObjService} from './realty-obj.service';
+import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
-
-export const dateTimeBasedOnNGBDateTimePicker = (reviewSelectTimeDto: ReviewSelectTimeDto) => {
-  const reviewDate = reviewSelectTimeDto.reviewDate;
-  const reviewTime = reviewSelectTimeDto.reviewTime;
-  const utcDatetime = new Date(
+export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
+  return new Date(
     reviewDate.year,
     reviewDate.month - 1,
     reviewDate.day,
-    reviewTime.hour,
-    reviewTime.minute,
-    reviewTime.second
+    0,
+    0,
+    0
   );
-  return utcDatetime;
 };
-
-
 
 @Injectable()
 export class ReviewsService extends AbstractService<ReviewDto> {
@@ -33,13 +26,12 @@ export class ReviewsService extends AbstractService<ReviewDto> {
   public currentUserReviews$ = this.currentUserReviews.asObservable();
 
   constructor(public http: HttpClient,
-              public objectsService: RealtyObjService,
               public userService: UserService) {
     super(http, endpoints.review);
   }
 
   public save(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<HttpResponse<ReviewPostDto>> {
-    const utcDatetime = dateTimeBasedOnNGBDateTimePicker(reviewSelectTimeDto);
+    const utcDatetime = reviewSelectTimeDto.dateTime;
 
     const review = {
       realtyObjId: reviewSelectTimeDto.realtyObjId,
@@ -87,7 +79,12 @@ export class ReviewsService extends AbstractService<ReviewDto> {
     );
   }
 
-  public get(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
+  public getForObjectAndUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
     return this.sendRequest('get', `/${realtyObjId}`, {});
+  }
+
+  public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return this.sendRequest('get', `/for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`, {});
   }
 }

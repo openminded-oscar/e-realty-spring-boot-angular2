@@ -43,6 +43,10 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "development": {
+              "sourceMap": true,
+              "optimization": false
             }
           }
         },
@@ -54,6 +58,9 @@
           "configurations": {
             "production": {
               "browserTarget": "ang4:build:production"
+            },
+            "development": {
+              "browserTarget": "ang4:build:development"
             }
           }
         },

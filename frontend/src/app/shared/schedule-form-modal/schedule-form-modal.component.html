@@ -6,21 +6,37 @@
 </div>
 <div class="modal-body">
   <form [formGroup]="reviewTimeForm">
-    <div class="form-group d-flex align-items-center">
-      <div class="input-group mr-2">
-        <input class="form-control" placeholder="yyyy-mm-dd"
-               [markDisabled]="isPreviewDateDisabled"
-               formControlName="reviewDate"
-               name="datePicker"
-               ngbDatepicker
-               #d="ngbDatepicker">
-        <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+    <div class="form-group d-flex flex-column" style="gap: 10px">
+      <div class="d-flex flex-column">
+        <h3 class="datetime-label">Select Date:</h3>
+        <div class="input-group mr-2 ">
+          <input class="form-control" placeholder="yyyy-mm-dd"
+                 [markDisabled]="isPreviewDateDisabled"
+                 formControlName="reviewDate"
+                 name="datePicker"
+                 ngbDatepicker
+                 #d="ngbDatepicker">
+          <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+        </div>
       </div>
-      <ngb-timepicker formControlName="reviewTime"
-                      [minuteStep]="30"></ngb-timepicker>
-    </div>
-    <div *ngIf="reviewTimeForm.errors?.tooSoon">
-      <p class="text-danger">Date and time must be at least 3 hours from now.</p>
+      <div style="height: 200px">
+        <ng-container>
+          <h3 class="datetime-label timeslots-label" [ngClass]="{'blurred': !availableTimesOfDay?.length}">Available
+            timeslots:</h3>
+          <div *ngIf="availableTimesOfDay.length; else loader" class="row" style="display: flex; flex-direction: row">
+            <div class="col-3" style="margin-bottom: 5px" *ngFor="let time of availableTimesOfDay">
+              <button class="btn btn-light" (click)="selectTimeslot(time)">
+                {{ time|date:'HH:mm' }}
+              </button>
+            </div>
+          </div>
+          <ng-template #loader>
+          </ng-template>
+        </ng-container>
+      </div>
+      <div *ngIf="reviewTimeForm.errors?.tooSoon">
+        <p class="text-danger">Date and time must be at least 3 hours from now.</p>
+      </div>
     </div>
   </form>
   <a *ngIf="reviewTimeForm.valid" target="_blank" [href]="googleCalendarLink">Add To Google Calendar</a>
@@ -29,6 +45,6 @@
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark"
           [disabled]="!reviewTimeForm.touched || reviewTimeForm.invalid"
-          (click)="modal.close(reviewTimeForm.value)">Save and close
+          (click)="saveAndClose()">Save and close
   </button>
 </div>

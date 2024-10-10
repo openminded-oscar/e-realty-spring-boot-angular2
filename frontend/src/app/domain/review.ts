@@ -1,6 +1,5 @@
 import {RealtyObj} from './realty-obj';
 import {User} from './user';
-import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 
 export interface Review {
   id?: number;
@@ -25,6 +24,5 @@ export interface ReviewPostDto {
 
 export interface ReviewSelectTimeDto {
   realtyObjId?: number;
-  reviewDate?: NgbDateStruct;
-  reviewTime?: NgbTimeStruct;
+  dateTime: Date;
 }

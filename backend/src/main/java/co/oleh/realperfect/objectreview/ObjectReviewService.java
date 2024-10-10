@@ -13,20 +13,23 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ObjectReviewService {
+    public static final int OBJECT_REVIEW_START_HOUR = 10;
+    public static final int OBJECT_REVIEW_END_HOUR = 20;
+
     private final RealtyObjectRepository realtyObjectRepository;
     private UserRepository userRepository;
     private ObjectReviewRepository objectReviewRepository;
     private MappingService mappingService;
-
 
     public MyObjectReviewDto save(ObjectReviewDto objectReview) {
         ObjectReview objectReviewEntity = mappingService.map(objectReview, ObjectReview.class);
@@ -39,11 +42,6 @@ public class ObjectReviewService {
         ObjectReview savedEntity = objectReviewRepository.save(objectReviewEntity);
 
         return mappingService.map(savedEntity, MyObjectReviewDto.class);
-    }
-
-    public ObjectReview remove(ObjectReview objectReview) {
-        objectReviewRepository.deleteById(objectReview.getId());
-        return objectReview;
     }
 
     public List<ObjectReview> remove(List<ObjectReview> objectReviews) {
@@ -73,14 +71,38 @@ public class ObjectReviewService {
                 .collect(Collectors.toList());
     }
 
-    public List<ObjectReviewDto> findReviewsForObjectAndDate(Long realtyObjId, ZonedDateTime zonedDateTime) {
-        ZonedDateTime startOfDay = zonedDateTime.with(LocalTime.MIN);
-        ZonedDateTime endOfDay = zonedDateTime.with(LocalTime.MAX);
+    public List<ObjectReview> findReviewsForObjectAndDate(Long realtyObjId, ZonedDateTime zonedDateTime) {
+        // day limits timestamp
+        Instant startOfDay = zonedDateTime.with(LocalTime.MIN).toInstant();
+        Instant endOfDay = zonedDateTime.with(LocalTime.MAX).toInstant();
 
-        List<ObjectReview> reviews = objectReviewRepository
-                .findByRealtyObjIdAndDateTimeBetween(realtyObjId, startOfDay.toInstant(), endOfDay.toInstant());
+        return this.objectReviewRepository
+                .findByRealtyObjIdAndDateTimeBetween(realtyObjId, startOfDay, endOfDay)
+                .stream()
+                .collect(Collectors.toList());
+    }
 
-        return reviews.stream().map(review -> this.mappingService.map(review, ObjectReviewDto.class)).collect(Collectors.toList());
+    public List<Instant> timeslotsForObjectAndDate(Long realtyObjId, ZonedDateTime zonedDateTime) {
+        List<Instant> busyTimes = this.findReviewsForObjectAndDate(realtyObjId, zonedDateTime)
+                .stream()
+                .map(ObjectReview::getDateTime)
+                .collect(Collectors.toList());
+
+        Instant houseOpeningTime =
+                zonedDateTime.withHour(ObjectReviewService.OBJECT_REVIEW_START_HOUR).toInstant();
+        Instant houseClosingTime =
+                zonedDateTime.withHour(ObjectReviewService.OBJECT_REVIEW_END_HOUR).toInstant();
+
+        List<Instant> availableSlots = new ArrayList<>();
+        Instant currentHour = houseOpeningTime;
+        while (houseClosingTime.isAfter(currentHour)) {
+            if (!busyTimes.contains(currentHour)) {
+                availableSlots.add(currentHour);
+            }
+            currentHour = currentHour.plus(1, ChronoUnit.HOURS);
+        }
+
+        return availableSlots;
     }
 
     public List<ObjectReviewDto> findReviewsForObject(Long realtyObjId) {
