@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,7 @@ public class ObjectReviewService {
         return this.mappingService.map(objectReview, ObjectReviewDto.class);
     }
 
+
     public List<MyObjectReviewDto> findReviewsForUser(Long userId) {
         List<ObjectReview> objectReviews = objectReviewRepository.findByUserIdOrderByDateTimeDesc(userId);
         return objectReviews.stream()
@@ -69,8 +71,17 @@ public class ObjectReviewService {
                 .collect(Collectors.toList());
     }
 
-    public List<ObjectReview> findReviewsForObject(Long realtyObjId) {
-        return objectReviewRepository.findByRealtyObjId(realtyObjId);
+    public List<ObjectReviewDto> findReviewsForObjectAndDate(Long realtyObjId, LocalDateTime dateTime) {
+        List<ObjectReview> reviews = objectReviewRepository
+                .findByRealtyObjIdAndDateTimeBetween(realtyObjId, null, null);
+
+        return reviews.stream().map(review -> this.mappingService.map(review, ObjectReviewDto.class)).collect(Collectors.toList());
+    }
+
+    public List<ObjectReviewDto> findReviewsForObject(Long realtyObjId) {
+        List<ObjectReview> reviews = objectReviewRepository.findByRealtyObjId(realtyObjId);
+
+        return reviews.stream().map(review -> this.mappingService.map(review, ObjectReviewDto.class)).collect(Collectors.toList());
     }
 
     public ObjectReview findById(Long objectId) {

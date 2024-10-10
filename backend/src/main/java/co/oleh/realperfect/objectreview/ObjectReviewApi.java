@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,17 @@ public class ObjectReviewApi {
     public ResponseEntity<List<MyObjectReviewDto>> findReviewsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
         Long userId = user.getId();
         List<MyObjectReviewDto> objectReviewDtos = reviewService.findReviewsForUser(userId);
+        return new ResponseEntity<>(objectReviewDtos, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/for-object/{realtyObjId}/${date}")
+    public ResponseEntity<List<ObjectReviewDto>>
+    findReviewsForObject(@AuthenticationPrincipal SpringSecurityUser user,
+                         @PathVariable Long realtyObjId,
+                         @PathVariable LocalDateTime date) {
+        Long userId = user.getId();
+        List<ObjectReviewDto> objectReviewDtos = reviewService.findReviewsForObject(userId);
+
         return new ResponseEntity<>(objectReviewDtos, HttpStatus.OK);
     }
 
