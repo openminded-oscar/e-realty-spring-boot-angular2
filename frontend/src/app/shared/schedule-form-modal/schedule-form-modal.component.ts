@@ -1,8 +1,20 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import {NgbActiveModal, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
-import {dateTimeBasedOnNGBDateTimePicker} from '../../services/reviews.service';
+import {
+  dateBasedOnNGBDatePicker,
+  ReviewsService
+} from '../../services/reviews.service';
 import {RealtyObj} from '../../domain/realty-obj';
+import {switchMap, tap} from 'rxjs/operators';
 
 export function reviewDateTimeValidator(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors => {
@@ -41,8 +53,40 @@ export class ScheduleFormModalComponent implements OnInit {
   public realtyObject: RealtyObj;
   public reviewTimeForm: FormGroup;
 
+  public availableTimesOfDay: Date[] = [];
+
+  constructor(
+    public reviewService: ReviewsService,
+    public fb: FormBuilder,
+    public modal: NgbActiveModal
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.reviewTimeForm = this.fb.group({
+      reviewDate: new FormControl(null, Validators.required),
+      reviewTime: new FormControl(null, Validators.required),
+    }, {validators: reviewDateTimeValidator()});
+    this.reviewTimeForm.controls.reviewDate.valueChanges
+      .pipe(
+        tap(() => {
+          this.availableTimesOfDay = [];
+        }),
+        switchMap((dateNgb: NgbDateStruct) => {
+          const date = dateBasedOnNGBDatePicker(dateNgb);
+          return this.reviewService.getForObjectAndDate(
+            this.realtyObject.id,
+            date
+          );
+        })
+      )
+      .subscribe(values => {
+        this.availableTimesOfDay = values.body.map(s => new Date(s));
+      });
+  }
+
   public get googleCalendarLink() {
-    const startTime = dateTimeBasedOnNGBDateTimePicker(this.reviewTimeForm.value);
+    const startTime = this.reviewTimeForm.value.reviewTime;
     const endTime = new Date(startTime);
     endTime.setUTCHours(endTime.getUTCHours() + 1);
 
@@ -70,25 +114,19 @@ export class ScheduleFormModalComponent implements OnInit {
     return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
   }
 
-
-  constructor(
-    public fb: FormBuilder,
-    public modal: NgbActiveModal
-  ) {
-  }
-
-  ngOnInit(): void {
-    this.reviewTimeForm = this.fb.group({
-      reviewDate: new FormControl(null),
-      reviewTime: new FormControl(null),
-    }, {validators: reviewDateTimeValidator()});
-  }
-
   public isPreviewDateDisabled(date: NgbDateStruct): boolean {
     const now = new Date();
     const selectedDate = new Date(date.year, date.month - 1, date.day);
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     return selectedDate < today || selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
+  }
+
+  public selectTimeslot(time: Date) {
+    this.reviewTimeForm.controls.reviewTime.setValue(time);
+  }
+
+  public saveAndClose() {
+    this.modal.close(this.reviewTimeForm.value.reviewTime);
   }
 }

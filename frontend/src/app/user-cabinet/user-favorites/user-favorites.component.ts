@@ -65,10 +65,7 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
 
   public openScheduleReviewModal(object: RealtyObj) {
     const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
-    modalRef.result.then((value: {
-      reviewDate: NgbDateStruct,
-      reviewTime: NgbTimeStruct
-    }) => {
+    modalRef.result.then((value: Date) => {
       this.saveReviewAndClose(object.id, value);
     }, error => {
       console.log('data dismissed');
@@ -76,12 +73,9 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.realtyObject = object;
   }
 
-  public saveReviewAndClose(objectId: number, value: {
-    reviewDate: NgbDateStruct,
-    reviewTime: NgbTimeStruct
-  }) {
+  public saveReviewAndClose(objectId: number, dateTime: Date) {
     this.reviewsService.save({
-      ...value,
+      dateTime,
       realtyObjId: objectId,
     }).pipe(takeUntil(this.destroy$))
       .subscribe();
