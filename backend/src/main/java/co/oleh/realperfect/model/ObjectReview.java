@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "tbl_object_review")
+@Table(name = "tbl_object_review", uniqueConstraints = { @UniqueConstraint(columnNames = { "realty_obj_id", "dateTime" }) })
 public class ObjectReview extends AuditableEntity {
     private Long id;
     private User user;
