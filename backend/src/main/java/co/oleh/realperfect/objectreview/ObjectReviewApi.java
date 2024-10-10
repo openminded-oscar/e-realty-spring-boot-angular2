@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -42,11 +43,11 @@ public class ObjectReviewApi {
         return new ResponseEntity<>(objectReviewDtos, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/for-object/{realtyObjId}/${date}")
+    @GetMapping(value = "/for-object/{realtyObjId}/{date}")
     public ResponseEntity<List<ObjectReviewDto>>
     findReviewsForObject(@AuthenticationPrincipal SpringSecurityUser user,
                          @PathVariable Long realtyObjId,
-                         @PathVariable LocalDateTime date) {
+                         @PathVariable ZonedDateTime date) {
         Long userId = user.getId();
         List<ObjectReviewDto> objectReviewDtos = reviewService.findReviewsForObject(userId);
 
