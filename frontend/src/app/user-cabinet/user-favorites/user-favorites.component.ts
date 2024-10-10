@@ -32,11 +32,11 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
   }
 
   private fetchUserInterests() {
-    combineLatest(
+    combineLatest([
       this.interestService.currentUserInterest$, this.reviewsService.currentUserReviews$
-    ).pipe(takeUntil(this.destroy$))
+    ]).pipe(takeUntil(this.destroy$))
       .subscribe(([interests, reviews]) => {
-        this.interests = interests as Interest[] ?? [];
+        this.interests = interests ?? [];
         for (const interest of this.interests) {
           if (interest.id) {
             interest.reviewScheduled = (reviews ?? []).find(r => r.realtyObj?.id === interest.realtyObj?.id);
