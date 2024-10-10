@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,9 +73,12 @@ public class ObjectReviewService {
                 .collect(Collectors.toList());
     }
 
-    public List<ObjectReviewDto> findReviewsForObjectAndDate(Long realtyObjId, LocalDateTime dateTime) {
+    public List<ObjectReviewDto> findReviewsForObjectAndDate(Long realtyObjId, ZonedDateTime zonedDateTime) {
+        ZonedDateTime startOfDay = zonedDateTime.with(LocalTime.MIN);
+        ZonedDateTime endOfDay = zonedDateTime.with(LocalTime.MAX);
+
         List<ObjectReview> reviews = objectReviewRepository
-                .findByRealtyObjIdAndDateTimeBetween(realtyObjId, null, null);
+                .findByRealtyObjIdAndDateTimeBetween(realtyObjId, startOfDay.toInstant(), endOfDay.toInstant());
 
         return reviews.stream().map(review -> this.mappingService.map(review, ObjectReviewDto.class)).collect(Collectors.toList());
     }

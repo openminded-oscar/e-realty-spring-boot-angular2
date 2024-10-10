@@ -12,11 +12,13 @@ import com.google.api.services.calendar.model.EventDateTime;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -47,9 +49,14 @@ public class ObjectReviewApi {
     public ResponseEntity<List<ObjectReviewDto>>
     findReviewsForObject(@AuthenticationPrincipal SpringSecurityUser user,
                          @PathVariable Long realtyObjId,
-                         @PathVariable ZonedDateTime date) {
+                         @PathVariable Instant date,
+                         @RequestParam String timezone) {
         Long userId = user.getId();
-        List<ObjectReviewDto> objectReviewDtos = reviewService.findReviewsForObject(userId);
+        ZonedDateTime zonedDateTime = date.atZone(ZoneId.of(timezone));
+
+        List<ObjectReviewDto> objectReviewDtos = reviewService.findReviewsForObjectAndDate(
+                realtyObjId, zonedDateTime
+        );
 
         return new ResponseEntity<>(objectReviewDtos, HttpStatus.OK);
     }
