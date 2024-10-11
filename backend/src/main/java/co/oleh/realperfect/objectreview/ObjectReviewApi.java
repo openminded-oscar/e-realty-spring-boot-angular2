@@ -42,7 +42,7 @@ public class ObjectReviewApi {
         return new ResponseEntity<>(objectReviewDtos, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/for-object/{realtyObjId}/{date}")
+    @GetMapping(value = "/slots-for-object/{realtyObjId}/{date}")
     public ResponseEntity<List<Instant>>
     findReviewsForObject(@PathVariable Long realtyObjId,
                          @PathVariable Instant date,

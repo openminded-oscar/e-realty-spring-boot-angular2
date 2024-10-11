@@ -104,7 +104,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
 
   public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return this.sendRequest('get', `/for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`, {});
+    return this.sendRequest('get', `/slots-for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`, {});
   }
 
   ngOnDestroy(): void {
