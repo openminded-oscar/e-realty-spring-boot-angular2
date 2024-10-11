@@ -1,13 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
+import {combineLatest, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {InterestService} from '../../services/interest.service';
 import {Interest} from '../../domain/interest';
 import {RealtyObj} from '../../domain/realty-obj';
-import {ScheduleFormModalComponent} from '../../shared/schedule-form-modal/schedule-form-modal.component';
-import {NgbDateStruct, NgbModal, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {ReviewsService} from '../../services/reviews.service';
-import {combineLatest} from 'rxjs';
 
 @Component({
   selector: 'app-user-favorites',
@@ -19,8 +16,7 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   constructor(public interestService: InterestService,
-              public reviewsService: ReviewsService,
-              public modalService: NgbModal) {
+              public reviewsService: ReviewsService) {
   }
 
   public trackById(index: number, obj: Interest): number {
@@ -64,20 +60,10 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
   }
 
   public openScheduleReviewModal(object: RealtyObj) {
-    const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
-    modalRef.result.then((value: Date) => {
-      this.saveReviewAndClose(object.id, value);
-    }, error => {
-      console.log('data dismissed');
-    });
-    modalRef.componentInstance.realtyObject = object;
-  }
-
-  public saveReviewAndClose(objectId: number, dateTime: Date) {
-    this.reviewsService.save({
-      dateTime,
-      realtyObjId: objectId,
-    }).pipe(takeUntil(this.destroy$))
+    this.reviewsService.scheduleReviewFlow(object)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
       .subscribe();
   }
 }

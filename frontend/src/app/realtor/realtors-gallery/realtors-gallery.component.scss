@@ -1,16 +1,8 @@
 @import "../../variables";
+
 :host {
   display: block;
   padding-top: $padding-below-header;
-}
-
-.realtor-block {
-  width: 20%;
-  margin-bottom: 20px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .add-realtor-btn {
@@ -21,10 +13,6 @@
   right: 50px;
   bottom: 50px;
   border-radius: 50%;
-}
-
-.realtor-photo-container {
-  height: 150px;
 }
 
 .realtor-photo {

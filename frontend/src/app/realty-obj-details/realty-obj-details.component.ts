@@ -6,18 +6,16 @@ import {Photo, RealtyPhoto} from '../domain/photo';
 import {UserService} from '../services/user.service';
 import {InterestService} from '../services/interest.service';
 import {InterestDto} from '../domain/interest';
-import {NgbDateStruct, NgbModal, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ReviewsService} from '../services/reviews.service';
 import {ReviewDto} from '../domain/review';
 import {HttpResponse} from '@angular/common/http';
-import {Subject} from 'rxjs';
+import {combineLatest, Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {User} from '../domain/user';
-import {combineLatest} from 'rxjs';
 
 import {RealtorContactComponent} from '../realtor/realtor-contact/realtor-contact.component';
 import {DeleteRealtyModalComponent} from '../shared/delete-realty-modal/delete-realty-modal.component';
-import {ScheduleFormModalComponent} from '../shared/schedule-form-modal/schedule-form-modal.component';
 import {ConfirmModalComponent} from '../shared/confirm-modal/confirm-modal.component';
 
 
@@ -161,30 +159,20 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   public openScheduleReviewModal() {
-    const modalRef =
-      this.modalService.open(ScheduleFormModalComponent);
-    modalRef.result.then((dateTimeSelected: Date) => {
-      this.saveReviewAndClose(dateTimeSelected);
-    }, error => {
-      console.log('data dismissed');
-    });
-    modalRef.componentInstance.realtyObject = this.currentObject;
-  }
-
-  public saveReviewAndClose(dateTime: Date) {
-    this.reviewsService.save({
-      dateTime,
-      realtyObjId: this.currentObject.id,
-    }).pipe(takeUntil(this.destroy$))
-      .subscribe(reviewsResponse => {
-        if (reviewsResponse.body) {
-          this.currentReview = {
-            ...reviewsResponse.body,
-            userId: this.user.id,
-            realtyObjId: this.currentObject.id,
-          };
-        }
-      });
+    this.reviewsService.scheduleReviewFlow(this.currentObject)
+      .pipe(
+        takeUntil(this.destroy$),
+        tap(reviewDto => {
+          if (reviewDto) {
+            this.currentReview = {
+              ...reviewDto,
+              userId: this.user.id,
+              realtyObjId: this.currentObject.id,
+            };
+          }
+        })
+      )
+      .subscribe();
   }
 
   public removeReview() {

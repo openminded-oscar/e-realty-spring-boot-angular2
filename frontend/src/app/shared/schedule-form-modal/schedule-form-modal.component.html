@@ -39,12 +39,17 @@
       </div>
     </div>
   </form>
-  <a *ngIf="reviewTimeForm.valid" target="_blank" [href]="googleCalendarLink">Add To Google Calendar</a>
+  <a *ngIf="savedReview" target="_blank" [href]="googleCalendarLink">Add To Google Calendar</a>
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-outline-dark"
+  <button *ngIf="!savedReview; else closeModalBlock" type="button" class="btn btn-outline-dark"
           [disabled]="!reviewTimeForm.touched || reviewTimeForm.invalid"
-          (click)="saveAndClose()">Save and close
+          (click)="saveReview()">Save
   </button>
+  <ng-template #closeModalBlock>
+    <button (click)="close(savedReview)">
+      Close
+    </button>
+  </ng-template>
 </div>

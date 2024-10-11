@@ -7,7 +7,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class InterestService extends AbstractService <InterestDto> {
   private currentUserInterests = new BehaviorSubject<Interest[]>([]);
   public currentUserInterest$ = this.currentUserInterests.asObservable();

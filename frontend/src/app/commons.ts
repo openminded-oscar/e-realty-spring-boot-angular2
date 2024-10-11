@@ -14,7 +14,8 @@ export const endpoints: any = {
   supportedCities: apiBase + '/addresses/cities-supported',
   realtors: {
     list: apiBase + '/realtor',
-    single: apiBase + '/realtor'
+    single: apiBase + '/realtor',
+    claim: apiBase + '/claim',
   },
   realtyObj: {
     add: apiBase + '/realty-objects/save',

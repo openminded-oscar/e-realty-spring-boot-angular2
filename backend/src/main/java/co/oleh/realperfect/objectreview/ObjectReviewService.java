@@ -76,10 +76,8 @@ public class ObjectReviewService {
         Instant startOfDay = zonedDateTime.with(LocalTime.MIN).toInstant();
         Instant endOfDay = zonedDateTime.with(LocalTime.MAX).toInstant();
 
-        return this.objectReviewRepository
-                .findByRealtyObjIdAndDateTimeBetween(realtyObjId, startOfDay, endOfDay)
-                .stream()
-                .collect(Collectors.toList());
+        return new ArrayList<>(this.objectReviewRepository
+                .findByRealtyObjIdAndDateTimeBetween(realtyObjId, startOfDay, endOfDay));
     }
 
     public List<Instant> timeslotsForObjectAndDate(Long realtyObjId, ZonedDateTime zonedDateTime) {
@@ -93,13 +91,19 @@ public class ObjectReviewService {
         Instant houseClosingTime =
                 zonedDateTime.withHour(ObjectReviewService.OBJECT_REVIEW_END_HOUR).toInstant();
 
+
         List<Instant> availableSlots = new ArrayList<>();
-        Instant currentHour = houseOpeningTime;
-        while (houseClosingTime.isAfter(currentHour)) {
-            if (!busyTimes.contains(currentHour)) {
-                availableSlots.add(currentHour);
+        Instant currentHourToCheck = houseOpeningTime;
+        Instant twoHoursFromNow = Instant.now().plus(2, ChronoUnit.HOURS);
+        while (houseClosingTime.isAfter(currentHourToCheck)) {
+            if (currentHourToCheck.isBefore(twoHoursFromNow)) {
+                break;
             }
-            currentHour = currentHour.plus(1, ChronoUnit.HOURS);
+            if (!busyTimes.contains(currentHourToCheck) &&
+                    currentHourToCheck.isAfter(Instant.now())) {
+                availableSlots.add(currentHourToCheck);
+            }
+            currentHourToCheck = currentHourToCheck.plus(1, ChronoUnit.HOURS);
         }
 
         return availableSlots;
