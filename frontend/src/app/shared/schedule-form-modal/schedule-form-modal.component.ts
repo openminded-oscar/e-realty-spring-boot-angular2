@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -14,7 +14,9 @@ import {
   ReviewsService
 } from '../../services/reviews.service';
 import {RealtyObj} from '../../domain/realty-obj';
-import {switchMap, tap} from 'rxjs/operators';
+import {switchMap, takeUntil, tap} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {ReviewPostDto} from '../../domain/review';
 
 export function reviewDateTimeValidator(): ValidatorFn {
   return (formGroup: AbstractControl): ValidationErrors => {
@@ -49,16 +51,19 @@ export function reviewDateTimeValidator(): ValidatorFn {
   templateUrl: './schedule-form-modal.component.html',
   styleUrls: ['./schedule-form-modal.component.scss']
 })
-export class ScheduleFormModalComponent implements OnInit {
+export class ScheduleFormModalComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<boolean>();
+
   public realtyObject: RealtyObj;
   public reviewTimeForm: FormGroup;
 
   public availableTimesOfDay: Date[] = [];
+  public savedReview: ReviewPostDto;
 
   constructor(
     public reviewService: ReviewsService,
     public fb: FormBuilder,
-    public modal: NgbActiveModal
+    public modal: NgbActiveModal,
   ) {
   }
 
@@ -126,7 +131,26 @@ export class ScheduleFormModalComponent implements OnInit {
     this.reviewTimeForm.controls.reviewTime.setValue(time);
   }
 
-  public saveAndClose() {
-    this.modal.close(this.reviewTimeForm.value.reviewTime);
+  public saveReview(): void {
+    this.reviewService.saveReview({
+      realtyObjId: this.realtyObject.id,
+      dateTime: this.reviewTimeForm.controls.reviewTime.value
+    }).pipe(
+        takeUntil(this.destroy$),
+        tap(reviewDto => {
+          this.savedReview = reviewDto;
+        })
+      )
+      .subscribe();
+
+  }
+
+  public close(savedReview: ReviewPostDto) {
+    this.modal.close(savedReview);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

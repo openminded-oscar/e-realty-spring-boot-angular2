@@ -24,7 +24,7 @@ export enum BackendSupportedOperations {
   RENT = 'RENT',
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class RealtyObjService {
   constructor(private http: HttpClient) {
   }

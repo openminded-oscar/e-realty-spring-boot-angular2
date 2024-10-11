@@ -7,7 +7,7 @@ import {Realtor} from '../domain/realtor';
 import {Photo} from '../domain/photo';
 import {catchError, tap} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class RealtorService {
   constructor(private http: HttpClient) {
   }

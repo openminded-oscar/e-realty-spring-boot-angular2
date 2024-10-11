@@ -9,7 +9,7 @@ import {tap} from 'rxjs/operators';
 
 import {Subject} from 'rxjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class SigninSignoutService extends AbstractService<Credentials> {
   private signInPrompt = new Subject<string>();
   public signinPrompt(text?: string) {

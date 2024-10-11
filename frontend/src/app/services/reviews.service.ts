@@ -1,13 +1,14 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {endpoints} from '../commons';
 import {AbstractService} from './common/abstract.service';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, from, Observable, of, Subject, switchMap} from 'rxjs';
 import {Review, ReviewDto, ReviewPostDto, ReviewSelectTimeDto} from '../domain/review';
-import {tap} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
 import {UserService} from './user.service';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ScheduleFormModalComponent} from '../shared/schedule-form-modal/schedule-form-modal.component';
 
 export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
   return new Date(
@@ -20,17 +21,34 @@ export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
   );
 };
 
-@Injectable()
-export class ReviewsService extends AbstractService<ReviewDto> {
+@Injectable({providedIn: 'root'})
+export class ReviewsService extends AbstractService<ReviewDto> implements OnDestroy {
+  private destroy$ = new Subject<boolean>();
   private currentUserReviews = new BehaviorSubject<Review[]>([]);
   public currentUserReviews$ = this.currentUserReviews.asObservable();
 
   constructor(public http: HttpClient,
+              public modalService: NgbModal,
               public userService: UserService) {
     super(http, endpoints.review);
   }
 
-  public save(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<HttpResponse<ReviewPostDto>> {
+  public scheduleReviewFlow(object: RealtyObj): Observable<ReviewPostDto> {
+    const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
+    modalRef.componentInstance.realtyObject = object;
+
+    return from(modalRef.result).pipe(
+      switchMap((value: ReviewPostDto) => {
+        if (value) {
+          return of(value);
+        } else {
+          return of(null);
+        }
+      })
+    );
+  }
+
+  public saveReview(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<ReviewPostDto> {
     const utcDatetime = reviewSelectTimeDto.dateTime;
 
     const review = {
@@ -51,7 +69,8 @@ export class ReviewsService extends AbstractService<ReviewDto> {
         };
         const updatedReviews = [updatedReview, ...currentReviews];
         this.currentUserReviews.next(updatedReviews);
-      })
+      }),
+      map(res => res.body)
     );
   }
 
@@ -86,5 +105,10 @@ export class ReviewsService extends AbstractService<ReviewDto> {
   public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     return this.sendRequest('get', `/for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`, {});
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

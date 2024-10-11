@@ -5,7 +5,7 @@ import {AbstractService} from '../common/abstract.service';
 import {endpoints} from '../../commons';
 import {Observable} from 'rxjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class SignupService extends AbstractService<Credentials> {
   constructor(http: HttpClient) {
     super(http, endpoints.signup);
