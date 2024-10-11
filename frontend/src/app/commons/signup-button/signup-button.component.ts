@@ -16,7 +16,7 @@ export class SignupButtonComponent {
   constructor(private modalService: NgbModal, private signupService: SignupService) {
   }
 
-  openModal(content) {
+  public openModal(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((credentials: Credentials) => {
       this.sendSignupRequest(credentials);
     }, (reason) => {

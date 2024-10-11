@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {endpoints} from '../commons';
 
-import {Observable, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {Realtor} from '../domain/realtor';
 import {Photo} from '../domain/photo';
 import {catchError, tap} from 'rxjs/operators';
@@ -46,5 +46,9 @@ export class RealtorService {
       .pipe(
         catchError((error: any) => throwError(error))
       );
+  }
+
+  public claimForRealtor(): Observable<any> {
+    throw new Error('Not implemented Yet');
   }
 }

@@ -1,13 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {apiBase} from '../../../commons';
 import {Photo} from '../../../domain/photo';
 import {FileUploadService} from '../../../services/file-upload.service';
 import {GlobalNotificationService} from '../../../services/global-notification.service';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {from, of, Subject, switchMap} from 'rxjs';
+import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {User} from '../../../domain/user';
 import {UserService} from '../../../services/user.service';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ConfirmModalComponent} from '../../../shared/confirm-modal/confirm-modal.component';
+import {RealtorService} from '../../../services/realtor.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -20,17 +24,52 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
   public isEditMode = false;
   public defaultUserPhoto = 'https://placehold.co/250x300?text=User+photo';
   public role = 'User';
+  public realtorForm: FormGroup;
 
   constructor(
     private userService: UserService,
+    private realtorService: RealtorService,
     private fileUploadService: FileUploadService,
     private notificationService: GlobalNotificationService,
-    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private ngbModal: NgbModal,
   ) {
+    this.realtorForm = this.fb.group({
+      isRealtorControl: new FormControl(false),
+    });
   }
 
   ngOnInit() {
-    this.userService.user$.subscribe(user => this.user = user);
+    this.userService.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => this.user = user);
+
+    this.realtorForm.controls.isRealtorControl.valueChanges.pipe(
+      takeUntil(this.destroy$),
+      switchMap(v => {
+        if (v) {
+          const modalRef = this.ngbModal.open(ConfirmModalComponent);
+          modalRef.componentInstance.message = 'You Need To Have Confirmation From Admin. Are you sure?';
+          return from(modalRef.result).pipe(
+            catchError(() => of(false))
+          );
+        } else {
+          return of(null);
+        }
+      }),
+      switchMap((confirmed: boolean) => {
+        if (confirmed) {
+          return this.realtorService.claimForRealtor();
+        } else {
+          return of(null);
+        }
+      }),
+      catchError((error: Error) => {
+        console.error(error);
+        return of(null);
+      })
+    ).subscribe();
+
   }
 
   public save() {
@@ -62,11 +101,6 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
-
   public goToEditMode() {
     this.isEditMode = true;
   }
@@ -83,5 +117,10 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
   public clearAvatar() {
     this.user.profilePic = null;
     this.user.profilePicUrl = null;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
