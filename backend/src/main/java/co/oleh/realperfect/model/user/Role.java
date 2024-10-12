@@ -1,14 +1,21 @@
 package co.oleh.realperfect.model.user;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@NoArgsConstructor
 @Table(name = "tbl_role")
 public class Role {
     private Long id;
-    private String name;
+    private RoleName name;
     private Set<User> users;
+
+    public Role(RoleName name) {
+        this.name = name;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +27,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
+    public RoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(RoleName name) {
         this.name = name;
     }
 
