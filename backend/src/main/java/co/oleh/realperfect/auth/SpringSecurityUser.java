@@ -12,7 +12,10 @@ public class SpringSecurityUser implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     // Constructor
-    public SpringSecurityUser(Long id, String username, String email, Collection<? extends GrantedAuthority> authorities) {
+    public SpringSecurityUser(Long id,
+                              String username,
+                              String email,
+                              Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;

@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.AllArgsConstructor;
@@ -41,9 +42,14 @@ public class AuthenticationService {
             Optional<String> userIdFromToken = this.parseJwt(header);
             if (userIdFromToken.isPresent()) {
                 User userInDb = this.userService.findById(Long.valueOf(userIdFromToken.get()));
+                List<SimpleGrantedAuthority> roles =
+                        userInDb.getRoles()
+                                .stream()
+                                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
+                                .collect(Collectors.toList());
                 SpringSecurityUser user =
-                        new SpringSecurityUser(userInDb.getId(), userInDb.getLogin(), userInDb.getEmail(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
-                return new UsernamePasswordAuthenticationToken(user, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+                        new SpringSecurityUser(userInDb.getId(), userInDb.getLogin(), userInDb.getEmail(), roles);
+                return new UsernamePasswordAuthenticationToken(user, null, roles);
             }
         }
 

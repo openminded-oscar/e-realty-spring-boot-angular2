@@ -9,13 +9,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "tbl_role")
 public class Role {
-    private Long id;
-    private RoleName name;
-    private Set<User> users;
+    public static final String USER_ROLE = "USER";
+    public static final String ADMIN_ROLE = "ADMIN";
+    public static final String REALTOR_ROLE = "REALTOR";
 
-    public Role(RoleName name) {
-        this.name = name;
-    }
+    private Long id;
+    private String name;
+    private Set<User> users;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +27,11 @@ public class Role {
         this.id = id;
     }
 
-    public RoleName getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(RoleName name) {
+    public void setName(String name) {
         this.name = name;
     }
 

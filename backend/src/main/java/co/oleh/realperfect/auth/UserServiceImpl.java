@@ -1,10 +1,9 @@
 package co.oleh.realperfect.auth;
 
 import co.oleh.realperfect.mapping.MappingService;
-import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
-import co.oleh.realperfect.model.user.RoleName;
+import co.oleh.realperfect.model.user.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import co.oleh.realperfect.model.user.AccountCredentials;
@@ -44,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(
-                new HashSet<>(Collections.singletonList(roleRepository.findByName(RoleName.USER)))
+                new HashSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
         );
 
         return userRepository.save(user);

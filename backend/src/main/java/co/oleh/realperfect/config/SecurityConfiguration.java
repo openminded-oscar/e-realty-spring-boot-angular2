@@ -48,7 +48,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS)
                 .permitAll()
 //                private endpoints
-                .antMatchers("/api/upload-photo/**", "/api/interest/**", "/api/object-review/**")
+                .antMatchers("/api/upload-photo/**",
+                        "/api/interest/**",
+                        "/api/object-review/**",
+                        "/api/manage-users")
                 .authenticated()
                 .antMatchers(HttpMethod.POST, "/realty-objects/save")
                 .authenticated()
