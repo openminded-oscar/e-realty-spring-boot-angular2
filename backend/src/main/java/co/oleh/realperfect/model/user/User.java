@@ -3,6 +3,7 @@ package co.oleh.realperfect.model.user;
 import co.oleh.realperfect.model.AuditableEntity;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.List;
@@ -103,7 +104,7 @@ public class User extends AuditableEntity {
         this.passwordConfirm = passwordConfirm;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     public Set<Role> getRoles() {
         return roles;
