@@ -15,11 +15,18 @@ import javax.annotation.security.RolesAllowed;
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserManagementApi {
-  private UserService userService;
+    private UserService userService;
 
-  @GetMapping
-  @RolesAllowed({"ADMIN"})
-  public UserDto list(@AuthenticationPrincipal SpringSecurityUser currentUser) {
-    throw new RuntimeException("Not implemented yet!");
-  }
+    @GetMapping
+    @RolesAllowed({"ADMIN"})
+    public UserDto list(@AuthenticationPrincipal SpringSecurityUser currentUser) {
+        throw new RuntimeException("Not implemented yet!");
+    }
+
+    @PostMapping(value = "set-realtor/{id}")
+    @RolesAllowed({"ADMIN"})
+    public UserDto setRealtor(@AuthenticationPrincipal SpringSecurityUser currentUser,
+                              @PathVariable String id) {
+        throw new RuntimeException("Not implemented yet!");
+    }
 }
