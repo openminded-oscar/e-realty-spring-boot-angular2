@@ -73,7 +73,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 /************    OAuth2 Auth config    *************/
                 .oauth2Login()
                 .authorizationEndpoint()
-                .authorizationRequestRepository(authorizationRequestRepository())
+                .authorizationRequestRepository(this.oauth2AuthorizationRequestRepository())
                 .authorizationRequestResolver(this.oAuth2AuthorizationRequestResolver)
                 .and()
                 .tokenEndpoint()
@@ -89,7 +89,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
+    public AuthorizationRequestRepository<OAuth2AuthorizationRequest> oauth2AuthorizationRequestRepository() {
         return new CustomAuthorizationRequestRepository();
     }
 
