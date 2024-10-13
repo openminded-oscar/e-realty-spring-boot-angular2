@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+
 
 @RestController
 @RequestMapping(value = "/api/manage-users")
@@ -16,8 +18,8 @@ public class UserManagementApi {
   private UserService userService;
 
   @GetMapping
+  @RolesAllowed({"ADMIN"})
   public UserDto list(@AuthenticationPrincipal SpringSecurityUser currentUser) {
-    System.out.println("Lol");
-    return null;
+    throw new RuntimeException("Not implemented yet!");
   }
 }
