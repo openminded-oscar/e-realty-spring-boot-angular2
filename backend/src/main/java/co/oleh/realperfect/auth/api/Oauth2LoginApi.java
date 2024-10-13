@@ -13,15 +13,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/oauth2-signin")
+@AllArgsConstructor
 public class Oauth2LoginApi {
     private static String authorizationRequestBaseUri
-      = "oauth2/authorization";
+            = "oauth2/authorization";
     private Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
 
     private ClientRegistrationRepository clientRegistrationRepository;
-    public Oauth2LoginApi(ClientRegistrationRepository clientRegistrationRepository) {
-        this.clientRegistrationRepository = clientRegistrationRepository;
-    }
 
     @GetMapping
     public Map<String, String> getLoginPage() {

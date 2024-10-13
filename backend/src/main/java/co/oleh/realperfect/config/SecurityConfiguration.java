@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -27,10 +28,11 @@ import java.io.IOException;
 @Configuration
 @EnableOAuth2Sso
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final JWTAuthenticationFilter jwtAuthenticationFilter;
-    private final Oauth2TokenSettingFilter oauth2TokenSettingFilter;
-    private final ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
+    private JWTAuthenticationFilter jwtAuthenticationFilter;
+    private Oauth2TokenSettingFilter oauth2TokenSettingFilter;
+    private ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
 
     public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter,
                                  ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver,
@@ -73,7 +75,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 /************    OAuth2 Auth config    *************/
                 .oauth2Login()
                 .authorizationEndpoint()
-                .authorizationRequestRepository(this.oauth2AuthorizationRequestRepository())
+                .authorizationRequestRepository(authorizationRequestRepository())
                 .authorizationRequestResolver(this.oAuth2AuthorizationRequestResolver)
                 .and()
                 .tokenEndpoint()
@@ -89,7 +91,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthorizationRequestRepository<OAuth2AuthorizationRequest> oauth2AuthorizationRequestRepository() {
+    public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
         return new CustomAuthorizationRequestRepository();
     }
 
