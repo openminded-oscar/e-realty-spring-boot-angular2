@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Oauth2LoginApi {
     private static String authorizationRequestBaseUri
-      = "oauth2/authorization";
+            = "oauth2/authorization";
     private Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
 
     private ClientRegistrationRepository clientRegistrationRepository;
