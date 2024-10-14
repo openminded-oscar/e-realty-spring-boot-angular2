@@ -3,7 +3,7 @@ package co.oleh.realperfect.model.user;
 import co.oleh.realperfect.model.AuditableEntity;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
-import org.hibernate.annotations.Fetch;
+import co.oleh.realperfect.model.photos.UserPhoto;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,7 +23,7 @@ public class User extends AuditableEntity {
     private String surname;
     private String phoneNumber;
 
-    private String profilePic;
+    private UserPhoto profilePic;
     private Realtor realtorDetails;
     private List<RealtyObject> realtyObjects;
 
@@ -132,12 +132,13 @@ public class User extends AuditableEntity {
         this.email = email;
     }
 
-    @Column(name = "profile_pic")
-    public String getProfilePic() {
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @JoinColumn(name = "photo_id")
+    public UserPhoto getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(String profilePic) {
+    public void setProfilePic(UserPhoto profilePic) {
         this.profilePic = profilePic;
     }
 }

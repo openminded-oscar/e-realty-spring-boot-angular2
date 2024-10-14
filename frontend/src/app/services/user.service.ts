@@ -34,7 +34,7 @@ export class UserService {
       .pipe(
         catchError((error: any) => throwError(error)),
         tap((userFromServer: User) => {
-          userFromServer.profilePicUrl = Photo.getLinkByFilename(userFromServer.profilePic as unknown as string);
+          userFromServer.profilePicUrl = Photo.getLinkByFilename(userFromServer.profilePic.filename);
         })
       );
   }
@@ -47,7 +47,7 @@ export class UserService {
     this.http.get(endpoints.userStatus, {headers}).subscribe(
       (userInfo: User) => {
         userInfo.profilePicUrl = userInfo.profilePic ?
-          Photo.getLinkByFilename(userInfo.profilePic as unknown as string) : null;
+          Photo.getLinkByFilename(userInfo.profilePic.filename) : null;
         userInfo.realtyObjects.forEach(o => o.mainPhotoPath = RealtyObj.getMainPhoto(o));
         this.userSubject.next(userInfo);
         this.isUserSubject.next(userInfo.roles?.includes(UserRole.User));

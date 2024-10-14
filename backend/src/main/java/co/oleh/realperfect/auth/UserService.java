@@ -4,7 +4,6 @@ import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
-import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.user.Role;
 import co.oleh.realperfect.repository.RealtorRepository;
 import org.springframework.http.HttpStatus;
@@ -123,7 +122,7 @@ public class UserService {
             existingUser.setEmail(patchDto.getEmail());
         }
         if (patchDto.getProfilePic() != null) {
-            existingUser.setProfilePic(patchDto.getProfilePic().getFilename());
+            existingUser.setProfilePic(patchDto.getProfilePic());
         } else {
             existingUser.setProfilePic(null);
         }
