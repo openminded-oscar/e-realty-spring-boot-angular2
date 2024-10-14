@@ -136,10 +136,13 @@ public class UserService {
         roles.add(role);
         this.userRepository.save(user);
 
-//        Realtor realtor = new Realtor();
-//        realtor.setName(user.getName());
-//        realtor.setSurname(user.getSurname());
-//        this.realtorRepository.save(realtor);
+        Realtor realtor = new Realtor();
+        realtor.setUser(user);
+        realtor.setName(user.getName());
+        realtor.setSurname(user.getSurname());
+        realtor.setProfilePic(user.getProfilePic());
+
+        this.realtorRepository.save(realtor);
 
         return this.mappingService.map(user, UserDto.class);
     }

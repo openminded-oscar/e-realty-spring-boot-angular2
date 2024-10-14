@@ -10,5 +10,5 @@ public class RealtorDto {
     private String name;
     private String surname;
 
-    private UserPhoto photo;
+    private UserPhoto profilePic;
 }

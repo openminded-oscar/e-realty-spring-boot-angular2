@@ -1,6 +1,7 @@
 package co.oleh.realperfect.model;
 
 import co.oleh.realperfect.model.photos.UserPhoto;
+import co.oleh.realperfect.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -15,10 +16,19 @@ public class Realtor {
 
 	private String name;
 	private String surname;
-	
-	private UserPhoto photo;
-
+	private User user;
+	private UserPhoto profilePic;
 	private List<RealtyObject> realtyObjects;
+
+	@OneToOne()
+	@JoinColumn(name = "user_id")
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JoinColumn(name = "realtor_id")
@@ -33,12 +43,12 @@ public class Realtor {
 
 	@OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JoinColumn(name = "photo_id")
-	public UserPhoto getPhoto() {
-		return photo;
+	public UserPhoto getProfilePic() {
+		return profilePic;
 	}
 
-	public void setPhoto(UserPhoto userPhoto) {
-		this.photo = userPhoto;
+	public void setProfilePic(UserPhoto userPhoto) {
+		this.profilePic = userPhoto;
 	}
 
 	@Id
