@@ -10,6 +10,7 @@ import java.time.Instant;
 @Component
 public class MappingConfig extends ConfigurableMapper {
     protected void configure(MapperFactory factory) {
+        factory.getConverterFactory().registerConverter(new RealtorMappingConverter());
         factory.getConverterFactory().registerConverter(new PassThroughConverter(Instant.class));
     }
 }
