@@ -155,6 +155,11 @@ public class UserService {
         Set<Role> roles = user.getRoles();
         roles.remove(role);
 
+        Realtor realtor = this.realtorRepository.findByUserId(user.getId());
+        if (realtor != null) {
+            this.realtorRepository.deleteById(realtor.getId());
+        }
+
         this.userRepository.save(user);
 
         return this.mappingService.map(user, UserDto.class);
