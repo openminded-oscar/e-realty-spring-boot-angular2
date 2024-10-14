@@ -4,6 +4,7 @@ import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
+import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.user.Role;
 import co.oleh.realperfect.repository.RealtorRepository;
 import org.springframework.http.HttpStatus;
@@ -136,10 +137,13 @@ public class UserService {
         roles.add(role);
         this.userRepository.save(user);
 
-//        Realtor realtor = new Realtor();
-//        realtor.setName(user.getName());
-//        realtor.setSurname(user.getSurname());
-//        this.realtorRepository.save(realtor);
+        Realtor realtor = new Realtor();
+        realtor.setUser(user);
+        realtor.setName(user.getName());
+        realtor.setSurname(user.getSurname());
+        realtor.setProfilePic(user.getProfilePic());
+
+        this.realtorRepository.save(realtor);
 
         return this.mappingService.map(user, UserDto.class);
     }
