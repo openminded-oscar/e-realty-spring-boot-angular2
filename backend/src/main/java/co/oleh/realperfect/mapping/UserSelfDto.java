@@ -10,7 +10,7 @@ import java.util.Set;
 public class UserSelfDto {
      Long id;
      String login;
-     Set<RoleDto> roles;
+     Set<String> roles;
      String name;
      String surname;
      String phoneNumber;

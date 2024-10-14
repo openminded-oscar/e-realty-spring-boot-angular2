@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,7 +32,16 @@ public class UserService {
         mergePatch(userDto, user);
 
         User updatedUser = userRepository.save(user);
-        return this.mappingService.map(updatedUser, UserSelfDto.class);
+
+        UserSelfDto userSelfDto = this.mappingService.map(updatedUser, UserSelfDto.class);
+        userSelfDto.setRoles(
+                new HashSet<>(user.getRoles()
+                        .stream()
+                        .map(Role::getName)
+                        .collect(Collectors.toList()))
+        );
+
+        return userSelfDto;
     }
 
     public User save(User user) {

@@ -1,6 +1,12 @@
 import {RealtyObj} from './realty-obj';
 import {Photo} from './photo';
 
+export enum UserRole {
+  User = 'USER',
+  Admin = 'ADMIN',
+  Realtor = 'REALTOR',
+}
+
 export interface User {
   id?: number;
   login?: string;
