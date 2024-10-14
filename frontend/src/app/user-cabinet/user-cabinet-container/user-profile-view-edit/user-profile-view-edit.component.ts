@@ -85,14 +85,14 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
       const file: File = fileList[0];
       this.fileUploadService.upload(file, apiBase + '/upload-photo/profile')
         .pipe(takeUntil(this.destroy$))
-        .subscribe(
-          (data: Photo) => {
+        .subscribe({
+          next: (data: Photo) => {
             this.user.profilePic = data;
             this.user.profilePic.fullUrl = Photo.getLinkByFilename(data.filename);
             this.user.profilePicUrl = Photo.getLinkByFilename(data.filename);
           },
-          error => console.log(error)
-        );
+          error: error => console.log(error)
+        });
     }
   }
 

@@ -18,11 +18,12 @@
         <a class="nav-link" [class.active]="isActiveRoute('/realtors')" [routerLink]="['/realtors']"
            routerLinkActive="active">Our Realtors</a>
       </li>
-      <li class="nav-item owner-item">
-        <a class="nav-link" routerLink="/obj/editor" style="color: black">I'm an owner!</a>
-      </li>
     </ul>
     <div style="display: flex">
+      <div class="nav-item owner-item" *ngIf="this.userService.isAdmin$|async">
+        <a class="btn btn-light nav-link" routerLink="/admin">Admin Section</a>
+      </div>
+
       <signup-button *ngIf="!isAuthenticated"></signup-button>
       <signin-button *ngIf="!isAuthenticated"></signin-button>
       <signout-button *ngIf="isAuthenticated"></signout-button>

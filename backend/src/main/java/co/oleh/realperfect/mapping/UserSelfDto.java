@@ -1,6 +1,7 @@
 package co.oleh.realperfect.mapping;
 
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
+import co.oleh.realperfect.model.photos.UserPhoto;
 import lombok.Data;
 
 import java.time.Instant;
@@ -16,7 +17,7 @@ public class UserSelfDto {
      String phoneNumber;
      String email;
 //     TODO change to picture dto???
-     String profilePic;
+     UserPhoto profilePic;
      RealtorDto realtorDetails;
      Set<RealtyObjectDto> realtyObjects;
      Instant createdAt;

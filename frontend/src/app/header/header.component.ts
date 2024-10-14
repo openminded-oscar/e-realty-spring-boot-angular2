@@ -11,6 +11,7 @@ import {User} from '../domain/user';
 })
 export class HeaderComponent implements OnInit {
   public isAuthenticated: boolean;
+  public isAdmin: boolean;
 
   public currentRoute: string;
   public user: User;

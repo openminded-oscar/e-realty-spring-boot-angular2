@@ -1,9 +1,11 @@
 package co.oleh.realperfect.auth;
 
 import co.oleh.realperfect.mapping.MappingService;
+import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.model.user.Role;
+import co.oleh.realperfect.repository.RealtorRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import co.oleh.realperfect.model.user.AccountCredentials;
@@ -14,9 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private MappingService mappingService;
     private UserRepository userRepository;
+    private RealtorRepository realtorRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -57,8 +58,22 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<UserDto> findAll() {
+        Iterable<User> iterable = userRepository.findAll();
+        List<User> users = new ArrayList<>();
+        iterable.forEach(users::add);
+
+        return users.stream()
+                .map(user -> {
+                    UserDto userDto = mappingService.map(user, UserDto.class);
+                    userDto.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+                    return userDto;
+                })
+                .collect(Collectors.toList());
+    }
+
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public User findByGoogleUserIdTokenSubject(String googleUserId) {
@@ -107,9 +122,37 @@ public class UserService {
             existingUser.setEmail(patchDto.getEmail());
         }
         if (patchDto.getProfilePic() != null) {
-            existingUser.setProfilePic(patchDto.getProfilePic().getFilename());
+            existingUser.setProfilePic(patchDto.getProfilePic());
         } else {
             existingUser.setProfilePic(null);
         }
+    }
+
+    public UserDto grantRealtorRole(String userId) {
+        User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Role role = roleRepository.findByName(Role.REALTOR_ROLE);
+
+        Set<Role> roles = user.getRoles();
+        roles.add(role);
+        this.userRepository.save(user);
+
+//        Realtor realtor = new Realtor();
+//        realtor.setName(user.getName());
+//        realtor.setSurname(user.getSurname());
+//        this.realtorRepository.save(realtor);
+
+        return this.mappingService.map(user, UserDto.class);
+    }
+
+    public UserDto removeRealtorRole(String userId) {
+        User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Role role = roleRepository.findByName(Role.REALTOR_ROLE);
+
+        Set<Role> roles = user.getRoles();
+        roles.remove(role);
+
+        this.userRepository.save(user);
+
+        return this.mappingService.map(user, UserDto.class);
     }
 }
