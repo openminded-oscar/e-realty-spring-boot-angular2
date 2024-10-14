@@ -1,11 +1,10 @@
-import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {apiBase} from '../../../commons';
 import {Photo} from '../../../domain/photo';
 import {FileUploadService} from '../../../services/file-upload.service';
 import {GlobalNotificationService} from '../../../services/global-notification.service';
 import {from, of, Subject, switchMap} from 'rxjs';
-import {catchError, takeUntil, tap} from 'rxjs/operators';
+import {catchError, takeUntil} from 'rxjs/operators';
 import {User} from '../../../domain/user';
 import {UserService} from '../../../services/user.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
@@ -23,7 +22,6 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   public isEditMode = false;
   public defaultUserPhoto = 'https://placehold.co/250x300?text=User+photo';
-  public role = 'User';
   public realtorForm: FormGroup;
 
   constructor(
@@ -76,9 +74,6 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
     this.userService.updateUserProfileOnServer(this.user).pipe(
       takeUntil(this.destroy$)
     ).subscribe(user => {
-      if (this.user.role) {
-        this.role = user.role;
-      }
       this.notificationService.showNotification('User Profile was Updated');
       this.isEditMode = false;
     });
