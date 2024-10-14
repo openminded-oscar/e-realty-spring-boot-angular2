@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 
 @RestController
@@ -19,14 +20,21 @@ public class UserManagementApi {
 
     @GetMapping
     @RolesAllowed({"ADMIN"})
-    public UserDto list(@AuthenticationPrincipal SpringSecurityUser currentUser) {
-        throw new RuntimeException("Not implemented yet!");
+    public List<UserDto> list(@AuthenticationPrincipal SpringSecurityUser currentUser) {
+        return this.userService.findAll();
     }
 
     @PostMapping(value = "set-realtor/{id}")
     @RolesAllowed({"ADMIN"})
-    public UserDto setRealtor(@AuthenticationPrincipal SpringSecurityUser currentUser,
+    public UserDto setAsRealtor(@AuthenticationPrincipal SpringSecurityUser currentUser,
                               @PathVariable String id) {
-        throw new RuntimeException("Not implemented yet!");
+        return this.userService.grantRealtorRole(id);
+    }
+
+    @DeleteMapping(value = "set-realtor/{id}")
+    @RolesAllowed({"ADMIN"})
+    public UserDto deleteAsRealtor(@AuthenticationPrincipal SpringSecurityUser currentUser,
+                              @PathVariable String id) {
+        return this.userService.removeRealtorRole(id);
     }
 }

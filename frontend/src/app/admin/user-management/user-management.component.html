@@ -1,0 +1,48 @@
+<h1 class="header">User management</h1>
+<div class="container mt-5">
+  <input
+    type="text"
+    class="form-control mb-4"
+    placeholder="Search by email"
+    [(ngModel)]="searchQuery"
+    (input)="searchUsers()"
+  />
+
+  <div class="row">
+    <div class="col-md-4" *ngFor="let user of filteredUsers">
+      <div class="card mb-4">
+        <img
+          [src]="user.profilePicUrl"
+          class="card-img-top"
+          alt="{{ user.name }}"
+          style="height: 250px; object-fit: contain;"
+        />
+        <div class="card-body">
+          <h5 class="user-card-title card-title">
+            <div class="name">{{ user.name }}</div>
+            <div class="roles">
+              <div *ngFor="let role of user.roles"
+                   class="role-label badge bg-warning"
+                   style="text-transform: lowercase">
+                {{ role }}
+              </div>
+            </div>
+          </h5>
+          <p class="card-text">{{ user.email }}</p>
+          <button
+            *ngIf="!isRealtor(user)"
+            class="btn btn-primary"
+            (click)="makeRealtor(user.id)">
+            Make Realtor
+          </button>
+          <button
+            *ngIf="isRealtor(user)"
+            class="btn btn-secondary"
+            (click)="makePlainUser(user.id)">
+            Make Plain User
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

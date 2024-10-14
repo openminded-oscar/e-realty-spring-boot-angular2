@@ -8,10 +8,7 @@ import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.model.RealtyObject;
-import co.oleh.realperfect.model.user.AccountCredentials;
-import co.oleh.realperfect.model.user.GoogleAccountData;
-import co.oleh.realperfect.model.user.Token;
-import co.oleh.realperfect.model.user.User;
+import co.oleh.realperfect.model.user.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +20,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,7 +77,15 @@ public class SigninApi {
             user.setRealtyObjects(sortedRealtyObjects);
         }
 
-        return this.mappingService.map(user, UserSelfDto.class);
+        UserSelfDto userSelfDto = this.mappingService.map(user, UserSelfDto.class);
+        userSelfDto.setRoles(
+                new HashSet<>(user.getRoles()
+                        .stream()
+                        .map(Role::getName)
+                        .collect(Collectors.toList()))
+        );
+
+        return userSelfDto;
     }
 
     @PostMapping

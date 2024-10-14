@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/cor
 import {RealtyObj} from '../../domain/realty-obj';
 import {Subject} from 'rxjs';
 import {BehaviorSubject} from 'rxjs';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'realty-objs-list',
@@ -23,7 +24,7 @@ export class RealtyObjsListComponent implements OnDestroy {
     return obj.id;
   }
 
-  constructor() {
+  constructor(public userService: UserService) {
   }
 
   public resetObjects() {

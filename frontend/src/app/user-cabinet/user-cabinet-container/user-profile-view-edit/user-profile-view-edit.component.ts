@@ -23,7 +23,6 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
   public isEditMode = false;
   public defaultUserPhoto = 'https://placehold.co/250x300?text=User+photo';
   public realtorForm: FormGroup;
-  public roles: string[] = [];
 
   constructor(
     private userService: UserService,
@@ -75,9 +74,6 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
     this.userService.updateUserProfileOnServer(this.user).pipe(
       takeUntil(this.destroy$)
     ).subscribe(user => {
-      if (this.user.roles) {
-        this.roles = user.roles;
-      }
       this.notificationService.showNotification('User Profile was Updated');
       this.isEditMode = false;
     });
@@ -89,14 +85,14 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
       const file: File = fileList[0];
       this.fileUploadService.upload(file, apiBase + '/upload-photo/profile')
         .pipe(takeUntil(this.destroy$))
-        .subscribe(
-          (data: Photo) => {
+        .subscribe({
+          next: (data: Photo) => {
             this.user.profilePic = data;
             this.user.profilePic.fullUrl = Photo.getLinkByFilename(data.filename);
             this.user.profilePicUrl = Photo.getLinkByFilename(data.filename);
           },
-          error => console.log(error)
-        );
+          error: error => console.log(error)
+        });
     }
   }
 

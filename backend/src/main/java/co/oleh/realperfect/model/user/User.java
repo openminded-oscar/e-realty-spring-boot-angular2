@@ -14,6 +14,7 @@ import java.util.Set;
 public class User extends AuditableEntity {
     private Long id;
     private String login;
+    private String email;
     private String password;
     private String passwordConfirm;
     private Set<Role> roles;
@@ -21,7 +22,7 @@ public class User extends AuditableEntity {
     private String name;
     private String surname;
     private String phoneNumber;
-    private String email;
+
     private String profilePic;
     private Realtor realtorDetails;
     private List<RealtyObject> realtyObjects;

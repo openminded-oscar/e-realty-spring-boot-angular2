@@ -41,13 +41,9 @@
 
         <div class="form-row"
              style="display: flex; flex-direction: row; justify-content: space-between">
-          <select id="role" name="role"
-                  [(ngModel)]="roles"
-                  [attr.disabled]="!isEditMode ? true : null"
-                  class="role-selector">
-            <option value="User">User</option>
-            <option value="Realtor">Realtor</option>
-          </select>
+          <span id="role">
+<!--                {{user.roles|json}}-->
+          </span>
         </div>
       </div>
 

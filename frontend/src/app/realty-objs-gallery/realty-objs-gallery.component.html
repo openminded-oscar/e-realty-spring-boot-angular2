@@ -89,13 +89,6 @@
        [infiniteScrollThrottle]="50"
        (scrolled)="onScroll()">
     <realty-objs-list [realtyObjectsPortion]="currentObjectsPortion$|async"></realty-objs-list>
-    <div class="row">
-      <div class="col-2 offset-5">
-        <button *ngIf="userService.isAuthenticated$|async" [routerLink]="'/obj/editor'"
-                class="btn btn-block btn-info add-object-button">Add Object
-        </button>
-      </div>
-    </div>
   </div>
 </div>
 
