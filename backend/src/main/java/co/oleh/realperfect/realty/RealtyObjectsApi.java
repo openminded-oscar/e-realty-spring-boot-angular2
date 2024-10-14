@@ -81,11 +81,4 @@ public class RealtyObjectsApi {
 
         return new ResponseEntity<>(buildingTypes, HttpStatus.OK);
     }
-
-    @GetMapping("/realty-objects/supported-operations")
-    public ResponseEntity<Set<OperationType>> getRealtySupportedOperations() {
-        Set<OperationType> operationTypes = realtyObjectsService.getRealtyOperationTypes();
-
-        return new ResponseEntity<>(operationTypes, HttpStatus.OK);
-    }
 }

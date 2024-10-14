@@ -7,19 +7,22 @@
     [(ngModel)]="searchQuery"
     (input)="searchUsers()"
   />
-
   <div class="row">
     <div class="col-md-4" *ngFor="let user of filteredUsers">
       <div class="card mb-4">
-        <img
-          [src]="user.profilePicUrl"
-          class="card-img-top"
-          alt="{{ user.name }}"
-          style="height: 250px; object-fit: contain;"
-        />
+        <div style="height: 250px;">
+          <img [src]="user.profilePicUrl??defaultUserPhoto"
+               class="card-img-top"
+               alt="{{ user.name }}"
+               style="height: 100%; object-fit: contain;"
+          />
+        </div>
         <div class="card-body">
           <h5 class="user-card-title card-title">
-            <div class="name">{{ user.name }}</div>
+            <div style="display: flex; flex-direction: column">
+              <div class="name">{{ user.name? user.name: 'Unnamed User' }}</div>
+              <p class="card-text">{{ user.email }}</p>
+            </div>
             <div class="roles">
               <div *ngFor="let role of user.roles"
                    class="role-label badge bg-warning"
@@ -28,7 +31,7 @@
               </div>
             </div>
           </h5>
-          <p class="card-text">{{ user.email }}</p>
+
           <button
             *ngIf="!isRealtor(user)"
             class="btn btn-primary"

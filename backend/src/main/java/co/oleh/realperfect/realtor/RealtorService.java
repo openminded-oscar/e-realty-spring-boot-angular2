@@ -21,7 +21,7 @@ public class RealtorService {
 
     public List<RealtorDto> findByNameOrSurnameLike(String query) {
         List<Realtor> realtors = realtorRepository.
-                findByNameStartingWith(query);
+                findByUserNameStartingWith(query);
 
         return realtors.stream().map(r -> this.mappingService.map(r, RealtorDto.class)).collect(Collectors.toList());
     }

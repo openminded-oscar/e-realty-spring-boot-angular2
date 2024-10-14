@@ -1,6 +1,6 @@
 package co.oleh.realperfect.model;
 
-import co.oleh.realperfect.model.photos.UserPhoto;
+import co.oleh.realperfect.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -12,14 +12,7 @@ import java.util.List;
 @Table(name = "tbl_realtor")
 public class Realtor {
 	private Long id;
-
-
-
-	private String name;
-	private String surname;
-	
-	private UserPhoto photo;
-
+	private User user;
 	private List<RealtyObject> realtyObjects;
 
 	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
@@ -33,16 +26,6 @@ public class Realtor {
 		this.realtyObjects = realtyObjects;
 	}
 
-	@OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
-	@JoinColumn(name = "photo_id")
-	public UserPhoto getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(UserPhoto userPhoto) {
-		this.photo = userPhoto;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
@@ -51,5 +34,15 @@ public class Realtor {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@OneToOne()
+	@JoinColumn(name = "user_id")
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

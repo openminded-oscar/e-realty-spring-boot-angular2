@@ -10,6 +10,8 @@ import {takeUntil} from 'rxjs/operators';
   styleUrls: ['./user-management.component.scss']
 })
 export class UserManagementComponent implements OnInit, OnDestroy {
+  public defaultUserPhoto = 'https://placehold.co/400x450?text=User+photo';
+
   constructor(public userManagementService: UserManagementService) { }
   private destroy$ = new Subject<boolean>();
 

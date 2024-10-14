@@ -18,5 +18,5 @@ public interface RealtorRepository extends JpaRepository<Realtor, Long> {
 
 //    List<Realtor> findByUser_NameStartingWithOrUser_SurnameStartingWith(String nameStart,
 //                                                                        String surnameStart);
-    List<Realtor> findByNameStartingWith(String nameStart);
+    List<Realtor> findByUserNameStartingWith(String nameStart);
 }

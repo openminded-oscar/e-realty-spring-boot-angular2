@@ -34,7 +34,7 @@ export class UserManagementService implements OnDestroy {
         takeUntil(this.onDestroy$),
         tap(users => {
           users.map(user => {
-            user.profilePicUrl = Photo.getLinkByFilename(user.profilePic as unknown as string);
+            user.profilePicUrl = user.profilePic ? Photo.getLinkByFilename(user.profilePic?.filename) : null;
           });
         })
       );
