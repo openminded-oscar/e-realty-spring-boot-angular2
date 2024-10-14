@@ -41,7 +41,7 @@ public class Realtor {
 		this.realtyObjects = realtyObjects;
 	}
 
-	@OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "photo_id")
 	public UserPhoto getProfilePic() {
 		return profilePic;
