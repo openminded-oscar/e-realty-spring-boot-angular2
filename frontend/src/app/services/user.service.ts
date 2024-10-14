@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {User} from '../domain/user';
+import {User, UserRole} from '../domain/user';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {endpoints} from '../commons';
 import {BehaviorSubject} from 'rxjs';
@@ -11,11 +11,20 @@ import {RealtyObj} from '../domain/realty-obj';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
-  private isAuthenticatedSubject = new BehaviorSubject<Boolean>(null);
-  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-
   private userSubject = new BehaviorSubject<User>(null);
   public user$ = this.userSubject.asObservable();
+
+  private isUserSubject = new BehaviorSubject<boolean>(null);
+  public isUser$ = this.isUserSubject.asObservable();
+
+  private isAdminSubject = new BehaviorSubject<boolean>(null);
+  public isAdmin$ = this.isAdminSubject.asObservable();
+
+  private isRealtorSubject = new BehaviorSubject<boolean>(null);
+  public isRealtor$ = this.isRealtorSubject.asObservable();
+
+  private isAuthenticatedSubject = new BehaviorSubject<Boolean>(null);
+  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(public http: HttpClient) {
   }
@@ -41,6 +50,9 @@ export class UserService {
           Photo.getLinkByFilename(userInfo.profilePic as unknown as string) : null;
         userInfo.realtyObjects.forEach(o => o.mainPhotoPath = RealtyObj.getMainPhoto(o));
         this.userSubject.next(userInfo);
+        this.isUserSubject.next(userInfo.roles?.includes(UserRole.User));
+        this.isRealtorSubject.next(userInfo.roles?.includes(UserRole.Realtor));
+        this.isAdminSubject.next(userInfo.roles?.includes(UserRole.Admin));
         this.isAuthenticatedSubject.next(!!userInfo);
       });
   }
