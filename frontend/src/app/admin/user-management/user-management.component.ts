@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {UserManagementService} from '../../services/user-management.service';
 import {User, UserRole} from '../../domain/user';
 import {Subject} from 'rxjs';
@@ -12,7 +12,9 @@ import {takeUntil} from 'rxjs/operators';
 export class UserManagementComponent implements OnInit, OnDestroy {
   public defaultUserPhoto = 'https://placehold.co/400x450?text=User+photo';
 
-  constructor(public userManagementService: UserManagementService) { }
+  constructor(public userManagementService: UserManagementService, public cdr: ChangeDetectorRef) {
+  }
+
   private destroy$ = new Subject<boolean>();
 
   public users: User[] = [];
@@ -21,7 +23,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   public searchQuery = '';
 
   ngOnInit(): void {
-    this.userManagementService.getAllUsers().pipe(
+    this.userManagementService.getUsers().pipe(
       takeUntil(this.destroy$),
     ).subscribe(
       users => {
@@ -31,24 +33,22 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     );
   }
 
-  public makeRealtor(id: number) {
-    this.userManagementService.grantRealtor(id)
-      .subscribe();
-  }
-
-  public makePlainUser(id: number) {
-    this.userManagementService.removeRealtorRole(id)
-      .subscribe();
-  }
-
-  public isRealtor(user: User) {
-    return user.roles.includes(UserRole.Realtor);
-  }
-
   public searchUsers(): void {
     this.filteredUsers = this.users.filter(user =>
       user.email?.toLowerCase().includes(this.searchQuery?.toLowerCase())
     );
+  }
+
+  public makeRealtor(id: number) {
+    this.userManagementService.grantRealtor(id);
+  }
+
+  public makePlainUser(id: number) {
+    this.userManagementService.removeRealtorRole(id);
+  }
+
+  public isRealtor(user: User) {
+    return user.roles.includes(UserRole.Realtor);
   }
 
   ngOnDestroy(): void {

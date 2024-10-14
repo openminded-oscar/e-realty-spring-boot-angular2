@@ -16,6 +16,9 @@
 }
 
 .realtor-photo {
-  max-width: 100%;
-  max-height: 100%;
+  &-container {
+    height: 200px;
+  }
+  height: 100%;
+  object-fit: cover;
 }
