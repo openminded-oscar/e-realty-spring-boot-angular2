@@ -139,6 +139,10 @@ public class UserService {
 
         Realtor realtor = new Realtor();
         realtor.setUser(user);
+        realtor.setName(user.getName());
+        realtor.setSurname(user.getSurname());
+        realtor.setProfilePic(user.getProfilePic());
+
         this.realtorRepository.save(realtor);
 
         return this.mappingService.map(user, UserDto.class);
