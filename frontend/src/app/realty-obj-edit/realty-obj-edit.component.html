@@ -106,7 +106,7 @@
             </div>
           </div>
           <div [formGroup]="importantInfoFormGroup" class="form-horizontal">
-            <div class="form-group row">
+            <div class="form-group row" style="margin-bottom: 20px">
               <div class="col-1 col-form-label">
                 <label for="description-input">Overall description:</label>
               </div>
@@ -169,30 +169,38 @@
             </div>
             <hr/>
             <div class="row">
-              <div class="col-2 mr-0 ml-0">
-                <label class="col-form-label">Supported operations:</label>
-              </div>
-              <div class="col-10" [formArrayName]="'targetOperations'">
-                <ng-container *ngFor="let operation of operationsInputValues; let i = index">
+              <ng-container [formArrayName]="'targetOperations'"
+                            *ngFor="let operation of operationsInputValues; let i = index">
+                <div class="col-1 mr-0 ml-0">
+                </div>
+                <div class="col-5">
                   <label>
                     <input class="big-checkbox"
                            type="checkbox"
                            [formControlName]="i"
                            [name]="operation.name"
                            [value]="operation.checked"/>
-                    {{ operation.name }}
+                    {{ operation.name }}&nbsp;enabled
                   </label>
-                </ng-container>
-              </div>
+                </div>
+              </ng-container>
             </div>
             <div class="row">
-              <div class="col-2">
-                <label class="col-form-label" for="price-input">Your expected price ($):</label>
+              <div class="col-1">
+                <label class="col-form-label" for="price-input">Selling price:</label>
               </div>
-              <div class="col-10">
+              <div class="col-5">
                 <input id="price-input" name="price" type="text"
                        class="form-control"
                        [formControlName]="'price'">
+              </div>
+              <div class="col-1">
+                <label class="col-form-label" for="price-input">Rent price ($ per month):</label>
+              </div>
+              <div class="col-5">
+                <input id="price-rent-input" name="price-for-rent" type="text"
+                       class="form-control"
+                       [formControlName]="'priceForRent'">
               </div>
             </div>
             <hr/>

@@ -25,9 +25,10 @@ public class RealtyObjectDetailsDto {
         Integer roomsAmount;
         Integer floor;
         Integer totalFloors;
-        @NotNull(message = "Price is required")
-        @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
+        @DecimalMin(value = "0.0", inclusive = false, message = "Selling price must be greater than 0")
         BigDecimal price;
+        @DecimalMin(value = "0.0", inclusive = false, message = "Rent price must be greater than 0")
+        BigDecimal priceForRent;
         @NotNull(message = "Total area is required")
         @DecimalMin(value = "0.0", inclusive = false, message = "Total area must be greater than 0")
         BigDecimal totalArea;
