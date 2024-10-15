@@ -43,8 +43,8 @@ export function valueGteThanTotal(keyCurrentValue: string, keyTotalValue: string
 }
 
 export function priceValidator(priceForSellingPosition?: number,
-                               priceForRentPosition?: number): ValidationErrors | null {
-  return (control: AbstractControl): ValidationErrors | null => {
+                               priceForRentPosition?: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors => {
     const targetOperationsIncluded: boolean[] = control.get('targetOperations')?.value || [];
     const price = control.get('price');
     const priceForRent = control.get('priceForRent');

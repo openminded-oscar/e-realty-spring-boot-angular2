@@ -114,7 +114,9 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       priceForRent: [''],
       realtor: ['', Validators.required]
     }, {
-      validators: [priceValidator()]
+      validators: [
+        priceValidator()
+      ]
     });
     this.photosFormGroup = this.fb.group({
       confirmationDocPhoto: [null, Validators.required],
