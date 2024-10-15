@@ -42,28 +42,3 @@ export function valueGteThanTotal(keyCurrentValue: string, keyTotalValue: string
   };
 }
 
-export function atLeastOnePriceRequired(): ValidatorFn {
-  return (formGroup: AbstractControl): ValidationErrors | null => {
-    const priceControl = formGroup.get('price');
-    const priceForRentControl = formGroup.get('priceForRent');
-
-    if (!priceControl || !priceForRentControl) {
-      return null;
-    }
-
-    const price = priceControl.value;
-    const priceForRent = priceForRentControl.value;
-
-    if (!price && !priceForRent) {
-      patchErrors(priceControl, 'atLeastOnePriceRequired', true);
-      patchErrors(priceForRentControl, 'atLeastOnePriceRequired', true);
-      return { atLeastOnePriceRequired: true };
-    } else {
-      patchErrors(priceControl, 'atLeastOnePriceRequired', undefined);
-      patchErrors(priceForRentControl, 'atLeastOnePriceRequired', undefined);
-    }
-
-    return null; // Validation passed
-  };
-}
-
