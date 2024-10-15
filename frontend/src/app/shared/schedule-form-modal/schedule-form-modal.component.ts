@@ -101,10 +101,27 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
         `${this.realtyObject.address?.street} str. est. at ${this.realtyObject.price}`);
     }
 
-    // TODO add realter contacts and phone number!
+    let contactInfo = 'Person+To+Contact: ';
+    const contact = this.realtyObject.realtor;
+    if (contact) {
+      const contactParts: string[] = [];
+      if (contact.name) {
+        contactParts.push(encodeURIComponent(contact.name));
+      }
+      if (contact.phoneNumber) {
+        contactParts.push(encodeURIComponent(contact.phoneNumber));
+      }
+      if (contact.email) {
+        contactParts.push(encodeURIComponent(contact.email));
+      }
+      contactInfo += contactParts.join('+');
+    } else {
+      contactInfo += 'Not Yet Set';
+    }
+
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Realperfect+Review` + titleObjectPart +
       `&dates=${this.formatToGoogleCalendarUTC(startTime)}/${this.formatToGoogleCalendarUTC(endTime)}` +
-      `&location=To+Be+Contacted&sf=true&output=xml`;
+      `&location=${contactInfo}&sf=true&output=xml`;
   }
 
   private formatToGoogleCalendarUTC(date: Date) {
@@ -136,11 +153,11 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
       realtyObjId: this.realtyObject.id,
       dateTime: this.reviewTimeForm.controls.reviewTime.value
     }).pipe(
-        takeUntil(this.destroy$),
-        tap(reviewDto => {
-          this.savedReview = reviewDto;
-        })
-      )
+      takeUntil(this.destroy$),
+      tap(reviewDto => {
+        this.savedReview = reviewDto;
+      })
+    )
       .subscribe();
 
   }
