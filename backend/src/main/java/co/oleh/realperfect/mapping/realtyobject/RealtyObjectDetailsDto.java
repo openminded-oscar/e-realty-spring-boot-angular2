@@ -1,6 +1,7 @@
 package co.oleh.realperfect.mapping.realtyobject;
 import co.oleh.realperfect.mapping.RealtorDto;
 import co.oleh.realperfect.mapping.UserDto;
+import co.oleh.realperfect.mapping.validators.AtLeastOnePriceRequired;
 import co.oleh.realperfect.model.Address;
 import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.DwellingType;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @Data
+@AtLeastOnePriceRequired
 public class RealtyObjectDetailsDto {
         Long id;
         @NotNull(message = "Rooms amount is required")
@@ -28,6 +30,9 @@ public class RealtyObjectDetailsDto {
         @NotNull(message = "Price is required")
         @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
         BigDecimal price;
+        @NotNull(message = "Price is required")
+        @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
+        BigDecimal priceForRent;
         @NotNull(message = "Total area is required")
         @DecimalMin(value = "0.0", inclusive = false, message = "Total area must be greater than 0")
         BigDecimal totalArea;

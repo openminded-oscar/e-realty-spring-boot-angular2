@@ -17,6 +17,7 @@ public class RealtyObjectDto {
     Integer floor;
     Integer totalFloors;
     BigDecimal price;
+    BigDecimal priceForRent;
     BigDecimal totalArea;
     BigDecimal livingArea;
     String description;

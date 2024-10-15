@@ -19,6 +19,7 @@ public class RealtyObject extends AuditableEntity {
     private Integer floor;
     private Integer totalFloors;
     private BigDecimal price;
+    private BigDecimal priceForRent;
     private BigDecimal totalArea;
     private BigDecimal livingArea;
     private String description;
@@ -103,6 +104,15 @@ public class RealtyObject extends AuditableEntity {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Column(name = "price_for_rent")
+    public BigDecimal getPriceForRent() {
+        return priceForRent;
+    }
+
+    public void setPriceForRent(BigDecimal priceForRent) {
+        this.priceForRent = priceForRent;
     }
 
     @Column(name = "total_area")
