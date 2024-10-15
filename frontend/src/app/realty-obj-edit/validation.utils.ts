@@ -43,7 +43,7 @@ export function valueGteThanTotal(keyCurrentValue: string, keyTotalValue: string
   };
 }
 
-export function priceValidator(): ValidatorFn {
+export function operationPricesValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
     const targetOperationsIncluded: {
       name: string,
