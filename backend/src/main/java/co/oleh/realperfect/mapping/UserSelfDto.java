@@ -16,7 +16,6 @@ public class UserSelfDto {
      String surname;
      String phoneNumber;
      String email;
-//     TODO change to picture dto???
      UserPhoto profilePic;
      RealtorDto realtorDetails;
      Set<RealtyObjectDto> realtyObjects;
