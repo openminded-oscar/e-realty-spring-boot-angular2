@@ -173,11 +173,11 @@
                             *ngFor="let operation of operationsInputValues; let i = index">
                 <div class="col-1 mr-0 ml-0">
                 </div>
-                <div class="col-5">
+                <div [formGroupName]="i" class="col-5">
                   <label>
                     <input class="big-checkbox"
                            type="checkbox"
-                           [formControlName]="i"
+                           [formControlName]="'checked'"
                            [name]="operation.name"
                            [value]="operation.checked"/>
                     {{ operation.name }}&nbsp;enabled
