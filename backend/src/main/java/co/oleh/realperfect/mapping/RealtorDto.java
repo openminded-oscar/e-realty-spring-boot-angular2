@@ -8,7 +8,9 @@ public class RealtorDto {
     private Long id;
 
     private String name;
+    private String email;
     private String surname;
+    private String phoneNumber;
 
     private UserPhoto profilePic;
 }

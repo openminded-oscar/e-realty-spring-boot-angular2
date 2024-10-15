@@ -4,7 +4,7 @@
   </div>
   <div class="modal-body">
     <div class="text-center">
-      <img [src]="realtor.profilePic" alt="Profile Picture"
+      <img *ngIf="realtor.profilePic" [src]="realtor.profilePic.fullUrl" alt="Profile Picture"
            class="img-fluid mb-3" style="width: 150px; height: 150px;">
       <h5>{{ realtor.name }}&nbsp;{{realtor.surname}}, realtor</h5>
       <ng-container *ngIf="realtor.email">
@@ -12,7 +12,7 @@
           <a [href]="'mailto:' + realtor.email">{{ realtor.email }}</a>
         </p>
       </ng-container>
-      <ng-container *ngIf="realtor.email">
+      <ng-container *ngIf="realtor.phoneNumber">
         <p><strong>Phone Number:&nbsp;</strong>
           <a [href]="'tel:' + realtor.phoneNumber">{{ realtor.phoneNumber }}</a>
         </p>
