@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -139,27 +140,28 @@ public class UserService {
 
         Realtor realtor = new Realtor();
         realtor.setUser(user);
-        realtor.setName(user.getName());
-        realtor.setSurname(user.getSurname());
-        realtor.setProfilePic(user.getProfilePic());
 
         this.realtorRepository.save(realtor);
 
         return this.mappingService.map(user, UserDto.class);
     }
 
+    @Transactional
     public UserDto removeRealtorRole(String userId) {
         User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Role role = roleRepository.findByName(Role.REALTOR_ROLE);
 
-        Set<Role> roles = user.getRoles();
-        roles.remove(role);
-
         Realtor realtor = this.realtorRepository.findByUserId(user.getId());
-        if (realtor != null) {
-            this.realtorRepository.deleteById(realtor.getId());
+        if (realtor == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Realtor doesn't exist OR Realty objects");
+        }
+        if(!realtor.getRealtyObjects().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Realtor contains realty objects");
         }
 
+        Set<Role> roles = user.getRoles();
+        roles.remove(role);
+        this.realtorRepository.deleteById(realtor.getId());
         this.userRepository.save(user);
 
         return this.mappingService.map(user, UserDto.class);

@@ -66,7 +66,7 @@
                 for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
               </div>
               <div class="btn-link" style="margin-left: 8px; cursor: pointer" (click)="openReviewRemoveDialog()">
-               Cancel
+                Cancel
               </div>
             </div>
             <div>
@@ -80,15 +80,17 @@
       </div>
 
       <div class="col-md-5 main-info-block">
+        <ng-container *ngIf="currentObject.realtor">
         <span>
-          {{ currentObject.realtor.name }}&nbsp;{{ currentObject.realtor.surname }}, realtor
+          {{ currentObject.realtor?.name }}&nbsp;{{ currentObject.realtor?.surname }}, realtor
         </span>
-        <div class="realtor-photo-container">
-          <img class="realtor-photo img-responsive"
-               (error)="setDefaultRealtorPhoto($event)"
-               [src]="currentObject.realtor?.profilePic ? currentObject.realtor.profilePic.fullUrl: defaultRealtorPhoto">
-        </div>
-        <button class="btn btn-info btn-block" (click)="openRealtorContacts()">Contact</button>
+          <div class="realtor-photo-container">
+            <img class="realtor-photo img-responsive"
+                 (error)="setDefaultRealtorPhoto($event)"
+                 [src]="currentObject.realtor?.profilePic ? currentObject.realtor.profilePic.fullUrl: defaultRealtorPhoto">
+          </div>
+          <button class="btn btn-info btn-block" (click)="openRealtorContacts()">Contact</button>
+        </ng-container>
       </div>
 
     </div>

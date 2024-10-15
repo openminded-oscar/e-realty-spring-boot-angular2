@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface RealtorRepository extends JpaRepository<Realtor, Long> {
-    List<Realtor> findByNameStartingWith(String nameStart);
+    List<Realtor> findByUserNameStartingWith(String nameStart);
     Realtor findByUserId(Long id);
 }
