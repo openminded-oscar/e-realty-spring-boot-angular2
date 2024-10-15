@@ -42,3 +42,24 @@ export function valueGteThanTotal(keyCurrentValue: string, keyTotalValue: string
   };
 }
 
+export function priceValidator(priceForSellingPosition?: number,
+                               priceForRentPosition?: number): ValidationErrors | null {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const targetOperationsIncluded: boolean[] = control.get('targetOperations')?.value || [];
+    const price = control.get('price');
+    const priceForRent = control.get('priceForRent');
+
+    patchErrors(price, 'priceRequiredForSelling', undefined);
+    patchErrors(priceForRent, 'priceForRentRequired', undefined);
+
+    if (targetOperationsIncluded[0] && !price.value) {
+      patchErrors(price, 'priceRequiredForSelling', true);
+    }
+
+    if (targetOperationsIncluded[1] && !priceForRent.value) {
+      patchErrors(priceForRent, 'priceForRentRequired', true);
+    }
+
+    return null;
+  };
+}

@@ -12,7 +12,7 @@ import {RealtyObj} from '../domain/realty-obj';
 import {Photo, RealtyPhoto, RealtyPhotoType} from '../domain/photo';
 import {Realtor} from '../domain/realtor';
 import {apiBase} from '../commons';
-import {valueGteThanTotal} from './validation.utils';
+import {priceValidator, valueGteThanTotal} from './validation.utils';
 
 export interface SupportedOperation {
   name: string;
@@ -114,7 +114,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       priceForRent: [''],
       realtor: ['', Validators.required]
     }, {
-      validators: []
+      validators: [priceValidator()]
     });
     this.photosFormGroup = this.fb.group({
       confirmationDocPhoto: [null, Validators.required],
