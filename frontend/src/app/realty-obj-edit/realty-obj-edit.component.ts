@@ -97,8 +97,11 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
     const operationsFormArray = new FormArray([]);
     this.operationsInputValues.forEach(operation => {
-      const control = this.fb.control(operation.checked);
-      operationsFormArray.push(control);
+      const operationControlGroup = this.fb.group({
+        name: [operation.name, Validators.required],
+        checked: [operation.checked]
+      });
+      operationsFormArray.push(operationControlGroup);
     });
 
     this.importantInfoFormGroup = this.fb.group({
@@ -175,9 +178,10 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     });
     this.operationsInputValues.forEach((op, index) => {
       const operationName = op.value;
-      (this.importantInfoFormGroup.controls.targetOperations as FormArray).at(index).setValue(
-        realtyObj.targetOperations.includes(operationName)
-      );
+      (this.importantInfoFormGroup.controls.targetOperations as FormArray).at(index).setValue({
+        name: operationName,
+        checked: realtyObj.targetOperations.includes(operationName)
+      });
     });
   }
 
