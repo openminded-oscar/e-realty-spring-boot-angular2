@@ -8,6 +8,7 @@ export class RealtyObj {
   public floor: number;
   public totalFloors: number;
   public price: number;
+  public priceForRent: number;
   public totalArea: number;
   public livingArea: number;
   public description: string;

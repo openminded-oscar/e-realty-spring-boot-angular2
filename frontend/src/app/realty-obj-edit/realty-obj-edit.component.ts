@@ -12,7 +12,7 @@ import {RealtyObj} from '../domain/realty-obj';
 import {Photo, RealtyPhoto, RealtyPhotoType} from '../domain/photo';
 import {Realtor} from '../domain/realtor';
 import {apiBase} from '../commons';
-import {valueGteThanTotal} from './validation.utils';
+import {atLeastOnePriceRequired, valueGteThanTotal} from './validation.utils';
 
 export interface SupportedOperation {
   name: string;
@@ -110,8 +110,13 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       hasCellar: [false],
       hasLoft: [false],
       targetOperations: operationsFormArray,
-      price: ['', Validators.required],
+      price: [''],
+      priceForRent: [''],
       realtor: ['', Validators.required]
+    }, {
+      validators: [
+        atLeastOnePriceRequired()
+      ]
     });
     this.photosFormGroup = this.fb.group({
       confirmationDocPhoto: [null, Validators.required],
@@ -153,6 +158,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         hasCellar: realtyObj.hasCellar,
         hasLoft: realtyObj.hasLoft,
         price: realtyObj.price,
+        priceForRent: realtyObj.priceForRent,
         realtor: realtyObj.realtor?.id,
       },
       photosFormGroup: {
