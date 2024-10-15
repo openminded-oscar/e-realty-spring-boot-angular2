@@ -40,6 +40,8 @@ public class MappingService {
 
             realtorDto.setName(realtor.getUser().getName());
             realtorDto.setSurname(realtor.getUser().getSurname());
+            realtorDto.setEmail(realtor.getUser().getEmail());
+            realtorDto.setPhoneNumber(realtor.getUser().getPhoneNumber());
             realtorDto.setProfilePic(realtor.getUser().getProfilePic());
         }
 
