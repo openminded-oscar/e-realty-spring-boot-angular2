@@ -42,10 +42,13 @@ export function valueGteThanTotal(keyCurrentValue: string, keyTotalValue: string
   };
 }
 
-export function priceValidator(priceForSellingPosition?: number,
-                               priceForRentPosition?: number): ValidatorFn {
+export function priceValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors => {
-    const targetOperationsIncluded: boolean[] = control.get('targetOperations')?.value || [];
+    const targetOperationsIncluded: {
+      name: string,
+      checked: boolean
+    } [] = control.get('targetOperations')?.value || [];
+
     const price = control.get('price');
     const priceForRent = control.get('priceForRent');
 

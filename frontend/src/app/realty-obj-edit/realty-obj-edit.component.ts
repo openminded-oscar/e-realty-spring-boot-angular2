@@ -195,8 +195,11 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       };
       const includedOperationsNames: string[] = [];
       if (realtyObjFormData.targetOperations) {
-        (realtyObjFormData.targetOperations as boolean[]).forEach((allowedAtIndex: boolean, index: number) => {
-            if (allowedAtIndex) {
+        (realtyObjFormData.targetOperations).forEach((allowedAtIndex: {
+            checked: boolean,
+            name: string
+          }, index: number) => {
+            if (allowedAtIndex.checked) {
               includedOperationsNames.push(this.operationsInputValues[index].name);
             }
           }
