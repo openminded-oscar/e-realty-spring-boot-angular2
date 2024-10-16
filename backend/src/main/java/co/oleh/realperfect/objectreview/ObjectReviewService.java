@@ -33,8 +33,8 @@ public class ObjectReviewService {
 
     public MyObjectReviewDto save(ObjectReviewDto objectReview) {
         ObjectReview objectReviewEntity = mappingService.map(objectReview, ObjectReview.class);
-        RealtyObject realtyObject = realtyObjectRepository.findById(objectReview.getRealtyObjId()).get();
-        User user = userRepository.findById(objectReview.getUserId()).get();
+        RealtyObject realtyObject = realtyObjectRepository.findById(objectReview.realtyObjId()).get();
+        User user = userRepository.findById(objectReview.userId()).get();
 
         objectReviewEntity.setUser(user);
         objectReviewEntity.setRealtyObj(realtyObject);

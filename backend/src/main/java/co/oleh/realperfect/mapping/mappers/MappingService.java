@@ -27,12 +27,18 @@ public class MappingService {
         }
         V result = modelMapper.map(from, to);
 
+        // Custom mapping for RealtorDto
         if (result instanceof RealtorDto realtorDto && from instanceof Realtor realtor) {
-            realtorDto.setName(realtor.getUser().getName());
-            realtorDto.setSurname(realtor.getUser().getSurname());
-            realtorDto.setEmail(realtor.getUser().getEmail());
-            realtorDto.setPhoneNumber(realtor.getUser().getPhoneNumber());
-            realtorDto.setProfilePic(realtor.getUser().getProfilePic());
+            // Create a new instance of RealtorDto with updated values
+            realtorDto = new RealtorDto(
+                    realtorDto.id(), // Assuming id is part of the original realtorDto
+                    realtor.getUser().getName(),
+                    realtor.getUser().getEmail(),
+                    realtor.getUser().getSurname(),
+                    realtor.getUser().getPhoneNumber(),
+                    realtor.getUser().getProfilePic()
+            );
+            return (V) realtorDto; // Return the new instance
         }
 
         // Custom mapping for RealtyObjectDetailsDto

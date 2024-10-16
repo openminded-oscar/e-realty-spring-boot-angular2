@@ -32,8 +32,8 @@ public class InterestService {
         server.getRoomOperations(Room.POST_ROOM.name()).sendEvent(SocketEvent.LOAD_POST_PAGE.name(), interestDto);
         Interest interest = this.mappingService.map(interestDto, Interest.class);
 
-        User user = this.userRepository.findById(interestDto.getUserId()).get();
-        RealtyObject realtyObject = this.realtyObjectRepository.findById(interestDto.getRealtyObjId()).get();
+        User user = this.userRepository.findById(interestDto.userId()).get();
+        RealtyObject realtyObject = this.realtyObjectRepository.findById(interestDto.realtyObjId()).get();
 
         interest.setUser(user);
         interest.setRealtyObj(realtyObject);
@@ -42,12 +42,15 @@ public class InterestService {
     }
 
     public InterestDto remove(InterestDto interest) {
-        interestRepository.deleteById(interest.getId());
+        interestRepository.deleteById(interest.id());
         return interest;
     }
 
     public InterestDto findInterestForUserAndObject(Long userId, Long objectId) {
         Interest interest = interestRepository.findByUserIdAndRealtyObjId(userId, objectId);
+        if (interest == null) {
+            return null;
+        }
         return this.mappingService.map(interest, InterestDto.class);
     }
 

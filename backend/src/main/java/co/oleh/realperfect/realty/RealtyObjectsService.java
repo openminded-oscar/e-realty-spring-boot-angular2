@@ -81,7 +81,7 @@ public class RealtyObjectsService {
     public RealtyObjectDetailsDto add(RealtyObjectDetailsDto realtyObjectDetailsDto) {
         RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
         if (realtyObjectDetailsDto.getRealtor() != null) {
-            Realtor realtor = this.realtorService.findById(realtyObjectDetailsDto.getRealtor().getId());
+            Realtor realtor = this.realtorService.findById(realtyObjectDetailsDto.getRealtor().id());
             realtyObject.setRealtor(realtor);
         }
         if (realtyObjectDetailsDto.getOwner() != null) {

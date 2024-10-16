@@ -58,16 +58,18 @@ public class ObjectReviewApi {
 
     @PostMapping
     public ResponseEntity<MyObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user, @RequestBody ObjectReviewDto review) throws IOException {
-        if (reviewService.findFutureReviewForUserAndObject(user.getId(), review.getRealtyObjId()) != null) {
+        if (reviewService.findFutureReviewForUserAndObject(user.getId(), review.realtyObjId()) != null) {
             throw new RuntimeException("There is already such review");
         }
-        review.setUserId(user.getId());
+
+        review = new ObjectReviewDto(review.id(), user.getId(), review.realtyObjId(), review.dateTime());
 
         Event event = constructEventForObjectReview(review);
         googleCalendarWrapperService.addEventToPrimaryCalendar(event);
 
         return new ResponseEntity<>(reviewService.save(review), HttpStatus.OK);
     }
+
 
     @GetMapping(value = "/{realtyObjId}")
     public ResponseEntity<ObjectReviewDto> getReviewForObjectAndUser(@AuthenticationPrincipal SpringSecurityUser user,
@@ -88,8 +90,8 @@ public class ObjectReviewApi {
         Event event = new Event();
         event.setSummary("Realty review from RealPerfect");
         event.setDescription("Please make sure to be on time!");
-        Date startDateTime = Date.from(review.getDateTime().atZone(ZoneId.systemDefault()).toInstant());
-        Instant plusOneHour = review.getDateTime()
+        Date startDateTime = Date.from(review.dateTime().atZone(ZoneId.systemDefault()).toInstant());
+        Instant plusOneHour = review.dateTime()
                 .atZone(ZoneId.systemDefault())  // Convert to ZonedDateTime using the system default zone
                 .plusHours(1)                    // Add 1 hour
                 .toInstant();                    // Convert back to Instant

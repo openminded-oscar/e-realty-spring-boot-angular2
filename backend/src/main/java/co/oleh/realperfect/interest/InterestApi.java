@@ -40,7 +40,7 @@ public class InterestApi {
 
     @PostMapping
     public ResponseEntity<Interest> saveInterest(@RequestBody InterestDto interest) {
-        if (interestService.findInterestForUserAndObject(interest.getUserId(), interest.getRealtyObjId()) != null) {
+        if (interestService.findInterestForUserAndObject(interest.userId(), interest.realtyObjId()) != null) {
             throw new RuntimeException("There is already such interest");
         }
         return new ResponseEntity<>(interestService.save(interest), HttpStatus.OK);

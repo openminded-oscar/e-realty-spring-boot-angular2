@@ -37,12 +37,7 @@ public class UserService {
         User updatedUser = userRepository.save(user);
 
         UserSelfDto userSelfDto = this.mappingService.map(updatedUser, UserSelfDto.class);
-        userSelfDto.setRoles(
-                new TreeSet<>(user.getRoles()
-                        .stream()
-                        .map(Role::getName)
-                        .collect(Collectors.toList()))
-        );
+        userSelfDto.setRoles(new TreeSet<>(user.getRoles().stream().map(Role::getName).collect(Collectors.toList())));
 
         return userSelfDto;
     }
@@ -53,9 +48,7 @@ public class UserService {
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(
-                new TreeSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
-        );
+        user.setRoles(new TreeSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE))));
 
         return userRepository.save(user);
     }
@@ -65,13 +58,11 @@ public class UserService {
         List<User> users = new ArrayList<>();
         iterable.forEach(users::add);
 
-        return users.stream()
-                .map(user -> {
-                    UserDto userDto = mappingService.map(user, UserDto.class);
-                    userDto.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
-                    return userDto;
-                })
-                .collect(Collectors.toList());
+        return users.stream().map(user -> {
+            UserDto userDto = mappingService.map(user, UserDto.class);
+            userDto.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+            return userDto;
+        }).collect(Collectors.toList());
     }
 
     public User findById(Long id) {
@@ -102,8 +93,7 @@ public class UserService {
 
         User user = maybeUser.get();
 
-        boolean isPasswordValid =
-                bCryptPasswordEncoder.matches(authentication.getPassword(), user.getPassword());
+        boolean isPasswordValid = bCryptPasswordEncoder.matches(authentication.getPassword(), user.getPassword());
         if (!isPasswordValid) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login and password do not match");
         }
@@ -131,7 +121,8 @@ public class UserService {
     }
 
     public UserDto grantRealtorRole(String userId) {
-        User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user =
+                this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Role role = roleRepository.findByName(Role.REALTOR_ROLE);
 
         Set<Role> roles = user.getRoles();
@@ -148,14 +139,15 @@ public class UserService {
 
     @Transactional
     public UserDto removeRealtorRole(String userId) {
-        User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user =
+                this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Role role = roleRepository.findByName(Role.REALTOR_ROLE);
 
         Realtor realtor = this.realtorRepository.findByUserId(user.getId());
         if (realtor == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Realtor doesn't exist OR Realty objects");
         }
-        if(!realtor.getRealtyObjects().isEmpty()) {
+        if (!realtor.getRealtyObjects().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Realtor contains realty objects");
         }
 
