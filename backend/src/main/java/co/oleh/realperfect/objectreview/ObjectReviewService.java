@@ -1,8 +1,8 @@
 package co.oleh.realperfect.objectreview;
 
-import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
+import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.ObjectReview;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.User;

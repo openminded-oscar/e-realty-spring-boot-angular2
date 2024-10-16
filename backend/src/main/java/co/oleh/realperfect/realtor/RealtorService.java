@@ -1,7 +1,7 @@
 package co.oleh.realperfect.realtor;
 
-import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.RealtorDto;
+import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.repository.RealtorRepository;
 import co.oleh.realperfect.model.Realtor;
 import org.springframework.stereotype.Service;
