@@ -72,6 +72,6 @@ public class CustomAuthorizationRequestRepository  implements AuthorizationReque
     private Map<String, OAuth2AuthorizationRequest> getAuthorizationRequests(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Map<String, OAuth2AuthorizationRequest> authorizationRequests = session == null ? null : (Map) session.getAttribute(this.sessionAttributeName);
-        return (Map) (authorizationRequests == null ? new HashMap() : authorizationRequests);
+        return authorizationRequests == null ? new HashMap<>() : authorizationRequests;
     }
 }

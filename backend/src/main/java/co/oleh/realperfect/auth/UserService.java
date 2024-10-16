@@ -38,7 +38,7 @@ public class UserService {
 
         UserSelfDto userSelfDto = this.mappingService.map(updatedUser, UserSelfDto.class);
         userSelfDto.setRoles(
-                new HashSet<>(user.getRoles()
+                new TreeSet<>(user.getRoles()
                         .stream()
                         .map(Role::getName)
                         .collect(Collectors.toList()))
@@ -54,7 +54,7 @@ public class UserService {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(
-                new HashSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
+                new TreeSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
         );
 
         return userRepository.save(user);

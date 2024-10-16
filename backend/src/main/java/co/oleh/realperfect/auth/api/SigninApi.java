@@ -20,8 +20,8 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @RestController
@@ -79,7 +79,7 @@ public class SigninApi {
 
         UserSelfDto userSelfDto = this.mappingService.map(user, UserSelfDto.class);
         userSelfDto.setRoles(
-                new HashSet<>(user.getRoles()
+                new TreeSet<>(user.getRoles()
                         .stream()
                         .map(Role::getName)
                         .collect(Collectors.toList()))

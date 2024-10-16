@@ -23,10 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -122,17 +119,7 @@ public class RealtyObjectsService {
     }
 
     public Set<BuildingType> getRealtyBuildingTypes() {
-        Set<BuildingType> buildingTypes = new HashSet<>();
-        Collections.addAll(buildingTypes, BuildingType.values());
-
-        return buildingTypes;
-    }
-
-    public Set<OperationType> getRealtyOperationTypes() {
-        Set<OperationType> operationTypes = new HashSet<>();
-        Collections.addAll(operationTypes, OperationType.values());
-
-        return operationTypes;
+        return EnumSet.allOf(BuildingType.class);
     }
 
     public Boolean delete(Long objectId) {
