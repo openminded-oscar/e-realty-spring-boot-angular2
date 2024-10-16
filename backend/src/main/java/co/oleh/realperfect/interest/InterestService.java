@@ -1,8 +1,8 @@
 package co.oleh.realperfect.interest;
 
 import co.oleh.realperfect.mapping.InterestDto;
-import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.MyInterestDto;
+import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.Interest;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.User;

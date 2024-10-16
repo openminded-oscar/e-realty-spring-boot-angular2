@@ -1,10 +1,9 @@
 package co.oleh.realperfect.realty;
 
-import co.oleh.realperfect.mapping.MappingService;
+import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
-import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;

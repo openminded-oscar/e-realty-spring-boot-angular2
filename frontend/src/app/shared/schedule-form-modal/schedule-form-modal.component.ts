@@ -15,7 +15,7 @@ import {
 } from '../../services/reviews.service';
 import {RealtyObj} from '../../domain/realty-obj';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
-import {Observable, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {ReviewPostDto} from '../../domain/review';
 
 export function reviewDateTimeValidator(): ValidatorFn {

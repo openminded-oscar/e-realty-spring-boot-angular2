@@ -1,9 +1,9 @@
 package co.oleh.realperfect.auth;
 
-import co.oleh.realperfect.mapping.MappingService;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
+import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.user.Role;
 import co.oleh.realperfect.repository.RealtorRepository;
