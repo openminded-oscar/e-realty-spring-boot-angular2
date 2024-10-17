@@ -39,7 +39,7 @@ public class RealtyObjectDetailsDto {
         Boolean hasRepairing;
         Boolean hasCellar;
         Boolean hasLoft;
-        @Min(value = 1600, message = "Foundation year must be after 1600")
+        @Min(value = 0, message = "Foundation year must be after 0")
         Integer foundationYear;
         String otherInfo;
         BuildingType buildingType;
