@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Event} from '@angular/router';
-import {ConfigService, OPERATION_TYPES} from '../services/config.service';
+import {BUILDING_TYPES, ConfigService, DWELLING_TYPES, OPERATION_TYPES} from '../services/config.service';
 import {FileUploadService} from '../services/file-upload.service';
 import {RealtyObjService} from '../services/realty-obj.service';
 import {RealtorService} from '../services/realtor.service';
@@ -13,6 +13,25 @@ import {Photo, RealtyPhoto, RealtyPhotoType} from '../domain/photo';
 import {Realtor} from '../domain/realtor';
 import {apiBase} from '../commons';
 import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
+
+
+export class AddressForm {
+  city: FormControl<string>;
+  street: FormControl<string>;
+  numberOfStreet: FormControl<string>;
+  apartmentNumber: FormControl<string>;
+}
+
+interface BasicInfoForm {
+  address: FormGroup<AddressForm>; // Address should be a FormGroup
+  dwellingType: FormControl<string>;
+  buildingType: FormControl<string>;
+  floor: FormControl<number | null>;
+  totalFloors: FormControl<number | null>;
+  totalArea: FormControl<number | null>;
+  livingArea: FormControl<number | null>;
+  roomsAmount: FormControl<number | null>;
+}
 
 export interface SupportedOperation {
   name: string;
@@ -34,8 +53,8 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public photoType = RealtyPhotoType;
 
   private destroy$ = new Subject<boolean>();
+  public basicInfoFormGroup: FormGroup<BasicInfoForm>;
   public importantInfoFormGroup: FormGroup;
-  public basicInfoFormGroup: FormGroup;
   public photosFormGroup: FormGroup;
   public objectId: string;
 
@@ -74,20 +93,20 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   }
 
   private initFormControls() {
-    this.basicInfoFormGroup = this.fb.group({
-      address: this.fb.group({
-        city: ['Lviv', Validators.required],
-        street: ['', Validators.required],
-        numberOfStreet: ['', [Validators.required, Validators.minLength(1)]],
-        apartmentNumber: ['', [Validators.required]],
+    this.basicInfoFormGroup = this.fb.group<BasicInfoForm>({
+      address: this.fb.group<AddressForm>({
+        city: new FormControl<string>('Lviv', Validators.required), // Type for city
+        street: new FormControl<string>('', Validators.required), // Type for street
+        numberOfStreet: new FormControl<string>('', [Validators.required, Validators.minLength(1)]), // Type for numberOfStreet
+        apartmentNumber: new FormControl<string>('', [Validators.required]), // Type for apartmentNumber
       }),
-      dwellingType: ['', Validators.required],
-      buildingType: ['', Validators.required],
-      floor: [null, Validators.required],
-      totalFloors: [null, Validators.required],
-      totalArea: [null, Validators.required],
-      livingArea: [null, Validators.required],
-      roomsAmount: [null, Validators.required]
+      dwellingType: new FormControl<string>(DWELLING_TYPES.APARTMENT, Validators.required), // Type for dwellingType
+      buildingType: new FormControl<string>(BUILDING_TYPES.BRICK, Validators.required), // Type for buildingType
+      floor: new FormControl<number | null>(null, Validators.required), // Type for floor
+      totalFloors: new FormControl<number | null>(null, Validators.required), // Type for totalFloors
+      totalArea: new FormControl<number | null>(null, Validators.required), // Type for totalArea
+      livingArea: new FormControl<number | null>(null, Validators.required), // Type for livingArea
+      roomsAmount: new FormControl<number | null>(null, Validators.required) // Type for roomsAmount
     }, {
       validators: [
         valueGteThanTotal('floor', 'totalFloors'),
