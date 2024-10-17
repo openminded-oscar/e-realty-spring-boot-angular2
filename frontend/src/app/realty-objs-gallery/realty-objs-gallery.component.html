@@ -3,7 +3,7 @@
     <div class="row card" [formGroup]="filterForm">
       <div class="card-header">
         <div class="card-header--part">
-          <input name="city" [placeholder]="'Type City'" [formControlName]="'city'" class="form-control">
+          <input name="city" (keyup.enter)="loadInitialObjects()" [placeholder]="'Type City'" [formControlName]="'city'" class="form-control">
         </div>
         <div>
           <div class="filter--value-container card-header--part" ngbDropdown>
@@ -37,34 +37,34 @@
 
       <div class="other-filters form-group card-body">
         Street
-        <input name="street" [formControlName]="'street'" class="form-control">
+        <input (keyup.enter)="loadInitialObjects()" name="street" [formControlName]="'street'" class="form-control">
         <div class="input-row">
           <div>
             Price min
-            <input type="number" name="minPrice" [formControlName]="'priceMin'" class="form-control">
+            <input (keyup.enter)="loadInitialObjects()" type="number" name="minPrice" [formControlName]="'priceMin'" class="form-control">
           </div>
           <div>
             Price max
-            <input type="number" name="maxPrice" [formControlName]="'priceMax'" class="form-control">
+            <input (keyup.enter)="loadInitialObjects()" type="number" name="maxPrice" [formControlName]="'priceMax'" class="form-control">
           </div>
         </div>
         <div class="input-row">
           <div>
             Area min
-            <input type="number" name="minTotalArea" [formControlName]="'totalAreaMin'" class="form-control">
+            <input (keyup.enter)="loadInitialObjects()" type="number" name="minTotalArea" [formControlName]="'totalAreaMin'" class="form-control">
           </div>
           <div>
             Area max
-            <input type="number" name="maxTotalArea" [formControlName]="'totalAreaMax'" class="form-control">
+            <input (keyup.enter)="loadInitialObjects()" type="number" name="maxTotalArea" [formControlName]="'totalAreaMax'" class="form-control">
           </div>
         </div>
         Rooms
-        <input name="rooms" type="number" [formControlName]="'roomsAmount'" class="form-control">
+        <input (keyup.enter)="loadInitialObjects()" name="rooms" type="number" [formControlName]="'roomsAmount'" class="form-control">
         Description like
-        <input name="description" [formControlName]="'description'" class="form-control">
+        <input (keyup.enter)="loadInitialObjects()" name="description" [formControlName]="'description'" class="form-control">
         Building type
         <select [formControlName]="'buildingType'" name="buildingType" class="form-control" required>
-          <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
+          <option (change)="loadInitialObjects()" *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
           </option>
         </select>
         <!--Dwelling type-->
