@@ -8,30 +8,18 @@ import {RealtorService} from '../services/realtor.service';
 import {GlobalNotificationService} from '../services/global-notification.service';
 import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {RealtyObj} from '../domain/realty-obj';
+import {
+  BasicInfoForm,
+  ImportantInfoForm,
+  OperationFormGroup,
+  PhotosForm,
+  RealtyForm,
+  RealtyObj
+} from '../domain/realty-obj';
 import {Photo, RealtyPhoto, RealtyPhotoType} from '../domain/photo';
 import {Realtor} from '../domain/realtor';
 import {apiBase} from '../commons';
 import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
-
-
-export class AddressForm {
-  city: FormControl<string>;
-  street: FormControl<string>;
-  numberOfStreet: FormControl<string>;
-  apartmentNumber: FormControl<string>;
-}
-
-interface BasicInfoForm {
-  address: FormGroup<AddressForm>; // Address should be a FormGroup
-  dwellingType: FormControl<string>;
-  buildingType: FormControl<string>;
-  floor: FormControl<number | null>;
-  totalFloors: FormControl<number | null>;
-  totalArea: FormControl<number | null>;
-  livingArea: FormControl<number | null>;
-  roomsAmount: FormControl<number | null>;
-}
 
 export interface SupportedOperation {
   name: string;
@@ -45,7 +33,6 @@ export interface SupportedOperation {
   styleUrls: ['./realty-obj-edit.scss']
 })
 export class RealtyObjEditComponent implements OnInit, OnDestroy {
-  public realtyForm: FormGroup;
   public operationsInputValues: SupportedOperation[];
   public realtors: Realtor[];
   public dwellingTypes: string[];
@@ -53,10 +40,12 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public photoType = RealtyPhotoType;
 
   private destroy$ = new Subject<boolean>();
+
+  public realtyForm: FormGroup<RealtyForm>;
   public basicInfoFormGroup: FormGroup<BasicInfoForm>;
-  public importantInfoFormGroup: FormGroup;
-  public photosFormGroup: FormGroup;
-  public objectId: string;
+  public importantInfoFormGroup: FormGroup<ImportantInfoForm>;
+  public photosFormGroup: FormGroup<PhotosForm>;
+  public objectId: number;
 
   constructor(
     private fb: FormBuilder,
@@ -94,19 +83,19 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
   private initFormControls() {
     this.basicInfoFormGroup = this.fb.group<BasicInfoForm>({
-      address: this.fb.group<AddressForm>({
-        city: new FormControl<string>('Lviv', Validators.required), // Type for city
-        street: new FormControl<string>('', Validators.required), // Type for street
-        numberOfStreet: new FormControl<string>('', [Validators.required, Validators.minLength(1)]), // Type for numberOfStreet
-        apartmentNumber: new FormControl<string>('', [Validators.required]), // Type for apartmentNumber
+      address: this.fb.group({
+        city: this.fb.control('Lviv', Validators.required),
+        street: this.fb.control('', Validators.required),
+        numberOfStreet: this.fb.control('', [Validators.required, Validators.minLength(1)]),
+        apartmentNumber: this.fb.control(null, Validators.required),
       }),
-      dwellingType: new FormControl<string>(DWELLING_TYPES.APARTMENT, Validators.required), // Type for dwellingType
-      buildingType: new FormControl<string>(BUILDING_TYPES.BRICK, Validators.required), // Type for buildingType
-      floor: new FormControl<number | null>(null, Validators.required), // Type for floor
-      totalFloors: new FormControl<number | null>(null, Validators.required), // Type for totalFloors
-      totalArea: new FormControl<number | null>(null, Validators.required), // Type for totalArea
-      livingArea: new FormControl<number | null>(null, Validators.required), // Type for livingArea
-      roomsAmount: new FormControl<number | null>(null, Validators.required) // Type for roomsAmount
+      dwellingType: this.fb.control(DWELLING_TYPES.APARTMENT, Validators.required),
+      buildingType: this.fb.control(BUILDING_TYPES.BRICK, Validators.required),
+      floor: this.fb.control(null, Validators.required),
+      totalFloors: this.fb.control(null, Validators.required),
+      totalArea: this.fb.control(null, Validators.required),
+      livingArea: this.fb.control(null, Validators.required),
+      roomsAmount: this.fb.control(null, Validators.required)
     }, {
       validators: [
         valueGteThanTotal('floor', 'totalFloors'),
@@ -114,37 +103,39 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       ]
     });
 
-    const operationsFormArray = new FormArray([]);
+    const operationsFormArray: FormArray<FormGroup<OperationFormGroup>> = new FormArray([]);
     this.operationsInputValues.forEach(operation => {
-      const operationControlGroup = this.fb.group({
-        name: [operation.name, Validators.required],
-        checked: [operation.checked]
+      const operationControlGroup = this.fb.group<OperationFormGroup>({
+        name: this.fb.control(operation.name, Validators.required),
+        checked: this.fb.control(operation.checked)
       });
       operationsFormArray.push(operationControlGroup);
     });
 
-    this.importantInfoFormGroup = this.fb.group({
-      description: ['', [Validators.required, Validators.maxLength(255)]],
-      otherInfo: ['', Validators.maxLength(64)],
-      foundationYear: ['', [Validators.required, Validators.min(1500)]],
-      hasRepairing: [false],
-      hasGarage: [false],
-      hasCellar: [false],
-      hasLoft: [false],
+    this.importantInfoFormGroup = this.fb.group<ImportantInfoForm>({
+      description: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
+      otherInfo: this.fb.control('', Validators.maxLength(64)),
+      foundationYear: this.fb.control(null, [Validators.required, Validators.min(1500)]),
+      hasRepairing: this.fb.control(false),
+      hasGarage: this.fb.control(false),
+      hasCellar: this.fb.control(false),
+      hasLoft: this.fb.control(false),
       targetOperations: operationsFormArray,
-      price: [''],
-      priceForRent: [''],
-      realtor: ['', Validators.required]
+      price: this.fb.control(null),
+      priceForRent: this.fb.control(null),
+      realtor: this.fb.control(null, Validators.required)
     }, {
       validators: [
         operationPricesValidator()
       ]
     });
-    this.photosFormGroup = this.fb.group({
-      confirmationDocPhoto: [null, Validators.required],
-      photos: this.fb.array([]),
+
+    this.photosFormGroup = this.fb.group<PhotosForm>({
+      confirmationDocPhoto: this.fb.control<RealtyPhoto>(null, Validators.required), // Type for confirmationDocPhoto
+      photos: this.fb.array<FormControl<RealtyPhoto>>([]) // Type for photos FormArray
     });
-    this.realtyForm = this.fb.group({
+
+    this.realtyForm = this.fb.group<RealtyForm>({
       basicInfoFormGroup: this.basicInfoFormGroup,
       importantInfoFormGroup: this.importantInfoFormGroup,
       photosFormGroup: this.photosFormGroup,
@@ -224,16 +215,18 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
           }
         );
       }
-      realtyObjFormData.targetOperations = includedOperationsNames;
       if (realtyObjFormData.realtor) {
-        const realtorId = Number(realtyObjFormData.realtor as string);
+        const realtorId = Number(realtyObjFormData.realtor);
         realtyObjFormData.realtor = this.realtors.find(r => {
           return r.id === realtorId;
         });
       }
 
-      this.realtyObjService.save(realtyObjFormData)
-        .pipe(takeUntil(this.destroy$))
+      this.realtyObjService.save({
+        ...realtyObjFormData,
+        targetOperations: includedOperationsNames as string[],
+        realtor: realtyObjFormData.realtor as Realtor
+      }).pipe(takeUntil(this.destroy$))
         .subscribe(
           (savedRealtyObj: RealtyObj) => {
             this.notificationService.showNotification('Success! The object was saved!');
