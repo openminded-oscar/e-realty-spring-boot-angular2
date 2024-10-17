@@ -14,6 +14,7 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: MyObjectsTabPath,
+        pathMatch: 'full',
       },
       {
         path: MyObjectsTabPath,
