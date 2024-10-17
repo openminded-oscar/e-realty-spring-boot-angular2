@@ -86,7 +86,7 @@ export abstract class AbstractService<T> {
     return request;
   }
 
-  /* tslint:enable */
+  /* eslint-enable */
 
   protected buildQueryString(data) {
     const params: URLSearchParams = new URLSearchParams('');

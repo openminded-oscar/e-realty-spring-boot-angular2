@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/addresses")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class AddressApi {
     private AddressService addressService;
 

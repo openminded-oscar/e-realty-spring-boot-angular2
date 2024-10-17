@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/realtor")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class RealtorApi {
     private static final Logger LOGGER = LoggerFactory.
             getLogger(RealtorApi.class);
