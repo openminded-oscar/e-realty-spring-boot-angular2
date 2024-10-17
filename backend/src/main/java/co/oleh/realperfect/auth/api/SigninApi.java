@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestScope
 @RequestMapping(value = "/api/signin")
-@CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class SigninApi {
 

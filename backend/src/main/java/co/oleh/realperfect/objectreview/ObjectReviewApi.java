@@ -27,7 +27,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/object-review")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class ObjectReviewApi {
     private static final Logger LOGGER = LoggerFactory.
             getLogger(ObjectReviewApi.class);

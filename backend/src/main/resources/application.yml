@@ -19,6 +19,8 @@ spring:
               - profile
               - openid
               - email
+  profiles:
+    active: local
 spring.servlet:
   multipart:
     max-file-size: 5MB

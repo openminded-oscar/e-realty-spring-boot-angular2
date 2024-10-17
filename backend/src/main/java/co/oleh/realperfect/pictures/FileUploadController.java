@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
 public class FileUploadController {
     @Autowired
     private FileSystemStorageService storageService;

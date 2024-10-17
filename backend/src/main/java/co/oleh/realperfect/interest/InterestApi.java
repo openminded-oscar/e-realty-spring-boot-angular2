@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/interest")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class InterestApi {
     private static final Logger LOGGER = LoggerFactory.
             getLogger(InterestApi.class);
