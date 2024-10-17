@@ -75,7 +75,7 @@ export class RealtyObjService {
       }));
   }
 
-  public save(realtyObj: RealtyObj): Observable<RealtyObj> {
+  public save(realtyObj: Partial<RealtyObj>): Observable<RealtyObj> {
     return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj).pipe(
       tap((realtyObjReturned: RealtyObj) => {
         if (realtyObjReturned.realtor && realtyObjReturned.realtor.profilePic) {
