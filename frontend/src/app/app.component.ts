@@ -9,7 +9,9 @@ import {map, switchMap, takeUntil} from 'rxjs/operators';
 import {GlobalNotificationService} from './services/global-notification.service';
 import {User} from './domain/user';
 import {RealtyObj} from './domain/realty-obj';
-import {SocialAuthService} from '@abacritt/angularx-social-login';
+import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {SigninSignoutService} from './services/auth/signin-signout.service';
 
 
 @Component({
@@ -21,6 +23,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   constructor(public http: HttpClient,
+              public modalService: NgbModal,
+              public authService: SigninSignoutService,
               public cookieService: CookieService,
               public router: Router,
               public socketService: SampleSocketService,
@@ -35,6 +39,15 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       this.userService.clearUserInState();
     }
+    this.socialAuthService.authState.pipe(takeUntil(this.destroy$)).subscribe((googleUser: SocialUser) => {
+      const {email, idToken, authToken, authorizationCode} = googleUser;
+      this.authService.signInGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.userService.fetchUserStatus();
+          this.modalService.dismissAll();
+        });
+    });
     this.userService.user$
       .pipe(
         switchMap(user =>
