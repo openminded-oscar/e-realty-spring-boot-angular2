@@ -3,9 +3,6 @@ import {filter, takeUntil} from 'rxjs/operators';
 import {NavigationEnd, Router} from '@angular/router';
 import {UserService} from '../services/user.service';
 import {User} from '../domain/user';
-import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {SigninSignoutService} from '../services/auth/signin-signout.service';
 import {Subject} from 'rxjs';
 
 @Component({
@@ -30,10 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   constructor(public router: Router,
-              public userService: UserService,
-              public modalService: NgbModal,
-              public authService: SigninSignoutService,
-              public socialAuthService: SocialAuthService) {
+              public userService: UserService) {
     this.userService.user$.subscribe(user => {
       if (user) {
         this.user = user;
@@ -51,16 +45,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.url;
       });
-
-    this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
-      const {email, idToken, authToken, authorizationCode} = googleUser;
-      this.authService.signInGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
-          this.userService.fetchUserStatus();
-          this.modalService.dismissAll();
-        });
-    });
   }
 
   ngOnDestroy(): void {

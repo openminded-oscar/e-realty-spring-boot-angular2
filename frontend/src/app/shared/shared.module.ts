@@ -8,13 +8,16 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ConfirmModalComponent} from './confirm-modal/confirm-modal.component';
 import {RealtyObjCardComponent} from './realty-obj-card/realty-obj-card.component';
+import {GoogleSignInButtonComponent} from '../commons/google-sign-in-button/google-sign-in-button.component';
+import {SocialLoginModule} from '@abacritt/angularx-social-login';
 
 const components = [
   RealtyObjsListComponent,
   DeleteRealtyModalComponent,
   ScheduleFormModalComponent,
   ConfirmModalComponent,
-  RealtyObjCardComponent
+  RealtyObjCardComponent,
+  GoogleSignInButtonComponent
 ];
 
 @NgModule({
@@ -26,7 +29,8 @@ const components = [
     CommonModule,
     RouterModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SocialLoginModule
   ]
 })
 export class SharedModule {
