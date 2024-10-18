@@ -118,7 +118,9 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha.apps.googleusercontent.com'
+              '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha.apps.googleusercontent.com', {
+                oneTapEnabled: false,
+              }
             ),
           }]
       }
