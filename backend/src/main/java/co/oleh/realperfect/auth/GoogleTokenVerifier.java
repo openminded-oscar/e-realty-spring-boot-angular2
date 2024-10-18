@@ -31,14 +31,14 @@ public class GoogleTokenVerifier {
                 .build();
     }
 
-    public String verifyGoogleTokenAndGetSubject(String token) throws IOException, GeneralSecurityException {
+    public GoogleIdToken verifyGoogleTokenAndGetSubject(String token) throws IOException, GeneralSecurityException {
         GoogleIdToken idToken = GoogleIdToken.parse(jsonFactory, token);
         boolean tokenIsValid = (idToken != null) && verifier.verify(idToken);
 
         if (!tokenIsValid) {
             throw new RuntimeException("Google token is not valid!");
         } else {
-            return idToken.getPayload().getSubject();
+            return idToken;
         }
     }
 }

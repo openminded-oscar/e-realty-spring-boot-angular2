@@ -40,6 +40,7 @@ import {RealtorContactComponent} from './realtor/realtor-contact/realtor-contact
 import {SharedModule} from './shared/shared.module';
 import {AppRoutesModule} from './app.routes.module';
 import {GoogleLoginProvider, SocialLoginModule} from '@abacritt/angularx-social-login';
+import {GoogleSignInButtonComponent} from './google-sign-in-button/google-sign-in-button.component';
 
 const appRoutes: Routes = [
   {
@@ -64,6 +65,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     RealtyObjsGalleryComponent,
     SigninButtonComponent,
     SignupButtonComponent,
+    GoogleSignInButtonComponent,
     SignoutButtonComponent,
     RealtyObjDetailsComponent,
     RealtorsGalleryComponent,

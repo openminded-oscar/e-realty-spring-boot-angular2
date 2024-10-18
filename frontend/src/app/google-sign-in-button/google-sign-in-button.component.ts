@@ -2,9 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {takeUntil} from 'rxjs/operators';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {SigninSignoutService} from '../../services/auth/signin-signout.service';
-import {UserService} from '../../services/user.service';
+
 import {Subject} from 'rxjs';
+import {UserService} from '../services/user.service';
+import {SigninSignoutService} from '../services/auth/signin-signout.service';
 
 @Component({
   selector: 'app-google-sign-in-button',
