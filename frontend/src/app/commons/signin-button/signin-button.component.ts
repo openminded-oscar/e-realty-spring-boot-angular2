@@ -19,14 +19,11 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
 
   @ViewChild('content', {static: true})
   public content: TemplateRef<any>;
-  @Output()
-  public onSignin = new EventEmitter();
   private destroy$ = new Subject<boolean>();
 
   constructor(private modalService: NgbModal,
               private authService: SigninSignoutService,
-              private userService: UserService,
-              private socialAuthService: SocialAuthService) {
+              private userService: UserService) {
   }
 
   public ngOnInit() {
@@ -37,17 +34,6 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
         this.openModal();
       })
     ).subscribe();
-
-    this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
-      const {email, idToken, authToken, authorizationCode} = googleUser;
-      this.authService.signinGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
-        .subscribe(res => {
-          console.log(JSON.stringify(res));
-          this.userService.fetchUserStatus();
-          this.modalService.dismissAll();
-          this.onSignin.emit();
-        });
-    });
   }
 
 
@@ -68,7 +54,6 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
     this.authService.signin(credentials)
       .subscribe(res => {
         this.userService.fetchUserStatus();
-        this.onSignin.emit();
       });
   }
 

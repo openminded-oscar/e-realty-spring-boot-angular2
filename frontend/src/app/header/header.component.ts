@@ -1,16 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {filter} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {filter, takeUntil} from 'rxjs/operators';
 import {NavigationEnd, Router} from '@angular/router';
 import {UserService} from '../services/user.service';
 import {User} from '../domain/user';
-import {SocialAuthService} from '@abacritt/angularx-social-login';
+import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {SigninSignoutService} from '../services/auth/signin-signout.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<boolean>();
   public isAuthenticated: boolean;
   public isAdmin: boolean;
 
@@ -26,7 +30,10 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor(public router: Router,
-              public userService: UserService) {
+              public userService: UserService,
+              public modalService: NgbModal,
+              public authService: SigninSignoutService,
+              public socialAuthService: SocialAuthService) {
     this.userService.user$.subscribe(user => {
       if (user) {
         this.user = user;
@@ -44,5 +51,21 @@ export class HeaderComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.url;
       });
+
+    this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
+      const {email, idToken, authToken, authorizationCode} = googleUser;
+      this.authService.signinGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(res => {
+          console.log(JSON.stringify(res));
+          this.userService.fetchUserStatus();
+          this.modalService.dismissAll();
+        });
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
