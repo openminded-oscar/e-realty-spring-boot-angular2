@@ -8,7 +8,6 @@ import {CookieService} from '../common/CookieService';
 import {tap} from 'rxjs/operators';
 
 import {Subject} from 'rxjs';
-import {SocialUser} from '@abacritt/angularx-social-login';
 
 export interface SignInResponse {
   token: string;
@@ -46,8 +45,7 @@ export class SigninSignoutService extends AbstractService<Credentials> {
         ));
   }
 
-  public signout() {
+  public signOut() {
     localStorage.removeItem('token');
-    this.cookieService.deleteCookie('GOOGLE_OAUTH_TOKEN');
   }
 }

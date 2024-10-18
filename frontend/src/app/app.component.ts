@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    if (localStorage.getItem('token') || this.cookieService.getCookie('GOOGLE_OAUTH_TOKEN')) {
+    if (localStorage.getItem('token')) {
       this.userService.fetchUserStatus();
     } else {
       this.userService.clearUserInState();

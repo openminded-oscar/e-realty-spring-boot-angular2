@@ -15,10 +15,9 @@ export class AuthHttpInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('token');
-    const googleAuthToken = this.cookieService.getCookie('GOOGLE_OAUTH_TOKEN');
 
     const clonedRequest = req.clone({
-      headers: req.headers.set('Authorization', token ? ('Bearer ' + token) : '').set('GAuthorization', googleAuthToken ? googleAuthToken : '')
+      headers: req.headers.set('Authorization', token ? ('Bearer ' + token) : '')
     });
     return next.handle(clonedRequest);
   }

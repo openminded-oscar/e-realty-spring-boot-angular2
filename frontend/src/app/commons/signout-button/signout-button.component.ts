@@ -15,7 +15,7 @@ export class SignoutButtonComponent {
   }
 
   public signout() {
-    this.authService.signout();
+    this.authService.signOut();
     this.userService.clearUserInState();
     this.onSignout.emit();
   }
