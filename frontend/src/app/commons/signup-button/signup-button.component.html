@@ -21,7 +21,18 @@
       </div>
     </form>
   </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close({login: login, password: password})">Sign Up</button>
+  <div class="modal-footer" style="display: flex; justify-content: space-between; flex-direction: row">
+    <div>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close({login: login, password: password})">Sign
+        Up
+      </button>
+    </div>
+    <div class="pull-right">
+      <!--GOOGLE SIGN IN SECTION-->
+      <!-- WARNING! Not Works Locally From localhost. Use Tools like Ngrok! -->
+      <!-- Alternative (no library) implementation: https://stackoverflow.com/questions/72820938/how-to-implement-sign-in-with-google-in-angular-->
+      <app-google-sign-in-button></app-google-sign-in-button>
+      <!--GOOGLE SIGN END SECTION-->
+    </div>
   </div>
 </ng-template>

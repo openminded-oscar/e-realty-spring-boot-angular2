@@ -34,11 +34,12 @@
         </div>
         <div>
           <div class="pull-right">
-            <a href="/oauth2/authorize-client/google?scope=openid%20email%20profile%20calendar%20calendar.events">
-              <img class="btn" src="/assets/btn_google_signin_dark_normal_web.png">
-              <!--              <img class="btn" src="/assets/btn_google_signin_dark_normal_web.png" (click)="signInViaGoogle()">-->
-            </a>
-          </div>
+            <app-google-sign-in-button></app-google-sign-in-button>
+<!--GOOGLE SIGN IN SECTION-->
+<!-- WARNING! Not Works Locally From localhost. Use Tools like Ngrok! -->
+<!-- Alternative (no library) implementation: https://stackoverflow.com/questions/72820938/how-to-implement-sign-in-with-google-in-angular-->
+<!--GOOGLE SIGN END SECTION-->
+         </div>
         </div>
       </div>
     </div>

@@ -54,7 +54,7 @@ public class UserService {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(
-                new TreeSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
+                new HashSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
         );
 
         return userRepository.save(user);
@@ -88,6 +88,16 @@ public class UserService {
 
     public User createUserForGoogleTokenSubject(String tokenSubject) {
         User user = new User();
+        user.setPassword("");
+        user.setGoogleUserIdTokenSubject(tokenSubject);
+
+        return save(user);
+    }
+
+    public User createUserForEmailAndGoogleTokenSubject(String email, String tokenSubject) {
+        User user = new User();
+        user.setLogin(email);
+        user.setEmail(email);
         user.setPassword("");
         user.setGoogleUserIdTokenSubject(tokenSubject);
 

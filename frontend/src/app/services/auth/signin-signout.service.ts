@@ -8,6 +8,11 @@ import {CookieService} from '../common/CookieService';
 import {tap} from 'rxjs/operators';
 
 import {Subject} from 'rxjs';
+import {SocialUser} from '@abacritt/angularx-social-login';
+
+export interface SignInResponse {
+  token: string;
+}
 
 @Injectable({providedIn: 'root'})
 export class SigninSignoutService extends AbstractService<Credentials> {
@@ -23,8 +28,8 @@ export class SigninSignoutService extends AbstractService<Credentials> {
     super(http, '');
   }
 
-  public signin(credentials: Credentials): Observable<HttpResponse<any>> {
-    return this.sendRequest('post', endpoints.signin, credentials)
+  public signIn(credentials: Credentials): Observable<HttpResponse<SignInResponse>> {
+    return this.sendRequest<SignInResponse>('post', endpoints.signin, credentials)
       .pipe(
         tap(res => {
             localStorage.setItem('token', res.body.token);
@@ -32,8 +37,8 @@ export class SigninSignoutService extends AbstractService<Credentials> {
         ));
   }
 
-  public signinGoogleData(googleCredentialsData: any): Observable<HttpResponse<any>> {
-    return this.sendRequest<any>('post', endpoints.signinGoogleData, googleCredentialsData)
+  public signInGoogleData(googleCredentialsData: any): Observable<HttpResponse<any>> {
+    return this.sendRequest<SignInResponse>('post', endpoints.signinGoogleData, googleCredentialsData)
       .pipe(
         tap(res => {
             localStorage.setItem('token', res.body.token);

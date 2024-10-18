@@ -1,11 +1,10 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Credentials} from '../../domain/credentials.model';
 import {SigninSignoutService} from '../../services/auth/signin-signout.service';
 import {UserService} from '../../services/user.service';
 import {takeUntil, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {GoogleLoginProvider, SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'signin-button',
@@ -19,14 +18,11 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
 
   @ViewChild('content', {static: true})
   public content: TemplateRef<any>;
-  @Output()
-  public onSignin = new EventEmitter();
   private destroy$ = new Subject<boolean>();
 
   constructor(private modalService: NgbModal,
               private authService: SigninSignoutService,
-              private userService: UserService,
-              private socialAuthService: SocialAuthService) {
+              private userService: UserService) {
   }
 
   public ngOnInit() {
@@ -38,6 +34,7 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
       })
     ).subscribe();
   }
+
 
   public openModal() {
     this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'})
@@ -53,25 +50,10 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
 
   public sendLoginRequest(credentials: Credentials) {
     credentials.type = 'plain';
-    this.authService.signin(credentials)
+    this.authService.signIn(credentials)
       .subscribe(res => {
         this.userService.fetchUserStatus();
-        this.onSignin.emit();
       });
-  }
-
-  public signInViaGoogle(): void {
-    this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
-      const {email, idToken, authToken, authorizationCode} = googleUser;
-      this.authService.signinGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
-        .subscribe(res => {
-          this.modalService.dismissAll();
-          this.userService.fetchUserStatus();
-          this.onSignin.emit();
-        });
-    });
-
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
   ngOnDestroy(): void {

@@ -9,6 +9,7 @@ import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.*;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -97,11 +98,15 @@ public class SigninApi {
 
     @PostMapping("/google")
     public Token signInViaGoogle(@RequestBody GoogleAccountData googleAccountData) throws IOException, GeneralSecurityException {
-        String tokenSubject = googleTokenVerifier.verifyGoogleTokenAndGetSubject(googleAccountData.getIdToken());
+        GoogleIdToken verifiedIdToken =
+                googleTokenVerifier.verifyGoogleTokenAndGetSubject(googleAccountData.getIdToken());
 
-        User user = userService.findByGoogleUserIdTokenSubject(tokenSubject);
+        User user = userService.findByLogin(googleAccountData.getEmail());
         if (user == null) {
-            user = userService.createUserForGoogleTokenSubject(tokenSubject);
+            user = userService.createUserForEmailAndGoogleTokenSubject(
+                    googleAccountData.getEmail(),
+                    verifiedIdToken.getPayload().getSubject()
+            );
         }
 
         String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());

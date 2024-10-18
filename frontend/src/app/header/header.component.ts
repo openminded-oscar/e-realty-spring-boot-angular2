@@ -1,15 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {filter} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {filter, takeUntil} from 'rxjs/operators';
 import {NavigationEnd, Router} from '@angular/router';
 import {UserService} from '../services/user.service';
 import {User} from '../domain/user';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<boolean>();
   public isAuthenticated: boolean;
   public isAdmin: boolean;
 
@@ -43,5 +45,10 @@ export class HeaderComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.url;
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
