@@ -110,12 +110,13 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
+        lang: 'en',
         autoLogin: false,
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha'
+              '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha.apps.googleusercontent.com'
             ),
           }]
       }

@@ -70,8 +70,6 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
           this.onSignin.emit();
         });
     });
-
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
   ngOnDestroy(): void {

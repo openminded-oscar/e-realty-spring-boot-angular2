@@ -34,11 +34,13 @@
         </div>
         <div>
           <div class="pull-right">
-            <a href="/oauth2/authorize-client/google?scope=openid%20email%20profile%20calendar%20calendar.events">
-              <img class="btn" src="/assets/btn_google_signin_dark_normal_web.png">
-              <!--              <img class="btn" src="/assets/btn_google_signin_dark_normal_web.png" (click)="signInViaGoogle()">-->
-            </a>
-          </div>
+            <asl-google-signin-button
+              [width]="'400'"
+              [text]="'signin_with'"
+              [type]="'icon'"
+              [size]="'medium'">
+            </asl-google-signin-button>
+         </div>
         </div>
       </div>
     </div>
