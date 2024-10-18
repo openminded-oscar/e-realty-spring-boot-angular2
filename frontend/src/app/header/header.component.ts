@@ -54,10 +54,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
       const {email, idToken, authToken, authorizationCode} = googleUser;
-      this.authService.signinGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
+      this.authService.signInGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
         .pipe(takeUntil(this.destroy$))
-        .subscribe(res => {
-          console.log(JSON.stringify(res));
+        .subscribe(() => {
           this.userService.fetchUserStatus();
           this.modalService.dismissAll();
         });

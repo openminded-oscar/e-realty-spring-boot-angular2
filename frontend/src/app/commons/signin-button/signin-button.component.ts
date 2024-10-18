@@ -1,11 +1,10 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Credentials} from '../../domain/credentials.model';
 import {SigninSignoutService} from '../../services/auth/signin-signout.service';
 import {UserService} from '../../services/user.service';
 import {takeUntil, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'signin-button',
@@ -51,7 +50,7 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
 
   public sendLoginRequest(credentials: Credentials) {
     credentials.type = 'plain';
-    this.authService.signin(credentials)
+    this.authService.signIn(credentials)
       .subscribe(res => {
         this.userService.fetchUserStatus();
       });
