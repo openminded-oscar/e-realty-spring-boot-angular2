@@ -37,6 +37,7 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
         this.openModal();
       })
     ).subscribe();
+
     this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
       const {email, idToken, authToken, authorizationCode} = googleUser;
       this.authService.signinGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
@@ -69,31 +70,6 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
         this.userService.fetchUserStatus();
         this.onSignin.emit();
       });
-  }
-
-  public createFakeGoogleWrapper = () => {
-    const googleLoginWrapper = document.createElement('div');
-    googleLoginWrapper.style.display = 'none';
-    googleLoginWrapper.classList.add('custom-google-button');
-    document.body.appendChild(googleLoginWrapper);
-    (window as any).google.accounts.id.renderButton(googleLoginWrapper, {
-      type: 'icon',
-      width: '200',
-    });
-
-    const googleLoginWrapperButton = googleLoginWrapper.querySelector(
-      'div[role=button]'
-    ) as HTMLElement;
-
-    return {
-      click: () => {
-        googleLoginWrapperButton?.click();
-      },
-    };
-  }
-
-  public handleGoogleLogin() {
-    this.createFakeGoogleWrapper().click();
   }
 
   ngOnDestroy(): void {

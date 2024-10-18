@@ -34,7 +34,11 @@
         </div>
         <div>
           <div class="pull-right">
-            <button (click)="handleGoogleLogin()">Login with google</button>
+<!--GOOGLE SIGN IN SECTION-->
+<!-- WARNING! Not Works Locally From localhost. Use Tools like Ngrok! -->
+<!-- Alternative (no library) implementation: https://stackoverflow.com/questions/72820938/how-to-implement-sign-in-with-google-in-angular-->
+            <asl-google-signin-button theme="filled_blue" locale="en" type='standard' text="signin_with" size='medium'></asl-google-signin-button>
+<!--GOOGLE SIGN END SECTION-->
          </div>
         </div>
       </div>
