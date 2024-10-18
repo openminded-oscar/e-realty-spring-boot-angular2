@@ -34,12 +34,7 @@
         </div>
         <div>
           <div class="pull-right">
-            <asl-google-signin-button
-              [width]="'400'"
-              [text]="'signin_with'"
-              [type]="'icon'"
-              [size]="'medium'">
-            </asl-google-signin-button>
+            <button (click)="handleGoogleLogin()">Login with google</button>
          </div>
         </div>
       </div>

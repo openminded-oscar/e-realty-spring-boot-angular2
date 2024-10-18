@@ -5,7 +5,7 @@ import {SigninSignoutService} from '../../services/auth/signin-signout.service';
 import {UserService} from '../../services/user.service';
 import {takeUntil, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {GoogleLoginProvider, SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
+import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'signin-button',
@@ -16,6 +16,8 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
   public customSignInText = null;
   public login: string;
   public password: string;
+
+  @Output() loginWithGoogle: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild('content', {static: true})
   public content: TemplateRef<any>;
@@ -70,6 +72,31 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
           this.onSignin.emit();
         });
     });
+  }
+
+  public createFakeGoogleWrapper = () => {
+    const googleLoginWrapper = document.createElement('div');
+    googleLoginWrapper.style.display = 'none';
+    googleLoginWrapper.classList.add('custom-google-button');
+    document.body.appendChild(googleLoginWrapper);
+    (window as any).google.accounts.id.renderButton(googleLoginWrapper, {
+      type: 'icon',
+      width: '200',
+    });
+
+    const googleLoginWrapperButton = googleLoginWrapper.querySelector(
+      'div[role=button]'
+    ) as HTMLElement;
+
+    return {
+      click: () => {
+        googleLoginWrapperButton?.click();
+      },
+    };
+  }
+
+  public handleGoogleLogin() {
+    this.loginWithGoogle.emit(this.createFakeGoogleWrapper());
   }
 
   ngOnDestroy(): void {
