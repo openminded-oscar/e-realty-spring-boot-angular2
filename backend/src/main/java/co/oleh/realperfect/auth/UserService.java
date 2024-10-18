@@ -54,7 +54,7 @@ public class UserService {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(
-                new ArrayList<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
+                new HashSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
         );
 
         return userRepository.save(user);
@@ -144,7 +144,7 @@ public class UserService {
         User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Role role = roleRepository.findByName(Role.REALTOR_ROLE);
 
-        List<Role> roles = user.getRoles();
+        Set<Role> roles = user.getRoles();
         roles.add(role);
         this.userRepository.save(user);
 
@@ -169,7 +169,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Realtor contains realty objects");
         }
 
-        List<Role> roles = user.getRoles();
+        Set<Role> roles = user.getRoles();
         roles.remove(role);
         this.realtorRepository.deleteById(realtor.getId());
         this.userRepository.save(user);

@@ -17,7 +17,7 @@ public class User extends AuditableEntity {
     private String email;
     private String password;
     private String passwordConfirm;
-    private List<Role> roles;
+    private Set<Role> roles;
     private String googleUserIdTokenSubject;
     private String name;
     private String surname;
@@ -107,11 +107,11 @@ public class User extends AuditableEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
