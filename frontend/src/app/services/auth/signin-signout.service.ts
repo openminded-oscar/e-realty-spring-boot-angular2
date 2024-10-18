@@ -36,7 +36,7 @@ export class SigninSignoutService extends AbstractService<Credentials> {
     return this.sendRequest<any>('post', endpoints.signinGoogleData, googleCredentialsData)
       .pipe(
         tap(res => {
-            localStorage.setItem('token', res.body.token);
+            // localStorage.setItem('token', res.body.token);
           }
         ));
   }

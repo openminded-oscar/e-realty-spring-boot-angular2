@@ -17,8 +17,6 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
   public login: string;
   public password: string;
 
-  @Output() loginWithGoogle: EventEmitter<any> = new EventEmitter<any>();
-
   @ViewChild('content', {static: true})
   public content: TemplateRef<any>;
   @Output()
@@ -39,7 +37,18 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
         this.openModal();
       })
     ).subscribe();
+    this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
+      const {email, idToken, authToken, authorizationCode} = googleUser;
+      this.authService.signinGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
+        .subscribe(res => {
+          console.log(JSON.stringify(res));
+          this.userService.fetchUserStatus();
+          this.modalService.dismissAll();
+          this.onSignin.emit();
+        });
+    });
   }
+
 
   public openModal() {
     this.modalService.open(this.content, {ariaLabelledBy: 'modal-basic-title'})
@@ -60,18 +69,6 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
         this.userService.fetchUserStatus();
         this.onSignin.emit();
       });
-  }
-
-  public signInViaGoogle(): void {
-    this.socialAuthService.authState.subscribe((googleUser: SocialUser) => {
-      const {email, idToken, authToken, authorizationCode} = googleUser;
-      this.authService.signinGoogleData({email, idToken, authToken, authorizationCode, type: 'google'})
-        .subscribe(res => {
-          this.modalService.dismissAll();
-          this.userService.fetchUserStatus();
-          this.onSignin.emit();
-        });
-    });
   }
 
   public createFakeGoogleWrapper = () => {
@@ -96,7 +93,7 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
   }
 
   public handleGoogleLogin() {
-    this.loginWithGoogle.emit(this.createFakeGoogleWrapper());
+    this.createFakeGoogleWrapper().click();
   }
 
   ngOnDestroy(): void {

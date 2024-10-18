@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {filter} from 'rxjs/operators';
 import {NavigationEnd, Router} from '@angular/router';
 import {UserService} from '../services/user.service';
 import {User} from '../domain/user';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-header',
