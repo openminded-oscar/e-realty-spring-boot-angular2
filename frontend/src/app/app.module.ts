@@ -19,10 +19,10 @@ import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gall
 import {Routes} from '@angular/router';
 import {UserService} from './services/user.service';
 import {SignInButtonComponent} from './commons/signin-button/sign-in-button.component';
-import {SigninSignoutService} from './services/auth/signin-signout.service';
+import {SignInSignOutService} from './services/auth/sign-in-sign-out.service';
 import {SignupButtonComponent} from './commons/signup-button/signup-button.component';
 import {SignupService} from './services/auth/signup.service';
-import {SignoutButtonComponent} from './commons/signout-button/signout-button.component';
+import {SignOutButtonComponent} from './commons/signout-button/sign-out-button.component';
 import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
 import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gallery.component';
 import {InterestService} from './services/interest.service';
@@ -41,6 +41,8 @@ import {SharedModule} from './shared/shared.module';
 import {AppRoutesModule} from './app.routes.module';
 import {GoogleLoginProvider, SocialLoginModule} from '@abacritt/angularx-social-login';
 import {GoogleSignInButtonComponent} from './google-sign-in-button/google-sign-in-button.component';
+import {SignInModalComponent} from './shared/sign-in-modal/sign-in-modal.component';
+import {SignUpModalComponent} from './shared/sign-up-modal/sign-up-modal.component';
 
 const appRoutes: Routes = [
   {
@@ -66,12 +68,14 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     SignInButtonComponent,
     SignupButtonComponent,
     GoogleSignInButtonComponent,
-    SignoutButtonComponent,
+    SignOutButtonComponent,
     RealtyObjDetailsComponent,
     RealtorsGalleryComponent,
     GlobalNotificationComponent,
     RealtorContactComponent,
-    HeaderComponent
+    HeaderComponent,
+    SignInModalComponent,
+    SignUpModalComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +101,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     RealtyObjService,
     RealtorService,
     UserService,
-    SigninSignoutService,
+    SignInSignOutService,
     SignupService,
     ErrorService, {
       provide: HTTP_INTERCEPTORS,

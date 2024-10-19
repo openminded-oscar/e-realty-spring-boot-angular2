@@ -14,8 +14,8 @@ export class UserService {
   private userSubject = new BehaviorSubject<User>(null);
   public user$ = this.userSubject.asObservable();
 
-  private isUserSubject = new BehaviorSubject<boolean>(null);
-  public isUser$ = this.isUserSubject.asObservable();
+  private isSignedInUserSubject = new BehaviorSubject<boolean>(null);
+  public isSignedInUser$ = this.isSignedInUserSubject.asObservable();
 
   private isAdminSubject = new BehaviorSubject<boolean>(null);
   public isAdmin$ = this.isAdminSubject.asObservable();
@@ -50,7 +50,7 @@ export class UserService {
           Photo.getLinkByFilename(userInfo.profilePic.filename) : null;
         userInfo.realtyObjects.forEach(o => o.mainPhotoPath = RealtyObj.getMainPhoto(o));
         this.userSubject.next(userInfo);
-        this.isUserSubject.next(userInfo.roles?.includes(UserRole.User));
+        this.isSignedInUserSubject.next(userInfo.roles?.includes(UserRole.User));
         this.isRealtorSubject.next(userInfo.roles?.includes(UserRole.Realtor));
         this.isAdminSubject.next(userInfo.roles?.includes(UserRole.Admin));
         this.isAuthenticatedSubject.next(!!userInfo);
@@ -62,6 +62,9 @@ export class UserService {
   }
 
   public clearUserInState() {
+    this.isAdminSubject.next(false);
+    this.isRealtorSubject.next(false);
+    this.isSignedInUserSubject.next(false);
     this.isAuthenticatedSubject.next(false);
     this.userSubject.next(null);
   }

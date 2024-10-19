@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{ customSignInText ? customSignInText : 'Please Sign In' }}</h4>
+  <div>
+    <button class="btn btn-link" style="margin-right: 10px" (click)="switchToSignUp()">Sign Up</button>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span>&times;</span>
+    </button>
+  </div>
+</div>
+<div class="modal-body">
+  <form [formGroup]="signInForm">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <div class="input-group">
+        <input formControlName="email" type="email" id="email" class="form-control" name="email">
+      </div>
+      <label for="password">Password</label>
+      <div class="input-group">
+        <input formControlName="password" id="password" class="form-control" name="password" type="password">
+      </div>
+    </div>
+  </form>
+
+</div>
+<div class="modal-footer">
+  <div class="container login-btns--container">
+    <div class="login-btns">
+      <div>
+        <button [disabled]="signInForm?.invalid"
+                type="button"
+                class="btn btn-outline-dark"
+                (click)="modal.close(signInForm.value)">
+          Sign In
+        </button>
+      </div>
+      <div>
+        OR
+      </div>
+      <div>
+        <div class="pull-right">
+          <!--GOOGLE SIGN IN SECTION-->
+          <app-google-sign-in-button></app-google-sign-in-button>
+          <!-- WARNING! Not Works Locally From localhost. Use Tools like Ngrok! -->
+          <!-- Alternative (no library) implementation: https://stackoverflow.com/questions/72820938/how-to-implement-sign-in-with-google-in-angular-->
+          <!--GOOGLE SIGN END SECTION-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

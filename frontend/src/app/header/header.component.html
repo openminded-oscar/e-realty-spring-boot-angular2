@@ -24,8 +24,10 @@
         <a class="btn btn-light nav-link" routerLink="/admin">Admin Section</a>
       </div>
 
-      <signup-button *ngIf="!isAuthenticated"></signup-button>
-      <signin-button *ngIf="!isAuthenticated"></signin-button>
+      <div *ngIf="!isAuthenticated" style="display: flex; flex-direction: row; gap: 10px">
+        <signup-button></signup-button>
+        <signin-button></signin-button>
+      </div>
       <signout-button *ngIf="isAuthenticated"></signout-button>
       <div class="nav-to-profile" *ngIf="isAuthenticated"
            [routerLink]="['/profile']">
