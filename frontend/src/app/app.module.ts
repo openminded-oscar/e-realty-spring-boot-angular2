@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AddressService} from './services/address.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AddressInputComponent} from './address-input/address-input.component';
