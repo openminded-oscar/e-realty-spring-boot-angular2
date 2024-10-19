@@ -8,24 +8,27 @@
     </button>
   </div>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="signInForm">
       <div class="form-group">
-        <label for="login">Email</label>
+        <label for="email">Email</label>
         <div class="input-group">
-          <input type="email" id="login" class="form-control" name="login" [(ngModel)]="login">
+          <input formControlName="email" type="email" id="email" class="form-control" name="email">
         </div>
         <label for="password">Password</label>
         <div class="input-group">
-          <input id="password" class="form-control" name="password" type="password" [(ngModel)]="password">
+          <input formControlName="password" id="password" class="form-control" name="password" type="password">
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <div class="container">
+    <div class="container login-btns--container">
       <div class="login-btns">
         <div>
-          <button type="button" class="btn btn-outline-dark" (click)="modal.close({login: login, password: password})">
+          <button [disabled]="signInForm?.invalid"
+                  type="button"
+                  class="btn btn-outline-dark"
+                  (click)="modal.close(signInForm.value)">
             Sign In
           </button>
         </div>
@@ -34,12 +37,12 @@
         </div>
         <div>
           <div class="pull-right">
+            <!--GOOGLE SIGN IN SECTION-->
             <app-google-sign-in-button></app-google-sign-in-button>
-<!--GOOGLE SIGN IN SECTION-->
-<!-- WARNING! Not Works Locally From localhost. Use Tools like Ngrok! -->
-<!-- Alternative (no library) implementation: https://stackoverflow.com/questions/72820938/how-to-implement-sign-in-with-google-in-angular-->
-<!--GOOGLE SIGN END SECTION-->
-         </div>
+            <!-- WARNING! Not Works Locally From localhost. Use Tools like Ngrok! -->
+            <!-- Alternative (no library) implementation: https://stackoverflow.com/questions/72820938/how-to-implement-sign-in-with-google-in-angular-->
+            <!--GOOGLE SIGN END SECTION-->
+          </div>
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@ public class CredentialsValidator implements Validator {
         AccountCredentials user = (AccountCredentials) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "login", "NotEmpty");
-        if (user.getLogin().length() < 4 || user.getLogin().length() > 32) {
+        if (user.getLogin().length() < 4 || user.getLogin().length() > 100) {
             errors.rejectValue("login", "Size.userForm.username");
         }
         if (userService.findByLogin(user.getLogin()) != null) {

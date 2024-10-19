@@ -10,6 +10,7 @@ export enum UserRole {
 export interface User {
   id?: number;
   login?: string;
+  email: string;
 
   roles?: string[];
 
@@ -18,7 +19,6 @@ export interface User {
   profilePicUrl?: string;
   profilePic?: Photo;
   phoneNumber: string;
-  email: string;
 
   realtorDetails?: any;
   realtyObjects?: RealtyObj[];

@@ -5,7 +5,7 @@ import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
-import co.oleh.realperfect.model.user.AccountCredentials;
+import co.oleh.realperfect.model.user.EmailPasswordDto;
 import co.oleh.realperfect.model.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,10 +28,11 @@ public class UserApi {
   }
 
   @PostMapping
-  public User create(@Valid @RequestBody AccountCredentials credentials) {
+  public User create(@Valid @RequestBody EmailPasswordDto credentials) {
     User user = new User();
 
-    user.setLogin(credentials.getLogin());
+    user.setLogin(credentials.getEmail());
+    user.setEmail(credentials.getEmail());
     user.setPassword(credentials.getPassword());
     userService.save(user);
 

@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AddressService} from './services/address.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AddressInputComponent} from './address-input/address-input.component';
@@ -18,7 +18,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
 import {Routes} from '@angular/router';
 import {UserService} from './services/user.service';
-import {SigninButtonComponent} from './commons/signin-button/signin-button.component';
+import {SignInButtonComponent} from './commons/signin-button/sign-in-button.component';
 import {SigninSignoutService} from './services/auth/signin-signout.service';
 import {SignupButtonComponent} from './commons/signup-button/signup-button.component';
 import {SignupService} from './services/auth/signup.service';
@@ -63,7 +63,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     AddressInputComponent,
     UserRegionInputComponent,
     RealtyObjsGalleryComponent,
-    SigninButtonComponent,
+    SignInButtonComponent,
     SignupButtonComponent,
     GoogleSignInButtonComponent,
     SignoutButtonComponent,
@@ -125,9 +125,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
           }]
       }
     }],
-  exports: [
-
-  ],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

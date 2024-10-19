@@ -11,11 +11,11 @@ import java.util.Set;
 public class UserSelfDto {
      Long id;
      String login;
+     String email;
      Set<String> roles;
      String name;
      String surname;
      String phoneNumber;
-     String email;
      UserPhoto profilePic;
      RealtorDto realtorDetails;
      Set<RealtyObjectDto> realtyObjects;

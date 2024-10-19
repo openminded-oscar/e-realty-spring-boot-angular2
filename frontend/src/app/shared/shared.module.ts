@@ -8,7 +8,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ConfirmModalComponent} from './confirm-modal/confirm-modal.component';
 import {RealtyObjCardComponent} from './realty-obj-card/realty-obj-card.component';
-import {SocialLoginModule} from '@abacritt/angularx-social-login';
 
 const components = [
   RealtyObjsListComponent,
