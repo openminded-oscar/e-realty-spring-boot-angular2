@@ -23,7 +23,6 @@ export class SignInButtonComponent implements OnInit, OnDestroy {
   public signInForm: FormGroup;
 
   constructor(public modalService: NgbModal,
-              public activeModal: NgbActiveModal,
               public fb: FormBuilder,
               public authService: SigninSignoutService,
               public userService: UserService) {
@@ -67,9 +66,5 @@ export class SignInButtonComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-  }
-
-  public submit() {
-    this.activeModal.close(this.signInForm.value);
   }
 }

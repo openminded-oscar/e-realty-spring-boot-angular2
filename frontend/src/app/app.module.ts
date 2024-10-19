@@ -99,7 +99,6 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     UserService,
     SigninSignoutService,
     SignupService,
-    NgbActiveModal,
     ErrorService, {
       provide: HTTP_INTERCEPTORS,
       useClass: AllHttpInterceptor,

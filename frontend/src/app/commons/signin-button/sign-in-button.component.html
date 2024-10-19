@@ -28,7 +28,7 @@
           <button [disabled]="signInForm?.invalid"
                   type="button"
                   class="btn btn-outline-dark"
-                  (click)="submit()">
+                  (click)="modal.close(signInForm.value)">
             Sign In
           </button>
         </div>

@@ -13,7 +13,6 @@ export class SignupButtonComponent implements OnInit {
   public signUpForm: FormGroup;
 
   constructor(private modalService: NgbModal,
-              private activeModal: NgbActiveModal,
               private fb: FormBuilder,
               private signupService: SignupService) {
   }
@@ -36,9 +35,5 @@ export class SignupButtonComponent implements OnInit {
   public sendSignupRequest(credentials: Credentials) {
     this.signupService.signUp(credentials)
       .subscribe();
-  }
-
-  public submit() {
-    this.activeModal.close(this.signUpForm.value);
   }
 }
