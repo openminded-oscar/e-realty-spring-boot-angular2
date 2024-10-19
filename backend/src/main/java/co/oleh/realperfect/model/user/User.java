@@ -1,7 +1,6 @@
 package co.oleh.realperfect.model.user;
 
 import co.oleh.realperfect.model.AuditableEntity;
-import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.photos.UserPhoto;
 
@@ -124,6 +123,7 @@ public class User extends AuditableEntity {
         this.phoneNumber = phoneNumber;
     }
 
+    @Column(name = "email", unique = true, nullable = false)
     public String getEmail() {
         return email;
     }

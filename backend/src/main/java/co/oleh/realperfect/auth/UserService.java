@@ -5,11 +5,11 @@ import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.Realtor;
+import co.oleh.realperfect.model.user.EmailPasswordDto;
 import co.oleh.realperfect.model.user.Role;
 import co.oleh.realperfect.repository.RealtorRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import co.oleh.realperfect.model.user.AccountCredentials;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
@@ -104,16 +104,16 @@ public class UserService {
         return save(user);
     }
 
-    public User findUserAndVerify(AccountCredentials authentication) {
-        Optional<User> maybeUser = userRepository.findByLogin(authentication.getLogin());
-        if (!maybeUser.isPresent()) {
+    public User findUserByEmailAndVerify(EmailPasswordDto emailPasswordDto) {
+        Optional<User> maybeUser = userRepository.findByEmail(emailPasswordDto.getEmail());
+        if (maybeUser.isEmpty()) {
             throw new RuntimeException("User doesn't exist with this username");
         }
 
         User user = maybeUser.get();
 
         boolean isPasswordValid =
-                bCryptPasswordEncoder.matches(authentication.getPassword(), user.getPassword());
+                bCryptPasswordEncoder.matches(emailPasswordDto.getPassword(), user.getPassword());
         if (!isPasswordValid) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login and password do not match");
         }

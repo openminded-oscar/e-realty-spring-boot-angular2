@@ -1,31 +1,39 @@
 import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Credentials} from '../../domain/credentials.model';
 import {SigninSignoutService} from '../../services/auth/signin-signout.service';
 import {UserService} from '../../services/user.service';
 import {takeUntil, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'signin-button',
-  templateUrl: './signin-button.component.html',
-  styleUrls: ['./signin-button.component.scss']
+  templateUrl: './sign-in-button.component.html',
+  styleUrls: ['./sign-in-button.component.scss']
 })
-export class SigninButtonComponent implements OnInit, OnDestroy {
+export class SignInButtonComponent implements OnInit, OnDestroy {
   public customSignInText = null;
-  public login: string;
+  public email: string;
   public password: string;
 
   @ViewChild('content', {static: true})
   public content: TemplateRef<any>;
   private destroy$ = new Subject<boolean>();
+  public signInForm: FormGroup;
 
-  constructor(private modalService: NgbModal,
-              private authService: SigninSignoutService,
-              private userService: UserService) {
+  constructor(public modalService: NgbModal,
+              public activeModal: NgbActiveModal,
+              public fb: FormBuilder,
+              public authService: SigninSignoutService,
+              public userService: UserService) {
   }
 
   public ngOnInit() {
+    this.signInForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
     this.authService.signinPromptSubscribe().pipe(
       takeUntil(this.destroy$),
       tap(text => {
@@ -59,5 +67,9 @@ export class SigninButtonComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public submit() {
+    this.activeModal.close(this.signInForm.value);
   }
 }
