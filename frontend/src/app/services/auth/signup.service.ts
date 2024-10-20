@@ -22,6 +22,7 @@ export class SignupService extends AbstractService<Credentials> implements OnDes
   public signUp() {
     this.dismissAllModal().pipe(
       take(1),
+      // wait delay for prev modals closed
       delay(200),
       switchMap(() => this.openSignUpModal()),
       filter(credentials => credentials !== null),
