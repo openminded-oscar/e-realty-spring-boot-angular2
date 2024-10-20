@@ -30,6 +30,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
   public signIn(text?: string) {
     this.dismissAllModal().pipe(
       take(1),
+      // wait delay for prev modals closed
       delay(200),
       switchMap(() => this.openSignInModal(text)),
       filter(credentials => credentials !== null),
