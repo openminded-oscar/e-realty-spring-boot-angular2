@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {UserService} from '../services/user.service';
 import {filter, map, takeUntil, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {SigninSignoutService} from '../services/auth/signin-signout.service';
+import {SignInSignOutService} from '../services/auth/sign-in-sign-out.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ import {SigninSignoutService} from '../services/auth/signin-signout.service';
 export class AuthGuard implements CanActivate, OnDestroy {
   private destroy$ = new Subject<Boolean>();
 
-  constructor(private userService: UserService, private signinSignoutService: SigninSignoutService, private router: Router) {
+  constructor(private userService: UserService, private signinSignoutService: SignInSignOutService, private router: Router) {
   }
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate, OnDestroy {
         tap(v => {
           if (!v) {
             this.router.navigate(['/']);
-            this.signinSignoutService.signinPrompt('Sign In To Access All Features!');
+            this.signinSignoutService.signIn('Sign In To Access All Features!');
           }
         }),
         takeUntil(this.destroy$)

@@ -23,7 +23,7 @@ export class UserObjectsComponent implements OnInit, OnDestroy {
     ).subscribe(
       user => {
         this.user = user;
-        this.realtyObjects = user.realtyObjects;
+        this.realtyObjects = user?.realtyObjects ?? [];
       }
     );
   }
