@@ -1,18 +1,20 @@
 # Git clone, after that install dependencies:
 [backend/local/start_resources.sh](backend/local/start_resources.sh)
 
-# BackEnd build
+# BackEnd start
 ####Dependencies
 * Maven 3, Java 16, Docker, MySQLV8
 ####Build
-* `mvn spring-boot:run -P dev|prod "-Dspring-boot.run.jvmArguments=--add-opens"`
+* application-local.yml file required for local run
+* `mvn spring-boot:run -Dspring-boot.run.profiles=local -P local|prod`
 
 # FrontEnd dependencies and build
 ####Dependencies
 * `npm install -g @angular/cli` to install angular cli (globally)
 * `npm install` to install Node packages
 ####Build
-* `ng serve` for `dev`
+* environment.local.ts file required for local run (please extend environment.base.ts there)
+* `ng serve` for `local`
 * `ng build` to make files build for `prod`. Builds all to `dist` folder.
 
 #Bootstrapping All Project
