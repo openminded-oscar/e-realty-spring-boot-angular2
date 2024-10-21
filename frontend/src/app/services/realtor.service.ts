@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {endpoints} from '../commons';
 
-import {Observable, of, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Realtor} from '../domain/realtor';
 import {Photo} from '../domain/photo';
-import {catchError, tap} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../domain/realty-obj';
 import {Review} from '../domain/review';
 
@@ -27,11 +27,25 @@ export class RealtorService {
   }
 
   public getMyAsRealtorObjects(): Observable<RealtyObj[]> {
-    return this.http.get<RealtyObj[]>(endpoints.realtyObj.realtorList);
+    return this.http.get<RealtyObj[]>(endpoints.realtyObj.realtorList)
+      .pipe(
+        tap(objects => {
+          (objects ?? []).forEach(object => {
+            object.mainPhotoPath = RealtyObj.getMainPhoto(object);
+          });
+        })
+      );
   }
 
   public getMyAsRealtorReviews(): Observable<Review[]> {
-    return this.http.get<Review[]>(endpoints.realtorReview);
+    return this.http.get<Review[]>(endpoints.realtorReview).pipe(
+      tap(res => {
+        const realtyObjects = res.map(r => r.realtyObj);
+        (realtyObjects ?? []).forEach(value => {
+          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+        });
+      })
+    );
   }
 
   public findById(id: any) {
@@ -42,20 +56,6 @@ export class RealtorService {
             realtor.profilePic.fullUrl = Photo.getLinkByFilename(realtor.profilePic.filename);
           }
         }));
-  }
-
-  public updateRealtor(realtor: Realtor, realtorId: string): Observable<any> {
-    return this.http.put(`${endpoints.realtors.single}/${realtorId}`, realtor)
-      .pipe(
-        catchError((error: any) => throwError(error))
-      );
-  }
-
-  public saveRealtor(realtor: Realtor): Observable<any> {
-    return this.http.post(endpoints.realtors.single, realtor)
-      .pipe(
-        catchError((error: any) => throwError(error))
-      );
   }
 
   public claimForRealtor(): Observable<any> {

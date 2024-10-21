@@ -8,6 +8,7 @@ import co.oleh.realperfect.repository.RealtorRepository;
 import co.oleh.realperfect.model.Realtor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,9 +50,14 @@ public class RealtorService {
         return realtorRepository.findById(objectId).get();
     }
 
+    public Realtor findRealtorByUserId(Long id) {
+        return realtorRepository.findByUserId(id);
+    }
+
     public List<RealtyObjectDetailsDto> getRealtorObjectsByUserId(Long id) {
         Realtor realtor = realtorRepository.findByUserId(id);
         List<RealtyObject> realtyObjects = realtor.getRealtyObjects();
+        realtyObjects.sort(Comparator.nullsLast(Comparator.comparing(RealtyObject::getCreatedAt).reversed()));
 
         return realtyObjects.stream()
                 .map(o -> this.mappingService.map(o, RealtyObjectDetailsDto.class))

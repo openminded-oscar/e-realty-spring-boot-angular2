@@ -20,6 +20,9 @@
 }
 
 .description {
+  &--row {
+    margin-bottom: 0.5rem;
+  }
   &-content--text {
     display: -webkit-box;
     -webkit-box-orient: vertical;

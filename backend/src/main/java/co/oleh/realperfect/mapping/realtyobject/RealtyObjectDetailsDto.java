@@ -14,6 +14,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -53,4 +54,6 @@ public class RealtyObjectDetailsDto {
         RealtorDto realtor;
         List<RealtyObjectPhoto> photos;
         ConfirmationDocPhoto confirmationDocPhoto;
+        Instant createdAt;
+        Instant updatedAt;
 }

@@ -1,5 +1,6 @@
 package co.oleh.realperfect.repository;
 
+import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.model.ObjectReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,5 @@ public interface ObjectReviewRepository extends JpaRepository<ObjectReview, Long
     List<ObjectReview> findByRealtyObjIdAndDateTimeAfter(Long realtyObjId, Instant dateTime);
     List<ObjectReview> findByUserIdAndRealtyObjId(Long userId, Long realtyObjId);
     ObjectReview findByUserIdAndRealtyObjIdAndDateTimeGreaterThan(Long userId, Long realtyObjId, Instant minDateTime);
+    List<ObjectReview> findByRealtorId(Long realterId);
 }
