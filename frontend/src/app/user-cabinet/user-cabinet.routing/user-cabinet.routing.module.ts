@@ -12,6 +12,8 @@ import {
   RealtorObjectsTabPath,
   RealtorReviewsTabPath
 } from '../utils';
+import {RealtorObjectsComponent} from '../realtor-objects/realtor-objects.component';
+import {RealtorReviewsComponent} from '../realtor-reviews/realtor-reviews.component';
 
 const routes: Routes = [
   {
@@ -36,11 +38,11 @@ const routes: Routes = [
       },
       {
         path: RealtorObjectsTabPath,
-        component: UserObjectsComponent,
+        component: RealtorObjectsComponent,
       },
       {
         path: RealtorReviewsTabPath,
-        component: UserReviewsComponent,
+        component: RealtorReviewsComponent,
       },
     ]
   },

@@ -7,6 +7,7 @@ export const endpoints: any = {
   googleSignIn: base + '/oauth2/authorize-client/google',
   interest: apiBase + '/interest',
   review: apiBase + '/object-review',
+  realtorReview: apiBase + '/object-review/my-as-realtor',
   signup: apiBase + '/user',
   userUpdate: apiBase + '/user',
   pictures: apiBase + '/files/',
@@ -21,7 +22,8 @@ export const endpoints: any = {
     add: apiBase + '/realty-objects/save',
     list: apiBase + '/realty-objects',
     delete: apiBase + '/realty-objects',
-    byId: apiBase + '/realty-objects'
+    byId: apiBase + '/realty-objects',
+    realtorList: apiBase + '/realty-objects/my-as-realtor',
   }
 };
 

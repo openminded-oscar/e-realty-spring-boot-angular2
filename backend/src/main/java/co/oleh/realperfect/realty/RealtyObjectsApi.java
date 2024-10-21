@@ -5,12 +5,11 @@ import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
-import co.oleh.realperfect.model.OperationType;
+import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +29,7 @@ public class RealtyObjectsApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(RealtyObjectsApi.class);
 
     private RealtyObjectsService realtyObjectsService;
+    private RealtorService realtorService;
 
 
     @GetMapping(value = "/realty-objects/{objectId}")
@@ -41,6 +42,15 @@ public class RealtyObjectsApi {
     @GetMapping(value = "/realty-objects/my")
     public ResponseEntity<List<RealtyObjectDetailsDto>> getRealtyObjects(@AuthenticationPrincipal SpringSecurityUser user) {
         List<RealtyObjectDetailsDto> myObjects = realtyObjectsService.getMyAllObjects(user.getId());
+        return new ResponseEntity<>(myObjects, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/realty-objects/my-as-realtor")
+    @RolesAllowed({"REALTOR", "ADMIN"})
+    public ResponseEntity<List<RealtyObjectDetailsDto>> getRealtorRealtyObjects(
+            @AuthenticationPrincipal SpringSecurityUser user
+    ) {
+        List<RealtyObjectDetailsDto> myObjects = realtorService.getRealtorObjectsByUserId(user.getId());
         return new ResponseEntity<>(myObjects, HttpStatus.OK);
     }
 

@@ -11,6 +11,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {UserFavoritesComponent} from './user-favorites/user-favorites.component';
 import {UserCabinetRoutingModule} from './user-cabinet.routing/user-cabinet.routing.module';
+import { RealtorObjectsComponent } from './realtor-objects/realtor-objects.component';
+import { RealtorReviewsComponent } from './realtor-reviews/realtor-reviews.component';
 
 
 @NgModule({
@@ -19,7 +21,9 @@ import {UserCabinetRoutingModule} from './user-cabinet.routing/user-cabinet.rout
     UserObjectsComponent,
     UserReviewsComponent,
     UserCabinetContainerComponent,
-    UserFavoritesComponent
+    UserFavoritesComponent,
+    RealtorObjectsComponent,
+    RealtorReviewsComponent
   ],
   imports: [
     UserCabinetRoutingModule,

@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {endpoints} from '../commons';
 
 import {Observable, of, throwError} from 'rxjs';
 import {Realtor} from '../domain/realtor';
 import {Photo} from '../domain/photo';
 import {catchError, tap} from 'rxjs/operators';
+import {RealtyObj} from '../domain/realty-obj';
+import {Review} from '../domain/review';
 
 @Injectable({providedIn: 'root'})
 export class RealtorService {
@@ -22,6 +24,14 @@ export class RealtorService {
             }
           });
         }));
+  }
+
+  public getMyAsRealtorObjects(): Observable<RealtyObj[]> {
+    return this.http.get<RealtyObj[]>(endpoints.realtyObj.realtorList);
+  }
+
+  public getMyAsRealtorReviews(): Observable<Review[]> {
+    return this.http.get<Review[]>(endpoints.realtorReview);
   }
 
   public findById(id: any) {

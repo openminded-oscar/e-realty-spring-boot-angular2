@@ -2,6 +2,8 @@ package co.oleh.realperfect.realtor;
 
 import co.oleh.realperfect.mapping.RealtorDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
+import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
+import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.repository.RealtorRepository;
 import co.oleh.realperfect.model.Realtor;
 import org.springframework.stereotype.Service;
@@ -45,5 +47,14 @@ public class RealtorService {
 
     public Realtor findById(Long objectId) {
         return realtorRepository.findById(objectId).get();
+    }
+
+    public List<RealtyObjectDetailsDto> getRealtorObjectsByUserId(Long id) {
+        Realtor realtor = realtorRepository.findByUserId(id);
+        List<RealtyObject> realtyObjects = realtor.getRealtyObjects();
+
+        return realtyObjects.stream()
+                .map(o -> this.mappingService.map(o, RealtyObjectDetailsDto.class))
+                .collect(Collectors.toList());
     }
 }
