@@ -14,8 +14,9 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class UserReviewsComponent implements OnInit, OnDestroy {
   public reviews: Review[] = [];
-  public reviewMappedObjects: RealtyObj[] = [];
+  public filteredReviews: Review[] = [];
   private destroy$ = new Subject<boolean>();
+  public filter: 'all' | 'future' | 'past' = 'all';
 
   constructor(public reviewService: ReviewsService,
               public modalService: NgbModal) {
@@ -36,9 +37,9 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$)
       ).subscribe(reviewsResponse => {
-        this.reviews = reviewsResponse;
-        this.reviewMappedObjects = this.reviews.map(review => review.realtyObj);
-      });
+      this.reviews = reviewsResponse;
+      this.applyFilter();
+    });
   }
 
   public cancelReview(realtyObj: RealtyObj): void {
@@ -52,6 +53,21 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public applyFilter(): void {
+    if (this.filter === 'all') {
+      this.filteredReviews = this.reviews;
+    } else if (this.filter === 'future') {
+      this.filteredReviews = this.reviews.filter(review => this.isFutureDate(review.dateTime));
+    } else if (this.filter === 'past') {
+      this.filteredReviews = this.reviews.filter(review => !this.isFutureDate(review.dateTime));
+    }
+  }
+
+  public setFilter(filter: 'all' | 'future' | 'past'): void {
+    this.filter = filter;
+    this.applyFilter();
   }
 
   // public rateReview(realtyObj: RealtyObj) {}

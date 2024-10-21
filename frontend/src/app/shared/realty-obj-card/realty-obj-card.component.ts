@@ -15,6 +15,8 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
   public isMyObject: boolean;
   private _realtyObject: RealtyObj;
   @Input()
+  public showCreatedAt = false;
+  @Input()
   public set realtyObject(value: RealtyObj) {
     this._realtyObject = value;
   }

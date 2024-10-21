@@ -7,12 +7,16 @@ import {UserService} from '../../services/user.service';
 @Component({
   selector: 'realty-objs-list',
   templateUrl: './realty-objs-list.component.html',
-  styleUrls: ['../../realty-objs-gallery/realty-objs-gallery.component.scss', './realty-objs-list.component.scss'],
+  styleUrls: [
+    '../../realty-objs-gallery/realty-objs-gallery.component.scss',
+    './realty-objs-list.component.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RealtyObjsListComponent implements OnDestroy {
   private destroy$ = new Subject<boolean>();
-
+  @Input()
+  public showCreatedAt = false;
   public realtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
   @Input()
   set realtyObjectsPortion(values: RealtyObj[]) {

@@ -6,6 +6,8 @@ import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.model.ObjectReview;
+import co.oleh.realperfect.model.Realtor;
+import co.oleh.realperfect.realtor.RealtorService;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
@@ -33,6 +35,7 @@ public class ObjectReviewApi {
 
     private ObjectReviewService reviewService;
     private GoogleCalendarWrapperService googleCalendarWrapperService;
+    private RealtorService realtorService;
 
     @GetMapping(value = "/my-reviews-list")
     public ResponseEntity<List<MyObjectReviewDto>> findReviewsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
@@ -56,7 +59,8 @@ public class ObjectReviewApi {
     }
 
     @PostMapping
-    public ResponseEntity<MyObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user, @RequestBody ObjectReviewDto review) throws IOException {
+    public ResponseEntity<MyObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user,
+                                                        @RequestBody ObjectReviewDto review) throws IOException {
         if (reviewService.findFutureReviewForUserAndObject(user.getId(), review.getRealtyObjId()) != null) {
             throw new RuntimeException("There is already such review");
         }
@@ -73,6 +77,15 @@ public class ObjectReviewApi {
                                                                      @PathVariable Long realtyObjId) {
         ObjectReviewDto objectReview = reviewService.findFutureReviewForUserAndObject(user.getId(), realtyObjId);
         return new ResponseEntity<>(objectReview, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/my-as-realtor")
+    public ResponseEntity<List<MyObjectReviewDto>> getReviewsForRealtor(@AuthenticationPrincipal SpringSecurityUser user) {
+        Realtor realtor = this.realtorService.findRealtorByUserId(user.getId());
+
+        List<MyObjectReviewDto> objectReviews = this.reviewService.findReviewsForObjectRealtor(realtor.getId());
+
+        return new ResponseEntity<>(objectReviews, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{realtyObjId}")
