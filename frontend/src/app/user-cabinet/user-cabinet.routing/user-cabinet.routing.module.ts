@@ -5,7 +5,13 @@ import {UserCabinetContainerComponent} from '../user-cabinet-container/user-cabi
 import {UserObjectsComponent} from '../user-objects/user-objects.component';
 import {UserReviewsComponent} from '../user-reviews/user-reviews.component';
 import {UserFavoritesComponent} from '../user-favorites/user-favorites.component';
-import {MyFavoritesTabPath, MyObjectsTabPath, MyReviewsTabPath} from '../utils';
+import {
+  MyFavoritesTabPath,
+  MyObjectsTabPath,
+  MyReviewsTabPath,
+  RealtorObjectsTabPath,
+  RealtorReviewsTabPath
+} from '../utils';
 
 const routes: Routes = [
   {
@@ -27,7 +33,15 @@ const routes: Routes = [
       {
         path: MyFavoritesTabPath,
         component: UserFavoritesComponent,
-      }
+      },
+      {
+        path: RealtorObjectsTabPath,
+        component: UserObjectsComponent,
+      },
+      {
+        path: RealtorReviewsTabPath,
+        component: UserReviewsComponent,
+      },
     ]
   },
 ];
