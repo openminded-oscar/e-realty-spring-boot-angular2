@@ -11,7 +11,7 @@
 </div>
 
 <div id="itemsContainer" class="row" *ngIf="reviews.length; else noReviews">
-  <div *ngFor="let review of reviews; trackBy: trackById" class="col-4">
+  <div *ngFor="let review of filteredReviews; trackBy: trackById" class="col-4">
     <app-realty-obj-card [realtyObject]="review.realtyObj">
       <ng-container *ngIf="review.dateTime">
         <ng-container *ngIf="isFutureDate(review.dateTime); else pastDate">
