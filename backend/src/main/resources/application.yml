@@ -19,12 +19,29 @@ spring:
               - profile
               - openid
               - email
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: <gmail-id>
+    password: <gmail-app-password>
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          debug: true
   profiles:
     active: local
 spring.servlet:
   multipart:
     max-file-size: 5MB
     max-request-size: 6MB
+
 
 management:
   security:
