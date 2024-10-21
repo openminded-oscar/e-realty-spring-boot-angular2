@@ -9,7 +9,9 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "tbl_realtor")
+@Table(name = "tbl_realtor", indexes = {
+		@Index(name = "idx_user_id", columnList = "user_id")
+})
 public class Realtor {
 	private Long id;
 	private User user;

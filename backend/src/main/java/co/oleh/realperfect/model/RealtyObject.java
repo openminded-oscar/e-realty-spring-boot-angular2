@@ -11,7 +11,11 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(indexes = @Index(columnList = "city"), name = "tbl_realty_object")
+@Table(indexes = {
+        @Index(name = "idx_city", columnList = "city"),
+        @Index(name = "idx_owner_id", columnList = "owner_id"),
+        @Index(name = "idx_realtor_id", columnList = "realtor_id")
+}, name = "tbl_realty_object")
 @ToString
 public class RealtyObject extends AuditableEntity {
     private Long id;
@@ -48,15 +52,18 @@ public class RealtyObject extends AuditableEntity {
     public List<Interest> getInterests() {
         return interests;
     }
+
     public void setInterests(List<Interest> interests) {
         this.interests = interests;
     }
 
     private List<ObjectReview> objectReviews;
+
     @OneToMany(mappedBy = "realtyObj", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     public List<ObjectReview> getObjectReviews() {
         return objectReviews;
     }
+
     public void setObjectReviews(List<ObjectReview> objectReviews) {
         this.objectReviews = objectReviews;
     }

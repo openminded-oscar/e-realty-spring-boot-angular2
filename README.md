@@ -1,11 +1,11 @@
 # Git clone, after that install dependencies:
 [backend/local/start_resources.sh](backend/local/start_resources.sh)
 
-# BackEnd build
+# BackEnd start
 ####Dependencies
 * Maven 3, Java 16, Docker, MySQLV8
 ####Build
-* `mvn spring-boot:run -P dev|prod "-Dspring-boot.run.jvmArguments=--add-opens"`
+* `mvn spring-boot:run -Dspring-boot.run.profiles=local -P local|prod`
 
 # FrontEnd dependencies and build
 ####Dependencies

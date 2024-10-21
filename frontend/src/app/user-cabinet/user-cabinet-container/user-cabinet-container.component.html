@@ -4,7 +4,7 @@
   </div>
   <div class="col-9">
     <ul ngbNav class="nav-tabs">
-      <li [ngbNavItem]="link.route" *ngFor="let link of links">
+      <li [ngbNavItem]="link.route" *ngFor="let link of (activeLinks$|async)">
         <a ngbNavLink [routerLink]="link.route">{{ link.title }}</a>
       </li>
     </ul>

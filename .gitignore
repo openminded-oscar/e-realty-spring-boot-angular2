@@ -4,6 +4,8 @@
 /.idea
 /frontend/node_modules/
 /D:
+/frontend/src/environments/environment.local.ts
+/backend/src/main/resources/application-local.yml
 /backend/src/main/java/co/oleh/realperfect/config/GoogleConfiguration.java
 *~
 .#*
