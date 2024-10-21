@@ -1,5 +1,17 @@
+<div style="display: flex; flex-direction: row; justify-content: start; gap: 50px">
+  <label>
+    All <input type="radio" name="filter" (change)="setFilter('all')" [checked]="filter === 'all'">
+  </label>
+  <label>
+    Future <input type="radio" name="filter" (change)="setFilter('future')" [checked]="filter === 'future'">
+  </label>
+  <label>
+    Past <input type="radio" name="filter" (change)="setFilter('past')" [checked]="filter === 'past'">
+  </label>
+</div>
+
 <div id="itemsContainer" class="row" *ngIf="reviews.length; else noReviews">
-  <div *ngFor="let review of reviews; trackBy: trackById" class="col-4">
+  <div *ngFor="let review of filteredReviews; trackBy: trackById" class="col-4">
     <app-realty-obj-card [realtyObject]="review.realtyObj">
       <ng-container *ngIf="review.dateTime">
         <ng-container *ngIf="isFutureDate(review.dateTime); else pastDate">
@@ -27,6 +39,6 @@
 
 <ng-template #noReviews>
   <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
-    <div>For Now You Didn't Schedule Any Reviews. Enjoy Using Our Service!</div>
+    <div>No Matching Reviews. Enjoy Using Our Service!</div>
   </div>
 </ng-template>

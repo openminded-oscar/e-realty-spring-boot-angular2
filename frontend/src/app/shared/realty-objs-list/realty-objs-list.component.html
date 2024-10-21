@@ -1,6 +1,6 @@
 <div id="itemsContainer" class="row">
   <div *ngFor="let realtyObject of realtyObjects$|async; trackBy: trackById" class="col-4">
-    <app-realty-obj-card [realtyObject]="realtyObject"></app-realty-obj-card>  </div>
+    <app-realty-obj-card [showCreatedAt]="showCreatedAt" [realtyObject]="realtyObject"></app-realty-obj-card>  </div>
 </div>
 <div class="row">
   <div class="col-2 offset-5">

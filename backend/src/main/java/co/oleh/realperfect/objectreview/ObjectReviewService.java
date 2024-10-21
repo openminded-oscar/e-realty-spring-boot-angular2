@@ -10,6 +10,7 @@ import co.oleh.realperfect.repository.ObjectReviewRepository;
 import co.oleh.realperfect.repository.RealtyObjectRepository;
 import co.oleh.realperfect.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,6 +18,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,7 @@ public class ObjectReviewService {
         RealtyObject realtyObject = realtyObjectRepository.findById(objectReview.getRealtyObjId()).get();
         User user = userRepository.findById(objectReview.getUserId()).get();
 
+        objectReviewEntity.setRealtor(realtyObject.getRealtor());
         objectReviewEntity.setUser(user);
         objectReviewEntity.setRealtyObj(realtyObject);
 
@@ -58,7 +61,8 @@ public class ObjectReviewService {
 
     public ObjectReviewDto findFutureReviewForUserAndObject(Long userId, Long objectId) {
         ObjectReview objectReview =
-                objectReviewRepository.findByUserIdAndRealtyObjIdAndDateTimeGreaterThan(userId, objectId, Instant.now());
+                objectReviewRepository.findByUserIdAndRealtyObjIdAndDateTimeGreaterThan(userId, objectId,
+                        Instant.now());
 
         return this.mappingService.map(objectReview, ObjectReviewDto.class);
     }
@@ -66,6 +70,15 @@ public class ObjectReviewService {
 
     public List<MyObjectReviewDto> findReviewsForUser(Long userId) {
         List<ObjectReview> objectReviews = objectReviewRepository.findByUserIdOrderByDateTimeDesc(userId);
+        return objectReviews.stream()
+                .map(objectReview -> this.mappingService.map(objectReview, MyObjectReviewDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<MyObjectReviewDto> findReviewsForObjectRealtor(Long realtorId) {
+        List<ObjectReview> objectReviews = this.objectReviewRepository.findByRealtorId(realtorId);
+        objectReviews.sort(Comparator.nullsLast(Comparator.comparing(ObjectReview::getDateTime).reversed()));
+
         return objectReviews.stream()
                 .map(objectReview -> this.mappingService.map(objectReview, MyObjectReviewDto.class))
                 .collect(Collectors.toList());

@@ -7,6 +7,7 @@ import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -36,4 +37,5 @@ public class RealtyObjectDto {
     RealtorDto realtor;
     List<RealtyObjectPhoto> photos;
     ConfirmationDocPhoto confirmationDocPhoto;
+    Instant createdAt;
 }

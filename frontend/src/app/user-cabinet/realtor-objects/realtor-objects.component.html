@@ -1,1 +1,8 @@
-<p>realtor-objects works!</p>
+<realty-objs-list *ngIf="realtorObjects?.length; else noObjectsTemplate"
+                  [showCreatedAt]="true"
+                  [realtyObjectsPortion]="realtorObjects"></realty-objs-list>
+<ng-template #noObjectsTemplate>
+  <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
+    <div>For Now You Haven't Been Assigned To Any Objects. Enjoy Using Our Service!</div>
+  </div>
+</ng-template>
