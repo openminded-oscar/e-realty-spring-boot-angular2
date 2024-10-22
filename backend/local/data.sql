@@ -6,7 +6,7 @@ INSERT INTO `tbl_user_photo` (`id`, `filename`) VALUES
                                                     (1, 'user_photo_1.jpg'),
                                                     (2, 'user_photo_2.jpg');
 
-INSERT INTO `tbl_realtor` (`id`, `name`, `surname`, `photo_id`) VALUES
+INSERT INTO `tbl_realtor` (`id`, `name`, `surname`) VALUES
                                                                     (1, 'John', 'Doe', 1),
                                                                     (17, 'Jane', 'Smith', 2);
 
@@ -100,11 +100,5 @@ INSERT INTO `tbl_object_supported_operations` (`object_id`, `operation_type`) VA
 INSERT INTO `tbl_realty_object_photo` (`id`, `filename`, `photo_type`, `realty_object_id`) VALUES
                                                                                                (1, 'realty_photo_1.jpg', 'REALTY_PLAIN', 1001),
                                                                                                (2, 'realty_photo_2.jpg', 'REALTY_PLAIN', 1002);
-
-
--- Inserting into tbl_realty_searcher
-INSERT INTO `tbl_realty_searcher` (`id`, `user_id`) VALUES
-                                                        (1, 2001),
-                                                        (2, 2002);
 
 

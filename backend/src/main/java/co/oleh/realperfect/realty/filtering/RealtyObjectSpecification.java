@@ -59,7 +59,7 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
 
     private Path<String> getField(Root<RealtyObject> root, String key) {
         String[] keyParts = key.split("\\.");
-        Path path = null;
+        Path<String> path = null;
         for (int i = 0; i < keyParts.length; ++i) {
             if (i == 0) {
                 path = root.get(keyParts[i]);

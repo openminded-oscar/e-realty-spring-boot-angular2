@@ -19,7 +19,7 @@ import java.util.List;
 public class AddressApi {
     private AddressService addressService;
 
-    private static Logger LOGGER = LoggerFactory.getLogger(AddressApi.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddressApi.class);
 
     @GetMapping("/cities-supported")
     public ResponseEntity<Iterable<CityOnMap>> getCities() {

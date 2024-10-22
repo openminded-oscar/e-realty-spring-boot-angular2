@@ -2,8 +2,6 @@ package co.oleh.realperfect.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Embeddable
