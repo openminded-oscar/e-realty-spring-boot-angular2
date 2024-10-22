@@ -28,8 +28,7 @@ import {RealtorsGalleryComponent} from './realtor/realtors-gallery/realtors-gall
 import {InterestService} from './services/interest.service';
 import {ReviewsService} from './services/reviews.service';
 import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
-import {ErrorService} from './services/common/ErrorService';
-import {AllHttpInterceptor} from './services/common/HttpInterceptor';
+import {HttpErrorsInterceptor} from './services/common/HttpErrorInterceptor';
 import {AuthHttpInterceptor} from './services/common/AuthHttpInterceptor';
 import {CookieService} from './services/common/CookieService';
 import {GlobalNotificationComponent} from './global-notification/global-notification.component';
@@ -103,9 +102,9 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     UserService,
     SignInSignOutService,
     SignupService,
-    ErrorService, {
+    {
       provide: HTTP_INTERCEPTORS,
-      useClass: AllHttpInterceptor,
+      useClass: HttpErrorsInterceptor,
       multi: true
     }, {
       provide: HTTP_INTERCEPTORS,

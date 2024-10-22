@@ -56,7 +56,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
       dateTime: utcDatetime
     };
 
-    return this.sendRequest<ReviewPostDto>('post', '', review).pipe(
+    return this.sendRequest<ReviewPostDto>('post', '', {}, review).pipe(
       tap(res => {
         const currentReviews = this.currentUserReviews.value;
         const updatedReview = {
@@ -75,7 +75,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
   }
 
   public remove(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
-    return this.sendRequest<ReviewDto>('delete', `/${realtyObjId}`, {}).pipe(
+    return this.sendRequest<ReviewDto>('delete', `/${realtyObjId}`, {}, {}).pipe(
       tap(() => {
         const currentReviews = this.currentUserReviews.value;
         const updatedReviews = currentReviews.filter(
@@ -87,7 +87,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
   }
 
   public getAllReviewsForUser(): Observable<HttpResponse<Review[]>> {
-    return this.sendRequest<Review[]>('get', `/my-reviews-list`, {}).pipe(
+    return this.sendRequest<Review[]>('get', `/my-reviews-list`, {}, {}).pipe(
       tap(res => {
         const realtyObjects = res.body.map(r => r.realtyObj);
         (realtyObjects ?? []).forEach(value => {
@@ -99,12 +99,12 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
   }
 
   public getForObjectAndUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
-    return this.sendRequest('get', `/${realtyObjId}`, {});
+    return this.sendRequest('get', `/${realtyObjId}`, {}, {});
   }
 
   public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return this.sendRequest('get', `/slots-for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`, {});
+    return this.sendRequest('get', `/slots-for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`, {}, {});
   }
 
   ngOnDestroy(): void {

@@ -1,10 +1,7 @@
 package co.oleh.realperfect.mapping.realtyobject;
 import co.oleh.realperfect.mapping.RealtorDto;
 import co.oleh.realperfect.mapping.UserDto;
-import co.oleh.realperfect.model.Address;
-import co.oleh.realperfect.model.BuildingType;
-import co.oleh.realperfect.model.DwellingType;
-import co.oleh.realperfect.model.OperationType;
+import co.oleh.realperfect.model.*;
 import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import lombok.Data;
@@ -21,10 +18,13 @@ import java.util.Set;
 @Data
 public class RealtyObjectDetailsDto {
         Long id;
+        String status;
+
         @NotNull(message = "Rooms amount is required")
         @Min(value = 1, message = "Rooms amount must be at least 1")
         Integer roomsAmount;
         Integer floor;
+
         Integer totalFloors;
         @DecimalMin(value = "0.0", inclusive = false, message = "Selling price must be greater than 0")
         BigDecimal price;

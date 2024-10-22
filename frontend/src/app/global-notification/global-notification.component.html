@@ -1,9 +1,9 @@
 <div class="toast-container">
   <ngb-toast
-    #toast
-    [class]="'bg-info text-light'">
-    <div *ngFor="let text of notificationTexts">
-      {{ text }}
-    </div>
+    *ngFor="let notification of notifications"
+    [class]="notification.type === 'info' ? 'bg-info text-light' : 'bg-danger text-light'"
+    [autohide]="true"
+    [delay]="2000"> <!-- Auto-hide after 2 seconds -->
+    {{ notification.message }}
   </ngb-toast>
 </div>

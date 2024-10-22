@@ -19,11 +19,13 @@ import java.util.Set;
 @ToString
 public class RealtyObject extends AuditableEntity {
     private Long id;
+    private RealtyObjectStatus status = RealtyObjectStatus.ACTIVE;
+    private BigDecimal price;
+    private BigDecimal priceForRent;
+
     private Integer roomsAmount;
     private Integer floor;
     private Integer totalFloors;
-    private BigDecimal price;
-    private BigDecimal priceForRent;
     private BigDecimal totalArea;
     private BigDecimal livingArea;
     private String description;
@@ -37,15 +39,12 @@ public class RealtyObject extends AuditableEntity {
     private DwellingType dwellingType;
     private Set<OperationType> targetOperations;
     private Boolean confirmed = false;
-    private Boolean realtorAware = false;
     private Address address;
     private User owner;
     private Realtor realtor;
 
     private List<RealtyObjectPhoto> photos;
     private ConfirmationDocPhoto confirmationDocPhoto;
-
-
     private List<Interest> interests;
 
     @OneToMany(mappedBy = "realtyObj", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
@@ -262,15 +261,6 @@ public class RealtyObject extends AuditableEntity {
         this.confirmed = confirmed;
     }
 
-    @Column(name = "realtor_aware")
-    public Boolean getRealtorAware() {
-        return realtorAware;
-    }
-
-    public void setRealtorAware(Boolean realtorAware) {
-        this.realtorAware = realtorAware;
-    }
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "realtor_id")
     public Realtor getRealtor() {
@@ -300,5 +290,15 @@ public class RealtyObject extends AuditableEntity {
 
     public void setPhotos(List<RealtyObjectPhoto> photos) {
         this.photos = photos;
+    }
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    public RealtyObjectStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RealtyObjectStatus status) {
+        this.status = status;
     }
 }
