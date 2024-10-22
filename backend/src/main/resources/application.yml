@@ -65,4 +65,9 @@ logging:
   level:
     org:
       springframework:
-        security=DEBUG:
+        security: DEBUG
+        cache: TRACE
+    com:
+      github:
+        benmanes:
+          caffeine: DEBUG
