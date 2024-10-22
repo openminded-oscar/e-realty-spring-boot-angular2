@@ -23,7 +23,7 @@ public class User extends AuditableEntity {
     private String phoneNumber;
 
     private UserPhoto profilePic;
-//    private Realtor realtorDetails;
+
     private List<RealtyObject> realtyObjects;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
@@ -52,16 +52,6 @@ public class User extends AuditableEntity {
     public void setGoogleUserIdTokenSubject(String googleUserId) {
         this.googleUserIdTokenSubject = googleUserId;
     }
-
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "realtor_id", referencedColumnName = "id")
-//    public Realtor getRealtorDetails() {
-//        return realtorDetails;
-//    }
-//
-//    public void setRealtorDetails(Realtor realtorDetails) {
-//        this.realtorDetails = realtorDetails;
-//    }
 
     public String getLogin() {
         return login;

@@ -77,15 +77,7 @@ public class SigninApi {
             user.setRealtyObjects(sortedRealtyObjects);
         }
 
-        UserSelfDto userSelfDto = this.mappingService.map(user, UserSelfDto.class);
-        userSelfDto.setRoles(
-                new TreeSet<>(user.getRoles()
-                        .stream()
-                        .map(Role::getName)
-                        .collect(Collectors.toList()))
-        );
-
-        return userSelfDto;
+        return this.mappingService.map(user, UserSelfDto.class);
     }
 
     @PostMapping
