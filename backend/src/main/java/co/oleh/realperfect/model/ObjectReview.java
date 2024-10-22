@@ -11,7 +11,7 @@ import java.time.Instant;
         indexes = {@Index(name = "idx_realtor", columnList = "realtor_id"),
                 @Index(name = "idx_user", columnList = "user_id"),
                 @Index(name = "idx_realtyObj", columnList = "realty_obj_id")},
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"realty_obj_id", "dateTime"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"realty_obj_id", "date_time"})}
 )
 public class ObjectReview extends AuditableEntity {
     private Long id;
@@ -59,7 +59,8 @@ public class ObjectReview extends AuditableEntity {
     public void setRealtyObj(RealtyObject realtyObj) {
         this.realtyObj = realtyObj;
     }
-    
+
+    @Column(name = "date_time")
     public Instant getDateTime() {
         return dateTime;
     }
