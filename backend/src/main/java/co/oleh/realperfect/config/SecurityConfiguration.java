@@ -30,9 +30,9 @@ import java.io.IOException;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private JWTAuthenticationFilter jwtAuthenticationFilter;
-    private Oauth2TokenSettingFilter oauth2TokenSettingFilter;
-    private ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
+    private final JWTAuthenticationFilter jwtAuthenticationFilter;
+    private final Oauth2TokenSettingFilter oauth2TokenSettingFilter;
+    private final ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
 
     public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter,
                                  ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver,
