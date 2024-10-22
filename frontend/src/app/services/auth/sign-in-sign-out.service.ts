@@ -42,7 +42,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
       }),
       catchError((error) => {
         const errorMessage = error?.message || 'Sign-in failed. Please try again.';
-        this.globalNotificationService.showNotification(errorMessage);
+        this.globalNotificationService.showErrorNotification(errorMessage);
         return this.dismissAllModal().pipe(switchMap(() => of(null)));
       })
     ).subscribe();
@@ -57,7 +57,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
       }),
       catchError((error) => {
         const errorMessage = error?.message || 'Google sign-in failed. Please try again.';
-        this.globalNotificationService.showNotification(errorMessage);
+        this.globalNotificationService.showErrorNotification(errorMessage);
         return of(null);
       })
     ).subscribe();

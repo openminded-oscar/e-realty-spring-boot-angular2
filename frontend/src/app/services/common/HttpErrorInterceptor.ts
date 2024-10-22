@@ -16,15 +16,12 @@ import {SignInSignOutService} from '../auth/sign-in-sign-out.service';
 import {GlobalNotificationService} from '../global-notification.service';
 
 @Injectable()
-export class AllHttpInterceptor implements HttpInterceptor {
+export class HttpErrorsInterceptor implements HttpInterceptor {
   constructor(
     private router: Router,
     private signInService: SignInSignOutService,
     private globalNotificationService: GlobalNotificationService,
-    private injector: Injector
   ) {}
-
-  tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   private generateMultipleErrorsMessage(response): string {
     let message = '';
@@ -48,7 +45,7 @@ export class AllHttpInterceptor implements HttpInterceptor {
       message = response.error || response.message;
     }
 
-    this.globalNotificationService.showNotification(message);
+    this.globalNotificationService.showErrorNotification(message);
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

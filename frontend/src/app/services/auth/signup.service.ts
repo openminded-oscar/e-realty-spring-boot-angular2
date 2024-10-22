@@ -31,7 +31,7 @@ export class SignupService extends AbstractService<Credentials> implements OnDes
       }),
       catchError((error) => {
         const errorMessage = error?.message || 'Sign-Up failed. Please try again.';
-        this.globalNotificationService.showNotification(errorMessage);
+        this.globalNotificationService.showErrorNotification(errorMessage);
         return this.dismissAllModal().pipe(switchMap(() => of(null)));
       })
     ).subscribe();
