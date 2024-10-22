@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/realty-objects")
 @AllArgsConstructor()
 public class RealtyObjectsApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(RealtyObjectsApi.class);
@@ -32,20 +32,20 @@ public class RealtyObjectsApi {
     private RealtorService realtorService;
 
 
-    @GetMapping(value = "/realty-objects/{objectId}")
+    @GetMapping(value = "/{objectId}")
     public ResponseEntity<RealtyObjectDetailsDto> getObjectDetails(@PathVariable Long objectId) {
         RealtyObjectDetailsDto realtyObject = realtyObjectsService.getObjectById(objectId);
 
         return new ResponseEntity<>(realtyObject, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/realty-objects/my")
+    @GetMapping(value = "/my")
     public ResponseEntity<List<RealtyObjectDetailsDto>> getRealtyObjects(@AuthenticationPrincipal SpringSecurityUser user) {
         List<RealtyObjectDetailsDto> myObjects = realtyObjectsService.getMyAllObjects(user.getId());
         return new ResponseEntity<>(myObjects, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/realty-objects/my-as-realtor")
+    @GetMapping(value = "/my-as-realtor")
     @RolesAllowed({"REALTOR", "ADMIN"})
     public ResponseEntity<List<RealtyObjectDetailsDto>> getRealtorRealtyObjects(
             @AuthenticationPrincipal SpringSecurityUser user
@@ -54,7 +54,7 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(myObjects, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/realty-objects")
+    @PostMapping()
     public ResponseEntity<Page<RealtyObjectDto>> getRealtyObjects(@RequestBody(required = false)
                                                                   List<FilterItem> filterItems,
                                                                   Pageable pageable) {
@@ -68,7 +68,7 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(allObjects, HttpStatus.OK);
     }
 
-    @PostMapping("/realty-objects/save")
+    @PostMapping("/save")
     public ResponseEntity<RealtyObjectDetailsDto> postRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
                                                                    @Valid @RequestBody RealtyObjectDetailsDto realtyObject) {
         realtyObject.setOwner(new UserDto() {{
@@ -79,12 +79,12 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(addedObject, HttpStatus.OK);
     }
 
-    @DeleteMapping("/realty-objects/{objectId}")
+    @DeleteMapping("/{objectId}")
     public ResponseEntity<Boolean> deleteRealtyObject(@PathVariable Long objectId) {
         return new ResponseEntity<>(realtyObjectsService.delete(objectId), HttpStatus.OK);
     }
 
-    @GetMapping("/realty-objects/building-types")
+    @GetMapping("/building-types")
     public ResponseEntity<Set<BuildingType>> getRealtyBuildingTypes() {
         Set<BuildingType> buildingTypes = realtyObjectsService.getRealtyBuildingTypes();
 
