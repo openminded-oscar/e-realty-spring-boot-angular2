@@ -3,6 +3,8 @@ spring.datasource:
   username: root
   password: root
 spring:
+  cache:
+    type: caffeine
   jpa:
     show-sql: true
     hibernate:
