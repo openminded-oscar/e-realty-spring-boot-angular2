@@ -11,14 +11,16 @@ import {
 import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
-import {ErrorService} from './ErrorService';
 import {catchError} from 'rxjs/operators';
+import {SignInSignOutService} from '../auth/sign-in-sign-out.service';
+import {GlobalNotificationService} from '../global-notification.service';
 
 @Injectable()
 export class AllHttpInterceptor implements HttpInterceptor {
   constructor(
     private router: Router,
-    private errorService: ErrorService,
+    private signInService: SignInSignOutService,
+    private globalNotificationService: GlobalNotificationService,
     private injector: Injector
   ) {}
 
@@ -46,13 +48,12 @@ export class AllHttpInterceptor implements HttpInterceptor {
       message = response.error || response.message;
     }
 
-    this.errorService.emitError(message);
+    this.globalNotificationService.showNotification(message);
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((response: any) => {
-        // Handle 200 response with empty data
         if (response.status >= 200 && response.status < 300) {
           const res = new HttpResponse({
             body: null,
@@ -67,7 +68,6 @@ export class AllHttpInterceptor implements HttpInterceptor {
 
         switch (response.status) {
           case 401: {
-            // Unauthorized response, try to refresh session.
             if (req.url.indexOf('/api/signin') !== -1) {
               this.redirectToLoginPage();
               return of(null);  // return an observable
@@ -89,13 +89,11 @@ export class AllHttpInterceptor implements HttpInterceptor {
   }
 
 
-  redirectToLoginPage(): void {
-    localStorage.removeItem('token');
-    localStorage.setItem('redirectedFrom', window.location.pathname);
-    this.router.navigate(['/']);
+  public redirectToLoginPage(): void {
+    this.signInService.signIn();
   }
 
-  redirectToMainPage(): void {
-    this.router.navigate(['/']);
+  public redirectToMainPage(): void {
+    this.router.navigate(['/']).then();
   }
 }
