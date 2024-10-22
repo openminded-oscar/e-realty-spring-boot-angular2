@@ -11,6 +11,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {UserService} from '../user.service';
 import {SignInModalComponent} from '../../shared/sign-in-modal/sign-in-modal.component';
 import {GlobalNotificationService} from '../global-notification.service';
+import {HTTP_CONSTANTS} from '../common/HttpErrorInterceptor';
 
 export interface SignInResponse {
   token: string;
@@ -42,7 +43,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
       }),
       catchError((error) => {
         const errorMessage = error?.message || 'Sign-in failed. Please try again.';
-        this.globalNotificationService.showNotification(errorMessage);
+        this.globalNotificationService.showErrorNotification(errorMessage);
         return this.dismissAllModal().pipe(switchMap(() => of(null)));
       })
     ).subscribe();
@@ -57,7 +58,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
       }),
       catchError((error) => {
         const errorMessage = error?.message || 'Google sign-in failed. Please try again.';
-        this.globalNotificationService.showNotification(errorMessage);
+        this.globalNotificationService.showErrorNotification(errorMessage);
         return of(null);
       })
     ).subscribe();
@@ -65,7 +66,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
 
 
   private signInGoogleRequest(googleCredentialsData: any) {
-    return this.sendRequest<SignInResponse>('post', endpoints.signinGoogleData, googleCredentialsData)
+    return this.sendRequest<SignInResponse>('post', endpoints.signinGoogleData, {}, googleCredentialsData)
       .pipe(
         tap(res => {
             localStorage.setItem('token', res.body.token);
@@ -94,7 +95,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
   }
 
   private signInRequest(credentials: Credentials): Observable<HttpResponse<SignInResponse>> {
-    return this.sendRequest<SignInResponse>('post', endpoints.signin, credentials)
+    return this.sendRequest<SignInResponse>('post', endpoints.signin, {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}, credentials)
       .pipe(
         tap(res => {
             localStorage.setItem('token', res.body.token);

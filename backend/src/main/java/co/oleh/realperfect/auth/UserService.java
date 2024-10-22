@@ -107,7 +107,7 @@ public class UserService {
     public User findUserByEmailAndVerify(EmailPasswordDto emailPasswordDto) {
         Optional<User> maybeUser = userRepository.findByEmail(emailPasswordDto.getEmail());
         if (maybeUser.isEmpty()) {
-            throw new RuntimeException("User doesn't exist with this username");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User doesn't exist");
         }
 
         User user = maybeUser.get();
