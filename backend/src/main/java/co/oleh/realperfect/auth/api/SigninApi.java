@@ -83,6 +83,7 @@ public class SigninApi {
     @PostMapping
     public Token signIn(@RequestBody EmailPasswordDto credentials) {
         User user = userService.findUserByEmailAndVerify(credentials);
+
         String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
 
         return new Token(tokenString);

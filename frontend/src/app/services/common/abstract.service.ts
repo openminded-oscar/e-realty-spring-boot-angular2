@@ -7,33 +7,39 @@ import {Observable, throwError} from 'rxjs';
 export abstract class AbstractService<T> {
   protected uri;
 
-  constructor(protected http: HttpClient, protected domain: string) {}
+  constructor(protected http: HttpClient, protected domain: string) {
+  }
 
   protected save(item: T): Observable<HttpResponse<any>> {
-    return this.sendRequest<any>('post', this.uri, null);
+    return this.sendRequest('post', this.uri, {}, null);
   }
 
   protected update(item: T): Observable<HttpResponse<T>> {
-    return this.sendRequest<T>('put', this.uri, null);
+    return this.sendRequest('put', this.uri, {}, null);
   }
 
   protected findAll(): Observable<HttpResponse<T[]>> {
-    return this.sendRequest<T[]>('get', this.uri, null);
+    return this.sendRequest('get', this.uri, {}, null);
   }
 
   protected findById(id: string): Observable<HttpResponse<T>> {
     const uri = `${this.uri}/${id}`;
-    return this.sendRequest<T>('get', uri, null);
+    return this.sendRequest('get', uri, {}, null);
   }
 
   protected delete(id: string): Observable<HttpResponse<any>> {
     const uri = `${this.uri}/${id}`;
-    return this.sendRequest<any>('delete', uri, null);
+    return this.sendRequest('delete', uri, {}, null);
   }
 
-  protected sendRequest<T>(method: string, uri: string, body: any, queryParams?: any): Observable<HttpResponse<T>> {
+  protected sendRequest<R>(method: string,
+                           uri: string,
+                           customHeaders: { [key: string]: string } = {},
+                           body: any,
+                           queryParams?: any): Observable<HttpResponse<R>> {
     const headers = new HttpHeaders({
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      ...(customHeaders ?? {})
     });
 
     let request;
