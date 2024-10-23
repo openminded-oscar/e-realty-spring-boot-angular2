@@ -11,8 +11,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {UserFavoritesComponent} from './user-favorites/user-favorites.component';
 import {UserCabinetRoutingModule} from './user-cabinet.routing/user-cabinet.routing.module';
-import { RealtorObjectsComponent } from './realtor-objects/realtor-objects.component';
-import { RealtorReviewsComponent } from './realtor-reviews/realtor-reviews.component';
+import {RealtorObjectsComponent} from './realtor-objects/realtor-objects.component';
+import {RealtorReviewsComponent} from './realtor-reviews/realtor-reviews.component';
+import {ReviewsService} from '../app-services/reviews.service';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { RealtorReviewsComponent } from './realtor-reviews/realtor-reviews.compo
     FormsModule,
     SharedModule,
     NgbTooltipModule
-  ]
+  ],
+  providers: [ReviewsService]
 })
 export class UserCabinetModule {
 }

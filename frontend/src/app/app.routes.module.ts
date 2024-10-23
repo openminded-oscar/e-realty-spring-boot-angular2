@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {RouterModule, Routes} from '@angular/router';
-import {AuthGuard} from './guargs/auth.guard';
+import {AuthGuard} from './app-guards/auth.guard';
 
 const appRoutes: Routes = [
   {
@@ -11,6 +11,10 @@ const appRoutes: Routes = [
   {
     path: `admin`,
     loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule),
+  },
+  {
+    path: 'realtors',
+    loadChildren: () => import('./realtor/realtor.module').then((m) => m.RealtorModule),
   },
   {
     path: 'profile',

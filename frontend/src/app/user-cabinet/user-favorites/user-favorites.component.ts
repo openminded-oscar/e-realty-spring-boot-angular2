@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {InterestService} from '../../services/interest.service';
-import {Interest} from '../../domain/interest';
-import {RealtyObj} from '../../domain/realty-obj';
-import {ReviewsService} from '../../services/reviews.service';
+import {InterestService} from '../../app-services/interest.service';
+import {Interest} from '../../app-models/interest';
+import {RealtyObj} from '../../app-models/realty-obj';
+import {ReviewsService} from '../../app-services/reviews.service';
 
 @Component({
   selector: 'app-user-favorites',
