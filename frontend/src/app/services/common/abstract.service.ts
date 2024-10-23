@@ -11,43 +11,48 @@ export abstract class AbstractService<T> {
   }
 
   protected save(item: T): Observable<HttpResponse<any>> {
-    return this.sendRequest('post', this.uri, {}, null);
+    return this.sendRequest('post', this.uri);
   }
 
   protected update(item: T): Observable<HttpResponse<T>> {
-    return this.sendRequest('put', this.uri, {}, null);
+    return this.sendRequest('put', this.uri);
   }
 
   protected findAll(): Observable<HttpResponse<T[]>> {
-    return this.sendRequest('get', this.uri, {}, null);
+    return this.sendRequest('get', this.uri);
   }
 
   protected findById(id: string): Observable<HttpResponse<T>> {
     const uri = `${this.uri}/${id}`;
-    return this.sendRequest('get', uri, {}, null);
+    return this.sendRequest('get', uri);
   }
 
   protected delete(id: string): Observable<HttpResponse<any>> {
     const uri = `${this.uri}/${id}`;
-    return this.sendRequest('delete', uri, {}, null);
+    return this.sendRequest('delete', uri);
   }
 
-  protected sendRequest<R>(method: string,
+  protected sendRequest<R>(method: 'get'|'post'|'put'|'delete'|'patch',
                            uri: string,
-                           customHeaders: { [key: string]: string } = {},
-                           body: any,
-                           queryParams?: any): Observable<HttpResponse<R>> {
+                           options: {
+                             customHeaders?: { [key: string]: string },
+                             body?: any,
+                             queryParams?: any
+                           } = {}): Observable<HttpResponse<R>> {
+
     const headers = new HttpHeaders({
       'Accept': 'application/json',
-      ...(customHeaders ?? {})
+      ...(options.customHeaders ?? {})
     });
 
     let request;
 
+    const { body, queryParams } = options;
+
     if (method === 'get') {
       const getParams: any = this.buildQueryString(body);
 
-      request = this.http.get<T>(this.domain + uri, {
+      request = this.http.get<R>(this.domain + uri, {
         headers,
         observe: 'response',
         params: getParams
@@ -55,7 +60,7 @@ export abstract class AbstractService<T> {
     } else if (method === 'put') {
       const params: any = this.buildQueryString(queryParams);
 
-      request = this.http.put<T>(this.domain + uri, body, {
+      request = this.http.put<R>(this.domain + uri, body, {
         headers,
         observe: 'response',
         params: params
@@ -63,7 +68,7 @@ export abstract class AbstractService<T> {
     } else if (method === 'patch') {
       const params: any = this.buildQueryString(queryParams);
 
-      request = this.http.patch<T>(this.domain + uri, body, {
+      request = this.http.patch<R>(this.domain + uri, body, {
         headers,
         observe: 'response',
         params: params
@@ -71,7 +76,7 @@ export abstract class AbstractService<T> {
     } else if (method === 'post') {
       const params: any = this.buildQueryString(queryParams);
 
-      request = this.http.post<T>(this.domain + uri, body, {
+      request = this.http.post<R>(this.domain + uri, body, {
         headers,
         observe: 'response',
         params: params
@@ -79,7 +84,7 @@ export abstract class AbstractService<T> {
     } else if (method === 'delete') {
       const params: any = this.buildQueryString(body);
 
-      request = this.http.delete<T>(this.domain + uri, {
+      request = this.http.delete<R>(this.domain + uri, {
         headers,
         observe: 'response',
         params: params

@@ -18,7 +18,7 @@ export class InterestService extends AbstractService <InterestDto> {
   }
 
   public getAllInterestsForUser(): Observable<HttpResponse<Interest[]>> {
-    return this.sendRequest<Interest[]>('get', `/my-interests-list`, {}, {}).pipe(
+    return this.sendRequest<Interest[]>('get', `/my-interests-list`).pipe(
       tap(res => {
         const realtyObjects = res.body.map(r => r.realtyObj);
         (realtyObjects ?? []).forEach(value => {
@@ -30,7 +30,7 @@ export class InterestService extends AbstractService <InterestDto> {
   }
 
   public save(interest: InterestDto): Observable<HttpResponse<Interest>> {
-    return this.sendRequest<Interest>('post', '', {}, interest).pipe(
+    return this.sendRequest<Interest>('post', '', {body: interest}).pipe(
       tap(res => {
         const currentInterests = this.currentUserInterests.value;
         const updatedInterests = [...currentInterests, res.body as Interest];
@@ -40,7 +40,7 @@ export class InterestService extends AbstractService <InterestDto> {
   }
 
   public remove(realtyObjId: number): Observable<HttpResponse<InterestDto>> {
-    return this.sendRequest<InterestDto>('delete', `/${realtyObjId}`, {}, {}).pipe(
+    return this.sendRequest<InterestDto>('delete', `/${realtyObjId}`).pipe(
       tap(() => {
         const currentInterests = this.currentUserInterests.value;
         const updatedInterests = currentInterests.filter(
@@ -52,7 +52,7 @@ export class InterestService extends AbstractService <InterestDto> {
   }
 
   public get(realtyObjId: number): Observable<HttpResponse<InterestDto>> {
-    return this.sendRequest('get', `/${realtyObjId}`, {}, {});
+    return this.sendRequest('get', `/${realtyObjId}`);
   }
 }
 

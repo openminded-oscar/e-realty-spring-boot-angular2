@@ -57,7 +57,7 @@ export class SignupService extends AbstractService<Credentials> implements OnDes
   }
 
   public signUpRequest(credentials: Credentials): Observable<HttpResponse<any>> {
-    return this.sendRequest<any>('post', '', {}, credentials);
+    return this.sendRequest<any>('post', '', {body: credentials});
   }
 
   ngOnDestroy(): void {
