@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RealtorService} from '../../services/realtor.service';
-import {Realtor} from '../../domain/realtor';
+import {RealtorService} from '../../app-services/realtor.service';
+import {Realtor} from '../../app-models/realtor';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
-import {UserService} from '../../services/user.service';
+import {UserService} from '../../app-services/user.service';
 import {takeUntil} from 'rxjs/operators';
-import {User} from '../../domain/user';
+import {User} from '../../app-models/user';
 
 @Component({
   selector: 'realtors-gallery',

@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RealtorService} from '../../services/realtor.service';
+import {RealtorService} from '../../app-services/realtor.service';
 import {Subject} from 'rxjs';
-import {Review} from '../../domain/review';
+import {Review} from '../../app-models/review';
 import {takeUntil, tap} from 'rxjs/operators';
-import {RealtyObj} from '../../domain/realty-obj';
+import {RealtyObj} from '../../app-models/realty-obj';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ReviewsService} from '../../services/reviews.service';
+import {ReviewsService} from '../../app-services/reviews.service';
 
 @Component({
   selector: 'app-realtor-reviews',

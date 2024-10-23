@@ -8,9 +8,9 @@ import {
   RealtorObjectsTabPath,
   RealtorReviewsTabPath
 } from '../utils';
-import {ReviewsService} from '../../services/reviews.service';
-import {InterestService} from '../../services/interest.service';
-import {UserService} from '../../services/user.service';
+import {ReviewsService} from '../../app-services/reviews.service';
+import {InterestService} from '../../app-services/interest.service';
+import {UserService} from '../../app-services/user.service';
 import {takeUntil} from 'rxjs/operators';
 import {BehaviorSubject, from, Subject} from 'rxjs';
 

@@ -1,14 +1,13 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
-import {RealtyObj} from '../../domain/realty-obj';
-import {Subject} from 'rxjs';
-import {BehaviorSubject} from 'rxjs';
-import {UserService} from '../../services/user.service';
+import {RealtyObj} from '../../app-models/realty-obj';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {UserService} from '../../app-services/user.service';
 
 @Component({
   selector: 'realty-objs-list',
   templateUrl: './realty-objs-list.component.html',
   styleUrls: [
-    '../../realty-objs-gallery/realty-objs-gallery.component.scss',
+    '../../home/realty-objs-gallery/realty-objs-gallery.component.scss',
     './realty-objs-list.component.scss'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
