@@ -66,7 +66,9 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
 
 
   private signInGoogleRequest(googleCredentialsData: any) {
-    return this.sendRequest<SignInResponse>('post', endpoints.signinGoogleData, {}, googleCredentialsData)
+    return this.sendRequest<SignInResponse>('post', endpoints.signinGoogleData, {
+      body: googleCredentialsData
+    })
       .pipe(
         tap(res => {
             localStorage.setItem('token', res.body.token);
@@ -95,7 +97,10 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
   }
 
   private signInRequest(credentials: Credentials): Observable<HttpResponse<SignInResponse>> {
-    return this.sendRequest<SignInResponse>('post', endpoints.signin, {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}, credentials)
+    return this.sendRequest<SignInResponse>('post', endpoints.signin, {
+      customHeaders: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'},
+      body: credentials,
+    })
       .pipe(
         tap(res => {
             localStorage.setItem('token', res.body.token);
