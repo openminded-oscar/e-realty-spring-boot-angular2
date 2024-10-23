@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration local --proxy-config proxy.conf.json --port 4200 --disable-host-check",
-    "start:prod": "npm run build --prod --aot --output-hashing=none && http-server ./dist -p 4200",
+    "start:prod": "npm run build --prod --aot && http-server ./dist -p 4200",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
