@@ -56,7 +56,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
       dateTime: utcDatetime
     };
 
-    return this.sendRequest<ReviewPostDto>('post', '').pipe(
+    return this.sendRequest<ReviewPostDto>('post', '', {body: review}).pipe(
       tap(res => {
         const currentReviews = this.currentUserReviews.value;
         const updatedReview = {
