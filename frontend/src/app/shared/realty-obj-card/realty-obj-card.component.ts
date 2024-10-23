@@ -1,9 +1,8 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {RealtyObj} from '../../domain/realty-obj';
-import {combineLatest} from 'rxjs';
+import {RealtyObj} from '../../app-models/realty-obj';
+import {combineLatest, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
-import {UserService} from '../../services/user.service';
+import {UserService} from '../../app-services/user.service';
 
 @Component({
   selector: 'app-realty-obj-card',

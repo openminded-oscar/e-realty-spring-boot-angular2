@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RealtorService} from '../../services/realtor.service';
+import {RealtorService} from '../../app-services/realtor.service';
 import {Subject} from 'rxjs';
-import {RealtyObj} from '../../domain/realty-obj';
+import {RealtyObj} from '../../app-models/realty-obj';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({

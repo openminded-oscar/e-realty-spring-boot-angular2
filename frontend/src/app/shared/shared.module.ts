@@ -4,28 +4,36 @@ import {RealtyObjsListComponent} from './realty-objs-list/realty-objs-list.compo
 import {RouterModule} from '@angular/router';
 import {DeleteRealtyModalComponent} from './delete-realty-modal/delete-realty-modal.component';
 import {ScheduleFormModalComponent} from './schedule-form-modal/schedule-form-modal.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {ReactiveFormsModule} from '@angular/forms';
+import {NgbDatepickerModule, NgbModalModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmModalComponent} from './confirm-modal/confirm-modal.component';
 import {RealtyObjCardComponent} from './realty-obj-card/realty-obj-card.component';
+import {RealtorContactComponent} from './realtor-contact/realtor-contact.component';
 
 const components = [
+  RealtorContactComponent,
   RealtyObjsListComponent,
+  RealtyObjCardComponent,
   DeleteRealtyModalComponent,
   ScheduleFormModalComponent,
   ConfirmModalComponent,
-  RealtyObjCardComponent
 ];
 
 @NgModule({
   declarations: [...components],
   exports: [
-    ...components
+    ...components,
+    NgbModalModule,
+    NgbDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   imports: [
     CommonModule,
     RouterModule,
-    NgbModule,
+    NgbModalModule,
+    NgbDatepickerModule,
+    FormsModule,
     ReactiveFormsModule
   ]
 })

@@ -1,16 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {apiBase} from '../../../commons';
-import {Photo} from '../../../domain/photo';
-import {FileUploadService} from '../../../services/file-upload.service';
-import {GlobalNotificationService} from '../../../services/global-notification.service';
+import {Photo} from '../../../app-models/photo';
+import {FileUploadService} from '../../../app-services/file-upload.service';
+import {GlobalNotificationService} from '../../../app-services/global-notification.service';
 import {from, of, Subject, switchMap} from 'rxjs';
 import {catchError, takeUntil} from 'rxjs/operators';
-import {User} from '../../../domain/user';
-import {UserService} from '../../../services/user.service';
+import {User} from '../../../app-models/user';
+import {UserService} from '../../../app-services/user.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmModalComponent} from '../../../shared/confirm-modal/confirm-modal.component';
-import {RealtorService} from '../../../services/realtor.service';
+import {RealtorService} from '../../../app-services/realtor.service';
 
 @Component({
   selector: 'app-user-profile',

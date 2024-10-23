@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {UserCabinetContainerComponent} from '../user-cabinet-container/user-cabinet-container.component';
 import {UserObjectsComponent} from '../user-objects/user-objects.component';

@@ -1,11 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
-import {RealtyObjsGalleryComponent} from '../realty-objs-gallery/realty-objs-gallery.component';
-import {RealtyObjDetailsComponent} from '../realty-obj-details/realty-obj-details.component';
-import {RealtyObjEditComponent} from '../realty-obj-edit/realty-obj-edit.component';
-import {AuthGuard} from '../guargs/auth.guard';
-import {RealtorsGalleryComponent} from '../realtor/realtors-gallery/realtors-gallery.component';
+import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
+import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
+import {AuthGuard} from '../app-guards/auth.guard';
 
 const appRoutes: Routes = [
   {
@@ -19,7 +17,8 @@ const appRoutes: Routes = [
   },
   {
     path: 'realty-object/new',
-    component: RealtyObjEditComponent
+    loadChildren: () =>
+      import('../realty-editor/realty-editor.module').then(m => m.RealtyEditorModule),
   },
   {
     path: 'realty-object/:objectId',
@@ -28,15 +27,12 @@ const appRoutes: Routes = [
   {
     path: 'realty-object/:objectId/editor',
     canActivate: [AuthGuard],
-    component: RealtyObjEditComponent
+    loadChildren: () =>
+      import('../realty-editor/realty-editor.module').then(m => m.RealtyEditorModule),
   },
   {
     path: 'rent',
     component: RealtyObjsGalleryComponent,
-  },
-  {
-    path: 'realtors',
-    component: RealtorsGalleryComponent
   },
   {
     path: 'login/oauth2/code/google',
