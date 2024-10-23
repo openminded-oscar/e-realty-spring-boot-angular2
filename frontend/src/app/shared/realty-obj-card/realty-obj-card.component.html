@@ -10,12 +10,12 @@
   <div class="caption">
     <div class="caption-top-row">
       <h4 style="flex: 1;">
-        <span [routerLink]="['/object-details', realtyObject.id]"
+        <span [routerLink]="['/realty-object', realtyObject.id]"
               style="cursor: pointer">{{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}</span>
       </h4>
       <div>
         <div *ngIf="isMyObject">
-          <a [routerLink]="['/obj/editor', realtyObject.id]" style="padding: 0 5px;"
+          <a [routerLink]="['/realty-object', realtyObject.id, 'editor']" style="padding: 0 5px;"
              class="btn btn-info btn-block">Edit</a>
         </div>
       </div>
@@ -37,7 +37,7 @@
       </p>
       <p class="description--row description-content--text">{{ realtyObject.description }}</p>
     </div>
-    <a [routerLink]="['/object-details', realtyObject.id]" style="border: 1px solid black" class="btn btn-block">Watch
+    <a [routerLink]="['/realty-object', realtyObject.id]" style="border: 1px solid black" class="btn btn-block">Watch
       details</a>
   </div>
 </div>

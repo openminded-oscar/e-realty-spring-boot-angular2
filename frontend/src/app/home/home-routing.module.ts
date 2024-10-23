@@ -18,21 +18,21 @@ const appRoutes: Routes = [
     component: RealtyObjsGalleryComponent,
   },
   {
-    path: 'rent',
-    component: RealtyObjsGalleryComponent,
+    path: 'realty-object/new',
+    component: RealtyObjEditComponent
   },
   {
-    path: 'object-details/:objectId',
+    path: 'realty-object/:objectId',
     component: RealtyObjDetailsComponent
   },
   {
-    path: 'obj/editor',
+    path: 'realty-object/:objectId/editor',
+    canActivate: [AuthGuard],
     component: RealtyObjEditComponent
   },
   {
-    path: 'obj/editor/:objectId',
-    canActivate: [AuthGuard],
-    component: RealtyObjEditComponent
+    path: 'rent',
+    component: RealtyObjsGalleryComponent,
   },
   {
     path: 'realtors',

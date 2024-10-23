@@ -16,7 +16,7 @@
           </ng-container>
           <ng-container *ngIf="isMyObject(currentObject)">
             <div>
-              <a [routerLink]="['/obj/editor', currentObject.id]"
+              <a [routerLink]="['/realty-object', currentObject.id, 'editor']"
                  class="btn btn-info btn-block btn-manage">Edit</a>
             </div>
           </ng-container>
