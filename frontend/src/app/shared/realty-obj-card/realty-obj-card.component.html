@@ -22,11 +22,11 @@
     </div>
     <div>
       <div class="description--row" style="display:flex; flex-direction: row; justify-content: space-between">
-        <div *ngIf="realtyObject.price" style="font-weight: 500">
-          Price: ${{ realtyObject.price }}
-        </div>
+<!--        <div *ngIf="realtyObject.price" style="font-weight: 500">-->
+<!--          Price: ${{ realtyObject.price }}-->
+<!--        </div>-->
         <div  *ngIf="realtyObject.priceForRent" style="font-weight: 500">
-          Rent Price: ${{ realtyObject.priceForRent }}
+          Rent: ${{ realtyObject.priceForRent }}/month
         </div>
         <div style="font-weight: 400" *ngIf="showCreatedAt && realtyObject.createdAt" class="created-at">
           <span>Since&nbsp;{{ realtyObject.createdAt | date: 'shortDate':'local' }}</span>

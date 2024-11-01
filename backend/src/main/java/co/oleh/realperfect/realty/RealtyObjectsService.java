@@ -54,32 +54,7 @@ public class RealtyObjectsService {
         this.mappingService = mappingService;
     }
 
-    public Page<RealtyObjectDto> getAllObjectsForRentFilterItems(List<FilterItem> filterItems, Pageable pageable) {
-        RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
-        for (FilterItem filterItem : filterItems) {
-            builder.with(filterItem);
-        }
-        Specification<RealtyObject> spec = builder.build();
-
-        Page<RealtyObject> objects = realtyObjectRepository.findAll(spec, pageable);
-
-        return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
-    }
-
-    public Page<RealtyObjectDto> getAllSellObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
-        RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
-        for (FilterItem filterItem : filterItems) {
-            builder.with(filterItem);
-        }
-        Specification<RealtyObject> spec = builder.build();
-
-        Page<RealtyObject> objects = realtyObjectRepository.findAll(spec, pageable);
-
-        return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
-    }
-
-    public Page<RealtyObjectDto> getAllRentObjectsForFilterItems(List<FilterItem> filterItems,
-                                                                 Pageable pageable) {
+    public Page<RealtyObjectDto> getAllObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
         RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
         for (FilterItem filterItem : filterItems) {
             builder.with(filterItem);
@@ -97,13 +72,7 @@ public class RealtyObjectsService {
         return objects.stream().map(o -> this.mappingService.map(o, RealtyObjectDetailsDto.class)).collect(Collectors.toList());
     }
 
-    public Page<RealtyObjectDto> getAllSellObjects(Pageable pageable) {
-        Page<RealtyObject> objects = realtyObjectRepository.findAll(pageable);
-
-        return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
-    }
-
-    public Page<RealtyObjectDto> getAllRentObjects(Pageable pageable) {
+    public Page<RealtyObjectDto> getAllObjects(Pageable pageable) {
         Page<RealtyObject> objects = realtyObjectRepository.findAll(pageable);
 
         return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
