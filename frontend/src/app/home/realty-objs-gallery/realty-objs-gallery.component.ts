@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '
 
 import {BackendSupportedOperations, RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtyObj} from '../../app-models/realty-obj';
-import {ConfigService} from '../../app-services/config.service';
+import {ConfigService, OPERATION_TYPES} from '../../app-services/config.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../app-services/user.service';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
@@ -158,8 +158,13 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   private getFilterValue() {
     const formValues = this.filterForm.value;
-    return {
+    const priceFilter = this.targetOperation === OPERATION_TYPES.SELLING ? {
       price: {ge: formValues.priceMin, le: formValues.priceMax},
+    } : {
+      priceForRent: {ge: formValues.priceMin, le: formValues.priceMax},
+    };
+    return {
+      ...priceFilter,
       city: {like: formValues.city},
       street: {like: formValues.street},
       roomsAmount: {eq: formValues.roomsAmount},

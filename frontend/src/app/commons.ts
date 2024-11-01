@@ -20,7 +20,8 @@ export const endpoints: any = {
   },
   realtyObj: {
     add: apiBase + '/realty-objects/save',
-    list: apiBase + '/realty-objects',
+    listSell: apiBase + '/realty-objects/sell-objects',
+    listRent: apiBase + '/realty-objects/rent-objects',
     delete: apiBase + '/realty-objects',
     byId: apiBase + '/realty-objects',
     realtorList: apiBase + '/realty-objects/my-as-realtor',

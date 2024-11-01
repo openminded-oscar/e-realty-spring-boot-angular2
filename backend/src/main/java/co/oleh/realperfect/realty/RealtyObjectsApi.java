@@ -5,6 +5,7 @@ import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.BuildingType;
+import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import lombok.AllArgsConstructor;
@@ -55,16 +56,31 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(myObjects, HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping("/sell-objects")
     @Cacheable(value = "realtyObjectGalleryCache", keyGenerator = "realtyObjectFilterKeyGenerator")
     public ResponseEntity<Page<RealtyObjectDto>> getRealtyObjects(@RequestBody(required = false)
                                                                   List<FilterItem> filterItems,
                                                                   Pageable pageable) {
         Page<RealtyObjectDto> allObjects;
         if (filterItems != null) {
-            allObjects = realtyObjectsService.getAllObjectsForFilterItems(filterItems, pageable);
+            allObjects = realtyObjectsService.getAllSellObjectsForFilterItems(filterItems, pageable);
         } else {
-            allObjects = realtyObjectsService.getAllObjects(pageable);
+            allObjects = realtyObjectsService.getAllSellObjects(pageable);
+        }
+
+        return new ResponseEntity<>(allObjects, HttpStatus.OK);
+    }
+
+    @PostMapping("/rent-objects")
+    @Cacheable(value = "realtyObjectGalleryCache", keyGenerator = "realtyObjectFilterKeyGenerator")
+    public ResponseEntity<Page<RealtyObjectDto>> getRentRealtyObjects(@RequestBody(required = false)
+                                                                  List<FilterItem> filterItems,
+                                                                  Pageable pageable) {
+        Page<RealtyObjectDto> allObjects;
+        if (filterItems != null) {
+            allObjects = realtyObjectsService.getAllRentObjectsForFilterItems(filterItems, pageable);
+        } else {
+            allObjects = realtyObjectsService.getAllRentObjects(pageable);
         }
 
         return new ResponseEntity<>(allObjects, HttpStatus.OK);
