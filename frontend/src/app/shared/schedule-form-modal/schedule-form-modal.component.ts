@@ -94,8 +94,10 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
 
     let titleObjectPart = '';
     if (this.realtyObject) {
-      titleObjectPart = encodeURIComponent(` Apartment at ` +
-        `${this.realtyObject.address?.street} str. est. at ${this.realtyObject.price}`);
+      titleObjectPart += ` Apartment at ` +
+        `${this.realtyObject.address?.street} str. est. at ${this.realtyObject.price}`;
+      titleObjectPart += this.realtyObject.priceForRent ? `(${this.realtyObject.priceForRent})/month` : ``;
+      titleObjectPart = encodeURIComponent(titleObjectPart);
     }
 
     let contactInfo = 'Person+To+Contact: ';

@@ -16,18 +16,19 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
 
     @Override
     public Predicate toPredicate(Root<RealtyObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-        String operation = filterItem.getOperation();
         Path<String> keyPath = getField(root, filterItem.getField());
-        Class<?> keyPathClass = keyPath.getJavaType();
+        String operation = filterItem.getOperation();
         String value = filterItem.getValue();
 
-        switch (operation.toLowerCase()) {
-            case "ge":
+        FilterOperation filterOperation = FilterOperation.fromString(operation);
+        switch (filterOperation) {
+            case GE:
                 return cb.greaterThanOrEqualTo(keyPath, value);
-            case "le":
+            case LE:
                 return cb.lessThanOrEqualTo(keyPath, value);
-            case "eq":
-            case "like": {
+            case EQ:
+            case LIKE: {
+                Class<?> keyPathClass = keyPath.getJavaType();
                 if (keyPathClass == String.class) {
                     return cb.like(cb.lower(keyPath), "%" + value.toLowerCase() + "%");
                 } else {
@@ -38,7 +39,7 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
                     return cb.equal(keyPath, value);
                 }
             }
-            case "operationtypecontains": {
+            case CONTAINS: {
                 Expression<Collection<OperationType>> operationTypes = root.get(filterItem.getField());
                 OperationType operationType = (OperationType) toEnum(OperationType.class, value);
                 return cb.isMember(operationType, operationTypes);
