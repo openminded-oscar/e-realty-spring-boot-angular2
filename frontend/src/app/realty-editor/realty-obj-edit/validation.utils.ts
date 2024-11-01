@@ -1,5 +1,5 @@
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import {BackendSupportedOperations} from '../../app-services/realty-obj.service';
+import {OPERATION_TYPES} from '../../app-services/config.service';
 
 function patchErrors(formControl: AbstractControl, errorKey: string, errorValue: any): void {
   const existingErrors = formControl.errors || {};
@@ -49,8 +49,8 @@ export function operationPricesValidator(): ValidatorFn {
       name: string,
       checked: boolean
     } [] = control.get('targetOperations')?.value || [];
-    const sellChecked = targetOperationsIncluded.find(c => c.name === BackendSupportedOperations.BUY)?.checked;
-    const rentChecked = targetOperationsIncluded.find(c => c.name === BackendSupportedOperations.RENT)?.checked;
+    const sellChecked = targetOperationsIncluded.find(c => c.name === OPERATION_TYPES.SELLING)?.checked;
+    const rentChecked = targetOperationsIncluded.find(c => c.name === OPERATION_TYPES.RENT)?.checked;
 
     const price = control.get('price');
     const priceForRent = control.get('priceForRent');

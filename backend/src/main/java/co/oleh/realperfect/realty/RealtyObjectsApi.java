@@ -55,7 +55,7 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(myObjects, HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping("/sell")
     @Cacheable(value = "realtyObjectGalleryCache", keyGenerator = "realtyObjectFilterKeyGenerator")
     public ResponseEntity<Page<RealtyObjectDto>> getRealtyObjects(@RequestBody(required = false)
                                                                   List<FilterItem> filterItems,
@@ -66,7 +66,20 @@ public class RealtyObjectsApi {
         } else {
             allObjects = realtyObjectsService.getAllObjects(pageable);
         }
+        return new ResponseEntity<>(allObjects, HttpStatus.OK);
+    }
 
+    @PostMapping("/rent")
+    @Cacheable(value = "realtyObjectGalleryCache", keyGenerator = "realtyObjectFilterKeyGenerator")
+    public ResponseEntity<Page<RealtyObjectDto>> getRentRealtyObjects(@RequestBody(required = false)
+                                                                  List<FilterItem> filterItems,
+                                                                  Pageable pageable) {
+        Page<RealtyObjectDto> allObjects;
+        if (filterItems != null) {
+            allObjects = realtyObjectsService.getAllObjectsForFilterItems(filterItems, pageable);
+        } else {
+            allObjects = realtyObjectsService.getAllObjects(pageable);
+        }
         return new ResponseEntity<>(allObjects, HttpStatus.OK);
     }
 

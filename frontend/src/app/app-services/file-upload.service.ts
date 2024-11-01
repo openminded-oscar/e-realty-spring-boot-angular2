@@ -5,7 +5,7 @@ import {Photo} from '../app-models/photo';
 import {throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class FileUploadService {
   constructor(private http: HttpClient) {
   }

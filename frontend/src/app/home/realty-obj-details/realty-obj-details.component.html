@@ -3,8 +3,9 @@
     <div class="details-title--left">
       <h1 style="font-size: 1.5rem;">
         <span>Apartment at
-          {{ currentObject.address.street }} str.&nbsp;</span>
-        <span>est. at ${{ currentObject.price }}</span>
+          {{ currentObject.address.street }} str.&nbsp;</span>&nbsp;
+        <span *ngIf="currentObject.price">est. at ${{ currentObject.price }}&nbsp;</span>
+        <span *ngIf="currentObject.priceForRent">(${{ currentObject.priceForRent }}/month)</span>
       </h1>
       <div class="details-title--right">
         <div class="btn-manage--container" *ngIf="userService.isAuthenticated$|async">

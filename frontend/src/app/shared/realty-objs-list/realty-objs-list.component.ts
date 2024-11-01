@@ -19,15 +19,11 @@ export class RealtyObjsListComponent implements OnDestroy {
   public realtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
 
   @Input()
-  set realtyObjectsPortion(values: RealtyObj[]) {
-    if (values?.length) {
-      const existingIds = new Set(this.realtyObjects$.value.map(obj => obj.id));
-      const uniqueValues = values.filter(value => !existingIds.has(value.id));
-      const currentValues = [...this.realtyObjects$.value, ...uniqueValues];
-      this.realtyObjects$.next(currentValues);
-    } else {
-      this.realtyObjects$.next([]);
-    }
+  set realtyObjectsPortion(newValues: RealtyObj[]) {
+    const existingIds = new Set(this.realtyObjects$.value.map(obj => obj.id));
+    const uniqueValues = newValues.filter(value => !existingIds.has(value.id));
+    const currentValues = [...this.realtyObjects$.value, ...uniqueValues];
+    this.realtyObjects$.next(currentValues);
   }
 
   public trackById(index: number, obj: RealtyObj): number {
