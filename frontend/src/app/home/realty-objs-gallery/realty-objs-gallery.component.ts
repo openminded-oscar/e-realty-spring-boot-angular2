@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
-import {BackendSupportedOperations, RealtyObjService} from '../../app-services/realty-obj.service';
+import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtyObj} from '../../app-models/realty-obj';
 import {ConfigService, OPERATION_TYPES} from '../../app-services/config.service';
 import {Router} from '@angular/router';
@@ -62,7 +62,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   public currentObjectsPortion$: Observable<RealtyObj[]>;
 
-  public targetOperation: string;
+  public targetOperation: OPERATION_TYPES;
 
   public readonly initialPageable: any = {
     page: 0,
@@ -99,9 +99,9 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
   private resolveTargetOperations() {
     if (this.router.url.endsWith('/rent')) {
-      this.targetOperation = BackendSupportedOperations.RENT;
+      this.targetOperation = OPERATION_TYPES.RENT;
     } else {
-      this.targetOperation = BackendSupportedOperations.BUY;
+      this.targetOperation = OPERATION_TYPES.SELLING;
     }
   }
 
@@ -124,7 +124,8 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     this.currentObjectsPortion$ = this.realtyObjService.findByFilterAndPage(
       this.getFilterValue(),
       this.getSortValue(),
-      this.pageable
+      this.pageable,
+      this.targetOperation
     ).pipe(
       debounceTime(this.FILTER_DEBOUNCE_TIME),
       tap(objects => {

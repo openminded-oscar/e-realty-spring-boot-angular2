@@ -8,6 +8,7 @@ import {SharedModule} from '../shared/shared.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
 import {ReviewsService} from '../app-services/reviews.service';
+import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [

@@ -6,6 +6,8 @@ import {Observable} from 'rxjs';
 import {Photo, RealtyPhoto} from '../app-models/photo';
 import {tap} from 'rxjs/operators';
 import {SortValue} from '../home/realty-objs-gallery/realty-objs-gallery.component';
+import {SupportedOperation} from '../realty-editor/realty-obj-edit/realty-obj-edit.component';
+import {OPERATION_TYPES} from './config.service';
 
 export interface PageableResponse<T> {
   content: T[];
@@ -19,11 +21,6 @@ export interface PageableResponse<T> {
   last: boolean;
 }
 
-export enum BackendSupportedOperations {
-  BUY = 'SELLING',
-  RENT = 'RENT',
-}
-
 @Injectable({providedIn: 'root'})
 export class RealtyObjService {
   constructor(private http: HttpClient) {
@@ -31,10 +28,10 @@ export class RealtyObjService {
 
   public findByFilterAndPage(filter: {
     [filterField: string]: { [operationName: string]: string }
-  }, ordering: SortValue, pageable): Observable<PageableResponse<RealtyObj>> {
+  }, ordering: SortValue, pageable, operation: OPERATION_TYPES): Observable<PageableResponse<RealtyObj>> {
     const filterItems = this.mapFilterInputsToHttpRequest(filter);
 
-    return this.http.post<PageableResponse<RealtyObj>>(endpoints.realtyObj.list, filterItems, {
+    return this.http.post<PageableResponse<RealtyObj>>(endpoints.realtyObj.listSell, filterItems, {
       params: {
         page: pageable.page,
         size: pageable.size,
