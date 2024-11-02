@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RealtyObj} from '../../app-models/realty-obj';
+import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {ActivatedRoute} from '@angular/router';
 import {Photo, RealtyPhoto} from '../../app-models/photo';
@@ -25,6 +25,7 @@ import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.co
   styleUrls: ['./realty-obj-details.component.scss']
 })
 export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
+  public RealtyObjectStatus = RealtyObjectStatus;
   currentObject: RealtyObj;
   enlargedPhoto: string;
   isInterested = false;

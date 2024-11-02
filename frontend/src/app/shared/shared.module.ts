@@ -14,6 +14,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmModalComponent} from './confirm-modal/confirm-modal.component';
 import {RealtyObjCardComponent} from './realty-obj-card/realty-obj-card.component';
 import {RealtorContactComponent} from './realtor-contact/realtor-contact.component';
+import { RealtyManageButtonsComponent } from './realty-obj-card/realty-manage-buttons/realty-manage-buttons.component';
+import { RealtyStatusComponent } from './realty-status/realty-status.component';
 
 const components = [
   RealtorContactComponent,
@@ -25,7 +27,7 @@ const components = [
 ];
 
 @NgModule({
-  declarations: [...components],
+  declarations: [...components, RealtyManageButtonsComponent, RealtyStatusComponent],
   exports: [
     ...components,
     NgbModalModule,
@@ -34,7 +36,8 @@ const components = [
     NgbTooltipModule,
     NgbToastModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RealtyStatusComponent
   ],
   imports: [
     CommonModule,

@@ -20,7 +20,6 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
   }
 
   constructor(private userService: UserService,
-              public realtyObjectService: RealtyObjService,
               private cdr: ChangeDetectorRef) {
   }
   private destroy$ = new Subject<boolean>();
@@ -54,19 +53,5 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-  }
-
-  public activateObject(realtyObject: RealtyObj) {
-    this.realtyObjectService.activate(realtyObject)
-      .subscribe();
-  }
-
-  public archiveObject(realtyObject: RealtyObj) {
-    this.realtyObjectService.archive(realtyObject)
-      .subscribe();
-  }
-  public restoreObject(realtyObject: RealtyObj) {
-    this.realtyObjectService.restore(realtyObject)
-      .subscribe();
   }
 }
