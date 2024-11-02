@@ -126,8 +126,8 @@ public class RealtyObjectsService {
         Long userId = user.getId();
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-        if (!authorities.contains(new SimpleGrantedAuthority(ROLE_PREFIX + "ADMIN")) ||
-                authorities.contains(new SimpleGrantedAuthority(ROLE_PREFIX + "REALTOR"))) {
+        if (!authorities.contains(new SimpleGrantedAuthority(ROLE_PREFIX + "ADMIN")) &&
+                !authorities.contains(new SimpleGrantedAuthority(ROLE_PREFIX + "REALTOR"))) {
             RealtyObject realtyObject = this.realtyObjectCrudRepository.findById(objectId).get();
             if (!realtyObject.getOwner().getId().equals(userId)) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);

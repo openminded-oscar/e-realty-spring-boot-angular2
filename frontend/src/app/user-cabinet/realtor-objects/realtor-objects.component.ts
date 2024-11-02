@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RealtorService} from '../../app-services/realtor.service';
 import {Subject} from 'rxjs';
 import {RealtyObj} from '../../app-models/realty-obj';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-realtor-objects',
@@ -12,6 +12,7 @@ import {takeUntil} from 'rxjs/operators';
 export class RealtorObjectsComponent implements OnInit, OnDestroy {
   public destroy$ = new Subject<boolean>();
   public realtorObjects: RealtyObj[];
+  public filter: 'all' | 'active' | 'archived' | 'drafts' = 'all';
 
   constructor(public realtorService: RealtorService) {
   }
@@ -27,5 +28,9 @@ export class RealtorObjectsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public setFilter(filterSelected: 'all' | 'active' | 'archived' | 'drafts') {
+    this.filter = filterSelected;
   }
 }

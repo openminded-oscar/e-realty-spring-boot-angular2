@@ -1,8 +1,9 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {RealtyObj} from '../../app-models/realty-obj';
+import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {combineLatest, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {UserService} from '../../app-services/user.service';
+import {RealtyObjService} from '../../app-services/realty-obj.service';
 
 @Component({
   selector: 'app-realty-obj-card',
@@ -10,11 +11,6 @@ import {UserService} from '../../app-services/user.service';
   styleUrls: ['./realty-obj-card.component.scss']
 })
 export class RealtyObjCardComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
-  public isMyObject: boolean;
-  private _realtyObject: RealtyObj;
-  @Input()
-  public showCreatedAt = false;
   @Input()
   public set realtyObject(value: RealtyObj) {
     this._realtyObject = value;
@@ -22,10 +18,22 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
   public get realtyObject(): RealtyObj {
     return this._realtyObject;
   }
-  public currentUserObjects: RealtyObj[];
 
-  constructor(private userService: UserService, private cdr: ChangeDetectorRef) {
+  constructor(private userService: UserService,
+              public realtyObjectService: RealtyObjService,
+              private cdr: ChangeDetectorRef) {
   }
+  private destroy$ = new Subject<boolean>();
+  public isMyObject: boolean;
+  private _realtyObject: RealtyObj;
+  @Input()
+  public showCreatedAt = false;
+  @Input()
+  showManageOptions = false;
+  public currentUserObjects: RealtyObj[];
+  public RealtyObjectStatus = RealtyObjectStatus;
+
+  protected readonly RealtyObj = RealtyObj;
 
   ngOnInit(): void {
     combineLatest([
@@ -46,5 +54,19 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public activateObject(realtyObject: RealtyObj) {
+    this.realtyObjectService.activate(realtyObject)
+      .subscribe();
+  }
+
+  public archiveObject(realtyObject: RealtyObj) {
+    this.realtyObjectService.archive(realtyObject)
+      .subscribe();
+  }
+  public restoreObject(realtyObject: RealtyObj) {
+    this.realtyObjectService.restore(realtyObject)
+      .subscribe();
   }
 }

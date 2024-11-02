@@ -63,6 +63,16 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(Map.of("updated", updated), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{objectId}/archive")
+    @RolesAllowed({"USER", "REALTOR", "ADMIN"})
+    public ResponseEntity<Map<String, Integer>> reactivateRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
+                                                                    @PathVariable Long objectId) {
+        this.realtyObjectsService.verifyRealtorOrAdminOrOwner(user, objectId);
+
+        int updated = this.realtyObjectsService.setRealtyObjectStatusById(objectId, RealtyObjectStatus.ACTIVE);
+        return new ResponseEntity<>(Map.of("updated", updated), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{objectId}")
     @RolesAllowed({"USER", "REALTOR", "ADMIN"})
     public ResponseEntity<Boolean> deleteRealtyObject(@PathVariable Long objectId) {

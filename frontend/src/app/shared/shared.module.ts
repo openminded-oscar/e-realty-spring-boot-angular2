@@ -8,8 +8,7 @@ import {
   NgbDatepickerModule,
   NgbDropdownModule,
   NgbModalModule,
-  NgbToastModule,
-  NgbTypeaheadModule
+  NgbToastModule, NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmModalComponent} from './confirm-modal/confirm-modal.component';
@@ -32,6 +31,7 @@ const components = [
     NgbModalModule,
     NgbDatepickerModule,
     NgbDropdownModule,
+    NgbTooltipModule,
     NgbToastModule,
     FormsModule,
     ReactiveFormsModule
@@ -43,6 +43,7 @@ const components = [
     NgbDatepickerModule,
     NgbDropdownModule,
     NgbToastModule,
+    NgbTooltipModule,
     FormsModule,
     ReactiveFormsModule
   ]

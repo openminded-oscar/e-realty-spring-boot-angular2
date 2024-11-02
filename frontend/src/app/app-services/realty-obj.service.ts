@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RealtyObj} from '../app-models/realty-obj';
 import {endpoints} from '../commons';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Photo, RealtyPhoto} from '../app-models/photo';
 import {tap} from 'rxjs/operators';
 import {SortValue} from '../home/realty-objs-gallery/realty-objs-gallery.component';
@@ -107,5 +107,17 @@ export class RealtyObjService {
     }
 
     return field;
+  }
+
+  public activate(realtyObject: RealtyObj): Observable<any> {
+    return this.http.post(`${endpoints.realtyObj.byId}/${realtyObject.id}/activate`, realtyObject).pipe();
+  }
+
+  public archive(realtyObject: RealtyObj): Observable<any> {
+    return this.http.post(`${endpoints.realtyObj.byId}/${realtyObject.id}/archive`, realtyObject).pipe();
+  }
+
+  public restore(realtyObject: RealtyObj): Observable<any> {
+    return this.http.delete(`${endpoints.realtyObj.byId}/${realtyObject.id}/archive`).pipe();
   }
 }

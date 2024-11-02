@@ -13,6 +13,7 @@ export class UserObjectsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   public user: User;
   public realtyObjects = [];
+  public filter: 'all' | 'active' | 'archived' | 'drafts' = 'all';
 
   constructor(private userService: UserService) {
   }
@@ -26,6 +27,10 @@ export class UserObjectsComponent implements OnInit, OnDestroy {
         this.realtyObjects = user?.realtyObjects ?? [];
       }
     );
+  }
+
+  public setFilter(filterSelected: 'all' | 'active' | 'archived' | 'drafts') {
+    this.filter = filterSelected;
   }
 
   ngOnDestroy(): void {
