@@ -3,7 +3,7 @@ import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 
 @Component({
-  selector: 'app-realty-status',
+  selector: 'app-realty-status-editor',
   templateUrl: './realty-status.component.html',
   styleUrls: ['./realty-status.component.scss']
 })

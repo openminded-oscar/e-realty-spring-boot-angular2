@@ -2,6 +2,9 @@
   <div class="col-md-7 photo-and-gallery-block">
     <div class="details-title--left">
       <h1 style="font-size: 1.5rem;">
+        <ng-container *ngIf="currentObject.status !== RealtyObjectStatus.ACTIVE">
+            [{{ currentObject.status }}]
+        </ng-container>
         <span>Apartment at
           {{ currentObject.address.street }} str.&nbsp;</span>&nbsp;
         <span *ngIf="currentObject.price">est. at ${{ currentObject.price }}&nbsp;</span>
@@ -58,9 +61,9 @@
           <div>
             <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
                 <h5 *ngIf="currentObject.description">Description:</h5>
-                <ng-container *ngIf="isMyObject(currentObject)">
-                    <app-realty-status [realtyObject]="currentObject"></app-realty-status>
-                </ng-container>
+                <div style="display: flex; flex-direction: row">
+                    <app-realty-status-editor  *ngIf="isMyObject(currentObject)" [realtyObject]="currentObject"></app-realty-status-editor>
+                </div>
             </div>
             <p class="description-block--text" *ngIf="currentObject.description">{{ currentObject.description }}</p>
           </div>
