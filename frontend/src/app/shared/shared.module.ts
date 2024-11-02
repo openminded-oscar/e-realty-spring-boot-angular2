@@ -4,7 +4,13 @@ import {RealtyObjsListComponent} from './realty-objs-list/realty-objs-list.compo
 import {RouterModule} from '@angular/router';
 import {DeleteRealtyModalComponent} from './delete-realty-modal/delete-realty-modal.component';
 import {ScheduleFormModalComponent} from './schedule-form-modal/schedule-form-modal.component';
-import {NgbDatepickerModule, NgbDropdownModule, NgbModalModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDatepickerModule,
+  NgbDropdownModule,
+  NgbModalModule,
+  NgbToastModule,
+  NgbTypeaheadModule
+} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmModalComponent} from './confirm-modal/confirm-modal.component';
 import {RealtyObjCardComponent} from './realty-obj-card/realty-obj-card.component';
@@ -26,6 +32,7 @@ const components = [
     NgbModalModule,
     NgbDatepickerModule,
     NgbDropdownModule,
+    NgbToastModule,
     FormsModule,
     ReactiveFormsModule
   ],
@@ -35,6 +42,7 @@ const components = [
     NgbModalModule,
     NgbDatepickerModule,
     NgbDropdownModule,
+    NgbToastModule,
     FormsModule,
     ReactiveFormsModule
   ]

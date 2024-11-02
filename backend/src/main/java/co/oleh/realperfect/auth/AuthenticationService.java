@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
+
 @Service
 @Slf4j
 public class AuthenticationService {
@@ -44,7 +46,7 @@ public class AuthenticationService {
                 List<SimpleGrantedAuthority> roles =
                         userInDb.getRoles()
                                 .stream()
-                                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
+                                .map(r -> new SimpleGrantedAuthority(ROLE_PREFIX + r.getName()))
                                 .collect(Collectors.toList());
                 SpringSecurityUser user =
                         new SpringSecurityUser(userInDb.getId(), userInDb.getLogin(), userInDb.getEmail(), roles);

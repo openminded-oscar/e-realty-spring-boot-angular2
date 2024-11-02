@@ -10,10 +10,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "tbl_role")
 public class Role {
-    public static final String USER_ROLE = "USER";
-    public static final String ADMIN_ROLE = "ADMIN";
-    public static final String REALTOR_ROLE = "REALTOR";
-
     private Long id;
     private String name;
     private Set<User> users;
