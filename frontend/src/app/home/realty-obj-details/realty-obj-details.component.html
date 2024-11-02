@@ -10,6 +10,9 @@
       <div class="details-title--right">
         <div class="btn-manage--container" *ngIf="userService.isAuthenticated$|async">
           <ng-container *ngIf="isMyObject(currentObject)">
+              <app-realty-manage-actions [realtyObject]="currentObject"></app-realty-manage-actions>
+          </ng-container>
+          <ng-container *ngIf="isMyObject(currentObject)">
             <div>
               <a (click)="promptDelete()"
                  class="btn btn-danger btn-block btn-manage">Delete</a>
@@ -21,6 +24,7 @@
                  class="btn btn-info btn-block btn-manage">Edit</a>
             </div>
           </ng-container>
+
           <div class="realty-obj-interested-btn">
             <ng-container *ngIf="!isInterested; else removeInterestedButton">
               <i (click)="toggleInterested()" ngbTooltip="Add to Favorites" class="far fa-heart text-danger"></i>
@@ -30,7 +34,6 @@
             </ng-template>
           </div>
         </div>
-
       </div>
     </div>
     <div class="realty-obj-pic--main-container">
