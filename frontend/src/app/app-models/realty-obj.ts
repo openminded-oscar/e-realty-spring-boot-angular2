@@ -52,6 +52,12 @@ export interface RealtyForm {
 }
 
 
+export enum RealtyObjectStatus {
+  ACTIVE = 'ACTIVE',
+  ARCHIVED = 'ARCHIVED',
+  DRAFT = 'DRAFT',
+}
+
 export class RealtyObj {
   public id?: number;
   public roomsAmount: number;
@@ -70,6 +76,7 @@ export class RealtyObj {
   public otherInfo: string;
   public buildingType: string;
   public targetOperations: string[];
+  public status: RealtyObjectStatus;
   public confirmed: boolean;
   public realtorAware: boolean;
   public dwellingType: string;

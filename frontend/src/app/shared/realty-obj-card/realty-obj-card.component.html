@@ -19,13 +19,55 @@
              class="btn btn-info btn-block">Edit</a>
         </div>
       </div>
+      <ng-container *ngIf="showManageOptions">
+        <div>
+          <i *ngIf="realtyObject.status === RealtyObjectStatus.DRAFT"
+             ngbTooltip="This object is not Activated yet"
+             style="color: red; margin-right: 10px"
+             class="fas fa-pencil-alt"></i>
+          <i *ngIf="realtyObject.status === RealtyObjectStatus.ARCHIVED"
+             ngbTooltip="This object is Archived"
+             style="color: red; margin-right: 10px"
+             class="fas fa-archive"></i>
+
+        </div>
+        <div class="dropdown" ngbDropdown>
+          <button
+            class="btn btn-link p-0"
+            type="button"
+            ngbDropdownToggle
+          >
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+          <ul ngbDropdownMenu class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" (click)="activateObject(realtyObject)"
+                 *ngIf="realtyObject.status === RealtyObjectStatus.DRAFT"
+            >Activate
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="archiveObject(realtyObject)"
+                 *ngIf="realtyObject.status === RealtyObjectStatus.ACTIVE">
+                Archive
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="restoreObject(realtyObject)"
+                 *ngIf="realtyObject.status === RealtyObjectStatus.ARCHIVED">
+                Re-activate
+              </a>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
     </div>
     <div>
       <div class="description--row" style="display:flex; flex-direction: row; justify-content: space-between">
-<!--        <div *ngIf="realtyObject.price" style="font-weight: 500">-->
-<!--          Price: ${{ realtyObject.price }}-->
-<!--        </div>-->
-        <div  *ngIf="realtyObject.priceForRent" style="font-weight: 500">
+        <div *ngIf="realtyObject.price" style="font-weight: 500">
+          Price: ${{ realtyObject.price }}
+        </div>
+        <div *ngIf="realtyObject.priceForRent" style="font-weight: 500">
           Rent: ${{ realtyObject.priceForRent }}/month
         </div>
         <div style="font-weight: 400" *ngIf="showCreatedAt && realtyObject.createdAt" class="created-at">

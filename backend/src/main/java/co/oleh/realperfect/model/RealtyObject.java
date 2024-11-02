@@ -19,7 +19,7 @@ import java.util.Set;
 @ToString
 public class RealtyObject extends AuditableEntity {
     private Long id;
-    private RealtyObjectStatus status = RealtyObjectStatus.ACTIVE;
+    private RealtyObjectStatus status;
     private BigDecimal price;
     private BigDecimal priceForRent;
 
@@ -38,7 +38,6 @@ public class RealtyObject extends AuditableEntity {
     private BuildingType buildingType;
     private DwellingType dwellingType;
     private Set<OperationType> targetOperations;
-    private Boolean confirmed = false;
     private Address address;
     private User owner;
     private Realtor realtor;
@@ -253,14 +252,6 @@ public class RealtyObject extends AuditableEntity {
         this.owner = owner;
     }
 
-    public Boolean getConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(Boolean confirmed) {
-        this.confirmed = confirmed;
-    }
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "realtor_id")
     public Realtor getRealtor() {
@@ -300,5 +291,12 @@ public class RealtyObject extends AuditableEntity {
 
     public void setStatus(RealtyObjectStatus status) {
         this.status = status;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (status == null) {
+            status = RealtyObjectStatus.DRAFT;
+        }
     }
 }

@@ -21,6 +21,9 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static co.oleh.realperfect.model.user.RoleUtils.REALTOR_ROLE;
+import static co.oleh.realperfect.model.user.RoleUtils.USER_ROLE;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -54,7 +57,7 @@ public class UserService {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(
-                new HashSet<>(Collections.singletonList(roleRepository.findByName(Role.USER_ROLE)))
+                new HashSet<>(Collections.singletonList(roleRepository.findByName(USER_ROLE)))
         );
 
         return userRepository.save(user);
@@ -142,7 +145,7 @@ public class UserService {
 
     public UserDto grantRealtorRole(String userId) {
         User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Role role = roleRepository.findByName(Role.REALTOR_ROLE);
+        Role role = roleRepository.findByName(REALTOR_ROLE);
 
         Set<Role> roles = user.getRoles();
         roles.add(role);
@@ -159,7 +162,7 @@ public class UserService {
     @Transactional
     public UserDto removeRealtorRole(String userId) {
         User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        Role role = roleRepository.findByName(Role.REALTOR_ROLE);
+        Role role = roleRepository.findByName(REALTOR_ROLE);
 
         Realtor realtor = this.realtorRepository.findByUserId(user.getId());
         if (realtor == null) {

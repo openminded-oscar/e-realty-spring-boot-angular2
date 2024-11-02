@@ -1,4 +1,19 @@
+<!--<div style="display: flex; flex-direction: row; justify-content: start; gap: 50px">-->
+<!--  <label>-->
+<!--    All <input type="radio" name="filter" (change)="setFilter('all')" [checked]="filter === 'all'">-->
+<!--  </label>-->
+<!--  <label>-->
+<!--    Active <input type="radio" name="filter" (change)="setFilter('active')" [checked]="filter === 'active'">-->
+<!--  </label>-->
+<!--  <label>-->
+<!--    Drafts <input type="radio" name="filter" (change)="setFilter('drafts')" [checked]="filter === 'drafts'">-->
+<!--  </label>-->
+<!--  <label>-->
+<!--    Archived <input type="radio" name="filter" (change)="setFilter('archived')" [checked]="filter === 'archived'">-->
+<!--  </label>-->
+<!--</div>-->
 <realty-objs-list *ngIf="realtorObjects?.length; else noObjectsTemplate"
+                  [showManageOptions]="true"
                   [showCreatedAt]="true"
                   [realtyObjectsPortion]="realtorObjects"></realty-objs-list>
 <ng-template #noObjectsTemplate>

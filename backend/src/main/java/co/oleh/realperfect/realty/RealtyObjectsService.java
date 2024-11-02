@@ -1,11 +1,12 @@
 package co.oleh.realperfect.realty;
 
+import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
-import co.oleh.realperfect.model.BuildingType;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
+import co.oleh.realperfect.model.RealtyObjectStatus;
 import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import co.oleh.realperfect.model.user.User;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,13 +28,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
+
 @Service
 public class RealtyObjectsService {
     private final RealtyObjectCrudRepository realtyObjectCrudRepository;
-    private RealtyObjectRepository realtyObjectRepository;
-    private ObjectReviewRepository objectReviewRepository;
-    private RealtyObjectPhotoRepository realtyObjectPhotoRepository;
-    private ConfirmationDocPhotoRepository confirmationDocPhotoRepository;
+    private final RealtyObjectRepository realtyObjectRepository;
+    private final ObjectReviewRepository objectReviewRepository;
+    private final RealtyObjectPhotoRepository realtyObjectPhotoRepository;
+    private final ConfirmationDocPhotoRepository confirmationDocPhotoRepository;
     private final RealtorService realtorService;
     private final MappingService mappingService;
     private final UserRepository userRepository;
@@ -117,14 +122,28 @@ public class RealtyObjectsService {
         return this.mappingService.map(realtyObject, RealtyObjectDetailsDto.class);
     }
 
-    public Set<BuildingType> getRealtyBuildingTypes() {
-        return EnumSet.allOf(BuildingType.class);
+    public void verifyRealtorOrAdminOrOwner(SpringSecurityUser user, Long objectId) {
+        Long userId = user.getId();
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+
+        if (!authorities.contains(new SimpleGrantedAuthority(ROLE_PREFIX + "ADMIN")) &&
+                !authorities.contains(new SimpleGrantedAuthority(ROLE_PREFIX + "REALTOR"))) {
+            RealtyObject realtyObject = this.realtyObjectCrudRepository.findById(objectId).get();
+            if (!realtyObject.getOwner().getId().equals(userId)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+        }
+    }
+
+    public int setRealtyObjectStatusById(Long objectId, RealtyObjectStatus realtyObjectStatus) {
+        return this.realtyObjectCrudRepository.updateRealtyObjectStatusById(objectId, realtyObjectStatus);
     }
 
     public Boolean delete(Long objectId) {
         Instant oneWeekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
         if (!objectReviewRepository.findByRealtyObjIdAndDateTimeAfter(objectId, oneWeekAgo).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You Can Not Remove Objects With Future Or Recent Reviews");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You Can Not Remove Objects With Future Or Recent" +
+                    " Reviews");
         }
         this.realtyObjectCrudRepository.deleteById(objectId);
         return true;
