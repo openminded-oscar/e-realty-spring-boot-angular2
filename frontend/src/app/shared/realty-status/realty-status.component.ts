@@ -3,11 +3,11 @@ import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 
 @Component({
-  selector: 'app-realty-manage-actions',
-  templateUrl: './realty-manage-actions.component.html',
-  styleUrls: ['./realty-manage-actions.component.scss']
+  selector: 'app-realty-status',
+  templateUrl: './realty-status.component.html',
+  styleUrls: ['./realty-status.component.scss']
 })
-export class RealtyManageActionsComponent implements OnInit {
+export class RealtyStatusComponent implements OnInit {
   protected readonly RealtyObjectStatus = RealtyObjectStatus;
 
   @Input()
