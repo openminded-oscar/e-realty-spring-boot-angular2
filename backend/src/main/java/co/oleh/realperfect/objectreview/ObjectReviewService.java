@@ -7,10 +7,9 @@ import co.oleh.realperfect.model.ObjectReview;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
-import co.oleh.realperfect.repository.RealtyObjectRepository;
+import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import co.oleh.realperfect.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -28,7 +27,7 @@ public class ObjectReviewService {
     public static final int OBJECT_REVIEW_START_HOUR = 10;
     public static final int OBJECT_REVIEW_END_HOUR = 20;
 
-    private final RealtyObjectRepository realtyObjectRepository;
+    private final RealtyObjectCrudRepository realtyObjectRepository;
     private UserRepository userRepository;
     private ObjectReviewRepository objectReviewRepository;
     private MappingService mappingService;

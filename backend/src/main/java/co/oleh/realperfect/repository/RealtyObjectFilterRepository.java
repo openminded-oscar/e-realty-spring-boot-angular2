@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RealtyObjectRepository extends JpaRepository<RealtyObject, Long>,
+public interface RealtyObjectFilterRepository extends JpaRepository<RealtyObject, Long>,
         JpaSpecificationExecutor<RealtyObject> {
 }

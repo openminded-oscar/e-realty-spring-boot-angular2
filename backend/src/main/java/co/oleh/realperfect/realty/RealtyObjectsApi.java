@@ -15,14 +15,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +83,7 @@ public class RealtyObjectsApi {
                                                                   Pageable pageable) {
         Page<RealtyObjectDto> allObjects;
         if (filterItems != null) {
-            allObjects = realtyObjectsService.getAllObjectsForFilterItems(filterItems, pageable);
+            allObjects = realtyObjectsService.getAllActiveObjectsForFilterItems(filterItems, pageable);
         } else {
             allObjects = realtyObjectsService.getAllObjects(pageable);
         }
@@ -100,7 +97,7 @@ public class RealtyObjectsApi {
                                                                       Pageable pageable) {
         Page<RealtyObjectDto> allObjects;
         if (filterItems != null) {
-            allObjects = realtyObjectsService.getAllObjectsForFilterItems(filterItems, pageable);
+            allObjects = realtyObjectsService.getAllActiveObjectsForFilterItems(filterItems, pageable);
         } else {
             allObjects = realtyObjectsService.getAllObjects(pageable);
         }

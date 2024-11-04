@@ -17,10 +17,9 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
     @Override
     public Predicate toPredicate(Root<RealtyObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         Path<String> keyPath = getField(root, filterItem.getField());
-        String operation = filterItem.getOperation();
         String value = filterItem.getValue();
 
-        FilterOperation filterOperation = FilterOperation.fromString(operation);
+        FilterOperation filterOperation = filterItem.getOperation();
         switch (filterOperation) {
             case GE:
                 return cb.greaterThanOrEqualTo(keyPath, value);
