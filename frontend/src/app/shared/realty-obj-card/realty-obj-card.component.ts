@@ -28,7 +28,7 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
   @Input()
   public showCreatedAt = false;
   @Input()
-  showManageOptions = false;
+  showManageStatusOptions = false;
   public currentUserObjects: RealtyObj[];
   public RealtyObjectStatus = RealtyObjectStatus;
 

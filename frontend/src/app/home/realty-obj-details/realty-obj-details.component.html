@@ -12,13 +12,13 @@
       </h1>
       <div class="details-title--right">
         <div class="btn-manage--container" *ngIf="userService.isAuthenticated$|async">
-          <ng-container *ngIf="isMyObject(currentObject)">
+          <ng-container *ngIf="isMyObject || isRealtorOrAdmin">
             <div>
               <a (click)="promptDelete()"
                  class="btn btn-danger btn-block btn-manage">Delete</a>
             </div>
           </ng-container>
-          <ng-container *ngIf="isMyObject(currentObject)">
+          <ng-container *ngIf="isMyObject || isRealtorOrAdmin">
             <div>
               <a [routerLink]="['/realty-object', currentObject.id, 'editor']"
                  class="btn btn-info btn-block btn-manage">Edit</a>
@@ -62,7 +62,7 @@
             <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
                 <h5 *ngIf="currentObject.description">Description:</h5>
                 <div style="display: flex; flex-direction: row">
-                    <app-realty-status-editor  *ngIf="isMyObject(currentObject)" [realtyObject]="currentObject"></app-realty-status-editor>
+                    <app-realty-status-editor  *ngIf="isMyObject || isRealtorOrAdmin" [realtyObject]="currentObject"></app-realty-status-editor>
                 </div>
             </div>
             <p class="description-block--text" *ngIf="currentObject.description">{{ currentObject.description }}</p>

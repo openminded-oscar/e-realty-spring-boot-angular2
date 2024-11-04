@@ -12,7 +12,7 @@ import {ReviewDto} from '../../app-models/review';
 import {HttpResponse} from '@angular/common/http';
 import {combineLatest, Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
-import {User} from '../../app-models/user';
+import {User, UserRole} from '../../app-models/user';
 
 import {RealtorContactComponent} from '../../shared/realtor-contact/realtor-contact.component';
 import {DeleteRealtyModalComponent} from '../../shared/delete-realty-modal/delete-realty-modal.component';
@@ -26,17 +26,19 @@ import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.co
 })
 export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public RealtyObjectStatus = RealtyObjectStatus;
-  currentObject: RealtyObj;
-  enlargedPhoto: string;
-  isInterested = false;
-  currentReview: ReviewDto = null;
+  public currentObject: RealtyObj;
+  public enlargedPhoto: string;
+  public isInterested = false;
+  public currentReview: ReviewDto = null;
 
   private destroy$ = new Subject<boolean>();
 
   public defaultRealtyObjectPhoto = 'https://placehold.co/650x400?text=Main+photo';
   public defaultRealtorPhoto = 'https://placehold.co/600x400?text=Realtor+photo';
   public user: User;
+  public isRealtorOrAdmin = false;
   private currentUserObjects: RealtyObj[] = [];
+  public isMyObject = false;
 
 
   constructor(public realtyObjService: RealtyObjService,
@@ -52,6 +54,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
       this.userService.user$.pipe(
         tap(user => {
           this.user = user;
+          this.isRealtorOrAdmin = user?.roles.includes(UserRole.Realtor) || user?.roles.includes(UserRole.Admin);
           this.currentUserObjects = user ? user.realtyObjects : [];
         })
       ),
@@ -74,15 +77,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         }
       });
 
-  }
-
-  public isMyObject(realtyObject: RealtyObj) {
-    const id = realtyObject.id;
-    if (this.currentUserObjects) {
-      const object = this.currentUserObjects.find((obj) => obj.id === id);
-      return !!object;
-    }
-    return false;
   }
 
   public setEnlargedPhoto(photo: RealtyPhoto) {
@@ -110,7 +104,13 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   }
 
   private initUserObjectRelatedData() {
-    this.interestService.get(this.currentObject.id)
+    const id = this.currentObject.id;
+    if (this.currentUserObjects) {
+      const object = this.currentUserObjects.find((obj) => obj.id === id);
+      this.isMyObject = !!object;
+    }
+
+    this.interestService.getForObjectAndCurrentUser(this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(interestResponse => {
         if (interestResponse.body) {
@@ -118,7 +118,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.reviewsService.getForObjectAndUser(this.currentObject.id)
+    this.reviewsService.getForObjectAndCurrentUser(this.currentObject.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((reviewsResponse: HttpResponse<ReviewDto>) => {
         if (reviewsResponse.body) {

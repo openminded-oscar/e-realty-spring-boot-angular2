@@ -17,7 +17,7 @@ export class RealtyObjsListComponent implements OnDestroy {
   @Input()
   public showCreatedAt = false;
   @Input()
-  public showManageOptions = false;
+  public showManageStatusOptions = false;
 
   public realtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
 
