@@ -1,4 +1,40 @@
 @import 'app/variables';
+@import 'bootstrap';
+
+.menu-right-block {
+  @include media-breakpoint-down(sm) {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    ::ng-deep {
+      signout-button {
+        width: 100%;
+      }
+      signout-button button {
+        width: 100%;
+        margin-right: 0;
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+.collapse.show {
+  background-color: #343a40;
+  padding: 1rem;
+}
+
+.navbar-collapse {
+  z-index: 1000;
+  height: 80vh;
+  justify-content: space-between;
+
+  @include media-breakpoint-down(sm) {
+    display: flex;
+    flex-direction: column;
+  }
+}
 
 .navbar {
   height: $header-height;
@@ -39,5 +75,8 @@ li.nav-item.owner-item {
   height: 40px;
   width: 40px;
   align-items: center;
-  justify-content: center
+  justify-content: center;
+  @include media-breakpoint-down(sm) {
+    order: -1
+  }
 }

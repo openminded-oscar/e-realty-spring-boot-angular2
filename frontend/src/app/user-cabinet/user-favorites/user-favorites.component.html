@@ -1,5 +1,5 @@
 <div id="itemsContainer" class="row" *ngIf="interests.length; else noInterests">
-  <div *ngFor="let interest of interests; trackBy: trackById" class="col-4">
+  <div *ngFor="let interest of interests; trackBy: trackById" class="col-md-6 col-lg-4">
     <app-realty-obj-card [realtyObject]="interest.realtyObj">
       <div class style="width: 100%; display: flex; justify-content: space-between">
         <div>
