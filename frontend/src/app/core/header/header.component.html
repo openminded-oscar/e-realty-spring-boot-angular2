@@ -1,11 +1,11 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark p-3">
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark p-3">
   <a class="navbar-brand" href="/">RealPerfect</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
           aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div style="justify-content: space-between" class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav mr-auto">
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav me-auto">
       <li class="nav-item">
         <a class="nav-link" [class.active]="isActiveRoute('/buy') || isDefaultRoute()" [routerLink]="['/buy']"
            routerLinkActive="active">Buy</a>
@@ -19,11 +19,11 @@
            routerLinkActive="active">Our Realtors</a>
       </li>
     </ul>
-    <div style="display: flex">
+
+    <div class="menu-right-block" style="display: flex">
       <div class="nav-item owner-item" *ngIf="this.userService.isAdmin$|async">
         <a class="btn btn-light nav-link" routerLink="/admin">Admin Section</a>
       </div>
-
       <div *ngIf="!isAuthenticated" style="display: flex; flex-direction: row; gap: 10px">
         <signup-button></signup-button>
         <signin-button></signin-button>
