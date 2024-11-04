@@ -5,6 +5,7 @@ import {RouterModule} from '@angular/router';
 import {DeleteRealtyModalComponent} from './delete-realty-modal/delete-realty-modal.component';
 import {ScheduleFormModalComponent} from './schedule-form-modal/schedule-form-modal.component';
 import {
+  NgbCollapseModule,
   NgbDatepickerModule,
   NgbDropdownModule,
   NgbModalModule,
@@ -35,6 +36,7 @@ const components = [
     NgbDropdownModule,
     NgbTooltipModule,
     NgbToastModule,
+    NgbCollapseModule,
     FormsModule,
     ReactiveFormsModule,
     RealtyStatusComponent
@@ -47,6 +49,7 @@ const components = [
     NgbDropdownModule,
     NgbToastModule,
     NgbTooltipModule,
+    NgbCollapseModule,
     FormsModule,
     ReactiveFormsModule
   ]
