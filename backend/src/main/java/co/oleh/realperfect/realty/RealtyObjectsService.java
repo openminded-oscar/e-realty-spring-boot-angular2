@@ -33,7 +33,7 @@ import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
 @Service
 public class RealtyObjectsService {
     private final RealtyObjectCrudRepository realtyObjectCrudRepository;
-    private final RealtyObjectRepository realtyObjectRepository;
+    private final RealtyObjectFilterRepository realtyObjectFilterRepository;
     private final ObjectReviewRepository objectReviewRepository;
     private final RealtyObjectPhotoRepository realtyObjectPhotoRepository;
     private final ConfirmationDocPhotoRepository confirmationDocPhotoRepository;
@@ -41,7 +41,7 @@ public class RealtyObjectsService {
     private final MappingService mappingService;
     private final UserRepository userRepository;
 
-    public RealtyObjectsService(RealtyObjectRepository realtyObjectRepository,
+    public RealtyObjectsService(RealtyObjectFilterRepository realtyObjectFilterRepository,
                                 UserRepository userRepository,
                                 ConfirmationDocPhotoRepository confirmationDocPhotoRepository,
                                 ObjectReviewRepository objectReviewRepository,
@@ -51,7 +51,7 @@ public class RealtyObjectsService {
                                 MappingService mappingService) {
         this.confirmationDocPhotoRepository = confirmationDocPhotoRepository;
         this.objectReviewRepository = objectReviewRepository;
-        this.realtyObjectRepository = realtyObjectRepository;
+        this.realtyObjectFilterRepository = realtyObjectFilterRepository;
         this.realtyObjectCrudRepository = realtyObjectCrudRepository;
         this.userRepository = userRepository;
         this.realtyObjectPhotoRepository = realtyObjectPhotoRepository;
@@ -59,14 +59,16 @@ public class RealtyObjectsService {
         this.mappingService = mappingService;
     }
 
-    public Page<RealtyObjectDto> getAllObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
+    public Page<RealtyObjectDto> getAllActiveObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
         RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
+        filterItems.add(FilterItem.ofStatusActive());
+
         for (FilterItem filterItem : filterItems) {
             builder.with(filterItem);
         }
         Specification<RealtyObject> spec = builder.build();
 
-        Page<RealtyObject> objects = realtyObjectRepository.findAll(spec, pageable);
+        Page<RealtyObject> objects = realtyObjectFilterRepository.findAll(spec, pageable);
 
         return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
     }
@@ -78,7 +80,7 @@ public class RealtyObjectsService {
     }
 
     public Page<RealtyObjectDto> getAllObjects(Pageable pageable) {
-        Page<RealtyObject> objects = realtyObjectRepository.findAll(pageable);
+        Page<RealtyObject> objects = realtyObjectFilterRepository.findAll(pageable);
 
         return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
     }
@@ -109,13 +111,13 @@ public class RealtyObjectsService {
             realtyObject.setConfirmationDocPhoto(confPhoto);
         }
 
-        RealtyObject createdObject = realtyObjectRepository.save(realtyObject);
+        RealtyObject createdObject = realtyObjectCrudRepository.save(realtyObject);
 
         return this.mappingService.map(createdObject, RealtyObjectDetailsDto.class);
     }
 
     public RealtyObjectDetailsDto getObjectById(Long objectId) {
-        RealtyObject realtyObject = realtyObjectRepository
+        RealtyObject realtyObject = realtyObjectCrudRepository
                 .findById(objectId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
