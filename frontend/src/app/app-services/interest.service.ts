@@ -51,7 +51,7 @@ export class InterestService extends AbstractService <InterestDto> {
     );
   }
 
-  public get(realtyObjId: number): Observable<HttpResponse<InterestDto>> {
+  public getForObjectAndCurrentUser(realtyObjId: number): Observable<HttpResponse<InterestDto>> {
     return this.sendRequest('get', `/${realtyObjId}`);
   }
 }

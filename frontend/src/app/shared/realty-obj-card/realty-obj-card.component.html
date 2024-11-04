@@ -13,15 +13,15 @@
         <span [routerLink]="['/realty-object', realtyObject.id]"
               style="cursor: pointer">{{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}</span>
       </h4>
+      <ng-container *ngIf="showManageStatusOptions">
+        <app-realty-status-editor [realtyObject]="realtyObject"></app-realty-status-editor>
+      </ng-container>
       <div>
         <div *ngIf="isMyObject">
           <a [routerLink]="['/realty-object', realtyObject.id, 'editor']" style="padding: 0 5px;"
              class="btn btn-info btn-block">Edit</a>
         </div>
       </div>
-      <ng-container *ngIf="showManageOptions">
-        <app-realty-status-editor [realtyObject]="realtyObject"></app-realty-status-editor>
-      </ng-container>
     </div>
     <div>
       <div class="description--row" style="display:flex; flex-direction: row; justify-content: space-between">

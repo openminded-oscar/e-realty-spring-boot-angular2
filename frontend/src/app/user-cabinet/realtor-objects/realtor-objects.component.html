@@ -13,7 +13,7 @@
 <!--  </label>-->
 <!--</div>-->
 <realty-objs-list *ngIf="realtorObjects?.length; else noObjectsTemplate"
-                  [showManageOptions]="true"
+                  [showManageStatusOptions]="true"
                   [showCreatedAt]="true"
                   [realtyObjectsPortion]="realtorObjects"></realty-objs-list>
 <ng-template #noObjectsTemplate>

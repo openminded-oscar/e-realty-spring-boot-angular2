@@ -1,14 +1,4 @@
 <div style="display: flex; flex-direction: row; align-items: center">
-  <div>
-    <i *ngIf="realtyObject.status === RealtyObjectStatus.DRAFT"
-       ngbTooltip="This object is not Activated yet"
-       style="color: red; margin-right: 10px"
-       class="fas fa-pencil-alt"></i>
-    <i *ngIf="realtyObject.status === RealtyObjectStatus.ARCHIVED"
-       ngbTooltip="This object is Archived"
-       style="color: red; margin-right: 10px"
-       class="fas fa-archive"></i>
-  </div>
   <div class="dropdown" ngbDropdown>
     <button
       class="btn btn-link p-0"
@@ -27,7 +17,7 @@
       <li>
         <a class="dropdown-item" (click)="archiveObject(realtyObject)"
            *ngIf="realtyObject.status === RealtyObjectStatus.ACTIVE">
-          Archive
+          Archive Realty Object
         </a>
       </li>
       <li>
@@ -37,5 +27,15 @@
         </a>
       </li>
     </ul>
+  </div>
+  <div style="margin-left: 5px" *ngIf="realtyObject.status !== RealtyObjectStatus.ACTIVE">
+    <i *ngIf="realtyObject.status === RealtyObjectStatus.DRAFT"
+       ngbTooltip="This object is not Activated yet"
+       style="color: red; margin-right: 10px"
+       class="fas fa-pencil-alt"></i>
+    <i *ngIf="realtyObject.status === RealtyObjectStatus.ARCHIVED"
+       ngbTooltip="This object is Archived"
+       style="color: red; margin-right: 10px"
+       class="fas fa-archive"></i>
   </div>
 </div>

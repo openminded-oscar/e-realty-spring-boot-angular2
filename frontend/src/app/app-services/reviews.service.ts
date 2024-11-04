@@ -98,7 +98,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     );
   }
 
-  public getForObjectAndUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
+  public getForObjectAndCurrentUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
     return this.sendRequest('get', `/${realtyObjId}`);
   }
 

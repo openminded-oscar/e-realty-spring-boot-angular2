@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {HomeRoutingModule} from './home-routing.module';
 import {ArchwizardModule} from 'angular-archwizard';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -15,15 +15,16 @@ import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
     RealtyObjsGalleryComponent,
     RealtyObjDetailsComponent,
   ],
-  imports: [
-    HomeRoutingModule,
-    CommonModule,
-    SharedModule,
-    FormsModule,
-    InfiniteScrollModule,
-    ReactiveFormsModule,
-    ArchwizardModule,
-  ],
+    imports: [
+        HomeRoutingModule,
+        CommonModule,
+        SharedModule,
+        FormsModule,
+        InfiniteScrollModule,
+        ReactiveFormsModule,
+        ArchwizardModule,
+        NgOptimizedImage,
+    ],
   providers: [ReviewsService]
 })
 export class HomeModule {
