@@ -11,9 +11,11 @@
 }
 
 .input-row {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between
+  @include media-breakpoint-up(md) {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between
+  }
 }
 
 .card-header {
@@ -43,6 +45,12 @@
   &--section {
     padding-top: 7px;
   }
+}
+
+.filter-input-in-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 }
 
 .main-page-block {
