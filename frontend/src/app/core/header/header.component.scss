@@ -10,15 +10,18 @@
     gap: 10px;
 
     ::ng-deep {
-      signout-button {
-        width: 100%;
-      }
       signout-button button {
         width: 100%;
         margin-right: 0;
         margin-left: 0;
       }
     }
+  }
+}
+
+.mobile-fixed-size {
+  @include media-breakpoint-down(sm) {
+    width: 140px;
   }
 }
 
@@ -32,9 +35,9 @@
   justify-content: space-between;
 
   @include media-breakpoint-down(sm) {
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
+    //height: 80vh;
+    //display: flex;
+    //flex-direction: column;
   }
 }
 

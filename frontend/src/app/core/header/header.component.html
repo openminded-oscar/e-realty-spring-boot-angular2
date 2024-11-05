@@ -22,14 +22,14 @@
     </ul>
 
     <div class="menu-right-block" style="display: flex">
-      <div class="nav-item owner-item" *ngIf="this.userService.isAdmin$ | async">
+      <div class="nav-item owner-item mobile-fixed-size" *ngIf="this.userService.isAdmin$ | async">
         <a class="btn btn-light nav-link" routerLink="/admin" (click)="closeMenu()">Admin Section</a>
       </div>
       <div *ngIf="!isAuthenticated" style="display: flex; flex-direction: row; gap: 10px">
         <signup-button></signup-button>
         <signin-button></signin-button>
       </div>
-      <signout-button *ngIf="isAuthenticated" (click)="closeMenu()"></signout-button>
+      <signout-button class="mobile-fixed-size"  *ngIf="isAuthenticated" (click)="closeMenu()"></signout-button>
       <div class="nav-to-profile" *ngIf="isAuthenticated" [routerLink]="['/profile']" (click)="closeMenu()">
         <img style="height: 100%; border-radius: 50%;" *ngIf="user?.profilePicUrl; else avatarIcon"
              [src]="user.profilePicUrl" alt="">
