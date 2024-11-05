@@ -1,4 +1,7 @@
 @import 'app/variables';
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
 
 $aw-colors: (
   '_': (
@@ -37,11 +40,13 @@ $aw-colors: (
 
 body { padding-top: $header-height; }
 
-.side-section {
-  position: sticky;
-  top: $header-height;
-  height: calc(100vh - #{$header-height});
-  overflow-y: auto; /* Allow scrolling within the filter section if needed */
+.tablet-desktop-side-section {
+  @include media-breakpoint-up(md) {
+    position: sticky;
+    top: $header-height;
+    height: calc(100vh - #{$header-height});
+    overflow-y: auto; /* Allow scrolling within the filter section if needed */
+  }
 }
 
 
