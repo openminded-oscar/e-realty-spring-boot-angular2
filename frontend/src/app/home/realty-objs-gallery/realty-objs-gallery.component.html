@@ -3,9 +3,11 @@
     <div class="row card" [formGroup]="filterForm">
       <div class="card-header">
         <div class="card-header--part">
-          <input name="city" (keyup.enter)="loadInitialObjects()" [placeholder]="'Type City'" [formControlName]="'city'" class="form-control">
+          <input name="city" (keyup.enter)="loadInitialObjects()" [placeholder]="'Type City'" [formControlName]="'city'"
+                 class="form-control">
         </div>
-        <div>
+
+        <div class="d-flex justify-content-between align-items-center mt-2">
           <div class="filter--value-container card-header--part" ngbDropdown>
             <button
               id="orderByDropdownMenuButton"
@@ -32,54 +34,64 @@
               </ng-container>
             </span>
           </div>
+
+          <button class="btn btn-link collapse-filter-btn d-md-none" (click)="isFilterCollapsed = !isFilterCollapsed" aria-expanded="isFilterCollapsed">
+            <i [class]="isFilterCollapsed ? 'fas fa-chevron-down' : 'fas fa-chevron-up'"></i>
+          </button>
         </div>
       </div>
 
-      <div class="other-filters form-group card-body">
-        Street
-        <input (keyup.enter)="loadInitialObjects()" name="street" [formControlName]="'street'" class="form-control">
-        <div class="input-row">
-          <div>
-            Price min
-            <input (keyup.enter)="loadInitialObjects()" type="number" name="minPrice" [formControlName]="'priceMin'" class="form-control">
+      <div class="other-filters--section form-group card-body" [ngbCollapse]="isFilterCollapsed">
+        <div class="other-filters">
+          Street
+          <input (keyup.enter)="loadInitialObjects()" name="street" [formControlName]="'street'" class="form-control">
+          <div class="input-row">
+            <div>
+              Price min
+              <input (keyup.enter)="loadInitialObjects()" type="number" name="minPrice" [formControlName]="'priceMin'"
+                     class="form-control">
+            </div>
+            <div>
+              Price max
+              <input (keyup.enter)="loadInitialObjects()" type="number" name="maxPrice" [formControlName]="'priceMax'"
+                     class="form-control">
+            </div>
           </div>
-          <div>
-            Price max
-            <input (keyup.enter)="loadInitialObjects()" type="number" name="maxPrice" [formControlName]="'priceMax'" class="form-control">
+          <div class="input-row">
+            <div>
+              Area min
+              <input (keyup.enter)="loadInitialObjects()" type="number" name="minTotalArea"
+                     [formControlName]="'totalAreaMin'" class="form-control">
+            </div>
+            <div>
+              Area max
+              <input (keyup.enter)="loadInitialObjects()" type="number" name="maxTotalArea"
+                     [formControlName]="'totalAreaMax'" class="form-control">
+            </div>
+          </div>
+          Rooms
+          <input (keyup.enter)="loadInitialObjects()" name="rooms" type="number" [formControlName]="'roomsAmount'"
+                 class="form-control">
+          Description like
+          <input (keyup.enter)="loadInitialObjects()" name="description" [formControlName]="'description'"
+                 class="form-control">
+          Building type
+          <select [formControlName]="'buildingType'" name="buildingType" class="form-control" required>
+            <option (change)="loadInitialObjects()" *ngFor="let buildingType of buildingTypes"
+                    [ngValue]="buildingType">{{ buildingType }}
+            </option>
+          </select>
+        </div>
+        <div class="row" style="max-width: unset; width: unset; margin-top: 10px">
+          <div class="col-6">
+            <button (click)="resetFiltersAndLoadInitialObjects()" class="btn btn-info btn-block">Reset all</button>
+          </div>
+          <div class="col-6">
+            <button (click)="loadInitialObjects()" class="btn btn-info btn-block">Search</button>
           </div>
         </div>
-        <div class="input-row">
-          <div>
-            Area min
-            <input (keyup.enter)="loadInitialObjects()" type="number" name="minTotalArea" [formControlName]="'totalAreaMin'" class="form-control">
-          </div>
-          <div>
-            Area max
-            <input (keyup.enter)="loadInitialObjects()" type="number" name="maxTotalArea" [formControlName]="'totalAreaMax'" class="form-control">
-          </div>
-        </div>
-        Rooms
-        <input (keyup.enter)="loadInitialObjects()" name="rooms" type="number" [formControlName]="'roomsAmount'" class="form-control">
-        Description like
-        <input (keyup.enter)="loadInitialObjects()" name="description" [formControlName]="'description'" class="form-control">
-        Building type
-        <select [formControlName]="'buildingType'" name="buildingType" class="form-control" required>
-          <option (change)="loadInitialObjects()" *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
-          </option>
-        </select>
-        <!--Dwelling type-->
-        <!--<select name="dwellingType" [(ngModel)]="filter.dwellingType.eq" class="form-control">-->
+      </div>
 
-        <!--</select>-->
-      </div>
-      <div class="row" style="max-width: unset; width: unset">
-        <div class="col-6">
-          <button (click)="resetFiltersAndLoadInitialObjects()" class="btn btn-info btn-block">Reset all</button>
-        </div>
-        <div class="col-6">
-          <button (click)="loadInitialObjects()" class="btn btn-info btn-block">Search</button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -91,4 +103,3 @@
     <realty-objs-list [realtyObjectsPortion]="currentObjectsPortion$|async"></realty-objs-list>
   </div>
 </div>
-

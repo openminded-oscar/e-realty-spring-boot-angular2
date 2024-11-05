@@ -1,4 +1,7 @@
 @import "app/variables";
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
 
 .toast-container {
   position: absolute;
@@ -28,12 +31,18 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center
+    align-items: center;
+
+    @include media-breakpoint-up(md) {
+      width: 100%;
+    }
   }
 }
 
 .other-filters {
-  padding-top: 7px;
+  &--section {
+    padding-top: 7px;
+  }
 }
 
 .main-page-block {

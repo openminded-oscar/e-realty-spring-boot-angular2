@@ -6,7 +6,7 @@ import {ConfigService, OPERATION_TYPES} from '../../app-services/config.service'
 import {Router} from '@angular/router';
 import {UserService} from '../../app-services/user.service';
 import {BehaviorSubject, Observable, Subject, take} from 'rxjs';
-import {debounceTime, map, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime} from 'rxjs/operators';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
 import {RealtyObjsListComponent} from '../../shared/realty-objs-list/realty-objs-list.component';
@@ -89,6 +89,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         display: 'City',
         field: 'address.city',
     }];
+  public isFilterCollapsed = true;
 
     public ngOnInit() {
         this.resolveTargetOperations();
