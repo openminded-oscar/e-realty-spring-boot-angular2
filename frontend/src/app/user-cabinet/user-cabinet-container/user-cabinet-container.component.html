@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col-3 side-section">
+  <div class="col-md-3 tablet-desktop-side-section">
     <app-user-profile></app-user-profile>
   </div>
-  <div class="col-9">
+  <div class="col-md-9">
     <ul ngbNav class="nav-tabs">
       <li [ngbNavItem]="link.route" *ngFor="let link of (activeLinks$|async)">
         <a ngbNavLink [routerLink]="link.route">{{ link.title }}</a>

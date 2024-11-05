@@ -36,13 +36,6 @@
   padding-top: 7px;
 }
 
-.filters-section {
-  position: sticky;
-  top: $header-height;
-  height: calc(100vh - #{$header-height});
-  overflow-y: auto; /* Allow scrolling within the filter section if needed */
-}
-
-.filters-section, .main-page-block {
+.main-page-block {
   padding-top: $padding-below-header;
 }

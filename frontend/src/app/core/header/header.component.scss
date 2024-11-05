@@ -27,10 +27,10 @@
 
 .navbar-collapse {
   z-index: 1000;
-  height: 80vh;
   justify-content: space-between;
 
   @include media-breakpoint-down(sm) {
+    height: 80vh;
     display: flex;
     flex-direction: column;
   }
