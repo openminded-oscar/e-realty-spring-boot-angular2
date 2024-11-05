@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtyObj} from '../../app-models/realty-obj';
@@ -46,7 +46,8 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     @ViewChild(RealtyObjsListComponent)
     public listComponent: RealtyObjsListComponent;
 
-    constructor(public realtyObjService: RealtyObjService,
+    constructor(
+      public realtyObjService: RealtyObjService,
                 public userService: UserService,
                 public config: ConfigService,
                 public router: Router,
@@ -69,7 +70,6 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         size: 12
     };
 
-
     public FILTER_DEBOUNCE_TIME = 1000;
     public selectedOrderingOption: SortField = {
         display: 'Price',
@@ -89,7 +89,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         display: 'City',
         field: 'address.city',
     }];
-  public isFilterCollapsed = true;
+    public isFilterCollapsed = window.innerWidth < 768;
 
     public ngOnInit() {
         this.resolveTargetOperations();
