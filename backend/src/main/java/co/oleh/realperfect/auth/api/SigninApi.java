@@ -11,18 +11,19 @@ import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.*;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,7 +31,6 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/signin")
 @Slf4j
 public class SigninApi {
-
     private final UserService userService;
     private final MappingService mappingService;
     private final AuthenticationService tokenAuthenticationService;
@@ -82,7 +82,10 @@ public class SigninApi {
 
     @PostMapping
     public Token signIn(@RequestBody EmailPasswordDto credentials) {
-        User user = userService.findUserByEmailAndVerify(credentials);
+        User user = userService.findUserByEmailAndVerifyPassword(credentials);
+        if (!user.getUserConfirmed()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User email not confirmed");
+        }
 
         String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
 
@@ -100,6 +103,10 @@ public class SigninApi {
                     googleAccountData.getEmail(),
                     verifiedIdToken.getPayload().getSubject()
             );
+        } else {
+            if (!user.getUserConfirmed()) {
+                userService.saveUserIsConfirmed(user.getId());
+            }
         }
 
         String tokenString = tokenAuthenticationService.generateTokenBySubject(user.getId().toString());
