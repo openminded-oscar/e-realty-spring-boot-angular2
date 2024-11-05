@@ -11,16 +11,16 @@
           </div>
           <div class="form-horizontal">
             <div class="form-group row" [formGroupName]="'address'">
-              <label class="col-1 col-form-label text-right">City:</label>
-              <div class="col-3">
+              <label class="col-md-1 col-form-label text-right">City:</label>
+              <div class="col-md-3">
                 <input class="form-control" style="width: 100%" [formControlName]="'city'">
               </div>
-              <label class="col-1 col-form-label text-right">Street:</label>
-              <div class="col-3">
+              <label class="col-md-1 col-form-label text-right">Street:</label>
+              <div class="col-md-3">
                 <input class="form-control" style="width: 100%" [formControlName]="'street'">
               </div>
-              <label class="col-1 col-form-label text-right" for="number-of-street-input">Building number:</label>
-              <div class="col-3">
+              <label class="col-md-1 col-form-label text-right" for="number-of-street-input">Building number:</label>
+              <div class="col-md-3">
                 <input id="number-of-street-input" name="buildingNumber" type="text"
                        class="form-control"
                        [formControlName]="'numberOfStreet'">
@@ -28,45 +28,45 @@
             </div>
             <div class="form-group row">
               <ng-container [formGroupName]="'address'">
-                <label class="col-1 col-form-label text-right" for="apt-number-input">Apt.
+                <label class="col-md-1 col-form-label text-right" for="apt-number-input">Apt.
                   number:</label>
-                <div class="col-3">
+                <div class="col-md-3">
                   <input id="apt-number-input" [formControlName]="'apartmentNumber'"
                          name="flatNum"
                          type="text"
                          class="form-control">
                 </div>
               </ng-container>
-              <label class="col-1 col-form-label text-right">Dwelling type:</label>
-              <div class="col-3">
+              <label class="col-md-1 col-form-label text-right">Dwelling type:</label>
+              <div class="col-md-3">
                 <select [formControlName]="'dwellingType'" name="dwellingType" class="form-control">
                   <option *ngFor="let dwellingType of dwellingTypes" [value]="dwellingType">{{ dwellingType }}
                   </option>
                 </select>
               </div>
-              <label class="col-1 col-form-label text-right" for="rooms-amount-input">Rooms
+              <label class="col-md-1 col-form-label text-right" for="rooms-amount-input">Rooms
                 amount:</label>
-              <div class="col-3">
+              <div class="col-md-3">
                 <input id="rooms-amount-input" name="rooms" type="number"
                        class="form-control"
                        [formControlName]="'roomsAmount'">
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-1 text-right" for="building-floors-input">Floors in building:</label>
-              <div class="col-3">
+              <label class="col-form-label col-md-1 text-right" for="building-floors-input">Floors in building:</label>
+              <div class="col-md-3">
                 <input id="building-floors-input" name="buildNum" type="number"
                        class="form-control" [formControlName]="'totalFloors'">
               </div>
-              <label class="col-form-label col-1 text-right" for="floor-input">Floor:</label>
-              <div class="col-3">
+              <label class="col-form-label col-md-1 text-right" for="floor-input">Floor:</label>
+              <div class="col-md-3">
                 <input id="floor-input" name="floor" type="number"
                        class="form-control" [formControlName]="'floor'">
               </div>
-              <div class="col-form-label text-right col-1">
+              <div class="col-form-label text-right col-md-1">
                 <label>Building type:</label>
               </div>
-              <div class="col-3">
+              <div class="col-md-3">
                 <select [formControlName]="'buildingType'" name="buildingType" class="form-control">
                   <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
                   </option>
@@ -74,15 +74,15 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-1 text-right" for="total-area-input">Total
+              <label class="col-form-label col-md-1 text-right" for="total-area-input">Total
                 area:</label>
-              <div class="col-3">
+              <div class="col-md-3">
                 <input id="total-area-input" name="total-area" type="number"
                        class="form-control" [formControlName]="'totalArea'">
               </div>
               <label class="col-form-label col-1 text-right" for="textinput">Living
                 area:</label>
-              <div class="col-3">
+              <div class="col-md-3">
                 <input id="textinput" name="buildNum" type="number"
                        class="form-control"
                        [formControlName]="'livingArea'">
@@ -94,10 +94,7 @@
 
         <aw-wizard-step stepTitle="Description and targeting">
           <div class="row mb-2">
-            <div class="col-6 text-left">
-              <button type="button" class="btn" awPreviousStep>Previous step</button>
-            </div>
-            <div class="col-6 text-right action-buttons">
+            <div class="text-right action-buttons">
               <button type="button" class="btn btn-info" awPreviousStep>Prev Step</button>
               <button type="button" class="btn btn-info" awNextStep>Next Step</button>
               <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">
@@ -107,17 +104,17 @@
           </div>
           <div [formGroup]="importantInfoFormGroup" class="form-horizontal">
             <div class="form-group row" style="margin-bottom: 20px">
-              <div class="col-1 col-form-label">
+              <div class="col-md-1 col-form-label">
                 <label for="description-input">Overall description:</label>
               </div>
-              <div class="col-5">
+              <div class="col-md-5">
         					<textarea rows="4" maxlength="255" [formControlName]="'description'" class="form-control"
                             id="description-input" name="description-input"></textarea>
               </div>
-              <div class="col-1 col-form-label">
+              <div class="col-md-1 col-form-label">
                 <label for="other-info-input">Other info:</label>
               </div>
-              <div class="col-5">
+              <div class="col-md-5">
         					<textarea rows="3" maxlength="64" name="otherInfo" [formControlName]="'otherInfo'"
                             class="form-control"
                             id="other-info-input"
@@ -125,21 +122,21 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-1">
+              <div class="col-md-1">
                 <label for="foundation-year-input">Foundation year:</label>
               </div>
-              <div class="col-2">
+              <div class="col-md-2">
                 <input class="form-control" id="foundation-year-input"
                        [formControlName]="'foundationYear'" name="foundationYear">
               </div>
-              <div class="col-3">
+              <div class="col-md-3">
                 <label>Recently repaired</label>
                 <input name="repairing"
                        type="checkbox"
                        [formControlName]="'hasRepairing'"
                        class="big-checkbox">
               </div>
-              <div class="col-2">
+              <div class="col-md-2">
                 <label>
                   Garage
                 </label>
@@ -148,7 +145,7 @@
                        [formControlName]="'hasGarage'"
                        class="big-checkbox">
               </div>
-              <div class="col-2">
+              <div class="col-md-2">
                 <label>
                   Cellar
                 </label>
@@ -157,7 +154,7 @@
                        [formControlName]="'hasCellar'"
                        class="big-checkbox">
               </div>
-              <div class="col-2">
+              <div class="col-md-2">
                 <label>
                   Loft
                 </label>
@@ -171,9 +168,9 @@
             <div class="row">
               <ng-container [formArrayName]="'targetOperations'"
                             *ngFor="let operation of operationsInputValues; let i = index">
-                <div class="col-1 me-0 ms-0">
+                <div class="col-md-1 me-0 ms-0">
                 </div>
-                <div [formGroupName]="i" class="col-5">
+                <div [formGroupName]="i" class="col-md-5">
                   <label>
                     <input class="big-checkbox"
                            type="checkbox"
@@ -186,18 +183,18 @@
               </ng-container>
             </div>
             <div class="row">
-              <div class="col-1">
+              <div class="col-md-1">
                 <label class="col-form-label" for="price-input">Selling price:</label>
               </div>
-              <div class="col-5">
+              <div class="col-md-5">
                 <input id="price-input" name="price" type="text"
                        class="form-control"
                        [formControlName]="'price'">
               </div>
-              <div class="col-1">
+              <div class="col-md-1">
                 <label class="col-form-label" for="price-input">Rent price ($ per month):</label>
               </div>
-              <div class="col-5">
+              <div class="col-md-5">
                 <input id="price-rent-input" name="price-for-rent" type="text"
                        class="form-control"
                        [formControlName]="'priceForRent'">
@@ -205,10 +202,10 @@
             </div>
             <hr/>
             <div class="row">
-              <div class="col-2 col-form-label">
+              <div class="col-md-2 col-form-label">
                 <label>Realtor:</label>
               </div>
-              <div class="col-10">
+              <div class="col-md-10">
                 <select class="form-control"
                         [formControlName]="'realtor'"
                         name="selected-realtor">
@@ -223,10 +220,7 @@
         </aw-wizard-step>
         <aw-wizard-step [formGroupName]="'photosFormGroup'" stepTitle="Photos and ownership confirmation">
           <div class="row mb-2">
-            <div class="col-6 text-left">
-              <button type="button" class="btn" awPreviousStep>Previous step</button>
-            </div>
-            <div class="col-6 text-right action-buttons">
+            <div class="text-right action-buttons">
               <button type="button" class="btn btn-info" awPreviousStep>Prev Step</button>
               <button type="button" class="btn btn-info" disabled>Next Step</button>
               <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">
@@ -236,7 +230,7 @@
           </div>
           <div class="form-horizontal">
             <div class="form-group row">
-              <div class="col-3">
+              <div class="col-md-3">
                 <label class="col-form-label">Ownership verification photo:&nbsp;</label>
                 <input type="file" (change)="onVerificationPictureSelecting($event)" placeholder="Upload file"
                        accept="image/*">
@@ -244,7 +238,7 @@
                   <img class="img-fluid" [src]="photosFormGroup.get('confirmationDocPhoto')?.value?.fullUrl || ''">
                 </div>
               </div>
-              <div class="col-9">
+              <div class="col-md-9">
                 <div style="margin-bottom: 5px">
                   <label class="col-form-label">Realty object photos (max. 5 MB):&nbsp;</label>
                   <br/>
@@ -252,7 +246,7 @@
                          accept="image/*" required>
                 </div>
                 <div class="row">
-                  <div class="col-3 realty-pic-preview-container"
+                  <div class="col-md-3 realty-pic-preview-container"
                        *ngFor="let photo of photosFormGroup.get('photos')?.value; let i = index">
                     <img class="img-fluid" [src]="photo.fullUrl || ''">
                     <div *ngIf="photo.type!==photoType.REALTY_MAIN">
