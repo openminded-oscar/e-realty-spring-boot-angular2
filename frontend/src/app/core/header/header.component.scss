@@ -10,9 +10,6 @@
     gap: 10px;
 
     ::ng-deep {
-      signout-button {
-        width: 100%;
-      }
       signout-button button {
         width: 100%;
         margin-right: 0;
@@ -20,6 +17,26 @@
       }
     }
   }
+
+  ::ng-deep {
+    @include media-breakpoint-down(md) {
+      signout-button button {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+    }
+  }
+}
+
+.mobile-fixed-size-button-block {
+  @include media-breakpoint-down(sm) {
+    width: 140px;
+  }
+}
+
+.nav-link {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 
 .collapse.show, .collapsing {
@@ -30,12 +47,6 @@
 .navbar-collapse {
   z-index: 1000;
   justify-content: space-between;
-
-  @include media-breakpoint-down(sm) {
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-  }
 }
 
 .navbar {
@@ -48,11 +59,6 @@ li.nav-item {
 
 .navbar-brand {
   font-size: 1.4rem !important;
-}
-
-.nav-link {
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
 }
 
 li.nav-item.owner-item {
