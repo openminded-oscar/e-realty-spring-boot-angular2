@@ -35,8 +35,8 @@
             </span>
           </div>
 
-          <button class="btn btn-link collapse-filter-btn d-md-none" (click)="isFilterCollapsed = !isFilterCollapsed" aria-expanded="isFilterCollapsed">
-            <i [class]="isFilterCollapsed ? 'fas fa-chevron-down' : 'fas fa-chevron-up'"></i>
+          <button class="btn btn-link collapse-filter-btn d-md-none" (click)="isFilterCollapsed = !isFilterCollapsed">
+            {{isFilterCollapsed? 'Display All Filters': 'Hide All Filters'}}
           </button>
         </div>
       </div>
@@ -45,25 +45,23 @@
         <div class="other-filters">
           Street
           <input (keyup.enter)="loadInitialObjects()" name="street" [formControlName]="'street'" class="form-control">
-          <div class="input-row">
-            <div>
+          <div class="row">
+            <div class="filter-input-in-row col-3 col-sm-6">
               Price min
               <input (keyup.enter)="loadInitialObjects()" type="number" name="minPrice" [formControlName]="'priceMin'"
                      class="form-control">
             </div>
-            <div>
+            <div class="filter-input-in-row col-3 col-sm-6">
               Price max
               <input (keyup.enter)="loadInitialObjects()" type="number" name="maxPrice" [formControlName]="'priceMax'"
                      class="form-control">
             </div>
-          </div>
-          <div class="input-row">
-            <div>
+            <div class="filter-input-in-row col-3 col-sm-6">
               Area min
               <input (keyup.enter)="loadInitialObjects()" type="number" name="minTotalArea"
                      [formControlName]="'totalAreaMin'" class="form-control">
             </div>
-            <div>
+            <div class="filter-input-in-row col-3 col-sm-6">
               Area max
               <input (keyup.enter)="loadInitialObjects()" type="number" name="maxTotalArea"
                      [formControlName]="'totalAreaMax'" class="form-control">
