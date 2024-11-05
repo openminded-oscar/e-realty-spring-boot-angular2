@@ -80,7 +80,9 @@ export class HttpErrorsInterceptor implements HttpInterceptor {
 
                 switch (response.status) {
                     case 401: {
-                        this.openSignIn();
+                        if (!skipError) {
+                          this.openSignIn();
+                        }
                         return throwError(() => response);
                     }
                     default: {
