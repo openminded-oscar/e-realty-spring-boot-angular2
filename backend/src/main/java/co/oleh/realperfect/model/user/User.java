@@ -12,6 +12,7 @@ import java.util.Set;
 @Table(name = "tbl_user")
 public class User extends AuditableEntity {
     private Long id;
+    private Boolean isUserConfirmed;
     private String login;
     private String email;
     private String password;
@@ -130,5 +131,14 @@ public class User extends AuditableEntity {
 
     public void setProfilePic(UserPhoto profilePic) {
         this.profilePic = profilePic;
+    }
+
+    @Column(name = "is_user_confirmed", unique = false, nullable = false)
+    public Boolean getUserConfirmed() {
+        return isUserConfirmed;
+    }
+
+    public void setUserConfirmed(Boolean userConfirmed) {
+        isUserConfirmed = userConfirmed;
     }
 }

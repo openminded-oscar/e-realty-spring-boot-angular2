@@ -6,12 +6,14 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 
@@ -29,11 +31,16 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
           throws IOException, ServletException {
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     if (SecurityContextHolder.getContext().getAuthentication() == null) {
-      Authentication authentication = authenticationService.getAuthentication(httpRequest);
-      if (authentication == null) {
-        authentication = authenticationService.getGoogleAuthentication(httpRequest);
+      try {
+        Authentication authentication = authenticationService.getAuthentication(httpRequest);
+        if (authentication == null) {
+          authentication = authenticationService.getGoogleAuthentication(httpRequest);
+        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+      } catch (ResponseStatusException ex) {
+        ((HttpServletResponse) response).sendError(ex.getStatus().value(), ex.getReason());
+        return;
       }
-      SecurityContextHolder.getContext().setAuthentication(authentication);
     }
     chain.doFilter(request, response);
   }

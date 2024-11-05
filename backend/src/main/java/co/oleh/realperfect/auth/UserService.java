@@ -102,12 +102,13 @@ public class UserService {
         user.setLogin(email);
         user.setEmail(email);
         user.setPassword("");
+        user.setUserConfirmed(true);
         user.setGoogleUserIdTokenSubject(tokenSubject);
 
         return save(user);
     }
 
-    public User findUserByEmailAndVerify(EmailPasswordDto emailPasswordDto) {
+    public User findUserByEmailAndVerifyPassword(EmailPasswordDto emailPasswordDto) {
         Optional<User> maybeUser = userRepository.findByEmail(emailPasswordDto.getEmail());
         if (maybeUser.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User doesn't exist");
@@ -178,5 +179,9 @@ public class UserService {
         this.userRepository.save(user);
 
         return this.mappingService.map(user, UserDto.class);
+    }
+
+    public void saveUserIsConfirmed(Long userId) {
+        this.userRepository.setUserConfirmedById(userId);
     }
 }

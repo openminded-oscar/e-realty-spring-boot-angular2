@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -43,6 +45,9 @@ public class AuthenticationService {
             Optional<String> userIdFromToken = this.parseJwt(header);
             if (userIdFromToken.isPresent()) {
                 User userInDb = this.userService.findById(Long.valueOf(userIdFromToken.get()));
+                if (userInDb == null || !userInDb.getUserConfirmed()) {
+                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Confirmed User not found with this email");
+                }
                 List<SimpleGrantedAuthority> roles =
                         userInDb.getRoles()
                                 .stream()
@@ -63,7 +68,8 @@ public class AuthenticationService {
         if (header != null && !header.isEmpty()) {
             Optional<String> parsedToken = this.parseJwt(header);
             if (parsedToken.isPresent()) {
-//                OAuth2AuthorizedClient oAuth2AuthorizedClient = authorizedClientService.loadAuthorizedClient("google", parsedToken.get());
+//                OAuth2AuthorizedClient oAuth2AuthorizedClient = authorizedClientService.loadAuthorizedClient
+//                ("google", parsedToken.get());
 //                OAuth2AccessToken oAuth2AccessToken = oAuth2AuthorizedClient.getAccessToken();
 //                String principalName = oAuth2AuthorizedClient.getPrincipalName();
                 return new OAuth2AuthenticationToken(new DefaultOAuth2User(new ArrayList<GrantedAuthority>() {{
