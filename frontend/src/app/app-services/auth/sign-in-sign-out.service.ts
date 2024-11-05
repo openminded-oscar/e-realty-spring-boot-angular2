@@ -39,8 +39,8 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
       tap((reqResult) => {
         this.userService.fetchUserStatus();
       }),
-      catchError((error) => {
-        const errorMessage = error?.message || 'Sign-in failed. Please try again.';
+      catchError((body) => {
+        const errorMessage = body?.error?.message || 'Sign-in failed. Please try again.';
         this.globalNotificationService.showErrorNotification(errorMessage);
         return this.dismissAllModal().pipe(switchMap(() => of(null)));
       })
