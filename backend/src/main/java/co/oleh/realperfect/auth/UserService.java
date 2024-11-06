@@ -11,7 +11,6 @@ import co.oleh.realperfect.model.user.*;
 import co.oleh.realperfect.repository.EmailConfirmationTokenRepository;
 import co.oleh.realperfect.repository.RealtorRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -32,6 +31,7 @@ import static co.oleh.realperfect.model.user.RoleUtils.USER_ROLE;
 @AllArgsConstructor
 @Slf4j
 public class UserService {
+    private UsersCacheHelperService userCache;
     private MappingService mappingService;
     private UserRepository userRepository;
     private EmailConfirmationTokenRepository emailConfirmationTokenRepository;
@@ -46,7 +46,7 @@ public class UserService {
         mergePatch(userDto, user);
 
         User updatedUser = userRepository.save(user);
-        this.evictUserCache(user.getId());
+        userCache.evictUserCache(user.getId());
 
         UserSelfDto userSelfDto = this.mappingService.map(updatedUser, UserSelfDto.class);
         userSelfDto.setRoles(
@@ -96,9 +96,6 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @CacheEvict(value = CacheNames.USERS_CACHE, key = "#id")
-    public void evictUserCache(Long id) {
-    }
 
     public EmailConfirmationStatus confirmUserByToken(String token) {
         EmailConfirmationToken confirmationToken = emailConfirmationTokenRepository.findByToken(token);
@@ -128,7 +125,7 @@ public class UserService {
 
     public void confirmUser(User user) {
         userRepository.setUserConfirmedById(user.getId());
-        evictUserCache(user.getId());
+        userCache.evictUserCache(user.getId());
     }
 
     private boolean isTokenExpired(EmailConfirmationToken token) {
@@ -211,7 +208,7 @@ public class UserService {
         realtor.setUser(user);
 
         this.realtorRepository.save(realtor);
-        evictUserCache(user.getId());
+        userCache.evictUserCache(user.getId());
 
         return this.mappingService.map(user, UserDto.class);
     }
@@ -234,7 +231,7 @@ public class UserService {
         roles.remove(role);
         this.realtorRepository.deleteById(realtor.getId());
         this.userRepository.save(user);
-        evictUserCache(user.getId());
+        userCache.evictUserCache(user.getId());
 
         return this.mappingService.map(user, UserDto.class);
     }
