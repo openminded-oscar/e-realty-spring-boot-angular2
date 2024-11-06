@@ -91,12 +91,12 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @Cacheable(value = CacheNames.USERS_CACHE)
+    @Cacheable(value = CacheNames.USERS_CACHE, key = "#id")
     public User findByIdCacheable(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @CacheEvict(value = CacheNames.USERS_CACHE)
+    @CacheEvict(value = CacheNames.USERS_CACHE, key = "#id")
     public void evictUserCache(Long id) {
     }
 
