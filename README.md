@@ -29,8 +29,7 @@ build (compile, 'compress', etc) FrontEnd into `dist` folder and then build Back
 TODO
 - Integrate ElasticSearch for full-text search by realty object description
 - Integrate Swagger
-- Implement RENT feature filter
-- ConcurrentHashMap integration for reservations, to try CopyOnWriteArrayList
+- to try CopyOnWriteArrayList, ConcurrentHashMap
 - Graceful Shutdown
 - Unit-tests
 - MySQL cluster?
