@@ -1,5 +1,6 @@
 package co.oleh.realperfect.auth;
 
+import co.oleh.realperfect.config.cache.CacheNames;
 import co.oleh.realperfect.emails.EmailSenderService;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
@@ -10,8 +11,9 @@ import co.oleh.realperfect.model.user.*;
 import co.oleh.realperfect.repository.EmailConfirmationTokenRepository;
 import co.oleh.realperfect.repository.RealtorRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
@@ -44,6 +46,7 @@ public class UserService {
         mergePatch(userDto, user);
 
         User updatedUser = userRepository.save(user);
+        this.evictUserCache(user.getId());
 
         UserSelfDto userSelfDto = this.mappingService.map(updatedUser, UserSelfDto.class);
         userSelfDto.setRoles(
@@ -83,8 +86,18 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Cacheable(value = CacheNames.USERS_CACHE)
+    public User findByIdCacheable(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @CacheEvict(value = CacheNames.USERS_CACHE)
+    public void evictUserCache(Long id) {
     }
 
     public EmailConfirmationStatus confirmUserByToken(String token) {
@@ -113,8 +126,9 @@ public class UserService {
         return EmailConfirmationStatus.EMAIL_CONFIRMED;
     }
 
-    private void confirmUser(User user) {
+    public void confirmUser(User user) {
         userRepository.setUserConfirmedById(user.getId());
+        evictUserCache(user.getId());
     }
 
     private boolean isTokenExpired(EmailConfirmationToken token) {
@@ -197,6 +211,7 @@ public class UserService {
         realtor.setUser(user);
 
         this.realtorRepository.save(realtor);
+        evictUserCache(user.getId());
 
         return this.mappingService.map(user, UserDto.class);
     }
@@ -219,11 +234,8 @@ public class UserService {
         roles.remove(role);
         this.realtorRepository.deleteById(realtor.getId());
         this.userRepository.save(user);
+        evictUserCache(user.getId());
 
         return this.mappingService.map(user, UserDto.class);
-    }
-
-    public void saveUserIsConfirmed(Long userId) {
-        this.userRepository.setUserConfirmedById(userId);
     }
 }

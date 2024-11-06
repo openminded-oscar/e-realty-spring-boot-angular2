@@ -44,7 +44,8 @@ public class AuthenticationService {
         if (header != null && !header.isEmpty()) {
             Optional<String> userIdFromToken = this.parseJwt(header);
             if (userIdFromToken.isPresent()) {
-                User userInDb = this.userService.findById(Long.valueOf(userIdFromToken.get()));
+                User userInDb = this.userService.findByIdCacheable(Long.valueOf(userIdFromToken.get()));
+
                 if (userInDb == null || !userInDb.getUserConfirmed()) {
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Confirmed User not found with this email");
                 }

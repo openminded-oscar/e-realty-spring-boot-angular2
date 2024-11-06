@@ -105,7 +105,7 @@ public class SigninApi {
             );
         } else {
             if (!user.getUserConfirmed()) {
-                userService.saveUserIsConfirmed(user.getId());
+                userService.confirmUser(user);
             }
         }
 
