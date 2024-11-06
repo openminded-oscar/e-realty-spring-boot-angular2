@@ -11,7 +11,6 @@ import co.oleh.realperfect.repository.EmailConfirmationTokenRepository;
 import co.oleh.realperfect.repository.RealtorRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
