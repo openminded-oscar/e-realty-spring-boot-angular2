@@ -14,11 +14,17 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class CacheConfiguration {
     @Bean
-    public CacheManager realtyObjectGalleryCache() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("realtyObjectGalleryCache");
-        cacheManager.setCaffeine(Caffeine.newBuilder()
+    public CacheManager cacheManager() {
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        cacheManager.registerCustomCache(CacheNames.REALTY_OBJECT_GALLERY_CACHE, Caffeine.newBuilder()
                 .expireAfterWrite(30, TimeUnit.SECONDS)
-                .maximumSize(100));
+                .maximumSize(100)
+                .build());
+        cacheManager.registerCustomCache(CacheNames.USERS_CACHE, Caffeine.newBuilder()
+                .expireAfterWrite(1, java.util.concurrent.TimeUnit.MINUTES)
+                .maximumSize(1000)
+                .build()
+        );
         return cacheManager;
     }
 }
