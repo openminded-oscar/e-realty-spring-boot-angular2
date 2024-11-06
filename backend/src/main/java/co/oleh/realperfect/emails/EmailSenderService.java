@@ -23,21 +23,18 @@ public class EmailSenderService {
     }
 
     public void sendEmailRegistrationConfirm(String to) throws MessagingException {
+        // TODO add encoding token to confirmationLink
         String confirmationLink = String.format("%s/api/user/confirm/%s", apiRoot, to);
         String htmlContent = String.format("""
-        Congrats, you have successfully registered at The Best realty service!
-        <a href="%s">Click here to complete registration</a>
-        """, confirmationLink);
+                Congrats, you have successfully registered at The Best realty service!
+                <a href="%s">Click here to complete registration</a>
+                """, confirmationLink);
 
-        this.sendHtmlMessage(to,
-                "Registration Confirmation",
-                htmlContent
-        );
+        this.sendHtmlMessage(to, "Registration Confirmation", htmlContent);
         log.info("Email confirmation sent to {}", to);
     }
 
-    public void sendSimpleMessage(
-            String to, String subject, String text) {
+    public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("noreply@noreply.com");
         message.setTo(to);
@@ -47,9 +44,7 @@ public class EmailSenderService {
         emailSender.send(message);
     }
 
-    private void sendHtmlMessage(String to,
-                                 String subject,
-                                 String htmlBody) throws MessagingException {
+    private void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom("noreply@noreply.com");
