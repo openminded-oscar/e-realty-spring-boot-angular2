@@ -1,16 +1,18 @@
 package co.oleh.realperfect.auth;
 
+import co.oleh.realperfect.emails.EmailSenderService;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.Realtor;
-import co.oleh.realperfect.model.user.EmailPasswordDto;
-import co.oleh.realperfect.model.user.Role;
+import co.oleh.realperfect.model.user.*;
+import co.oleh.realperfect.repository.EmailConfirmationTokenRepository;
 import co.oleh.realperfect.repository.RealtorRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
-import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -26,15 +28,19 @@ import static co.oleh.realperfect.model.user.RoleUtils.USER_ROLE;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService {
     private MappingService mappingService;
     private UserRepository userRepository;
+    private EmailConfirmationTokenRepository emailConfirmationTokenRepository;
     private RealtorRepository realtorRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private EmailSenderService emailSenderService;
 
     public UserSelfDto patchProfile(Long id, UserProfileDto userDto) {
-        User user = this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user =
+                this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         mergePatch(userDto, user);
 
         User updatedUser = userRepository.save(user);
@@ -79,6 +85,40 @@ public class UserService {
 
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public EmailConfirmationStatus confirmUserByToken(String token) {
+        EmailConfirmationToken confirmationToken = emailConfirmationTokenRepository.findByToken(token);
+
+        if (confirmationToken == null) {
+            return EmailConfirmationStatus.TOKEN_NOT_FOUND;
+        }
+
+        User user = confirmationToken.getUser();
+        if (isTokenExpired(confirmationToken)) {
+            try {
+                this.emailSenderService.sendEmailRegistrationConfirm(user);
+            } catch (Exception e) {
+                log.error("ErrorWhileSendingUserAccountConfirmation repeat letter {}. Details: {}", user.getEmail(),
+                        e.getMessage());
+            }
+            return EmailConfirmationStatus.TOKEN_EXPIRED;
+        }
+
+        if (user.getUserConfirmed()) {
+            return EmailConfirmationStatus.USER_ALREADY_CONFIRMED;
+        }
+
+        confirmUser(user);
+        return EmailConfirmationStatus.EMAIL_CONFIRMED;
+    }
+
+    private void confirmUser(User user) {
+        userRepository.setUserConfirmedById(user.getId());
+    }
+
+    private boolean isTokenExpired(EmailConfirmationToken token) {
+        return token.getExpirationDate().before(new Date());
     }
 
     public User findByGoogleUserIdTokenSubject(String googleUserId) {
@@ -145,7 +185,8 @@ public class UserService {
     }
 
     public UserDto grantRealtorRole(String userId) {
-        User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user =
+                this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Role role = roleRepository.findByName(REALTOR_ROLE);
 
         Set<Role> roles = user.getRoles();
@@ -162,14 +203,15 @@ public class UserService {
 
     @Transactional
     public UserDto removeRealtorRole(String userId) {
-        User user = this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user =
+                this.userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Role role = roleRepository.findByName(REALTOR_ROLE);
 
         Realtor realtor = this.realtorRepository.findByUserId(user.getId());
         if (realtor == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Realtor doesn't exist OR Realty objects");
         }
-        if(!realtor.getRealtyObjects().isEmpty()) {
+        if (!realtor.getRealtyObjects().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Realtor contains realty objects");
         }
 

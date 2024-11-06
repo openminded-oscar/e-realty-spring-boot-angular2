@@ -7,10 +7,14 @@ import co.oleh.realperfect.emails.EmailSenderService;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
+import co.oleh.realperfect.model.user.EmailConfirmationStatus;
+import co.oleh.realperfect.model.user.EmailConfirmationToken;
 import co.oleh.realperfect.model.user.EmailPasswordDto;
 import co.oleh.realperfect.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +47,7 @@ public class UserApi {
 
         userService.save(user);
         try {
-            emailSenderService.sendEmailRegistrationConfirm(user.getEmail());
+            emailSenderService.sendEmailRegistrationConfirm(user);
         } catch (Exception e) {
             log.error("ErrorWhileSendingUserAccountConfirmation letter {}. Details: {}", user.getEmail(), e.getMessage());
         }
@@ -51,13 +55,17 @@ public class UserApi {
         return this.mappingService.map(user, UserSelfDto.class);
     }
 
-    @GetMapping("/confirm/{email}")
-    public UserSelfDto userEmailConfirmation(@PathVariable String email) {
-        User user = this.userService.findByLogin(email);
+    @GetMapping("/confirm")
+    public ResponseEntity<String> userEmailConfirmation(@RequestParam("token") String token) {
+        EmailConfirmationStatus status = userService.confirmUserByToken(token);
 
-        this.userService.saveUserIsConfirmed(user.getId());
-
-        return this.mappingService.map(user, UserSelfDto.class);
+        return switch (status) {
+            case TOKEN_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found.");
+            case TOKEN_EXPIRED -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is invalid or expired.");
+            case USER_ALREADY_CONFIRMED ->
+                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is already confirmed.");
+            case EMAIL_CONFIRMED -> ResponseEntity.ok("Email confirmed successfully. Your account is now active.");
+        };
     }
 
     @PatchMapping
