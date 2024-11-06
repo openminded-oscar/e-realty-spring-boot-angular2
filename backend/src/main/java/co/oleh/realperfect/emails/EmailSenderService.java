@@ -1,5 +1,8 @@
 package co.oleh.realperfect.emails;
 
+import co.oleh.realperfect.model.user.EmailConfirmationToken;
+import co.oleh.realperfect.model.user.User;
+import co.oleh.realperfect.repository.EmailConfirmationTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,22 +19,28 @@ public class EmailSenderService {
     @Value("${server.apiRoot}")
     private String apiRoot;
 
-    private JavaMailSender emailSender;
+    private final JavaMailSender emailSender;
+    private final EmailConfirmationTokenRepository emailConfirmationTokenRepository;
 
-    public EmailSenderService(JavaMailSender emailSender) {
+    public EmailSenderService(JavaMailSender emailSender,
+                              EmailConfirmationTokenRepository emailConfirmationTokenRepository) {
         this.emailSender = emailSender;
+        this.emailConfirmationTokenRepository = emailConfirmationTokenRepository;
     }
 
-    public void sendEmailRegistrationConfirm(String to) throws MessagingException {
-        // TODO add encoding token to confirmationLink
-        String confirmationLink = String.format("%s/api/user/confirm/%s", apiRoot, to);
+    public void sendEmailRegistrationConfirm(User user) throws MessagingException {
+        EmailConfirmationToken tokenEntity = new EmailConfirmationToken(user);
+        String tokenString = tokenEntity.getToken();
+
+        this.emailConfirmationTokenRepository.save(tokenEntity);
+        String confirmationLink = String.format("%s/api/user/confirm?token=%s", apiRoot, tokenString);
         String htmlContent = String.format("""
                 Congrats, you have successfully registered at The Best realty service!
                 <a href="%s">Click here to complete registration</a>
                 """, confirmationLink);
-
-        this.sendHtmlMessage(to, "Registration Confirmation", htmlContent);
-        log.info("Email confirmation sent to {}", to);
+        String email = user.getEmail();
+        this.sendHtmlMessage(email, "Registration Confirmation", htmlContent);
+        log.info("Email confirmation sent to {}", email);
     }
 
     public void sendSimpleMessage(String to, String subject, String text) {
@@ -51,6 +60,7 @@ public class EmailSenderService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
+
         emailSender.send(message);
     }
 }
