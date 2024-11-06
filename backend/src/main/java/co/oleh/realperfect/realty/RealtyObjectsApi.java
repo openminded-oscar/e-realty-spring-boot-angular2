@@ -1,6 +1,7 @@
 package co.oleh.realperfect.realty;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
+import co.oleh.realperfect.config.cache.CacheNames;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
@@ -77,7 +78,7 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/sell")
-    @Cacheable(value = "realtyObjectGalleryCache", keyGenerator = "realtyObjectFilterKeyGenerator")
+    @Cacheable(value = CacheNames.REALTY_OBJECT_GALLERY_CACHE, keyGenerator = "realtyObjectFilterKeyGenerator")
     public ResponseEntity<Page<RealtyObjectDto>> getRealtyObjects(@RequestBody(required = false)
                                                                   List<FilterItem> filterItems,
                                                                   Pageable pageable) {
@@ -91,7 +92,7 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/rent")
-    @Cacheable(value = "realtyObjectGalleryCache", keyGenerator = "realtyObjectFilterKeyGenerator")
+    @Cacheable(value = CacheNames.REALTY_OBJECT_GALLERY_CACHE, keyGenerator = "realtyObjectFilterKeyGenerator")
     public ResponseEntity<Page<RealtyObjectDto>> getRentRealtyObjects(@RequestBody(required = false)
                                                                       List<FilterItem> filterItems,
                                                                       Pageable pageable) {
