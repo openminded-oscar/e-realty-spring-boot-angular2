@@ -8,3 +8,11 @@
     </div>
   </div>
 </div>
+<div style="height: 300px;">
+  <div style="height: 100%; width: 100%"
+       leaflet
+       [leafletOptions]="options"
+       (leafletMapReady)="mapReady($event)"
+  >
+  </div>
+</div>

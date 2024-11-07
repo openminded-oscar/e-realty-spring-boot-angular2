@@ -6,6 +6,7 @@ import {Subject} from 'rxjs';
 import {UserService} from '../../app-services/user.service';
 import {takeUntil} from 'rxjs/operators';
 import {User} from '../../app-models/user';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'realtors-gallery',
@@ -17,6 +18,18 @@ export class RealtorsGalleryComponent implements OnInit, OnDestroy {
   public realtors: Realtor[];
   public defaultRealtorPhoto = 'https://placehold.co/600x400?text=Realtor+photo';
   public user: User;
+
+  options: any = {
+    zoomControl: false,
+    layers: [
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 4,
+        attribution: '...',
+      }),
+    ],
+    zoom: 2,
+    center: L.latLng({ lat: 38.991709, lng: -76.886109 }),
+  };
 
   constructor(private realtorService: RealtorService,
               private userService: UserService,
@@ -56,5 +69,12 @@ export class RealtorsGalleryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  mapReady(map) {
+    map.addControl(L.control.zoom({ position: 'bottomright' }));
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 0);
   }
 }
