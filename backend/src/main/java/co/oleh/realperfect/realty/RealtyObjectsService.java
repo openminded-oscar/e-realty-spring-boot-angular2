@@ -86,7 +86,10 @@ public class RealtyObjectsService {
     }
 
     public RealtyObjectDetailsDto add(RealtyObjectDetailsDto realtyObjectDetailsDto) {
+        RealtyObject existingObjectInDb = this.realtyObjectCrudRepository.findById(realtyObjectDetailsDto.getId()).get();
+
         RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
+        realtyObject.setStatus(existingObjectInDb.getStatus());
         if (realtyObjectDetailsDto.getRealtor() != null) {
             Realtor realtor = this.realtorService.findById(realtyObjectDetailsDto.getRealtor().getId());
             realtyObject.setRealtor(realtor);
@@ -105,6 +108,7 @@ public class RealtyObjectsService {
                 })
                 .collect(Collectors.toList());
         realtyObject.setPhotos(retrievedPhotos);
+
         if (realtyObjectDetailsDto.getConfirmationDocPhoto() != null) {
             ConfirmationDocPhoto confPhoto =
                     confirmationDocPhotoRepository.findById(realtyObjectDetailsDto.getConfirmationDocPhoto().getId()).get();

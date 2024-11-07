@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Event} from '@angular/router';
 import {BUILDING_TYPES, ConfigService, DWELLING_TYPES, OPERATION_TYPES} from '../../app-services/config.service';
@@ -6,8 +6,8 @@ import {FileUploadService} from '../../app-services/file-upload.service';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtorService} from '../../app-services/realtor.service';
 import {GlobalNotificationService} from '../../app-services/global-notification.service';
-import {Observable, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {from, Observable, of, Subject, take} from 'rxjs';
+import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {
   BasicInfoForm,
   ImportantInfoForm,
@@ -20,6 +20,10 @@ import {Photo, RealtyPhoto, RealtyPhotoType} from '../../app-models/photo';
 import {Realtor} from '../../app-models/realtor';
 import {apiBase} from '../../commons';
 import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
+import {Geolocation} from '../select-location/select-location.component';
+import {WizardComponent} from 'angular-archwizard';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 
 export interface SupportedOperation {
   name: string;
@@ -33,11 +37,15 @@ export interface SupportedOperation {
   styleUrls: ['./realty-obj-edit.scss']
 })
 export class RealtyObjEditComponent implements OnInit, OnDestroy {
+  @ViewChild(WizardComponent)
+  public wizard: WizardComponent;
+
   public operationsInputValues: SupportedOperation[];
   public realtors: Realtor[];
   public dwellingTypes: string[];
   public buildingTypes: string[];
   public photoType = RealtyPhotoType;
+  public location: Geolocation;
 
   private destroy$ = new Subject<boolean>();
 
@@ -46,14 +54,17 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public importantInfoFormGroup: FormGroup<ImportantInfoForm>;
   public photosFormGroup: FormGroup<PhotosForm>;
   public objectId: number;
+  public initialLocation: Geolocation;
+
 
   constructor(
-    private fb: FormBuilder,
+    public fb: FormBuilder,
     public config: ConfigService,
     public fileUploadService: FileUploadService,
     public realtyObjService: RealtyObjService,
     public realtorsService: RealtorService,
     public notificationService: GlobalNotificationService,
+    public dialogService: NgbModal,
     public route: ActivatedRoute
   ) {
   }
@@ -102,6 +113,14 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         valueGteThanTotal('livingArea', 'totalArea')
       ]
     });
+    this.basicInfoFormGroup.get('dwellingType').valueChanges.subscribe(value => {
+      const aptControl = this.basicInfoFormGroup.get('address.apartmentNumber');
+      if (value !== 'APARTMENT') {
+        aptControl.disable();
+      } else {
+        aptControl.enable();
+      }
+    });
 
     const operationsFormArray: FormArray<FormGroup<OperationFormGroup>> = new FormArray([]);
     this.operationsInputValues.forEach(operation => {
@@ -136,21 +155,24 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     });
 
     this.realtyForm = this.fb.group<RealtyForm>({
+      geolocation: new FormControl<Geolocation>(null),
       basicInfoFormGroup: this.basicInfoFormGroup,
       importantInfoFormGroup: this.importantInfoFormGroup,
       photosFormGroup: this.photosFormGroup,
     });
-    this.realtyForm.get('basicInfoFormGroup.dwellingType').valueChanges.subscribe(value => {
-      const aptControl = this.basicInfoFormGroup.get('address.apartmentNumber');
-      if (value !== 'APARTMENT') {
-        aptControl.disable();
-      } else {
-        aptControl.enable();
-      }
-    });
   }
 
   private populateRealtyForm(realtyObj: RealtyObj): void {
+    if (realtyObj) {
+      this.initialLocation = {
+        lng: realtyObj.address.lng,
+        lat: realtyObj.address.lat
+      };
+      this.location = {
+        ...this.initialLocation
+      };
+    }
+
     this.realtyForm.patchValue({
       basicInfoFormGroup: {
         address: realtyObj.address,
@@ -177,6 +199,10 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       photosFormGroup: {
         confirmationDocPhoto: realtyObj.confirmationDocPhoto
       },
+      geolocation: {
+        lat: realtyObj.address.lat,
+        lng: realtyObj.address.lng
+      }
     });
     realtyObj.photos.forEach(photo => {
       const control = this.fb.group({
@@ -200,8 +226,12 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
       const realtyObjFormData = {
         ...this.objectId ? {id: this.objectId} : {},
         ...this.realtyForm.controls.basicInfoFormGroup.value,
+        address: {
+          ...this.realtyForm.controls.basicInfoFormGroup.value.address ?? {},
+          ...this.realtyForm.controls.geolocation.value ?? {}
+        },
         ...this.realtyForm.controls.importantInfoFormGroup.value,
-        ...this.realtyForm.controls.photosFormGroup.value
+        ...this.realtyForm.controls.photosFormGroup.value,
       };
       const includedOperationsNames: string[] = [];
       if (realtyObjFormData.targetOperations) {
@@ -226,13 +256,16 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         ...realtyObjFormData,
         targetOperations: includedOperationsNames as string[],
         realtor: realtyObjFormData.realtor as Realtor
-      }).pipe(takeUntil(this.destroy$))
-        .subscribe(
-          (savedRealtyObj: RealtyObj) => {
-            this.notificationService.showNotification('Success! The object was saved!');
-          },
-          error => this.notificationService.showNotification('Failure! The object adding failed!')
-        );
+      }).pipe(
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: (savedRealtyObj: RealtyObj) => {
+          this.notificationService.showNotification('Success! The object was saved!');
+        },
+        error: (error) => {
+          this.notificationService.showNotification('Failure! The object adding failed!');
+        }
+      });
     }
   }
 
@@ -241,12 +274,12 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     if (fileList.length > 0) {
       this.uploadFile(fileList[0], '/upload-photo/confirm-object')
         .pipe(takeUntil(this.destroy$))
-        .subscribe(
-          (data: RealtyPhoto) => {
+        .subscribe({
+          next: (data: RealtyPhoto) => {
             this.photosFormGroup.patchValue({confirmationDocPhoto: data});
           },
-          error => console.log('File upload error:', error)
-        );
+          error: error => console.log('File upload error:', error)
+        });
     }
   }
 
@@ -298,5 +331,31 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public changeLocation(location: Geolocation) {
+    this.location = location;
+    this.realtyForm.get('geolocation').setValue(location);
+  }
+
+  public confirmLocationAndNavigate() {
+    if (!this.location.lat || !this.location.lng) {
+      const modalRef = this.dialogService.open(ConfirmModalComponent);
+      modalRef.componentInstance.message =
+        'Setting no Geolocation will limit your object visibility on our maps. Proceed?';
+      from(modalRef.result)
+        .pipe(
+          take(1),
+          catchError(() => of(false)),
+          tap(v => {
+            if (v) {
+              this.wizard.goToNextStep();
+            }
+          }),
+        )
+        .subscribe();
+    } else {
+      this.wizard.goToNextStep();
+    }
   }
 }

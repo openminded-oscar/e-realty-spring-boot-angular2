@@ -43,13 +43,7 @@ export class RealtorsGalleryComponent implements OnInit, OnDestroy {
 
   public goToRealtor(realtor: Realtor) {
     if (this.user) {
-      this.router.navigateByUrl(`/realtor/${realtor.id}`);
-    }
-  }
-
-  public addNewRealtor() {
-    if (this.user) {
-      this.router.navigateByUrl(`/realtor`);
+      this.router.navigateByUrl(`/realtor/${realtor.id}`).then();
     }
   }
 
