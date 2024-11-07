@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Event} from '@angular/router';
 import {BUILDING_TYPES, ConfigService, DWELLING_TYPES, OPERATION_TYPES} from '../../app-services/config.service';
@@ -6,8 +6,8 @@ import {FileUploadService} from '../../app-services/file-upload.service';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtorService} from '../../app-services/realtor.service';
 import {GlobalNotificationService} from '../../app-services/global-notification.service';
-import {from, Observable, Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {
   BasicInfoForm,
   ImportantInfoForm,
@@ -21,7 +21,8 @@ import {Realtor} from '../../app-models/realtor';
 import {apiBase} from '../../commons';
 import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {SelectLocationDialogComponent} from './select-location-dialog/select-location-dialog.component';
+import {Geolocation} from './select-location/select-location.component';
+import {WizardComponent} from 'angular-archwizard';
 
 export interface SupportedOperation {
   name: string;
@@ -35,11 +36,15 @@ export interface SupportedOperation {
   styleUrls: ['./realty-obj-edit.scss']
 })
 export class RealtyObjEditComponent implements OnInit, OnDestroy {
+  @ViewChild(WizardComponent)
+  public wizard: WizardComponent;
+
   public operationsInputValues: SupportedOperation[];
   public realtors: Realtor[];
   public dwellingTypes: string[];
   public buildingTypes: string[];
   public photoType = RealtyPhotoType;
+  public location: Geolocation;
 
   private destroy$ = new Subject<boolean>();
 
@@ -48,10 +53,11 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public importantInfoFormGroup: FormGroup<ImportantInfoForm>;
   public photosFormGroup: FormGroup<PhotosForm>;
   public objectId: number;
+  public initialLocation: Geolocation;
+
 
   constructor(
-    private fb: FormBuilder,
-    public modalService: NgbModal,
+    public fb: FormBuilder,
     public config: ConfigService,
     public fileUploadService: FileUploadService,
     public realtyObjService: RealtyObjService,
@@ -154,6 +160,12 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   }
 
   private populateRealtyForm(realtyObj: RealtyObj): void {
+    if (realtyObj) {
+      this.initialLocation = {
+        lng: realtyObj.lng,
+        lat: realtyObj.lat
+      };
+    }
     this.realtyForm.patchValue({
       basicInfoFormGroup: {
         address: realtyObj.address,
@@ -303,12 +315,11 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public openLocationMap() {
-    const modalRef = this.modalService.open(SelectLocationDialogComponent);
-    from(modalRef.result)
-      .pipe(tap((res) => {
-        console.log('Coordinates:', JSON.stringify(res));
-      }))
-      .subscribe();
+  public saveLocation($event: Geolocation) {
+    this.location = $event;
+  }
+
+  public confirmLocationAndNavigate() {
+    this.wizard.goToNextStep();
   }
 }

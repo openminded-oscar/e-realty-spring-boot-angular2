@@ -82,6 +82,8 @@ export class RealtyObj {
   public dwellingType: string;
   public photos: RealtyPhoto[];
   public confirmationDocPhoto: Photo;
+  public lat?: number;
+  public lng?: number;
   public address: Partial<Address>;
   public realtor: Realtor;
   public owner: string;

@@ -5,7 +5,7 @@ import {ArchwizardModule} from 'angular-archwizard';
 import {SharedModule} from '../shared/shared.module';
 import {RouterModule, Routes} from '@angular/router';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
-import { SelectLocationDialogComponent } from './realty-obj-edit/select-location-dialog/select-location-dialog.component';
+import { SelectLocationComponent } from './realty-obj-edit/select-location/select-location.component';
 
 export const routes: Routes = [
   {
@@ -15,7 +15,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [RealtyObjEditComponent, SelectLocationDialogComponent],
+  declarations: [RealtyObjEditComponent, SelectLocationComponent],
   imports: [
     CommonModule,
     SharedModule,
