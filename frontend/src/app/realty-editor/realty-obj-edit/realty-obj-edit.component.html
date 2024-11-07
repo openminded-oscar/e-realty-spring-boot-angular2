@@ -9,7 +9,9 @@
             <button type="button" class="btn btn-dark" [disabled]="realtyForm.invalid" (click)="saveRealtyObject()">Save
             </button>
           </div>
+
           <div class="form-horizontal">
+            <button (click)="openLocationMap()">Select Location On Map</button>
             <div class="form-group row" [formGroupName]="'address'">
               <label class="col-md-1 col-form-label text-right">City:</label>
               <div class="col-md-3">

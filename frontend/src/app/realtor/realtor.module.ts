@@ -18,8 +18,7 @@ const appRoutes: Routes = [
     CommonModule,
     RouterModule.forChild(
       appRoutes
-    ),
-    LeafletModule,
+    )
   ]
 })
 export class RealtorModule { }

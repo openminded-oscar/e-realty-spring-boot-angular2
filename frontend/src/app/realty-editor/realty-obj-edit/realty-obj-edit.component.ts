@@ -6,8 +6,8 @@ import {FileUploadService} from '../../app-services/file-upload.service';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtorService} from '../../app-services/realtor.service';
 import {GlobalNotificationService} from '../../app-services/global-notification.service';
-import {Observable, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {from, Observable, Subject} from 'rxjs';
+import {takeUntil, tap} from 'rxjs/operators';
 import {
   BasicInfoForm,
   ImportantInfoForm,
@@ -20,6 +20,8 @@ import {Photo, RealtyPhoto, RealtyPhotoType} from '../../app-models/photo';
 import {Realtor} from '../../app-models/realtor';
 import {apiBase} from '../../commons';
 import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {SelectLocationDialogComponent} from './select-location-dialog/select-location-dialog.component';
 
 export interface SupportedOperation {
   name: string;
@@ -49,6 +51,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
+    public modalService: NgbModal,
     public config: ConfigService,
     public fileUploadService: FileUploadService,
     public realtyObjService: RealtyObjService,
@@ -298,5 +301,14 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public openLocationMap() {
+    const modalRef = this.modalService.open(SelectLocationDialogComponent);
+    from(modalRef.result)
+      .pipe(tap((res) => {
+        console.log('Coordinates:', JSON.stringify(res));
+      }))
+      .subscribe();
   }
 }
