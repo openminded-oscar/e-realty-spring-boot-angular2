@@ -7,15 +7,15 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./confirm-modal.component.scss']
 })
 export class ConfirmModalComponent {
-  @Input() message = 'Are you sure?';  // Default message if none is provided
+  @Input() message = 'Are you sure?';
 
   constructor(public activeModal: NgbActiveModal) {}
 
   public confirm() {
-    this.activeModal.close(true);  // Closes the modal with 'confirm' result
+    this.activeModal.close(true);
   }
 
   public cancel() {
-    this.activeModal.dismiss('cancel');  // Dismisses the modal with 'cancel' result
+    this.activeModal.dismiss('cancel');
   }
 }

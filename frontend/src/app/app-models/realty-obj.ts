@@ -1,6 +1,7 @@
 import {Photo, RealtyPhoto, RealtyPhotoType} from './photo';
 import {Address} from './address';
 import {Realtor} from './realtor';
+import {Geolocation} from '../realty-editor/select-location/select-location.component';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
 
 export class AddressForm {
@@ -49,6 +50,7 @@ export interface RealtyForm {
   basicInfoFormGroup: FormGroup<BasicInfoForm>;
   importantInfoFormGroup: FormGroup<ImportantInfoForm>;
   photosFormGroup: FormGroup<PhotosForm>;
+  geolocation: FormControl<Geolocation>;
 }
 
 

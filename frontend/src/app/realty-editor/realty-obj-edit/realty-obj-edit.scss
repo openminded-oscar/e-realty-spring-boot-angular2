@@ -1,4 +1,17 @@
 @import 'app/variables';
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
+
+.geomap-container {
+  width: 50%;
+  @include media-breakpoint-down(lg) {
+    width: 75%;
+  }
+  @include media-breakpoint-down(md) {
+    width: 100%;
+  }
+}
 
 .realty-pic-preview-container {
   text-align: center

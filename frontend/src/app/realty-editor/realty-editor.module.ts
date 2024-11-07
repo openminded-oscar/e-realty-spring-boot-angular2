@@ -4,6 +4,8 @@ import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.componen
 import {ArchwizardModule} from 'angular-archwizard';
 import {SharedModule} from '../shared/shared.module';
 import {RouterModule, Routes} from '@angular/router';
+import {LeafletModule} from '@asymmetrik/ngx-leaflet';
+import {SelectLocationComponent} from './select-location/select-location.component';
 
 export const routes: Routes = [
   {
@@ -13,12 +15,13 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [RealtyObjEditComponent],
+  declarations: [RealtyObjEditComponent, SelectLocationComponent],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
-    ArchwizardModule
+    ArchwizardModule,
+    LeafletModule
   ]
 })
 export class RealtyEditorModule { }

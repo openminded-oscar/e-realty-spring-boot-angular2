@@ -10,8 +10,8 @@ public class Address {
 	private String street;
 	private String numberOfStreet;
 	private Integer apartmentNumber;
-	private BigDecimal latitude;
-	private BigDecimal longitude;
+	private BigDecimal lat;
+	private BigDecimal lng;
 
 	@Column(name="city")
 	public String getCity() {
@@ -49,21 +49,21 @@ public class Address {
 		this.numberOfStreet = numberOfStreet;
 	}
 
-	@Column(name="latitude")
-	public BigDecimal getLatitude() {
-		return latitude;
+	@Column(name="lat")
+	public BigDecimal getLat() {
+		return lat;
 	}
 
-	public void setLatitude(BigDecimal latitude) {
-		this.latitude = latitude;
+	public void setLat(BigDecimal lat) {
+		this.lat = lat;
 	}
 
-	@Column(name="longitude")
-	public BigDecimal getLongitude() {
-		return longitude;
+	@Column(name="lng")
+	public BigDecimal getLng() {
+		return lng;
 	}
 
-	public void setLongitude(BigDecimal longitude) {
-		this.longitude = longitude;
+	public void setLng(BigDecimal lng) {
+		this.lng = lng;
 	}
 }
