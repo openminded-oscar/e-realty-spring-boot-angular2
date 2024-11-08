@@ -8,18 +8,21 @@ import {SharedModule} from '../shared/shared.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
 import {ReviewsService} from '../app-services/reviews.service';
-import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
+import {LeafletModule} from '@asymmetrik/ngx-leaflet';
+import {DisplayLocationComponent} from './display-location/display-location.component';
 
 @NgModule({
   declarations: [
     RealtyObjsGalleryComponent,
     RealtyObjDetailsComponent,
+    DisplayLocationComponent,
   ],
     imports: [
         HomeRoutingModule,
         CommonModule,
         SharedModule,
         FormsModule,
+        LeafletModule,
         InfiniteScrollModule,
         ReactiveFormsModule,
         ArchwizardModule,

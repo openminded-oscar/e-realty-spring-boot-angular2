@@ -24,6 +24,9 @@
                  class="btn btn-info btn-block btn-manage">Edit</a>
             </div>
           </ng-container>
+          <button (click)="openLocationDialog()" class="btn btn-link" [ngbTooltip]="'Area On Map'">
+            <i class="fas fa-location-dot"></i>
+          </button>
           <div class="realty-obj-interested-btn">
             <ng-container *ngIf="!isInterested; else removeInterestedButton">
               <i (click)="toggleInterested()" ngbTooltip="Add to Favorites" class="far fa-heart text-danger"></i>

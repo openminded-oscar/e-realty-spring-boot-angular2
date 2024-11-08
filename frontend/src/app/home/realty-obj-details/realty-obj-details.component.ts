@@ -10,13 +10,15 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ReviewsService} from '../../app-services/reviews.service';
 import {ReviewDto} from '../../app-models/review';
 import {HttpResponse} from '@angular/common/http';
-import {combineLatest, Subject} from 'rxjs';
+import {combineLatest, from, Subject, take} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {User, UserRole} from '../../app-models/user';
 
 import {RealtorContactComponent} from '../../shared/realtor-contact/realtor-contact.component';
 import {DeleteRealtyModalComponent} from '../../shared/delete-realty-modal/delete-realty-modal.component';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
+import {DisplayLocationComponent} from '../display-location/display-location.component';
+import {latLng} from 'leaflet';
 
 
 @Component({
@@ -191,5 +193,16 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
       }
     }).catch((error) => {
     });
+  }
+
+  public openLocationDialog() {
+    const locationDialogRef = this.modalService.open(DisplayLocationComponent);
+    locationDialogRef.componentInstance.options.center = latLng({
+      lat: this.currentObject.address.lat,
+      lng: this.currentObject.address.lng
+    });
+    from(locationDialogRef.result)
+      .pipe(take(1))
+      .subscribe();
   }
 }
