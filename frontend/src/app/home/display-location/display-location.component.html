@@ -1,8 +1,8 @@
-<div class="modal-header">
-  <h4 class="modal-title">Property Location Area</h4>
+<div>
+  <h5>Location Area</h5>
 </div>
 <div>
-  <div style="height: 300px;">
+  <div class="map-widget-container">
     <div style="height: 100%; width: 100%"
          leaflet
          [leafletOptions]="options"
@@ -10,9 +10,4 @@
     >
     </div>
   </div>
-</div>
-<div class="modal-footer">
-  <button  type="button" class="btn btn-outline-dark"
-           (click)="closeAndPassLocation()">Close
-  </button>
 </div>

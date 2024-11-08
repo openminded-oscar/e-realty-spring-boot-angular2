@@ -41,6 +41,12 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public isRealtorOrAdmin = false;
   private currentUserObjects: RealtyObj[] = [];
   public isMyObject = false;
+  public get geolocation () {
+    return this.currentObject?.address && latLng({
+      lat: this.currentObject.address.lat,
+      lng: this.currentObject.address.lng
+    });
+  }
 
 
   constructor(public realtyObjService: RealtyObjService,
@@ -193,16 +199,5 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
       }
     }).catch((error) => {
     });
-  }
-
-  public openLocationDialog() {
-    const locationDialogRef = this.modalService.open(DisplayLocationComponent);
-    locationDialogRef.componentInstance.options.center = latLng({
-      lat: this.currentObject.address.lat,
-      lng: this.currentObject.address.lng
-    });
-    from(locationDialogRef.result)
-      .pipe(take(1))
-      .subscribe();
   }
 }
