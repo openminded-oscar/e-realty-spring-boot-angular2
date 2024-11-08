@@ -1,30 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {Layer, MapOptions, tileLayer} from 'leaflet';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {Component, Input, OnInit} from '@angular/core';
+import {LatLng, Layer, MapOptions, tileLayer} from 'leaflet';
 
 @Component({
-  selector: 'app-location-dialog',
+  selector: 'app-location',
   templateUrl: './display-location.component.html',
   styleUrls: ['./display-location.component.scss']
 })
 export class DisplayLocationComponent implements OnInit {
   public options: MapOptions = {
-    zoomControl: true,
+    zoomControl: false,
     zoom: 15,
   };
+  @Input()
+  set center(value: LatLng) {
+    this.options.center = value;
+  }
   public layers: Layer[] = [
     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
     })
   ];
 
-  constructor(public ngbActiveModal: NgbActiveModal) {
+  constructor() {
   }
 
   ngOnInit(): void {
-  }
-
-  public closeAndPassLocation() {
-    this.ngbActiveModal.close();
   }
 }

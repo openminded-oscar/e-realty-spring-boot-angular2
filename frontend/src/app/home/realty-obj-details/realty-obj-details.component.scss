@@ -1,3 +1,7 @@
+:host ::ng-deep .map-widget-container {
+  height: 180px;
+}
+
 .realty-obj-pic-container {
   height: 120px;
 }
@@ -22,6 +26,10 @@
   text-transform: uppercase;
   margin-right: 15px;
   font-size: 1.2rem;
+}
+
+.realtor-link {
+  cursor: pointer;
 }
 
 .realtor-photo-container {
