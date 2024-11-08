@@ -91,9 +91,9 @@
       <div class="col-md-5 main-info-block">
         <app-location [center]="geolocation"></app-location>
         <ng-container *ngIf="currentObject.realtor">
-        <span class="realtor-link btn-link" (click)="openRealtorContacts()">
+        <div class="realtor-link btn-link" style="margin-top: 18px" (click)="openRealtorContacts()">
           {{ currentObject.realtor?.name }}&nbsp;{{ currentObject.realtor?.surname }}, realtor
-        </span>
+        </div>
         </ng-container>
       </div>
 
