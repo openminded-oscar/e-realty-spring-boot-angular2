@@ -12,6 +12,10 @@
     width: 100%;
   }
 }
+:host ::ng-deep .map-widget-container {
+  height: 300px;
+}
+
 
 .realty-pic-preview-container {
   text-align: center
