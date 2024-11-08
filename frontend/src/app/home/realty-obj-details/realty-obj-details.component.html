@@ -3,7 +3,7 @@
     <div class="details-title--left">
       <h1 style="font-size: 1.5rem;">
         <ng-container *ngIf="currentObject.status !== RealtyObjectStatus.ACTIVE">
-            [{{ currentObject.status }}]
+          [{{ currentObject.status }}]
         </ng-container>
         <span>Apartment at
           {{ currentObject.address.street }} str.&nbsp;</span>&nbsp;
@@ -24,9 +24,6 @@
                  class="btn btn-info btn-block btn-manage">Edit</a>
             </div>
           </ng-container>
-          <button (click)="openLocationDialog()" class="btn btn-link" [ngbTooltip]="'Area On Map'">
-            <i class="fas fa-location-dot"></i>
-          </button>
           <div class="realty-obj-interested-btn">
             <ng-container *ngIf="!isInterested; else removeInterestedButton">
               <i (click)="toggleInterested()" ngbTooltip="Add to Favorites" class="far fa-heart text-danger"></i>
@@ -34,6 +31,10 @@
             <ng-template #removeInterestedButton>
               <i (click)="toggleInterested()" ngbTooltip="Added to Favorites" class="fa-solid fa-heart text-danger"></i>
             </ng-template>
+          </div>
+          <div>
+            <app-realty-status-editor *ngIf="isMyObject || isRealtorOrAdmin"
+                                      [realtyObject]="currentObject"></app-realty-status-editor>
           </div>
         </div>
       </div>
@@ -63,10 +64,7 @@
         <div class="description-block">
           <div>
             <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
-                <h5 *ngIf="currentObject.description">Description:</h5>
-                <div style="display: flex; flex-direction: row">
-                    <app-realty-status-editor  *ngIf="isMyObject || isRealtorOrAdmin" [realtyObject]="currentObject"></app-realty-status-editor>
-                </div>
+              <h5 *ngIf="currentObject.description">Description:</h5>
             </div>
             <p class="description-block--text" *ngIf="currentObject.description">{{ currentObject.description }}</p>
           </div>
@@ -91,16 +89,11 @@
       </div>
 
       <div class="col-md-5 main-info-block">
+        <app-location [center]="geolocation"></app-location>
         <ng-container *ngIf="currentObject.realtor">
-        <span>
+        <span class="realtor-link btn-link" (click)="openRealtorContacts()">
           {{ currentObject.realtor?.name }}&nbsp;{{ currentObject.realtor?.surname }}, realtor
         </span>
-          <div class="realtor-photo-container">
-            <img class="realtor-photo img-responsive"
-                 (error)="setDefaultRealtorPhoto($event)"
-                 [src]="currentObject.realtor?.profilePic ? currentObject.realtor.profilePic.fullUrl: defaultRealtorPhoto">
-          </div>
-          <button class="btn btn-info btn-block" (click)="openRealtorContacts()">Contact</button>
         </ng-container>
       </div>
 
