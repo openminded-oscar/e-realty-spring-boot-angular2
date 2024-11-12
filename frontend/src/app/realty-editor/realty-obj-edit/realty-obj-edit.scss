@@ -29,11 +29,11 @@
   object-fit: cover;
 }
 
-input.ng-invalid, select.ng-invalid, textarea.ng-invalid {
+input.ng-invalid, textarea.ng-invalid {
   border: 1px solid #ffc87f !important;
 }
 
-input.ng-valid, select.ng-valid, textarea.ng-valid {
+input.ng-valid, textarea.ng-valid {
   border: 1px solid $app-border-color !important;
 }
 
@@ -46,4 +46,8 @@ input.ng-valid, select.ng-valid, textarea.ng-valid {
 
 .main-photo-text {
   padding: 9px;
+}
+
+input::placeholder {
+  color: rgba(0, 0, 0, 0.2); /* Darker or faded placeholder */
 }
