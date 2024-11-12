@@ -339,7 +339,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   }
 
   public confirmLocationAndNavigate() {
-    if (!this.location.lat || !this.location.lng) {
+    if (!this.location?.lat || !this.location?.lng) {
       const modalRef = this.dialogService.open(ConfirmModalComponent);
       modalRef.componentInstance.message =
         'Setting no Geolocation will limit your object visibility on our maps. Proceed?';
