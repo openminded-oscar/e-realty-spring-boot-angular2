@@ -25,7 +25,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
@@ -85,7 +86,7 @@ public class RealtyObjectsService {
         return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
     }
 
-    public RealtyObjectDetailsDto add(RealtyObjectDetailsDto realtyObjectDetailsDto) {
+    public RealtyObjectDetailsDto save(RealtyObjectDetailsDto realtyObjectDetailsDto) {
         RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
 
         if (realtyObjectDetailsDto.getId() != null) {

@@ -3,7 +3,8 @@
 </div>
 <div>
   <div class="map-widget-container">
-    <div *ngIf="center; else noLocation"
+    <div style="height: 100%; width: 100%; cursor: pointer" *ngIf="center; else noLocation"
+         (leafletClick)="openOnGoogleMaps(center)"
          leaflet
          [leafletOptions]="options"
          [leafletLayers]="layers"

@@ -6,6 +6,9 @@ import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,28 +24,26 @@ public class MappingService {
         this.modelMapper = modelMapper;
     }
 
-    public <T, V> V map(T from, Class<V> to) {
-        if (from == null) {
+    public <T, V> V map(T fromObj, Class<V> destClass) {
+        if (fromObj == null) {
             return null;
         }
-        V result = modelMapper.map(from, to);
+        V result = modelMapper.map(fromObj, destClass);
 
-        if (result instanceof RealtorDto realtorDto && from instanceof Realtor realtor) {
-            realtorDto.setName(realtor.getUser().getName());
-            realtorDto.setSurname(realtor.getUser().getSurname());
-            realtorDto.setEmail(realtor.getUser().getEmail());
-            realtorDto.setPhoneNumber(realtor.getUser().getPhoneNumber());
-            realtorDto.setProfilePic(realtor.getUser().getProfilePic());
+        if (result instanceof RealtorDto to && fromObj instanceof Realtor from) {
+            to.setName(from.getUser().getName());
+            to.setSurname(from.getUser().getSurname());
+            to.setEmail(from.getUser().getEmail());
+            to.setPhoneNumber(from.getUser().getPhoneNumber());
+            to.setProfilePic(from.getUser().getProfilePic());
         }
 
-        // Custom mapping for RealtyObjectDetailsDto
-        if (result instanceof RealtyObjectDetailsDto dto && from instanceof RealtyObject object) {
-            dto.setRealtor(this.map(object.getRealtor(), RealtorDto.class));
+        if (result instanceof RealtyObjectDto to && fromObj instanceof RealtyObject from) {
+            to.setRealtor(this.map(from.getRealtor(), RealtorDto.class));
         }
 
-        // Custom mapping for RealtyObjectDto
-        if (result instanceof RealtyObjectDto dto && from instanceof RealtyObject object) {
-            dto.setRealtor(this.map(object.getRealtor(), RealtorDto.class));
+        if (result instanceof RealtyObjectDetailsDto to && fromObj instanceof RealtyObject from) {
+            to.setRealtor(this.map(from.getRealtor(), RealtorDto.class));
         }
 
         return result;
