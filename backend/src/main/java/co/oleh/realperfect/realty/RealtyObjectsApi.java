@@ -111,7 +111,7 @@ public class RealtyObjectsApi {
         realtyObject.setOwner(new UserDto() {{
             setId(user.getId());
         }});
-        RealtyObjectDetailsDto addedObject = realtyObjectsService.add(realtyObject);
+        RealtyObjectDetailsDto addedObject = realtyObjectsService.save(realtyObject);
 
         return new ResponseEntity<>(addedObject, HttpStatus.OK);
     }

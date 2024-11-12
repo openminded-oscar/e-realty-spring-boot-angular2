@@ -1,8 +1,7 @@
 package co.oleh.realperfect.model;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.math.BigDecimal;
+import org.locationtech.jts.geom.Point;
 
 @Embeddable
 public class Address {
@@ -10,8 +9,15 @@ public class Address {
 	private String street;
 	private String numberOfStreet;
 	private Integer apartmentNumber;
-	private BigDecimal lat;
-	private BigDecimal lng;
+	private Point geolocation;
+
+	@Column(columnDefinition = "Point")
+	public Point getGeolocation() {
+		return geolocation;
+	}
+	public void setGeolocation(Point location) {
+		this.geolocation = location;
+	}
 
 	@Column(name="city")
 	public String getCity() {
@@ -47,23 +53,5 @@ public class Address {
 
 	public void setNumberOfStreet(String numberOfStreet) {
 		this.numberOfStreet = numberOfStreet;
-	}
-
-	@Column(name="lat")
-	public BigDecimal getLat() {
-		return lat;
-	}
-
-	public void setLat(BigDecimal lat) {
-		this.lat = lat;
-	}
-
-	@Column(name="lng")
-	public BigDecimal getLng() {
-		return lng;
-	}
-
-	public void setLng(BigDecimal lng) {
-		this.lng = lng;
 	}
 }

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BUILDING_TYPES, ConfigService, DWELLING_TYPES, OPERATION_TYPES} from '../../app-services/config.service';
 import {FileUploadService} from '../../app-services/file-upload.service';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
@@ -63,9 +63,9 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     public fileUploadService: FileUploadService,
     public realtyObjService: RealtyObjService,
     public realtorsService: RealtorService,
-    public notificationService: GlobalNotificationService,
     public dialogService: NgbModal,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    public router: Router,
   ) {
   }
 
@@ -261,7 +261,9 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         realtor: realtyObjFormData.realtor as Realtor
       }).pipe(
         takeUntil(this.destroy$)
-      ).subscribe();
+      ).subscribe(object => {
+        this.router.navigate(['/realty-object', object.id]).then();
+      });
     }
   }
 

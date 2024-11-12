@@ -74,8 +74,8 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
     public FILTER_DEBOUNCE_TIME = 1000;
     public selectedOrderingOption: SortField = {
-        display: 'Price',
-        field: 'price',
+        display: 'Recent',
+        field: 'updatedAt',
     };
     public selectedOrderingDirection: 'asc' | 'desc' = 'desc';
     public orderingOptions: SortField[] = [{
