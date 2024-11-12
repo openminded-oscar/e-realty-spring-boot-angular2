@@ -8,6 +8,6 @@ public class AddressDto {
     private String street;
     private String numberOfStreet;
     private Integer apartmentNumber;
-    private Double lat;
     private Double lng;
+    private Double lat;
 }
