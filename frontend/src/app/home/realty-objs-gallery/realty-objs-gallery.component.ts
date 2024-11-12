@@ -10,6 +10,7 @@ import {debounceTime} from 'rxjs/operators';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
 import {RealtyObjsListComponent} from '../../shared/realty-objs-list/realty-objs-list.component';
+import {WindowService} from '../../app-services/window.service';
 
 export interface SortValue {
     field: string;
@@ -52,6 +53,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
                 public config: ConfigService,
                 public router: Router,
                 public fb: FormBuilder,
+                public windowService: WindowService,
     ) {
     }
 
@@ -89,9 +91,10 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         display: 'City',
         field: 'address.city',
     }];
-    public isFilterCollapsed = window.innerWidth < 768;
+    public isFilterCollapsed = false;
 
     public ngOnInit() {
+        this.isFilterCollapsed = this.windowService.nativeWindow?.innerWidth < 768;
         this.resolveTargetOperations();
         this.buildingTypes = this.config.supportedBuildingTypes;
         this.resetFiltersAndLoadInitialObjects();
