@@ -22,6 +22,7 @@ export class SelectLocationComponent implements OnInit {
   public layers: Layer[] = [
     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
+      noWrap: true
     })
   ];
   public markers: LayerGroup = new LayerGroup();
