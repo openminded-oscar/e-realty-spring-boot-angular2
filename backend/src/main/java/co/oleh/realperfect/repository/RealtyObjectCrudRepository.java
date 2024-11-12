@@ -2,6 +2,7 @@ package co.oleh.realperfect.repository;
 
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.RealtyObjectStatus;
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,4 +19,8 @@ public interface RealtyObjectCrudRepository extends CrudRepository<RealtyObject,
     @Modifying
     @Query("UPDATE RealtyObject r SET r.status = :status WHERE r.id = :id")
     int updateRealtyObjectStatusById(@Param("id") Long id, @Param("status") RealtyObjectStatus status);
+
+    @Query(value = "SELECT * FROM tbl_realty_object r WHERE ST_Distance_Sphere(r.geolocation, ST_GeomFromText(:point)) <= :radius",
+            nativeQuery = true)
+    List<RealtyObject> findWithinRadius(@Param("point") String pointWKT, @Param("radius") double radius);
 }

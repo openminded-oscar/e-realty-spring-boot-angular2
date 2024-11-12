@@ -2,9 +2,8 @@ package co.oleh.realperfect.mapping.mappers;
 
 import co.oleh.realperfect.mapping.AddressDto;
 import co.oleh.realperfect.model.Address;
+import co.oleh.realperfect.model.AddressUtils;
 import lombok.NonNull;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
@@ -19,9 +18,7 @@ public class AddressDtoToAddressMapper extends AbstractConverter<AddressDto, Add
         modelMapper.map(from, to);
 
         if (from.getLat() != null && from.getLng() != null) {
-            GeometryFactory geometryFactory = new GeometryFactory();
-            Point p = geometryFactory.createPoint(new Coordinate(from.getLat(),
-                    from.getLng()));
+            Point p = AddressUtils.createPointFromCoordinates(from.getLng(), from.getLat());
             to.setGeolocation(p);
         }
         return to;

@@ -6,9 +6,6 @@ import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 import lombok.extern.slf4j.Slf4j;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
