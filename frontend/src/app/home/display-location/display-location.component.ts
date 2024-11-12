@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {LatLng, Layer, MapOptions, tileLayer} from 'leaflet';
+import {LatLng, LatLngExpression, Layer, MapOptions, tileLayer} from 'leaflet';
 
 @Component({
   selector: 'app-location',
@@ -12,8 +12,11 @@ export class DisplayLocationComponent implements OnInit {
     zoom: 15,
   };
   @Input()
-  set center(value: LatLng) {
+  public set center(value: LatLngExpression) {
     this.options.center = value;
+  }
+  public get center(): LatLngExpression {
+    return this.options.center;
   }
   public layers: Layer[] = [
     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

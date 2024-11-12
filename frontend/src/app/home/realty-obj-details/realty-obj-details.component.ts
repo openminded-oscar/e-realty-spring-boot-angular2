@@ -42,7 +42,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   private currentUserObjects: RealtyObj[] = [];
   public isMyObject = false;
   public get geolocation () {
-    return this.currentObject?.address && latLng({
+    return this.currentObject?.address?.lat && this.currentObject?.address?.lng && latLng({
       lat: this.currentObject.address.lat,
       lng: this.currentObject.address.lng
     });
