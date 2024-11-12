@@ -1,3 +1,5 @@
+@import "app/variables";
+
 :host ::ng-deep .map-widget-container {
   height: 180px;
 }
@@ -72,7 +74,7 @@
   }
 
   &--text {
-    font-size: 1rem;
+    font-size: $description-text-size;
     max-height: 150px;
     overflow: auto;
   }
