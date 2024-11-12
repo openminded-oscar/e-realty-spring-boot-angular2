@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
+import {WindowService} from '../../app-services/window.service';
 
 @Component({
   selector: 'app-realty-status-editor',
@@ -13,7 +14,8 @@ export class RealtyStatusComponent implements OnInit {
   @Input()
   public realtyObject: RealtyObj;
 
-  constructor(public realtyObjectService: RealtyObjService) { }
+  constructor(public realtyObjectService: RealtyObjService,
+              public windowService: WindowService) { }
 
   ngOnInit(): void {
   }
@@ -39,6 +41,6 @@ export class RealtyStatusComponent implements OnInit {
   }
 
   public refreshPage() {
-    window.location.reload();
+    this.windowService.nativeWindow?.location.reload();
   }
 }

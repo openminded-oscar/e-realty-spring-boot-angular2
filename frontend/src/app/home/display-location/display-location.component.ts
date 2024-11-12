@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {LatLng, LatLngExpression, Layer, MapOptions, tileLayer} from 'leaflet';
+import {LatLngExpression, Layer, MapOptions, tileLayer} from 'leaflet';
+import {WindowService} from '../../app-services/window.service';
 
 @Component({
   selector: 'app-location',
@@ -11,22 +12,30 @@ export class DisplayLocationComponent implements OnInit {
     zoomControl: false,
     zoom: 15,
   };
+
   @Input()
   public set center(value: LatLngExpression) {
     this.options.center = value;
   }
+
   public get center(): LatLngExpression {
     return this.options.center;
   }
+
   public layers: Layer[] = [
     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
     })
   ];
 
-  constructor() {
+  constructor(private windowService: WindowService) {
   }
 
   ngOnInit(): void {
+  }
+
+  public openOnGoogleMaps(center) {
+    const url = `https://www.google.com/maps?q=${center.lat},${center.lng}`;
+    this.windowService.nativeWindow?.open(url, '_blank');
   }
 }
