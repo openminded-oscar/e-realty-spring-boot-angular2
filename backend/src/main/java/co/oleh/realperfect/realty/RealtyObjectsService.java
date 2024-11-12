@@ -4,6 +4,7 @@ import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
+import co.oleh.realperfect.model.AddressUtils;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.RealtyObjectStatus;
@@ -88,6 +89,9 @@ public class RealtyObjectsService {
 
     public RealtyObjectDetailsDto save(RealtyObjectDetailsDto realtyObjectDetailsDto) {
         RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
+        if (realtyObject.getAddress().getGeolocation() == null) {
+            realtyObject.getAddress().setGeolocation(AddressUtils.createPointFromCoordinates(1, 1));
+        }
 
         if (realtyObjectDetailsDto.getId() != null) {
             RealtyObject existingObjectInDb =
