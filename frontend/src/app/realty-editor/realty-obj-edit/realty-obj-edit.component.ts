@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Event} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {BUILDING_TYPES, ConfigService, DWELLING_TYPES, OPERATION_TYPES} from '../../app-services/config.service';
 import {FileUploadService} from '../../app-services/file-upload.service';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
@@ -252,20 +252,16 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         });
       }
 
-      this.realtyObjService.save({
+      const saveFunc = realtyObjFormData.id
+        ? (data: Partial<RealtyObj>) => this.realtyObjService.update(data)
+        : (data: Partial<RealtyObj>) => this.realtyObjService.create(data);
+      saveFunc({
         ...realtyObjFormData,
         targetOperations: includedOperationsNames as string[],
         realtor: realtyObjFormData.realtor as Realtor
       }).pipe(
         takeUntil(this.destroy$)
-      ).subscribe({
-        next: (savedRealtyObj: RealtyObj) => {
-          this.notificationService.showNotification('Success! The object was saved!');
-        },
-        error: (error) => {
-          this.notificationService.showNotification('Failure! The object adding failed!');
-        }
-      });
+      ).subscribe();
     }
   }
 
