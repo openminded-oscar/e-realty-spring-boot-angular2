@@ -8,6 +8,7 @@ import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {SortValue} from '../home/realty-objs-gallery/realty-objs-gallery.component';
 import {OPERATION_TYPES} from './config.service';
 import {GlobalNotificationService} from './global-notification.service';
+import {HTTP_CONSTANTS} from './common/HttpErrorInterceptor';
 
 export interface PageableResponse<T> {
   content: T[];
@@ -70,7 +71,7 @@ export class RealtyObjService implements OnDestroy {
         tap(createdObject => {
           this.notificationService.showNotification('The object was created! It will appear on site after our system confirmation!');
         }), catchError((error) => {
-          this.notificationService.showNotification('Failure! The object saving failed!');
+          this.notificationService.showErrorNotification('Failure! The object saving failed!');
           return throwError(() => error);
         })
       );
@@ -81,14 +82,16 @@ export class RealtyObjService implements OnDestroy {
       tap(updatedObject => {
         this.notificationService.showNotification('The object was saved!');
       }), catchError((error) => {
-        this.notificationService.showNotification('Failure! The object saving failed!');
+        this.notificationService.showErrorNotification('Failure! The object saving failed!');
         return throwError(() => error);
       })
     );
   }
 
   private callSaveOnServer(realtyObj: Partial<RealtyObj>) {
-    return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj).pipe(
+    return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj, {
+      headers: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}
+    }).pipe(
       takeUntil(this.destroy$),
       tap((realtyObjReturned: RealtyObj) => {
         if (realtyObjReturned.realtor && realtyObjReturned.realtor.profilePic) {
