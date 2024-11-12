@@ -7,7 +7,8 @@
           <div class="text-right mb-2 action-buttons">
             <button type="button"
                     class="btn btn-info"
-                    (click)="confirmLocationAndNavigate()">Next Step</button>
+                    (click)="confirmLocationAndNavigate()">Next Step
+            </button>
             <button type="button"
                     class="btn btn-dark"
                     [disabled]="realtyForm.invalid"
@@ -16,7 +17,8 @@
           </div>
           <div style="display: flex; flex-direction: row; align-items: center; justify-content: center">
             <div class="geomap-container">
-              <app-select-location [initialLocation]="initialLocation" (locationSelected)="changeLocation($event)"></app-select-location>
+              <app-select-location [initialLocation]="initialLocation"
+                                   (locationSelected)="changeLocation($event)"></app-select-location>
             </div>
           </div>
         </aw-wizard-step>
@@ -45,6 +47,13 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-md-1 col-form-label text-right">Dwelling type:</label>
+              <div class="col-md-3">
+                <select [formControlName]="'dwellingType'" name="dwellingType" class="select-input form-control">
+                  <option *ngFor="let dwellingType of dwellingTypes" [value]="dwellingType">{{ dwellingType }}
+                  </option>
+                </select>
+              </div>
               <ng-container [formGroupName]="'address'">
                 <label class="col-md-1 col-form-label text-right" for="apt-number-input">Apt.
                   number:</label>
@@ -55,60 +64,62 @@
                          class="form-control">
                 </div>
               </ng-container>
-              <label class="col-md-1 col-form-label text-right">Dwelling type:</label>
+              <label class="col-md-1 col-form-label text-right" for="rooms-amount-input">Rooms amount:</label>
               <div class="col-md-3">
-                <select [formControlName]="'dwellingType'" name="dwellingType" class="form-control">
-                  <option *ngFor="let dwellingType of dwellingTypes" [value]="dwellingType">{{ dwellingType }}
-                  </option>
-                </select>
-              </div>
-              <label class="col-md-1 col-form-label text-right" for="rooms-amount-input">Rooms
-                amount:</label>
-              <div class="col-md-3">
-                <input id="rooms-amount-input" name="rooms" type="number"
-                       class="form-control"
+                <input id="rooms-amount-input" name="rooms" type="number" class="form-control"
                        [formControlName]="'roomsAmount'">
               </div>
             </div>
+
             <div class="form-group row">
-              <label class="col-form-label col-md-1 text-right" for="building-floors-input">Floors in building:</label>
-              <div class="col-md-3">
-                <input id="building-floors-input" name="buildNum" type="number"
-                       class="form-control" [formControlName]="'totalFloors'">
-              </div>
-              <label class="col-form-label col-md-1 text-right" for="floor-input">Floor:</label>
-              <div class="col-md-3">
-                <input id="floor-input" name="floor" type="number"
-                       class="form-control" [formControlName]="'floor'">
-              </div>
-              <div class="col-form-label text-right col-md-1">
-                <label>Building type:</label>
-              </div>
+              <label class="col-form-label col-md-1 text-right">Building type:</label>
               <div class="col-md-3">
                 <select [formControlName]="'buildingType'" name="buildingType" class="form-control">
                   <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
                   </option>
                 </select>
               </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-form-label col-md-1 text-right" for="total-area-input">Total
-                area:</label>
-              <div class="col-md-3">
-                <input id="total-area-input" name="total-area" type="number"
-                       class="form-control" [formControlName]="'totalArea'">
-              </div>
-              <label class="col-form-label col-1 text-right" for="textinput">Living
-                area:</label>
-              <div class="col-md-3">
-                <input id="textinput" name="buildNum" type="number"
-                       class="form-control"
-                       [formControlName]="'livingArea'">
+
+              <label class="col-form-label col-md-1 text-right">Living Area:</label>
+              <div class="col-md-3" style="display: flex; justify-content: space-between">
+                <div>
+                  <input id="living-area-input" name="livingArea" type="number" class="form-control"
+                         placeholder="65"
+                         [formControlName]="'livingArea'">
+                </div>
+                <div>
+                  <label class="col-form-label col-md-1 text-center"
+                         style="margin-left: 1rem; margin-right: 1rem;">of</label>
+                </div>
+                <div>
+                  <input id="total-area-input" name="total-area" type="number" class="form-control"
+                         placeholder="80"
+                         [formControlName]="'totalArea'">
+                </div>
               </div>
 
+              <label class="col-form-label col-md-1 text-right">Floor:</label>
+              <div class="col-md-3" style="display: flex; justify-content: space-between">
+                <div>
+                  <input id="floor-input" name="floor" type="number" class="form-control"
+                         placeholder="3"
+                         [formControlName]="'floor'">
+                </div>
+
+                <div>
+                  <label class="col-form-label col-md-1 text-center"
+                         style="margin-left: 1rem; margin-right: 1rem;">of</label>
+                </div>
+                <div>
+                  <input id="building-floors-input" name="buildNum" type="number" class="form-control"
+                         placeholder="9"
+                         [formControlName]="'totalFloors'">
+                </div>
+              </div>
             </div>
           </div>
         </aw-wizard-step>
+
 
         <aw-wizard-step stepTitle="Description and targeting">
           <div class="row mb-2">
@@ -126,7 +137,7 @@
                 <label for="description-input">Overall description:</label>
               </div>
               <div class="col-md-5">
-        					<textarea rows="4" maxlength="255" [formControlName]="'description'" class="form-control"
+        					<textarea rows="3" maxlength="255" [formControlName]="'description'" class="form-control"
                             id="description-input" name="description-input"></textarea>
               </div>
               <div class="col-md-1 col-form-label">
@@ -147,14 +158,14 @@
                 <input class="form-control" id="foundation-year-input"
                        [formControlName]="'foundationYear'" name="foundationYear">
               </div>
-              <div class="col-md-3">
+              <div class="col-md-3" style="display: flex; align-items: center">
                 <label>Recently repaired</label>
                 <input name="repairing"
                        type="checkbox"
                        [formControlName]="'hasRepairing'"
                        class="big-checkbox">
               </div>
-              <div class="col-md-2">
+              <div class="col-md-2" style="display: flex; align-items: center">
                 <label>
                   Garage
                 </label>
@@ -163,7 +174,7 @@
                        [formControlName]="'hasGarage'"
                        class="big-checkbox">
               </div>
-              <div class="col-md-2">
+              <div class="col-md-2" style="display: flex; align-items: center">
                 <label>
                   Cellar
                 </label>
@@ -172,7 +183,7 @@
                        [formControlName]="'hasCellar'"
                        class="big-checkbox">
               </div>
-              <div class="col-md-2">
+              <div class="col-md-2" style="display: flex; align-items: center">
                 <label>
                   Loft
                 </label>
