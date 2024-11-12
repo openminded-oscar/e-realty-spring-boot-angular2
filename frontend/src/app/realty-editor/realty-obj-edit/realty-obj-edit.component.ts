@@ -252,20 +252,16 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         });
       }
 
-      this.realtyObjService.save({
+      const saveFunc = realtyObjFormData.id
+        ? (data: Partial<RealtyObj>) => this.realtyObjService.update(data)
+        : (data: Partial<RealtyObj>) => this.realtyObjService.create(data);
+      saveFunc({
         ...realtyObjFormData,
         targetOperations: includedOperationsNames as string[],
         realtor: realtyObjFormData.realtor as Realtor
       }).pipe(
         takeUntil(this.destroy$)
-      ).subscribe({
-        next: (savedRealtyObj: RealtyObj) => {
-          this.notificationService.showNotification('Success! The object was saved!');
-        },
-        error: (error) => {
-          this.notificationService.showNotification('Failure! The object adding failed!');
-        }
-      });
+      ).subscribe();
     }
   }
 
