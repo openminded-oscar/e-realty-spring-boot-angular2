@@ -1,4 +1,5 @@
 package co.oleh.realperfect.mapping.realtyobject;
+import co.oleh.realperfect.mapping.AddressDto;
 import co.oleh.realperfect.mapping.RealtorDto;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.model.*;
@@ -49,7 +50,7 @@ public class RealtyObjectDetailsDto {
         Set<OperationType> targetOperations;
         Boolean confirmed;
         Boolean realtorAware;
-        Address address;
+        AddressDto address;
         UserDto owner;
         RealtorDto realtor;
         List<RealtyObjectPhoto> photos;

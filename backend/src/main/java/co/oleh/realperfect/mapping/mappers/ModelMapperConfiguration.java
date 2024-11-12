@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 @Configuration
 public class ModelMapperConfiguration {
+    private AddressDtoToAddressMapper addressDtoToAddressMapper;
+    private AddressToAddressDtoMapper addressToAddressDtoMapper;
     private RoleToStringDtoMapper roleToStringDtoMapper;
     private UserToRealtyOwnerDtoMapper userToRealtyOwnerDtoMapper;
 
@@ -16,6 +18,8 @@ public class ModelMapperConfiguration {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.addConverter(userToRealtyOwnerDtoMapper);
         modelMapper.addConverter(roleToStringDtoMapper);
+        modelMapper.addConverter(addressToAddressDtoMapper);
+        modelMapper.addConverter(addressDtoToAddressMapper);
 
         modelMapper.getConfiguration()
                 .setPropertyCondition(ctx -> ctx.getSource() != null);
