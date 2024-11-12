@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RealtyObj} from '../app-models/realty-obj';
 import {endpoints} from '../commons';
-import {Observable, of} from 'rxjs';
+import {Observable, Subject, throwError} from 'rxjs';
 import {Photo, RealtyPhoto} from '../app-models/photo';
-import {tap} from 'rxjs/operators';
+import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {SortValue} from '../home/realty-objs-gallery/realty-objs-gallery.component';
-import {SupportedOperation} from '../realty-editor/realty-obj-edit/realty-obj-edit.component';
 import {OPERATION_TYPES} from './config.service';
+import {GlobalNotificationService} from './global-notification.service';
 
 export interface PageableResponse<T> {
   content: T[];
@@ -22,8 +22,10 @@ export interface PageableResponse<T> {
 }
 
 @Injectable({providedIn: 'root'})
-export class RealtyObjService {
-  constructor(private http: HttpClient) {
+export class RealtyObjService implements OnDestroy {
+  private destroy$ = new Subject<boolean>();
+
+  constructor(private http: HttpClient, private notificationService: GlobalNotificationService) {
   }
 
   public findByFilterAndPage(filter: {
@@ -62,8 +64,32 @@ export class RealtyObjService {
       }));
   }
 
-  public save(realtyObj: Partial<RealtyObj>): Observable<RealtyObj> {
+  public create(realtyObj: Partial<RealtyObj>): Observable<RealtyObj> {
+    return this.callSaveOnServer(realtyObj)
+      .pipe(
+        tap(createdObject => {
+          this.notificationService.showNotification('The object was created! It will appear on site after our system confirmation!');
+        }), catchError((error) => {
+          this.notificationService.showNotification('Failure! The object saving failed!');
+          return throwError(() => error);
+        })
+      );
+  }
+
+  public update(realtyObj: Partial<RealtyObj>): Observable<RealtyObj> {
+    return this.callSaveOnServer(realtyObj).pipe(
+      tap(updatedObject => {
+        this.notificationService.showNotification('The object was saved!');
+      }), catchError((error) => {
+        this.notificationService.showNotification('Failure! The object saving failed!');
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private callSaveOnServer(realtyObj: Partial<RealtyObj>) {
     return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj).pipe(
+      takeUntil(this.destroy$),
       tap((realtyObjReturned: RealtyObj) => {
         if (realtyObjReturned.realtor && realtyObjReturned.realtor.profilePic) {
           realtyObjReturned.realtor.profilePic.fullUrl =
@@ -119,5 +145,10 @@ export class RealtyObjService {
 
   public restore(realtyObject: RealtyObj): Observable<any> {
     return this.http.delete(`${endpoints.realtyObj.byId}/${realtyObject.id}/archive`).pipe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
