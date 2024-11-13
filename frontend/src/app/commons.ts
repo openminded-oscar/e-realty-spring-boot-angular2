@@ -20,6 +20,7 @@ export const endpoints: any = {
   },
   realtyObj: {
     add: apiBase + '/realty-objects/save',
+    byGeolocation: apiBase + '/realty-objects/by-geolocation',
     listSell: apiBase + '/realty-objects/sell',
     listRent: apiBase + '/realty-objects/rent',
     delete: apiBase + '/realty-objects',
@@ -27,14 +28,3 @@ export const endpoints: any = {
     realtorList: apiBase + '/realty-objects/my-as-realtor',
   }
 };
-
-export function  convertUTCDateToLocalDate(date) {
-  const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-
-  const offset = date.getTimezoneOffset() / 60;
-  const hours = date.getHours();
-
-  newDate.setHours(hours - offset);
-
-  return newDate;
-}

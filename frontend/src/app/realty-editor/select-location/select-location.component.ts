@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {icon, latLng, Layer, LayerGroup, LeafletMouseEvent, MapOptions, marker, tileLayer, Map} from 'leaflet';
+import {icon, latLng, Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, marker, tileLayer} from 'leaflet';
+import {RealtyObjService} from '../../app-services/realty-obj.service';
 
 export interface Geolocation {
   lat: number;
@@ -41,7 +42,7 @@ export class SelectLocationComponent implements OnInit {
         lng: value.lng,
         lat: value.lat
       };
-      this.addMarkerOnMap(value.lat, value.lng);
+      this.addMarkerAndNeighborsOnMap(value.lat, value.lng);
       if (this.map) {
         this.map.setView(value, this.map.getZoom(), {animate: true});
       }
@@ -55,7 +56,7 @@ export class SelectLocationComponent implements OnInit {
   public currentLocation: Geolocation;
 
 
-  constructor() {
+  constructor(public realtyObjectService: RealtyObjService) {
     this.layers.push(new LayerGroup([this.markers]));
   }
 
@@ -64,24 +65,45 @@ export class SelectLocationComponent implements OnInit {
 
   public onMapClick(mouseClickData: LeafletMouseEvent) {
     const {lat, lng} = mouseClickData.latlng;
-    this.addMarkerOnMap(lat, lng);
+
+    this.addMarkerAndNeighborsOnMap(lat, lng);
 
     this.currentLocation = mouseClickData.latlng;
     this.locationSelected.emit(this.currentLocation);
   }
 
-  private addMarkerOnMap(lat: number, lng: number) {
-    const newMarker = marker([lat, lng], {
-      icon: icon({
-        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      })
-    });
+  private addMarkerAndNeighborsOnMap(lat: number, lng: number) {
+    const newMarker = this.blueMarkerOfLngAndLat(lat, lng);
     this.markers.clearLayers();
     this.markers.addLayer(newMarker);
+    // this.realtyObjectService.findByLatLngAndZoomLevel(
+    //   lat, lng, this.map.getZoom()
+    // ).subscribe(objects => {
+    //   objects.forEach(object => {
+    //     if (this.currentLocation?.lat !== object.address.lat || this.currentLocation?.lng !== object.address.lng) {
+    //       const newRelatedMarker = this.redMarkerOfLatAndLng(object.address.lat, object.address.lng);
+    //       this.markers.addLayer(newRelatedMarker);
+    //     }
+    //   });
+    // });
+  }
+
+  private blueMarkerOfLngAndLat(lat: number, lng: number) {
+    return marker([lat, lng], {
+      icon: icon({
+        iconUrl: '/assets/house-icon.png',
+        iconSize: [25, 25],
+      })
+    });
+  }
+
+  private redMarkerOfLatAndLng(lat: number, lng: number) {
+    return marker([lat, lng], {
+      icon: icon({
+        iconUrl: '/assets/house-red-icon.png',
+        iconSize: [20, 20],
+      })
+    });
   }
 
   public onMapReady(map: Map) {
