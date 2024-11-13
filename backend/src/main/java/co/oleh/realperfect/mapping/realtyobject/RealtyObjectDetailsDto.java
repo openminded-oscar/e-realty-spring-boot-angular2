@@ -7,6 +7,7 @@ import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -50,6 +51,7 @@ public class RealtyObjectDetailsDto {
         Set<OperationType> targetOperations;
         Boolean confirmed;
         Boolean realtorAware;
+        @Valid
         AddressDto address;
         UserDto owner;
         RealtorDto realtor;
