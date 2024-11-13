@@ -18,7 +18,7 @@ public class AddressDtoToAddressMapper extends AbstractConverter<AddressDto, Add
         modelMapper.map(from, to);
 
         if (from.getLat() != null && from.getLng() != null) {
-            Point p = AddressUtils.createPointFromCoordinates(from.getLng(), from.getLat());
+            Point p = AddressUtils.lonLatToPoint(from.getLng(), from.getLat());
             to.setGeolocation(p);
         }
         return to;
