@@ -37,15 +37,14 @@ export class SelectLocationComponent implements OnInit {
   public set initialLocation(value: Geolocation) {
     this._initialLocation = value;
     if (value?.lat && value?.lng) {
-      if (this.map) {
-        this.map.setView(value, this.map.getZoom(), {animate: true});
-      }
-
       this.currentLocation = {
         lng: value.lng,
         lat: value.lat
       };
       this.addMarkerOnMap(value.lat, value.lng);
+      if (this.map) {
+        this.map.setView(value, this.map.getZoom(), {animate: true});
+      }
     }
   }
 
