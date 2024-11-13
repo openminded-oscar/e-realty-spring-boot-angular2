@@ -90,7 +90,7 @@ public class RealtyObjectsService {
     public RealtyObjectDetailsDto save(RealtyObjectDetailsDto realtyObjectDetailsDto) {
         RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
         if (realtyObject.getAddress().getGeolocation() == null) {
-            realtyObject.getAddress().setGeolocation(AddressUtils.createPointFromCoordinates(1, 1));
+            realtyObject.getAddress().setGeolocation(AddressUtils.lonLatToPoint(1, 1));
         }
 
         if (realtyObjectDetailsDto.getId() != null) {

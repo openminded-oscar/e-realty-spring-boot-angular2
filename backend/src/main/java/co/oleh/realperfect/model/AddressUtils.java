@@ -15,7 +15,7 @@ public class AddressUtils {
      * @param lat the latitude
      * @return a Point object representing the geographical coordinates
      */
-    public static Point createPointFromCoordinates(double lon, double lat) {
+    public static Point lonLatToPoint(double lon, double lat) {
         Coordinate coordinate = new Coordinate(lon, lat);
         return geometryFactory.createPoint(coordinate);
     }
@@ -31,6 +31,6 @@ public class AddressUtils {
     }
 
     public static String coordinatesToWkt(double lon, double lat) {
-        return pointToWkt(createPointFromCoordinates(lon, lat));
+        return pointToWkt(lonLatToPoint(lon, lat));
     }
 }
