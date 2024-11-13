@@ -35,7 +35,7 @@ public class RealtyObjectsApi {
     public static final int DEFAULT_BY_LOCATION_ZOOM_LEVEL = 10;
 
     private RealtyObjectsService realtyObjectsService;
-    private RealtyObjectCrudRepository objectCrudRepository;
+    private RealtyObjectsByGeolocationService realtyObjectsByGeolocationService;
     private RealtorService realtorService;
 
     @GetMapping(value = "/{objectId}")
@@ -88,7 +88,7 @@ public class RealtyObjectsApi {
             @RequestParam double lat,
             @RequestParam(required = false) Integer zoomLevel
     ) {
-        List<RealtyObjectDto> realtyObjects = this.realtyObjectsService.getAllRealtyObjectsByGeolocation(
+        List<RealtyObjectDto> realtyObjects = this.realtyObjectsByGeolocationService.getAllRealtyObjectsByGeolocation(
                 AddressUtils.lonLatToPoint(lng, lat), zoomLevel != null ? zoomLevel : DEFAULT_BY_LOCATION_ZOOM_LEVEL
         );
         return new ResponseEntity<>(realtyObjects, HttpStatus.OK);
