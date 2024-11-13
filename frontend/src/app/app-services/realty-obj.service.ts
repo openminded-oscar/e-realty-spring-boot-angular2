@@ -50,6 +50,18 @@ export class RealtyObjService implements OnDestroy {
     );
   }
 
+  public findByLatLngAndZoomLevel(lat: number, lng: number, zoomLevel: number): Observable<RealtyObj[]> {
+    return this.http.get<RealtyObj[]>(endpoints.realtyObj.byGeolocation, {
+      params: {lat, lng, zoomLevel}
+    }).pipe(
+      tap(res => {
+        (res ?? []).forEach(value => {
+          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+        });
+      })
+    );
+  }
+
   public findById(id: string): Observable<RealtyObj> {
     return this.http.get<RealtyObj>(endpoints.realtyObj.byId + '/' + id).pipe(
       tap((realtyObj: RealtyObj) => {
@@ -130,14 +142,6 @@ export class RealtyObjService implements OnDestroy {
     return filterItems;
   }
 
-  private appendFieldNameIfNestedRequired(field: string): string {
-    if (field === 'street' || field === 'city') {
-      field = 'address.' + field;
-    }
-
-    return field;
-  }
-
   public activate(realtyObject: RealtyObj): Observable<any> {
     return this.http.post(`${endpoints.realtyObj.byId}/${realtyObject.id}/activate`, realtyObject).pipe();
   }
@@ -148,6 +152,14 @@ export class RealtyObjService implements OnDestroy {
 
   public restore(realtyObject: RealtyObj): Observable<any> {
     return this.http.delete(`${endpoints.realtyObj.byId}/${realtyObject.id}/archive`).pipe();
+  }
+
+  private appendFieldNameIfNestedRequired(field: string): string {
+    if (field === 'street' || field === 'city') {
+      field = 'address.' + field;
+    }
+
+    return field;
   }
 
   ngOnDestroy(): void {

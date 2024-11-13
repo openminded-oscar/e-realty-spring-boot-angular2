@@ -15,6 +15,7 @@ import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
 import co.oleh.realperfect.repository.*;
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static co.oleh.realperfect.model.AddressUtils.MIN_ZOOM_LEVEL_TO_SEARCH;
 import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
 
 @Service
@@ -59,6 +61,21 @@ public class RealtyObjectsService {
         this.realtyObjectPhotoRepository = realtyObjectPhotoRepository;
         this.realtorService = realtorService;
         this.mappingService = mappingService;
+    }
+
+    public List<RealtyObjectDto> getAllRealtyObjectsByGeolocation(Point point, int currentZoomLevel) {
+        int zoomLevelToSearch = Math.max(currentZoomLevel - 3, MIN_ZOOM_LEVEL_TO_SEARCH);
+        return this.getAllRealtyObjectsByGeolocationAndRadius(point, AddressUtils.zoomLevelToRadiusMeters(zoomLevelToSearch));
+    }
+
+    private List<RealtyObjectDto> getAllRealtyObjectsByGeolocationAndRadius(Point point, int radius) {
+        List<RealtyObject> realtyObjects = this.realtyObjectCrudRepository.findWithinRadius(
+                AddressUtils.pointToWkt(point), radius
+        );
+
+        return realtyObjects.stream().map(object ->
+                this.mappingService.map(object, RealtyObjectDto.class)
+        ).toList();
     }
 
     public Page<RealtyObjectDto> getAllActiveObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {

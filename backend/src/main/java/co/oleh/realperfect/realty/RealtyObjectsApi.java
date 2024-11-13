@@ -5,9 +5,12 @@ import co.oleh.realperfect.config.cache.CacheNames;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
+import co.oleh.realperfect.model.AddressUtils;
+import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.RealtyObjectStatus;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
+import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +32,11 @@ import java.util.Map;
 @AllArgsConstructor()
 public class RealtyObjectsApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(RealtyObjectsApi.class);
+    public static final int DEFAULT_BY_LOCATION_ZOOM_LEVEL = 10;
 
     private RealtyObjectsService realtyObjectsService;
+    private RealtyObjectCrudRepository objectCrudRepository;
     private RealtorService realtorService;
-
 
     @GetMapping(value = "/{objectId}")
     public ResponseEntity<RealtyObjectDetailsDto> getObjectDetails(@PathVariable Long objectId) {
@@ -64,7 +68,7 @@ public class RealtyObjectsApi {
     @DeleteMapping("/{objectId}/archive")
     @RolesAllowed({"USER", "REALTOR", "ADMIN"})
     public ResponseEntity<Map<String, Integer>> reactivateRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
-                                                                    @PathVariable Long objectId) {
+                                                                       @PathVariable Long objectId) {
         this.realtyObjectsService.verifyRealtorOrAdminOrOwner(user, objectId);
 
         int updated = this.realtyObjectsService.setRealtyObjectStatusById(objectId, RealtyObjectStatus.ACTIVE);
@@ -75,6 +79,19 @@ public class RealtyObjectsApi {
     @RolesAllowed({"USER", "REALTOR", "ADMIN"})
     public ResponseEntity<Boolean> deleteRealtyObject(@PathVariable Long objectId) {
         return new ResponseEntity<>(realtyObjectsService.delete(objectId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/by-geolocation")
+    @RolesAllowed({"USER", "REALTOR", "ADMIN"})
+    public ResponseEntity<List<RealtyObjectDto>> getObjectsByGeolocation(
+            @RequestParam double lng,
+            @RequestParam double lat,
+            @RequestParam(required = false) Integer zoomLevel
+    ) {
+        List<RealtyObjectDto> realtyObjects = this.realtyObjectsService.getAllRealtyObjectsByGeolocation(
+                AddressUtils.lonLatToPoint(lng, lat), zoomLevel != null ? zoomLevel : DEFAULT_BY_LOCATION_ZOOM_LEVEL
+        );
+        return new ResponseEntity<>(realtyObjects, HttpStatus.OK);
     }
 
     @PostMapping("/sell")
