@@ -31,10 +31,16 @@ export class SelectLocationComponent implements OnInit {
   public locationSelected = new EventEmitter<Geolocation>();
 
   private _initialLocation: Geolocation;
+  private map: Map;
+
   @Input()
   public set initialLocation(value: Geolocation) {
     this._initialLocation = value;
     if (value?.lat && value?.lng) {
+      if (this.map) {
+        this.map.setView(value, this.map.getZoom(), {animate: true});
+      }
+
       this.currentLocation = {
         lng: value.lng,
         lat: value.lat
@@ -80,6 +86,7 @@ export class SelectLocationComponent implements OnInit {
   }
 
   public onMapReady(map: Map) {
+    this.map = map;
     setTimeout(() => {
       map.invalidateSize();
     }, 0);
