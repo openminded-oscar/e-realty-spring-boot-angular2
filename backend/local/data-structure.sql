@@ -126,6 +126,8 @@ CREATE TABLE `tbl_realty_object` (
   `realty_object_id` bigint DEFAULT NULL,
   `owner_id` bigint DEFAULT NULL,
   `realtor_id` bigint DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `geolocation` point NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK7ujvwekhjj7mip1e53tmlwtjc` (`realty_object_id`),
   KEY `FKghvmecgfl56awhev42qtql1cd` (`owner_id`),
@@ -134,6 +136,7 @@ CREATE TABLE `tbl_realty_object` (
   CONSTRAINT `FK7ujvwekhjj7mip1e53tmlwtjc` FOREIGN KEY (`realty_object_id`) REFERENCES `tbl_confirmation_doc_photo` (`id`),
   CONSTRAINT `FKghvmecgfl56awhev42qtql1cd` FOREIGN KEY (`owner_id`) REFERENCES `tbl_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ALTER TABLE tbl_realty_object ADD SPATIAL INDEX(geolocation);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
