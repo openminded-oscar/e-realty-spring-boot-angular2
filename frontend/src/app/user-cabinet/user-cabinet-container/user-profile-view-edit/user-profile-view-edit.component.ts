@@ -3,14 +3,12 @@ import {apiBase} from '../../../commons';
 import {Photo} from '../../../app-models/photo';
 import {FileUploadService} from '../../../app-services/file-upload.service';
 import {GlobalNotificationService} from '../../../app-services/global-notification.service';
-import {from, of, Subject, switchMap} from 'rxjs';
-import {catchError, takeUntil} from 'rxjs/operators';
-import {User} from '../../../app-models/user';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {User, UserRole} from '../../../app-models/user';
 import {UserService} from '../../../app-services/user.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ConfirmModalComponent} from '../../../shared/confirm-modal/confirm-modal.component';
-import {RealtorService} from '../../../app-services/realtor.service';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -23,18 +21,15 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
   public isEditMode = false;
   public defaultUserPhoto = 'https://placehold.co/250x300?text=User+photo';
   public realtorForm: FormGroup;
+  public isRealtor = false;
 
   constructor(
     private userService: UserService,
-    private realtorService: RealtorService,
     private fileUploadService: FileUploadService,
     private notificationService: GlobalNotificationService,
     private fb: FormBuilder,
-    private ngbModal: NgbModal,
   ) {
-    this.realtorForm = this.fb.group({
-      isRealtorControl: new FormControl(false),
-    });
+
   }
 
   ngOnInit() {
@@ -42,32 +37,15 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => this.user = user);
 
-    this.realtorForm.controls.isRealtorControl.valueChanges.pipe(
-      takeUntil(this.destroy$),
-      switchMap(v => {
-        if (v) {
-          const modalRef = this.ngbModal.open(ConfirmModalComponent);
-          modalRef.componentInstance.message = 'You Need To Have Confirmation From Admin. Are you sure?';
-          return from(modalRef.result).pipe(
-            catchError(() => of(false))
-          );
-        } else {
-          return of(null);
-        }
-      }),
-      switchMap((confirmed: boolean) => {
-        if (confirmed) {
-          return this.realtorService.claimForRealtor();
-        } else {
-          return of(null);
-        }
-      }),
-      catchError((error: Error) => {
-        console.error(error);
-        return of(null);
-      })
-    ).subscribe();
-
+    if (this.user.roles.includes(UserRole.Realtor)) {
+      this.realtorForm = this.fb.group({
+        isRealtorControl: new FormControl(false),
+      });
+      this.isRealtor = true;
+      this.realtorForm.setValue({
+        'isRealtorControl': true
+      });
+    }
   }
 
   public save() {

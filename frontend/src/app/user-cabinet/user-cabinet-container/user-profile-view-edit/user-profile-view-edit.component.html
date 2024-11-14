@@ -59,8 +59,8 @@
   </div>
   <div>User since:&nbsp;{{ user.createdAt | date:'shortDate' }}</div>
 
-  <div [formGroup]="realtorForm" class="realtor-block d-flex flex-column">
-    <div *ngIf="isEditMode" class="d-flex flex-row" style="gap: 10px; align-items: center">
+  <div *ngIf="isRealtor" [formGroup]="realtorForm" class="realtor-block d-flex flex-column">
+    <div class="d-flex flex-row" style="gap: 10px; align-items: center">
       <div>
         <label>I'm realtor</label>
       </div>
@@ -68,7 +68,8 @@
         <input name="isRealtor"
                type="checkbox"
                class="big-checkbox"
-               formControlName="isRealtorControl">
+               formControlName="isRealtorControl"
+               disabled>
       </div>
     </div>
   </div>
