@@ -5,7 +5,6 @@ import {BUILDING_TYPES, ConfigService, DWELLING_TYPES, OPERATION_TYPES} from '..
 import {FileUploadService} from '../../app-services/file-upload.service';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtorService} from '../../app-services/realtor.service';
-import {GlobalNotificationService} from '../../app-services/global-notification.service';
 import {from, Observable, of, Subject, take} from 'rxjs';
 import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {

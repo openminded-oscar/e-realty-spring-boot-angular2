@@ -5,12 +5,9 @@ import co.oleh.realperfect.config.cache.CacheNames;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
-import co.oleh.realperfect.model.AddressUtils;
-import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.RealtyObjectStatus;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
-import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,9 +85,10 @@ public class RealtyObjectsApi {
             @RequestParam double lat,
             @RequestParam(required = false) Integer zoomLevel
     ) {
-        List<RealtyObjectDto> realtyObjects = this.realtyObjectsByGeolocationService.getAllRealtyObjectsByGeolocation(
-                AddressUtils.lonLatToPoint(lng, lat), zoomLevel != null ? zoomLevel : DEFAULT_BY_LOCATION_ZOOM_LEVEL
-        );
+        List<RealtyObjectDto> realtyObjects =
+                this.realtyObjectsByGeolocationService.getAllRealtyObjectsByLngLatAndZoomLevel(
+                        lng, lat, zoomLevel != null ? zoomLevel : DEFAULT_BY_LOCATION_ZOOM_LEVEL
+                );
         return new ResponseEntity<>(realtyObjects, HttpStatus.OK);
     }
 
