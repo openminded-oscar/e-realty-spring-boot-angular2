@@ -43,11 +43,9 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/{objectId}/activate")
-    @RolesAllowed({"USER", "REALTOR", "ADMIN"})
+    @RolesAllowed({"REALTOR", "ADMIN"})
     public ResponseEntity<Map<String, Integer>> activateRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
                                                                      @PathVariable Long objectId) {
-        this.realtyObjectsService.verifyRealtorOrAdminOrOwner(user, objectId);
-
         int updated = this.realtyObjectsService.setRealtyObjectStatusById(objectId, RealtyObjectStatus.ACTIVE);
         return new ResponseEntity<>(Map.of("updated", updated), HttpStatus.OK);
     }
