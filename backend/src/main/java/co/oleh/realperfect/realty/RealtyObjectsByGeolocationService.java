@@ -37,4 +37,6 @@ public class RealtyObjectsByGeolocationService {
                 this.mappingService.map(object, RealtyObjectDto.class)
         ).toList();
     }
+
+    
 }
