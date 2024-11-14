@@ -76,16 +76,16 @@ export class SelectLocationComponent implements OnInit {
     const newMarker = this.blueMarkerOfLngAndLat(lat, lng);
     this.markers.clearLayers();
     this.markers.addLayer(newMarker);
-    // this.realtyObjectService.findByLatLngAndZoomLevel(
-    //   lat, lng, this.map.getZoom()
-    // ).subscribe(objects => {
-    //   objects.forEach(object => {
-    //     if (this.currentLocation?.lat !== object.address.lat || this.currentLocation?.lng !== object.address.lng) {
-    //       const newRelatedMarker = this.redMarkerOfLatAndLng(object.address.lat, object.address.lng);
-    //       this.markers.addLayer(newRelatedMarker);
-    //     }
-    //   });
-    // });
+    this.realtyObjectService.findByLatLngAndZoomLevel(
+      lat, lng, this.map.getZoom()
+    ).subscribe(objects => {
+      objects.forEach(object => {
+        if (this.currentLocation?.lat !== object.address.lat || this.currentLocation?.lng !== object.address.lng) {
+          const newRelatedMarker = this.redMarkerOfLatAndLng(object.address.lat, object.address.lng);
+          this.markers.addLayer(newRelatedMarker);
+        }
+      });
+    });
   }
 
   private blueMarkerOfLngAndLat(lat: number, lng: number) {
