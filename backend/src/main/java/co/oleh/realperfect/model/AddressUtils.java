@@ -5,6 +5,9 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.WKTWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddressUtils {
     public static final int MIN_ZOOM_LEVEL_TO_SEARCH = 5;
     private static final GeometryFactory geometryFactory = new GeometryFactory();
@@ -60,5 +63,25 @@ public class AddressUtils {
             case 20 -> 19;
             default -> 50_000;
         };
+    }
+
+    public static List<GeoSegment> generateGeoSegmentsForUkraine(int numRows, int numCols) {
+        List<GeoSegment> geoSegments = new ArrayList<>();
+        double minLat = 44.0;  // Southern boundary
+        double maxLat = 52.0;  // Northern boundary
+        double minLon = 22.0;  // Western boundary
+        double maxLon = 40.0;  // Eastern boundary
+
+        double latStep = (maxLat - minLat) / (numRows - 1);
+        double lonStep = (maxLon - minLon) / (numCols - 1);
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                double latitude = minLat + i * latStep;
+                double longitude = minLon + j * lonStep;
+                geoSegments.add(new GeoSegment(latitude, longitude));
+            }
+        }
+        return geoSegments;
     }
 }
