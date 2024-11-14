@@ -6,8 +6,9 @@ import {endpoints} from '../../commons';
 import {delay, from, Observable, of, Subject, switchMap, take} from 'rxjs';
 import {SignUpModalComponent} from '../../core/sign-up-modal/sign-up-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {catchError, filter} from 'rxjs/operators';
+import {catchError, filter, tap} from 'rxjs/operators';
 import {GlobalNotificationService} from '../global-notification.service';
+import {MessageModalComponent} from '../../shared/message-modal/message-modal.component';
 
 @Injectable({providedIn: 'root'})
 export class SignupService extends AbstractService<Credentials> implements OnDestroy {
@@ -28,6 +29,10 @@ export class SignupService extends AbstractService<Credentials> implements OnDes
       filter(credentials => credentials !== null),
       switchMap((credentials: Credentials) => {
         return this.signUpRequest(credentials);
+      }),
+      tap(res => {
+        const modal = this.modalService.open(MessageModalComponent);
+        modal.componentInstance.message = 'Account Created! Check your email for confirmation!';
       }),
       catchError((error) => {
         const errorMessage = error?.message || 'Sign-Up failed. Please try again.';

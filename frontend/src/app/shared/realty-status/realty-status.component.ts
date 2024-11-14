@@ -5,6 +5,8 @@ import {WindowService} from '../../app-services/window.service';
 import {UserService} from '../../app-services/user.service';
 import {takeUntil, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {MessageModalComponent} from '../message-modal/message-modal.component';
 
 @Component({
   selector: 'app-realty-status-editor',
@@ -18,15 +20,9 @@ export class RealtyStatusComponent implements OnInit {
   private destroy$ = new Subject<boolean>();
   public isRealtorOrAdmin = false;
 
-  public get shouldShowDropdown(): boolean {
-    return (
-      this.isRealtorOrAdmin ||
-      this.realtyObject?.status !== RealtyObjectStatus.DRAFT // prevent change status by owners for just created object
-    );
-  }
-
   constructor(public realtyObjectService: RealtyObjService,
               public userService: UserService,
+              public dialogService: NgbModal,
               public windowService: WindowService) {
   }
 
@@ -46,10 +42,17 @@ export class RealtyStatusComponent implements OnInit {
   }
 
   public activateObject(realtyObject: RealtyObj) {
-    this.realtyObjectService.activate(realtyObject)
-      .subscribe(() => {
-        this.refreshPage();
-      });
+    if (this.isRealtorOrAdmin) {
+      this.realtyObjectService.activate(realtyObject)
+        .subscribe(() => {
+          this.refreshPage();
+        });
+    } else {
+      const confirmation = this.dialogService.open(MessageModalComponent);
+      confirmation.componentInstance.message = `
+      Object is waiting to be reviewed by admin or realtor within few hours.
+       `;
+    }
   }
 
   public archiveObject(realtyObject: RealtyObj) {
