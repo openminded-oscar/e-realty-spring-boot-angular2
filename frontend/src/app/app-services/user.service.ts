@@ -32,7 +32,9 @@ export class UserService {
       .pipe(
         catchError((error: any) => throwError(error)),
         tap((userFromServer: User) => {
-          userFromServer.profilePicUrl = Photo.getLinkByFilename(userFromServer.profilePic.filename);
+          if (userFromServer.profilePic) {
+            userFromServer.profilePicUrl = Photo.getLinkByFilename(userFromServer.profilePic.filename);
+          }
         })
       );
   }
