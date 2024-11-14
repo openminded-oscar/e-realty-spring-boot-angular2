@@ -57,8 +57,4 @@ export class RealtorService {
           }
         }));
   }
-
-  public claimForRealtor(): Observable<any> {
-    throw new Error('Not implemented Yet');
-  }
 }
