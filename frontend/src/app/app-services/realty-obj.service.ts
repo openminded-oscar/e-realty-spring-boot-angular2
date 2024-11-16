@@ -9,6 +9,8 @@ import {SortValue} from '../home/realty-objs-gallery/realty-objs-gallery.compone
 import {OPERATION_TYPES} from './config.service';
 import {GlobalNotificationService} from './global-notification.service';
 import {HTTP_CONSTANTS} from './common/HttpErrorInterceptor';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {MessageModalComponent} from '../shared/message-modal/message-modal.component';
 
 export interface PageableResponse<T> {
   content: T[];
@@ -26,7 +28,9 @@ export interface PageableResponse<T> {
 export class RealtyObjService implements OnDestroy {
   private destroy$ = new Subject<boolean>();
 
-  constructor(private http: HttpClient, private notificationService: GlobalNotificationService) {
+  constructor(private http: HttpClient,
+              private notificationService: GlobalNotificationService,
+              private dialogService: NgbModal) {
   }
 
   public findByFilterAndPage(filter: {
@@ -81,7 +85,8 @@ export class RealtyObjService implements OnDestroy {
     return this.callSaveOnServer(realtyObj)
       .pipe(
         tap(createdObject => {
-          this.notificationService.showNotification('The object was created! It will appear on site after our system confirmation!');
+          const messageModal = this.dialogService.open(MessageModalComponent);
+          messageModal.componentInstance.message = 'The object was created! It will appear on site after our system confirmation!';
         }), catchError((error) => {
           this.notificationService.showErrorNotification('Failure! The object saving failed!');
           return throwError(() => error);
