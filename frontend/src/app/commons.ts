@@ -11,6 +11,7 @@ export const endpoints: any = {
   signup: apiBase + '/user',
   userUpdate: apiBase + '/user',
   pictures: apiBase + '/files/',
+  addressesByCoordinates: apiBase + '/addresses/address-by-geocoding',
   addressesNearby: apiBase + '/addresses/addresses-nearby',
   supportedCities: apiBase + '/addresses/cities-supported',
   realtors: {

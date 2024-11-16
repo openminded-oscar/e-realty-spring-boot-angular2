@@ -19,10 +19,11 @@ import {Photo, RealtyPhoto, RealtyPhotoType} from '../../app-models/photo';
 import {Realtor} from '../../app-models/realtor';
 import {apiBase} from '../../commons';
 import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
-import {Geolocation} from '../select-location/select-location.component';
 import {WizardComponent} from 'angular-archwizard';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
+import {AddressService} from '../../app-services/address.service';
+import {AddressByGeolocation, Geolocation} from '../../app-models/geolocation';
 
 export interface SupportedOperation {
   name: string;
@@ -44,8 +45,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public dwellingTypes: string[];
   public buildingTypes: string[];
   public photoType = RealtyPhotoType;
-  public location: Geolocation;
-
   private destroy$ = new Subject<boolean>();
 
   public realtyForm: FormGroup<RealtyForm>;
@@ -53,7 +52,10 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public importantInfoFormGroup: FormGroup<ImportantInfoForm>;
   public photosFormGroup: FormGroup<PhotosForm>;
   public objectId: number;
+  public location: Geolocation;
   public initialLocation: Geolocation;
+
+  public addressByGeolocation: AddressByGeolocation;
 
 
   constructor(
@@ -62,6 +64,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     public fileUploadService: FileUploadService,
     public realtyObjService: RealtyObjService,
     public realtorsService: RealtorService,
+    public addressService: AddressService,
     public dialogService: NgbModal,
     public route: ActivatedRoute,
     public router: Router,
@@ -94,7 +97,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   private initFormControls() {
     this.basicInfoFormGroup = this.fb.group<BasicInfoForm>({
       address: this.fb.group({
-        city: this.fb.control('Lviv', Validators.required),
+        city: this.fb.control('', Validators.required),
         street: this.fb.control('', Validators.required),
         numberOfStreet: this.fb.control('', [Validators.required, Validators.minLength(1)]),
         apartmentNumber: this.fb.control(null, Validators.required),
@@ -333,6 +336,12 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   public changeLocation(location: Geolocation) {
     this.location = location;
     this.realtyForm.get('geolocation').setValue(location);
+    if (this.location?.lat !== this.initialLocation?.lat || this.location?.lng !== this.initialLocation?.lng) {
+      this.addressService.getAddressesByLatLong(location)
+        .subscribe(addressByGeolocation => {
+          this.addressByGeolocation = addressByGeolocation;
+        });
+    }
   }
 
   public confirmLocationAndNavigate() {
@@ -353,6 +362,14 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         .subscribe();
     } else {
       this.wizard.goToNextStep();
+    }
+  }
+
+  public autofillAddressFromMapIfChanged(): void {
+    if (this.addressByGeolocation &&
+      (this.location?.lat !== this.initialLocation?.lat || this.location?.lng !== this.initialLocation?.lng)) {
+      this.basicInfoFormGroup.get('address.city')?.setValue(this.addressByGeolocation.city);
+      this.basicInfoFormGroup.get('address.street')?.setValue(this.addressByGeolocation.street);
     }
   }
 }

@@ -1,15 +1,28 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
+import {AddressByGeolocation, Geolocation} from '../app-models/geolocation';
 
 import {endpoints} from '../commons';
-import {ReplaySubject, Subject} from 'rxjs';
+import {Observable, ReplaySubject, Subject} from 'rxjs';
+import {HTTP_CONSTANTS} from './common/HttpErrorInterceptor';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AddressService {
   private observableAddresses = new Subject;
   private observableCities = new ReplaySubject(1);
 
   constructor(private http: HttpClient) {
+  }
+
+  public getAddressesByLatLong(geo: Geolocation): Observable<AddressByGeolocation> {
+    const params = new HttpParams()
+      .set('lat', geo.lat.toString())
+      .set('lng', geo.lng.toString());
+
+    return this.http.get<AddressByGeolocation>(endpoints.addressesByCoordinates, {
+      params: params,
+      headers: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}
+    });
   }
 
   public getAddressesByTerm(term: string, lat: number, lng: number) {
@@ -21,7 +34,7 @@ export class AddressService {
       .set('term', term);
     this.http.get(endpoints.addressesNearby, {params: params}).subscribe(
       (data: any[]) => {
-        data = data.map(data => data.description);
+        data = data.map(item => item.description);
         this.observableAddresses.next(data);
       }, error => {
         this.observableAddresses.error(error);
@@ -32,14 +45,15 @@ export class AddressService {
   }
 
   public getSupportedCities(forceRefresh?: boolean) {
-    this.http.get(endpoints.supportedCities).subscribe(
-      data => {
+    this.http.get(endpoints.supportedCities).subscribe({
+      next: (data) => {
         this.observableCities.next(data);
-      }, error => {
+      },
+      error: (error) => {
         this.observableCities.error(error);
         this.observableCities = new ReplaySubject(1);
       }
-    );
+    });
 
     return this.observableCities;
   }

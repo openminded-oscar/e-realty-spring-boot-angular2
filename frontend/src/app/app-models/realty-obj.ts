@@ -1,8 +1,8 @@
 import {Photo, RealtyPhoto, RealtyPhotoType} from './photo';
 import {Address} from './address';
 import {Realtor} from './realtor';
-import {Geolocation} from '../realty-editor/select-location/select-location.component';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {Geolocation} from './geolocation';
 
 export class AddressForm {
   city: FormControl<string>;

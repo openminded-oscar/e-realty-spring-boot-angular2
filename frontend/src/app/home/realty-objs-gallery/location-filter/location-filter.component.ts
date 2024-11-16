@@ -1,16 +1,17 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {latLng, Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, marker, tileLayer} from 'leaflet';
-import {blueMarkerOfLngAndLat} from '../../utils/location-utils';
-import {Geolocation} from '../../app-models/geolocation';
+import {RealtyObjService} from '../../../app-services/realty-obj.service';
+import {blueMarkerOfLngAndLat, redMarkerOfLatAndLng} from '../../../utils/location-utils';
+import {Geolocation} from '../../../app-models/geolocation';
 
 export const LVIV_COORDINATES: Geolocation = {lat: 49.83, lng: 24.01};
 
 @Component({
-  selector: 'app-select-location',
-  templateUrl: './select-location.component.html',
-  styleUrls: ['./select-location.component.scss']
+  selector: 'app-location-filter',
+  templateUrl: './location-filter.component.html',
+  styleUrls: ['./location-filter.component.scss']
 })
-export class SelectLocationComponent implements OnInit {
+export class LocationFilterComponent implements OnInit {
   public options: MapOptions = {
     zoomControl: true,
     zoom: 11,
@@ -24,9 +25,6 @@ export class SelectLocationComponent implements OnInit {
   ];
   public markers: LayerGroup = new LayerGroup();
 
-  @Output()
-  public locationSelected = new EventEmitter<Geolocation>();
-
   private _initialLocation: Geolocation;
   private map: Map;
 
@@ -38,7 +36,7 @@ export class SelectLocationComponent implements OnInit {
         lng: value.lng,
         lat: value.lat
       };
-      this.addMarkerOnMap(value.lat, value.lng);
+      this.addMarkerAndNeighborsOnMap(value.lat, value.lng);
       if (this.map) {
         this.map.setView(value, this.map.getZoom(), {animate: true});
       }
@@ -52,7 +50,7 @@ export class SelectLocationComponent implements OnInit {
   public currentLocation: Geolocation;
 
 
-  constructor() {
+  constructor(public realtyObjectService: RealtyObjService) {
     this.layers.push(new LayerGroup([this.markers]));
   }
 
@@ -62,16 +60,25 @@ export class SelectLocationComponent implements OnInit {
   public onMapClick(mouseClickData: LeafletMouseEvent) {
     const {lat, lng} = mouseClickData.latlng;
 
-    this.addMarkerOnMap(lat, lng);
+    this.addMarkerAndNeighborsOnMap(lat, lng);
 
     this.currentLocation = mouseClickData.latlng;
-    this.locationSelected.emit(this.currentLocation);
   }
 
-  private addMarkerOnMap(lat: number, lng: number) {
+  private addMarkerAndNeighborsOnMap(lat: number, lng: number) {
     const newMarker = blueMarkerOfLngAndLat(lat, lng);
     this.markers.clearLayers();
     this.markers.addLayer(newMarker);
+    this.realtyObjectService.findByLatLngAndZoomLevel(
+      lat, lng, this.map.getZoom()
+    ).subscribe(objects => {
+      objects.forEach(object => {
+        if (this.currentLocation?.lat !== object.address.lat || this.currentLocation?.lng !== object.address.lng) {
+          const newRelatedMarker = redMarkerOfLatAndLng(object.address.lat, object.address.lng);
+          this.markers.addLayer(newRelatedMarker);
+        }
+      });
+    });
   }
 
   public onMapReady(map: Map) {

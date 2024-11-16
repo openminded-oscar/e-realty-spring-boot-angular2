@@ -11,7 +11,7 @@ import {
   MyReviewsTabPath,
   RealtorObjectsTabPath,
   RealtorReviewsTabPath
-} from '../utils';
+} from '../routes';
 import {RealtorObjectsComponent} from '../realtor-objects/realtor-objects.component';
 import {RealtorReviewsComponent} from '../realtor-reviews/realtor-reviews.component';
 
