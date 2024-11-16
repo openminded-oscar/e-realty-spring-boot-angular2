@@ -7,7 +7,7 @@ import {
   MyReviewsTabPath,
   RealtorObjectsTabPath,
   RealtorReviewsTabPath
-} from '../utils';
+} from '../routes';
 import {ReviewsService} from '../../app-services/reviews.service';
 import {InterestService} from '../../app-services/interest.service';
 import {UserService} from '../../app-services/user.service';
