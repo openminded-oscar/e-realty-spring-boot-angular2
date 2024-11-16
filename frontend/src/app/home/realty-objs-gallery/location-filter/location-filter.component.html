@@ -1,0 +1,25 @@
+<div style="display: flex; align-items: center; justify-content: center">
+  <h4>Please Select Your Property Area (~100-200 metres):
+    <span
+      [ngbTooltip]="'Click on the map to select a location.'"
+    >
+      <i style="font-size: 1rem" class="fa fa-info-circle"></i>
+    </span>
+  </h4>
+</div>
+<div>
+  <div>
+    <div class="map-widget-container"
+         leaflet
+         [leafletOptions]="options"
+         [leafletLayers]="layers"
+         (leafletMapReady)="onMapReady($event)"
+         (leafletClick)="onMapClick($event)"
+    >
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 10px; text-align: center; font-size: 0.9em; color: #666;">
+  Note: We will not provide the end user with the exact location. This information will only be used for your convenience and improved filtering.
+</div>
