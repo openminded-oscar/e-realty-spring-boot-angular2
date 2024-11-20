@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtyObj} from '../../app-models/realty-obj';
@@ -11,8 +11,10 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
 import {RealtyObjsListComponent} from '../../shared/realty-objs-list/realty-objs-list.component';
 import {WindowService} from '../../app-services/window.service';
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {GeolocationWidgetModalComponent} from './geolocation-widget-modal/geolocation-widget-modal.component';
 import {LVIV_COORDINATES} from '../../utils/location-utils';
-import {Geolocation} from '../../app-models/geolocation';
+
 
 export interface SortValue {
     field: string;
@@ -55,6 +57,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
                 public userService: UserService,
                 public config: ConfigService,
                 public router: Router,
+                public ngbModal: NgbModal,
                 public fb: FormBuilder,
                 public windowService: WindowService,
     ) {
@@ -95,7 +98,6 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         field: 'address.city',
     }];
     public isFilterCollapsed = false;
-    public initialWidgetLocation: Geolocation = LVIV_COORDINATES;
 
     public ngOnInit() {
         this.isFilterCollapsed = this.windowService.nativeWindow?.innerWidth < 768;
@@ -191,5 +193,11 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroy$.next(true);
         this.destroy$.complete();
+    }
+
+    public openRealtyOnMapWidget(): void {
+        const realtyOnMap: NgbModalRef = this.ngbModal.open(GeolocationWidgetModalComponent);
+        realtyOnMap.componentInstance.initialLocation = LVIV_COORDINATES;
+        realtyOnMap.componentInstance.zoomLevel = 10;
     }
 }

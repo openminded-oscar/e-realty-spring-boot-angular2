@@ -4,6 +4,7 @@
          [leafletOptions]="options"
          [leafletLayers]="layers"
          (leafletMapReady)="onMapReady($event)"
+         (leafletCenterChange)="onMapCenterChanged($event)"
          (leafletClick)="onMapClick($event)"
     >
     </div>

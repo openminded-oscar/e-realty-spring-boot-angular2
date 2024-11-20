@@ -11,10 +11,14 @@ import {ReviewsService} from '../app-services/reviews.service';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {DisplayLocationComponent} from './display-location/display-location.component';
 import {GeolocationWidgetComponent} from './realty-objs-gallery/geolocation-widget/geolocation-widget.component';
+import {
+  GeolocationWidgetModalComponent
+} from './realty-objs-gallery/geolocation-widget-modal/geolocation-widget-modal.component';
 
 @NgModule({
   declarations: [
     GeolocationWidgetComponent,
+    GeolocationWidgetModalComponent,
     RealtyObjsGalleryComponent,
     RealtyObjDetailsComponent,
     DisplayLocationComponent,
