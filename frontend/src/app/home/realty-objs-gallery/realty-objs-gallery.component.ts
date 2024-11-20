@@ -1,191 +1,167 @@
-import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {RealtyObjService} from '../../app-services/realty-obj.service';
-import {RealtyObj} from '../../app-models/realty-obj';
-import {ConfigService, OPERATION_TYPES} from '../../app-services/config.service';
-import {Router} from '@angular/router';
-import {UserService} from '../../app-services/user.service';
-import {BehaviorSubject, Observable, Subject, take} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
-import {RealtyObjsListComponent} from '../../shared/realty-objs-list/realty-objs-list.component';
-import {WindowService} from '../../app-services/window.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {PageableResponse, RealtyObjService} from '../../app-services/realty-obj.service';
+import {UserService} from '../../app-services/user.service';
+import {OPERATION_TYPES} from '../../app-services/config.service';
+import {RealtyObj} from '../../app-models/realty-obj';
+
+export interface FilterRange {
+  ge: string;
+  le: string;
+}
+
+export interface FilterExact {
+  eq: string;
+}
+
+export interface FilterLike {
+  like: string;
+}
 
 export interface SortValue {
-    field: string;
-    direction: 'asc' | 'desc';
+  field: string;
+  direction: 'asc' | 'desc';
 }
 
 export interface SortField {
-    display: string;
-    field: string;
+  display: string;
+  field: string;
+}
+
+export interface Filter {
+  price: FilterRange;
+  city: FilterLike;
+  street: FilterLike;
+  roomsAmount: FilterExact;
+  description: FilterLike;
+  buildingType: FilterExact;
+  totalArea: FilterRange;
 }
 
 @Component({
-    selector: 'realty-objs-gallery',
-    templateUrl: './realty-objs-gallery.component.html',
-    styleUrls: ['./realty-objs-gallery.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'realty-objs-gallery',
+  templateUrl: './realty-objs-gallery.component.html',
+  styleUrls: ['./realty-objs-gallery.component.scss']
 })
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
-    public filterForm: FormGroup;
-    public readonly DEFAULT_CITY = 'Lviv';
-    public readonly INITIAL_FILTER_FORM = {
-        priceMin: ['0'],
-        priceMax: ['1000000'],
-        city: [this.DEFAULT_CITY],
-        street: [''],
-        roomsAmount: [''],
-        description: [''],
-        buildingType: [''],
-        totalAreaMin: [''],
-        totalAreaMax: ['']
-    };
-    private lastPage = false;
-
-    @ViewChild(RealtyObjsListComponent)
-    public listComponent: RealtyObjsListComponent;
-
-    constructor(
-      public realtyObjService: RealtyObjService,
-                public userService: UserService,
-                public config: ConfigService,
-                public router: Router,
-                public fb: FormBuilder,
-                public windowService: WindowService,
-    ) {
+  public initialFilter: Filter = {
+    price: {
+      ge: '0',
+      le: '1000000'
+    },
+    city: {
+      like: ''
+    },
+    street: {
+      like: ''
+    },
+    roomsAmount: {
+      eq: ''
+    },
+    description: {
+      like: ''
+    },
+    buildingType: {
+      eq: ''
+    },
+    totalArea: {
+      ge: '',
+      le: ''
     }
+  };
 
-    public pageable: any;
-    public buildingTypes: string[];
-    public showNotificaton = false;
+  constructor(public realtyObjService: RealtyObjService,
+              public userService: UserService,
+              public router: Router,
+              public route: ActivatedRoute,
+  ) {
+  }
 
-    private destroy$ = new Subject<boolean>();
+  public currentRealtyObjects = [];
 
-    public currentRealtyObjectsPortion = new BehaviorSubject<RealtyObj[]>([]);
-    public currentObjectsPortion$: Observable<RealtyObj[]> = this.currentRealtyObjectsPortion.asObservable();
+  public order: string;
+  public currentFilter: any;
 
-    public targetOperation: OPERATION_TYPES;
-    public readonly initialPageable: any = {
-        page: 0,
-        size: 12
-    };
+  public pageable: any;
 
-    public FILTER_DEBOUNCE_TIME = 1000;
-    public selectedOrderingOption: SortField = {
-        display: 'Recent',
-        field: 'updatedAt',
-    };
-    public selectedOrderingDirection: 'asc' | 'desc' = 'desc';
-    public orderingOptions: SortField[] = [{
-        display: 'Recent',
-        field: 'updatedAt',
-    }, {
-        display: 'Price',
-        field: 'price',
-    }, {
-        display: 'Area',
-        field: 'totalArea',
-    }, {
-        display: 'City',
-        field: 'address.city',
-    }];
-    public isFilterCollapsed = false;
+  public showNotificaton = false;
+  public targetOperation: OPERATION_TYPES;
+  public initialPageable: any = {
+    page: 0,
+    size: 12
+  };
 
-    public ngOnInit() {
-        this.isFilterCollapsed = this.windowService.nativeWindow?.innerWidth < 768;
-        this.resolveTargetOperations();
-        this.buildingTypes = this.config.supportedBuildingTypes;
-        this.resetFiltersAndLoadInitialObjects();
+  public FILTER_DEBOUNCE_TIME = 1000;
+
+  private destroy$ = new Subject<boolean>();
+
+  ngOnInit() {
+    this.resolveTargetOperations();
+
+    this.currentFilter = _.cloneDeep(this.initialFilter);
+    this.currentFilter.targetOperations = {operationTypeContains: this.targetOperation};
+    this.pageable = _.cloneDeep(this.initialPageable);
+
+    this.loadInitialObjects();
+  }
+
+  private resolveTargetOperations() {
+    if (this.router.url.startsWith('/rent')) {
+      this.targetOperation = OPERATION_TYPES.RENT;
+    } else {
+      this.targetOperation = OPERATION_TYPES.SELLING;
     }
+  }
 
-    private resolveTargetOperations() {
-        if (this.router.url.endsWith('/rent')) {
-            this.targetOperation = OPERATION_TYPES.RENT;
-        } else {
-            this.targetOperation = OPERATION_TYPES.SELLING;
-        }
-    }
+  public loadInitialObjects() {
+    this.currentRealtyObjects = [];
+    this.pageable = _.cloneDeep(this.initialPageable);
+    this.loadNextObjects();
+  }
 
-    public resetFiltersAndLoadInitialObjects() {
-        this.filterForm = this.fb.group(this.INITIAL_FILTER_FORM);
-        this.loadInitialObjects();
-    }
-
-    public loadInitialObjects() {
-        this.currentRealtyObjectsPortion.next([]);
-        this.pageable = _.cloneDeep(this.initialPageable);
-        if (this.listComponent) {
-            this.listComponent.resetObjects();
-        }
-
-        this.loadNextObjects();
-    }
-
-    public loadNextObjects() {
-        this.realtyObjService.findByFilterAndPage(
-            this.getFilterValue(),
-            this.getSortValue(),
-            this.pageable,
-            this.targetOperation
-        ).pipe(
-            take(1),
-            debounceTime(this.FILTER_DEBOUNCE_TIME),
-        ).subscribe(objectsPage => {
-            this.lastPage = objectsPage.last;
-            this.showNotificaton = true;
-            this.currentRealtyObjectsPortion.next([
-                ...objectsPage.content
-            ]);
-            ++this.pageable.page;
+  public loadNextObjects() {
+    this.realtyObjService.findByFilterAndPage(
+      this.currentFilter, this.pageable, this.pageable, this.targetOperation
+    )
+      .pipe(
+        debounceTime(this.FILTER_DEBOUNCE_TIME),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((response: PageableResponse<RealtyObj>) => {
+        this.showNotificaton = true;
+        const realtyObjects: RealtyObj[] = response.content;
+        realtyObjects.forEach(value => {
+          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
         });
-    }
+        this.currentRealtyObjects.push(...realtyObjects);
+        ++this.pageable.page;
+      });
+  }
 
-    public selectOrderingOption(option: SortField) {
-        this.selectedOrderingOption = option;
-        this.loadInitialObjects();
-    }
+  public addObject() {
+    this.router.navigateByUrl('/sell').then();
+  }
 
-    public toggleOrderingDirection() {
-        this.selectedOrderingDirection = this.selectedOrderingDirection === 'asc' ? 'desc' : 'asc';
-        this.loadInitialObjects();
-    }
+  public onScroll() {
+    this.loadNextObjects();
+  }
 
-    public onScroll() {
-        if (!this.lastPage) {
-            this.loadNextObjects();
-        }
-    }
+  public filterChange(filter: Filter) {
+    this.currentFilter = filter;
+    this.loadInitialObjects();
+  }
 
-    private getFilterValue() {
-        const formValues = this.filterForm.value;
-        const priceFilter = this.targetOperation === OPERATION_TYPES.SELLING ? {
-            price: {ge: formValues.priceMin, le: formValues.priceMax},
-        } : {
-            priceForRent: {ge: formValues.priceMin, le: formValues.priceMax},
-        };
-        return {
-            ...priceFilter,
-            city: {like: formValues.city},
-            street: {like: formValues.street},
-            roomsAmount: {eq: formValues.roomsAmount},
-            description: {like: formValues.description},
-            buildingType: {eq: formValues.buildingType},
-            totalArea: {ge: formValues.totalAreaMin, le: formValues.totalAreaMax},
-            targetOperations: {operationTypeContains: this.targetOperation}
-        };
-    }
+  public orderChange(order: string) {
+    this.order = order;
+    this.loadInitialObjects();
+  }
 
-    private getSortValue(): SortValue {
-        return {
-            field: this.selectedOrderingOption.field,
-            direction: this.selectedOrderingDirection,
-        };
-    }
-
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
 }
