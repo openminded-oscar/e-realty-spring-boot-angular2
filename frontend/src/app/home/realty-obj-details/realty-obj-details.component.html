@@ -5,7 +5,7 @@
         <ng-container *ngIf="currentObject.status !== RealtyObjectStatus.ACTIVE">
           [{{ currentObject.status }}]
         </ng-container>
-        <span>Apartment at
+        <span>House at
           {{ currentObject.address.street }} str.&nbsp;</span>&nbsp;
         <span *ngIf="currentObject.price">est. at ${{ currentObject.price }}&nbsp;</span>
         <span *ngIf="currentObject.priceForRent">(${{ currentObject.priceForRent }}/month)</span>
