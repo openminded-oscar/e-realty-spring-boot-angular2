@@ -41,6 +41,7 @@ $aw-colors: (
 body { padding-top: $header-height; }
 
 .tablet-desktop-side-section {
+  z-index: 1;
   @include media-breakpoint-up(md) {
     position: sticky;
     top: $header-height;
@@ -69,4 +70,8 @@ button.calendar, button.calendar:active {
 
 button.disabled, button:disabled {
   opacity: .35 !important;
+}
+
+.dropdown-menu.show {
+  z-index: 2000;
 }

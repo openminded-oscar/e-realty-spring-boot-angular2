@@ -10,11 +10,15 @@ import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details
 import {ReviewsService} from '../app-services/reviews.service';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {DisplayLocationComponent} from './display-location/display-location.component';
-import {LocationFilterComponent} from './realty-objs-gallery/location-filter/location-filter.component';
+import {GeolocationWidgetComponent} from './realty-objs-gallery/geolocation-widget/geolocation-widget.component';
+import {
+  GeolocationWidgetModalComponent
+} from './realty-objs-gallery/geolocation-widget-modal/geolocation-widget-modal.component';
 
 @NgModule({
   declarations: [
-    LocationFilterComponent,
+    GeolocationWidgetComponent,
+    GeolocationWidgetModalComponent,
     RealtyObjsGalleryComponent,
     RealtyObjDetailsComponent,
     DisplayLocationComponent,
