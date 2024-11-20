@@ -1,103 +1,115 @@
 <div class="row">
-  <div class="col-md-3 tablet-desktop-side-section">
-    <div class="row card" [formGroup]="filterForm">
-      <div class="card-header">
-        <div class="card-header--part">
-          <input name="city" (keyup.enter)="loadInitialObjects()" [placeholder]="'Type City'" [formControlName]="'city'"
-                 class="form-control">
-        </div>
+    <div class="col-md-3 tablet-desktop-side-section">
+        <div class="row card" [formGroup]="filterForm">
+            <div class="card-header">
+                <div class="card-header--part" style="position: relative; display: flex; flex: 1;">
+                    <input name="city"
+                           (keyup.enter)="loadInitialObjects()"
+                           [placeholder]="'Type City'"
+                           [formControlName]="'city'"
+                           class="form-control city-input">
+                    <span class="location-icon">
+                        <i class="fas fa-location-dot"></i>
+                    </span>
+                </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-2">
-          <div class="filter--value-container card-header--part" ngbDropdown>
-            <button
-              id="orderByDropdownMenuButton"
-              class="btn btn-outline-secondary"
-              ngbDropdownToggle
-            >
-              By {{ selectedOrderingOption.display }}
-            </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
-              <button
-                class="dropdown-item"
-                *ngFor="let option of orderingOptions"
-                (click)="selectOrderingOption(option)"
-              >
-                {{ option.display }}
-              </button>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <div class="filter--value-container card-header--part" ngbDropdown>
+                        <button
+                                id="orderByDropdownMenuButton"
+                                class="btn btn-outline-secondary"
+                                ngbDropdownToggle
+                        >
+                            By {{ selectedOrderingOption.display }}
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
+                            <button
+                                    class="dropdown-item"
+                                    *ngFor="let option of orderingOptions"
+                                    (click)="selectOrderingOption(option)"
+                            >
+                                {{ option.display }}
+                            </button>
+                        </div>
+                        <span class="toggle-order-icon" style="color: black; margin-top: 3px; cursor: pointer"
+                              (click)="toggleOrderingDirection()">
+                          <ng-container>
+                            <i *ngIf="selectedOrderingDirection === 'desc'; else arrowDown"
+                               class="fas fa-arrow-down"></i>
+                            <ng-template #arrowDown>
+                              <i style="cursor: pointer" class="fas fa-arrow-up"></i>
+                            </ng-template>
+                          </ng-container>
+                        </span>
+                    </div>
+                    <button class="btn btn-link collapse-filter-btn d-md-none"
+                            (click)="isFilterCollapsed = !isFilterCollapsed">
+                        {{ isFilterCollapsed ? 'Display All Filters' : 'Hide All Filters' }}
+                    </button>
+                </div>
             </div>
-            <span style="margin-top: 3px; cursor: pointer" (click)="toggleOrderingDirection()">
-              <ng-container>
-                <i *ngIf="selectedOrderingDirection === 'desc'; else arrowDown" class="fas fa-arrow-down"></i>
-                <ng-template #arrowDown>
-                  <i style="cursor: pointer" class="fas fa-arrow-up"></i>
-                </ng-template>
-              </ng-container>
-            </span>
-          </div>
 
-          <button class="btn btn-link collapse-filter-btn d-md-none" (click)="isFilterCollapsed = !isFilterCollapsed">
-            {{isFilterCollapsed? 'Display All Filters': 'Hide All Filters'}}
-          </button>
+            <div class="other-filters--section form-group card-body" [ngbCollapse]="isFilterCollapsed">
+                <div class="other-filters">
+                    Street
+                    <input (keyup.enter)="loadInitialObjects()" name="street" [formControlName]="'street'"
+                           class="form-control">
+                    <div class="row">
+                        <div class="filter-input-in-row col-3 col-sm-6">
+                            Price min
+                            <input (keyup.enter)="loadInitialObjects()" type="number" name="minPrice"
+                                   [formControlName]="'priceMin'"
+                                   class="form-control">
+                        </div>
+                        <div class="filter-input-in-row col-3 col-sm-6">
+                            Price max
+                            <input (keyup.enter)="loadInitialObjects()" type="number" name="maxPrice"
+                                   [formControlName]="'priceMax'"
+                                   class="form-control">
+                        </div>
+                        <div class="filter-input-in-row col-3 col-sm-6">
+                            Area min
+                            <input (keyup.enter)="loadInitialObjects()" type="number" name="minTotalArea"
+                                   [formControlName]="'totalAreaMin'" class="form-control">
+                        </div>
+                        <div class="filter-input-in-row col-3 col-sm-6">
+                            Area max
+                            <input (keyup.enter)="loadInitialObjects()" type="number" name="maxTotalArea"
+                                   [formControlName]="'totalAreaMax'" class="form-control">
+                        </div>
+                    </div>
+                    Rooms
+                    <input (keyup.enter)="loadInitialObjects()" name="rooms" type="number"
+                           [formControlName]="'roomsAmount'"
+                           class="form-control">
+                    Description like
+                    <input (keyup.enter)="loadInitialObjects()" name="description" [formControlName]="'description'"
+                           class="form-control">
+                    Building type
+                    <select [formControlName]="'buildingType'" name="buildingType" class="form-control" required>
+                        <option (change)="loadInitialObjects()" *ngFor="let buildingType of buildingTypes"
+                                [ngValue]="buildingType">{{ buildingType }}
+                        </option>
+                    </select>
+                </div>
+                <div class="row" style="max-width: unset; width: unset; margin-top: 10px">
+                    <div class="col-6">
+                        <button (click)="resetFiltersAndLoadInitialObjects()" class="btn btn-info btn-block">Reset all
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button (click)="loadInitialObjects()" class="btn btn-info btn-block">Search</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div class="other-filters--section form-group card-body" [ngbCollapse]="isFilterCollapsed">
-        <div class="other-filters">
-          Street
-          <input (keyup.enter)="loadInitialObjects()" name="street" [formControlName]="'street'" class="form-control">
-          <div class="row">
-            <div class="filter-input-in-row col-3 col-sm-6">
-              Price min
-              <input (keyup.enter)="loadInitialObjects()" type="number" name="minPrice" [formControlName]="'priceMin'"
-                     class="form-control">
-            </div>
-            <div class="filter-input-in-row col-3 col-sm-6">
-              Price max
-              <input (keyup.enter)="loadInitialObjects()" type="number" name="maxPrice" [formControlName]="'priceMax'"
-                     class="form-control">
-            </div>
-            <div class="filter-input-in-row col-3 col-sm-6">
-              Area min
-              <input (keyup.enter)="loadInitialObjects()" type="number" name="minTotalArea"
-                     [formControlName]="'totalAreaMin'" class="form-control">
-            </div>
-            <div class="filter-input-in-row col-3 col-sm-6">
-              Area max
-              <input (keyup.enter)="loadInitialObjects()" type="number" name="maxTotalArea"
-                     [formControlName]="'totalAreaMax'" class="form-control">
-            </div>
-          </div>
-          Rooms
-          <input (keyup.enter)="loadInitialObjects()" name="rooms" type="number" [formControlName]="'roomsAmount'"
-                 class="form-control">
-          Description like
-          <input (keyup.enter)="loadInitialObjects()" name="description" [formControlName]="'description'"
-                 class="form-control">
-          Building type
-          <select [formControlName]="'buildingType'" name="buildingType" class="form-control" required>
-            <option (change)="loadInitialObjects()" *ngFor="let buildingType of buildingTypes"
-                    [ngValue]="buildingType">{{ buildingType }}
-            </option>
-          </select>
-        </div>
-        <div class="row" style="max-width: unset; width: unset; margin-top: 10px">
-          <div class="col-6">
-            <button (click)="resetFiltersAndLoadInitialObjects()" class="btn btn-info btn-block">Reset all</button>
-          </div>
-          <div class="col-6">
-            <button (click)="loadInitialObjects()" class="btn btn-info btn-block">Search</button>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
 
-  <div class="col-md-9 main-page-block"
-       infiniteScroll
-       [infiniteScrollDistance]="2"
-       [infiniteScrollThrottle]="50"
-       (scrolled)="onScroll()">
-    <realty-objs-list [realtyObjectsPortion]="currentObjectsPortion$|async"></realty-objs-list>
-  </div>
+    <div class="col-md-9 main-page-block"
+         infiniteScroll
+         [infiniteScrollDistance]="2"
+         [infiniteScrollThrottle]="50"
+         (scrolled)="onScroll()">
+        <realty-objs-list [realtyObjectsPortion]="currentObjectsPortion$|async"></realty-objs-list>
+    </div>
 </div>

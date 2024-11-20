@@ -1,21 +1,18 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {latLng, Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, marker, tileLayer} from 'leaflet';
 import {RealtyObjService} from '../../../app-services/realty-obj.service';
-import {blueMarkerOfLngAndLat, redMarkerOfLatAndLng} from '../../../utils/location-utils';
+import {blueMarkerOfLngAndLat, LVIV_COORDINATES, redMarkerOfLatAndLng} from '../../../utils/location-utils';
 import {Geolocation} from '../../../app-models/geolocation';
 
-export const LVIV_COORDINATES: Geolocation = {lat: 49.83, lng: 24.01};
-
 @Component({
-  selector: 'app-location-filter',
-  templateUrl: './location-filter.component.html',
-  styleUrls: ['./location-filter.component.scss']
+  selector: 'app-geolocation-widget',
+  templateUrl: './geolocation-widget.component.html',
+  styleUrls: ['./geolocation-widget.component.scss']
 })
-export class LocationFilterComponent implements OnInit {
+export class GeolocationWidgetComponent implements OnInit {
   public options: MapOptions = {
     zoomControl: true,
-    zoom: 11,
-    center: latLng(LVIV_COORDINATES),
+    zoom: 11
   };
   public layers: Layer[] = [
     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -30,17 +27,20 @@ export class LocationFilterComponent implements OnInit {
 
   @Input()
   public set initialLocation(value: Geolocation) {
-    this._initialLocation = value;
-    if (value?.lat && value?.lng) {
-      this.currentLocation = {
-        lng: value.lng,
-        lat: value.lat
-      };
-      this.addMarkerAndNeighborsOnMap(value.lat, value.lng);
-      if (this.map) {
-        this.map.setView(value, this.map.getZoom(), {animate: true});
+    // setting  timeout for initial map initialization
+    setTimeout(() => {
+      this._initialLocation = value;
+      if (value?.lat && value?.lng) {
+        this.currentLocation = {
+          lng: value.lng,
+          lat: value.lat
+        };
+        if (this.map) {
+          this.addMarkerAndNeighborsOnMap(value.lat, value.lng);
+          this.map.setView(value, this.map.getZoom(), {animate: true});
+        }
       }
-    }
+    }, 100);
   }
 
   public get initialLocation(): Geolocation {

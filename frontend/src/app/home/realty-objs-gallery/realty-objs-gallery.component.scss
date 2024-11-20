@@ -3,11 +3,22 @@
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/mixins';
 
-.toast-container {
+$filter-icon-margin: 10px;
+
+.city-input {
+  padding-right: 35px;
+}
+
+.toggle-order-icon {
+  margin-right: $filter-icon-margin;
+}
+.location-icon {
+  cursor: pointer;
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
+  right: $filter-icon-margin;
+  top: 50%;
+  transform: translateY(-50%);
+  color: cadetblue;
 }
 
 .input-row {

@@ -11,6 +11,8 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
 import {RealtyObjsListComponent} from '../../shared/realty-objs-list/realty-objs-list.component';
 import {WindowService} from '../../app-services/window.service';
+import {LVIV_COORDINATES} from '../../utils/location-utils';
+import {Geolocation} from '../../app-models/geolocation';
 
 export interface SortValue {
     field: string;
@@ -31,6 +33,7 @@ export interface SortField {
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     public filterForm: FormGroup;
     public readonly DEFAULT_CITY = 'Lviv';
+
     public readonly INITIAL_FILTER_FORM = {
         priceMin: ['0'],
         priceMax: ['1000000'],
@@ -92,6 +95,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         field: 'address.city',
     }];
     public isFilterCollapsed = false;
+    public initialWidgetLocation: Geolocation = LVIV_COORDINATES;
 
     public ngOnInit() {
         this.isFilterCollapsed = this.windowService.nativeWindow?.innerWidth < 768;
