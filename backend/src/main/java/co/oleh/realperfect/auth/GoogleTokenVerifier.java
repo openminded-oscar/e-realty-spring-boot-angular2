@@ -8,7 +8,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -27,7 +27,7 @@ public class GoogleTokenVerifier {
         NetHttpTransport transport = new NetHttpTransport();
 
         verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                .setAudience(Collections.singletonList(clientId))
+                .setAudience(Collections.singletonList(this.clientId))
                 .build();
     }
 

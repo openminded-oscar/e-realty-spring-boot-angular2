@@ -2,8 +2,8 @@ package co.oleh.realperfect.mapping;
 
 import lombok.Data;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 
 @Data
 public class AddressDto {

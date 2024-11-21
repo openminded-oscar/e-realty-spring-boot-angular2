@@ -2,14 +2,13 @@ package co.oleh.realperfect.repository;
 
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.RealtyObjectStatus;
-import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.List;
 
 @Repository

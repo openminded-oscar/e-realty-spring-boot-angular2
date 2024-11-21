@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -150,9 +150,8 @@ public class ScopeAwareOAuth2AuthorizationRequestResolver implements OAuth2Autho
                 addPkceParameters(attributes, additionalParameters);
             }
             builder.additionalParameters(additionalParameters);
-        } else if (AuthorizationGrantType.IMPLICIT.equals(clientRegistration.getAuthorizationGrantType())) {
-            builder = OAuth2AuthorizationRequest.implicit();
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("Invalid Authorization Grant Type ("  +
                     clientRegistration.getAuthorizationGrantType().getValue() +
                     ") for Client Registration with Id: " + clientRegistration.getRegistrationId());
@@ -225,7 +224,7 @@ public class ScopeAwareOAuth2AuthorizationRequestResolver implements OAuth2Autho
 
         uriVariables.put("action", action == null ? "" : action);
 
-        return UriComponentsBuilder.fromUriString(clientRegistration.getRedirectUriTemplate())
+        return UriComponentsBuilder.fromUriString(clientRegistration.getRedirectUri())
                 .buildAndExpand(uriVariables)
                 .toUriString();
     }
