@@ -1,12 +1,10 @@
 package co.oleh.realperfect.model.photos;
 
 import co.oleh.realperfect.model.RealtyPhotoType;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tbl_realty_object_photo")

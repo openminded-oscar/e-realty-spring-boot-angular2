@@ -2,7 +2,7 @@ package co.oleh.realperfect.model.user;
 
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 

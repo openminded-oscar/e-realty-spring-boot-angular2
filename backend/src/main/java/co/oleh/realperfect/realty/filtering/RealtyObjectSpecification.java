@@ -4,7 +4,7 @@ import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.RealtyObject;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import jakarta.persistence.criteria.*;
 import java.util.Collection;
 
 public class RealtyObjectSpecification implements Specification<RealtyObject> {

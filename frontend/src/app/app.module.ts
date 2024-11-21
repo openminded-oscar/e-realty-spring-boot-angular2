@@ -19,6 +19,7 @@ import {GoogleLoginProvider, SocialLoginModule} from '@abacritt/angularx-social-
 import {GoogleSignInButtonComponent} from './core/google-sign-in-button/google-sign-in-button.component';
 import {SignInModalComponent} from './core/sign-in-modal/sign-in-modal.component';
 import {SignUpModalComponent} from './core/sign-up-modal/sign-up-modal.component';
+import {environment} from '../environments/environment';
 
 const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transports: ['websocket', 'polling']}};
 
@@ -63,7 +64,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '510686946042-rijrprort52tnmpm0e0ir20qgngt9cha.apps.googleusercontent.com', {
+              environment.googleClientKey, {
                 oneTapEnabled: false,
               }
             ),
