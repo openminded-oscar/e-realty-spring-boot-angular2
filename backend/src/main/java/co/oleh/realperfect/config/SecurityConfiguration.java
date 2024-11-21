@@ -4,35 +4,35 @@ import co.oleh.realperfect.auth.JWTAuthenticationFilter;
 import co.oleh.realperfect.config.oauth.CustomAuthorizationRequestRepository;
 import co.oleh.realperfect.config.oauth.Oauth2TokenSettingFilter;
 import co.oleh.realperfect.config.oauth.ScopeAwareOAuth2AuthorizationRequestResolver;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.endpoint.*;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Configuration
-@EnableOAuth2Sso
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(jsr250Enabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@EnableMethodSecurity(jsr250Enabled = true)
+public class SecurityConfiguration {
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
-    private final Oauth2TokenSettingFilter oauth2TokenSettingFilter;
     private final ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
+    private final Oauth2TokenSettingFilter oauth2TokenSettingFilter;
 
     public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter,
                                  ScopeAwareOAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver,
@@ -43,46 +43,60 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.oauth2TokenSettingFilter = oauth2TokenSettingFilter;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-/************    HTTP Auth config    *************/
-//                public options requests
-                .antMatchers(HttpMethod.OPTIONS)
-                .permitAll()
-//                private endpoints
-                .antMatchers("/api/upload-photo/**",
-                        "/api/interest/**",
-                        "/api/object-review/**",
-                        "/api/manage-users")
-                .authenticated()
-                .antMatchers(HttpMethod.POST, "/realty-objects/save")
-                .authenticated()
-//                public endpoints
-                .antMatchers("/api/**", "/login/oauth2/**", "/index.html", "/")
-                .permitAll()
-                .and()
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                // Disable session creation (stateless)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // Configure request authorization
+                .authorizeHttpRequests(auth -> auth
+                        // Public OPTIONS requests
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+
+                        // Private endpoints
+                        .requestMatchers(
+                                "/api/upload-photo/**",
+                                "/api/interest/**",
+                                "/api/object-review/**",
+                                "/api/manage-users"
+                        ).authenticated()
+                        .requestMatchers(HttpMethod.POST, "/realty-objects/save").authenticated()
+
+                        // Public endpoints
+                        .requestMatchers(
+                                "/api/**",
+                                "/login/oauth2/**",
+                                "/index.html",
+                                "/"
+                        ).permitAll()
+                )
+
+                // Add custom filters
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(oauth2TokenSettingFilter, OAuth2LoginAuthenticationFilter.class)
-                .csrf()
-                .disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-                .and()
-/************    OAuth2 Auth config    *************/
-                .oauth2Login()
-                .authorizationEndpoint()
-                .authorizationRequestRepository(authorizationRequestRepository())
-                .authorizationRequestResolver(this.oAuth2AuthorizationRequestResolver)
-                .and()
-                .tokenEndpoint()
-                .accessTokenResponseClient(accessTokenResponseClient());
 
+                // Disable CSRF
+                .csrf(AbstractHttpConfigurer::disable)
 
-        http.oauth2Client();
+                // Exception handling
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                )
+
+                // OAuth2 login configuration
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(endpoint -> endpoint
+                                .authorizationRequestRepository(authorizationRequestRepository())
+                                .authorizationRequestResolver(this.oAuth2AuthorizationRequestResolver)
+                        )
+                        .tokenEndpoint(token -> token
+                                .accessTokenResponseClient(accessTokenResponseClient())
+                        )
+                );
+
+        return http.build();
     }
 
     @Bean

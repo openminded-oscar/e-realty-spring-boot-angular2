@@ -3,7 +3,7 @@ package co.oleh.realperfect.model;
 
 import co.oleh.realperfect.model.user.User;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tbl_interest")

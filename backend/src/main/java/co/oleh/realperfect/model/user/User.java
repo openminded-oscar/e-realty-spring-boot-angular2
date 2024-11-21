@@ -4,7 +4,7 @@ import co.oleh.realperfect.model.AuditableEntity;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.photos.UserPhoto;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 import java.util.Set;
 
