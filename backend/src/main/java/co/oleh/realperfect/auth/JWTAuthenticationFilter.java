@@ -32,9 +32,6 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
     if (SecurityContextHolder.getContext().getAuthentication() == null) {
       try {
         Authentication authentication = authenticationService.getAuthentication(httpRequest);
-        if (authentication == null) {
-          authentication = authenticationService.getGoogleAuthentication(httpRequest);
-        }
         SecurityContextHolder.getContext().setAuthentication(authentication);
       } catch (ResponseStatusException ex) {
         ((HttpServletResponse) response).sendError(ex.getStatusCode().value(), ex.getReason());
