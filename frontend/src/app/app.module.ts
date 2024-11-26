@@ -15,7 +15,7 @@ import {GlobalNotificationComponent} from './core/global-notification/global-not
 import {HeaderComponent} from './core/header/header.component';
 import {SharedModule} from './shared/shared.module';
 import {AppRoutesModule} from './app.routes.module';
-import {GoogleLoginProvider, SocialLoginModule} from '@abacritt/angularx-social-login';
+import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule} from '@abacritt/angularx-social-login';
 import {GoogleSignInButtonComponent} from './core/google-sign-in-button/google-sign-in-button.component';
 import {SignInModalComponent} from './core/sign-in-modal/sign-in-modal.component';
 import {SignUpModalComponent} from './core/sign-up-modal/sign-up-modal.component';
@@ -40,9 +40,10 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
     SharedModule,
     HttpClientModule,
     SocialLoginModule,
+    GoogleSigninButtonModule,
     AppRoutesModule,
     BrowserAnimationsModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
   ],
   providers: [
     {
