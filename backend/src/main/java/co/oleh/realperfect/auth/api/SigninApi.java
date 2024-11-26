@@ -35,7 +35,6 @@ public class SigninApi {
     private final MappingService mappingService;
     private final AuthenticationService tokenAuthenticationService;
     private final GoogleTokenVerifier googleTokenVerifier;
-    private final GoogleCalendarWrapperService googleCalendarWrapper;
 
     public SigninApi(UserService userService,
                      MappingService mappingService,
@@ -46,7 +45,6 @@ public class SigninApi {
         this.mappingService = mappingService;
         this.tokenAuthenticationService = tokenAuthenticationService;
         this.googleTokenVerifier = googleTokenVerifier;
-        this.googleCalendarWrapper = googleCalendarWrapper;
     }
 
     @GetMapping("/with-token")
