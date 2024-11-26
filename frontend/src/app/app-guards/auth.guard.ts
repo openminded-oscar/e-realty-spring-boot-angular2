@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate, OnDestroy {
         map(v => !!v),
         tap(v => {
           if (!v) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/']).then();
             this.signinSignoutService.signIn('Sign In To Access All Features!');
           }
         }),
