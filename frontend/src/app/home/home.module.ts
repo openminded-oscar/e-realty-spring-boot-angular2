@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {HomeRoutingModule} from './home-routing.module';
-import {ArchwizardModule} from 'angular-archwizard';
+
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
 import {SharedModule} from '../shared/shared.module';
@@ -14,6 +14,7 @@ import {GeolocationWidgetComponent} from './realty-objs-gallery/geolocation-widg
 import {
   GeolocationWidgetModalComponent
 } from './realty-objs-gallery/geolocation-widget-modal/geolocation-widget-modal.component';
+import {ArchwizardModule} from '@achimha/angular-archwizard';
 
 @NgModule({
   declarations: [
