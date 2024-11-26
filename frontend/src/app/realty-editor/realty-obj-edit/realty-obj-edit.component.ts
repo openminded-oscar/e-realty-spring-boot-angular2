@@ -19,11 +19,11 @@ import {Photo, RealtyPhoto, RealtyPhotoType} from '../../app-models/photo';
 import {Realtor} from '../../app-models/realtor';
 import {apiBase} from '../../commons';
 import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
-import {WizardComponent} from 'angular-archwizard';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 import {AddressService} from '../../app-services/address.service';
 import {AddressByGeolocation, Geolocation} from '../../app-models/geolocation';
+import {WizardComponent} from '@rg-software/angular-archwizard';
 
 export interface SupportedOperation {
   name: string;
