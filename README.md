@@ -10,6 +10,7 @@
 
 # FrontEnd dependencies and build
 ####Dependencies
+NodeJs version 18
 * `npm install -g @angular/cli` to install angular cli (globally)
 * `npm install` to install Node packages
 ####Build

@@ -14,7 +14,7 @@ import {GeolocationWidgetComponent} from './realty-objs-gallery/geolocation-widg
 import {
   GeolocationWidgetModalComponent
 } from './realty-objs-gallery/geolocation-widget-modal/geolocation-widget-modal.component';
-import {ArchwizardModule} from '@achimha/angular-archwizard';
+import {ArchwizardModule} from '@rg-software/angular-archwizard';
 
 @NgModule({
   declarations: [

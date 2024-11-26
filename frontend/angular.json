@@ -20,6 +20,11 @@
               "src/assets",
               "src/favicon.ico"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "."
+              ]
+            },
             "styles": [
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -58,21 +63,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ang4:build"
+            "buildTarget": "ang4:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ang4:build:production"
+              "buildTarget": "ang4:build:production"
             },
             "local": {
-              "browserTarget": "ang4:build:local"
+              "buildTarget": "ang4:build:local"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ang4:build"
+            "buildTarget": "ang4:build"
           }
         },
         "test": {
@@ -130,7 +135,6 @@
       }
     }
   },
-  "defaultProject": "ang4",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
