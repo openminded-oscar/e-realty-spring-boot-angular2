@@ -5,7 +5,7 @@ import {SharedModule} from '../shared/shared.module';
 import {RouterModule, Routes} from '@angular/router';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {SelectLocationComponent} from './select-location/select-location.component';
-import {ArchwizardModule} from '@achimha/angular-archwizard';
+import {ArchwizardModule} from '@rg-software/angular-archwizard';
 
 export const routes: Routes = [
   {
