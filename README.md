@@ -1,6 +1,8 @@
 # Git clone, after that install dependencies:
 [backend/local/start_resources.sh](backend/local/start_resources.sh)
 
+For pre-commit initialization, please run command: _npx husky_
+
 # BackEnd start
 ####Dependencies
 * Maven 3, Java 16, Docker, MySQLV8
