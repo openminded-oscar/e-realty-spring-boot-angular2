@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {UserService} from '../app-services/user.service';
 import {Router} from '@angular/router';
-import {SampleSocketService} from '../app-services/socket/sample-socket.service';
 import {Subject} from 'rxjs';
 import {map, switchMap, takeUntil} from 'rxjs/operators';
+import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
+import {UserService} from '../app-services/user.service';
+import {SampleSocketService} from '../app-services/socket/sample-socket.service';
 import {GlobalNotificationService} from '../app-services/global-notification.service';
 import {User} from '../app-models/user';
 import {RealtyObj} from '../app-models/realty-obj';
-import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {SignInSignOutService} from '../app-services/auth/sign-in-sign-out.service';
 
 

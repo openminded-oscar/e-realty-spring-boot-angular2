@@ -1,6 +1,6 @@
-import {  Component, Input  } from '@angular/core';
-import { LatLngExpression, Layer, MapOptions, tileLayer } from 'leaflet';
-import { WindowService } from '../../app-services/window.service';
+import {Component, Input} from '@angular/core';
+import {LatLngExpression, Layer, MapOptions, tileLayer} from 'leaflet';
+import {WindowService} from '../../app-services/window.service';
 import {Geolocation} from '../../app-models/geolocation';
 
 @Component({

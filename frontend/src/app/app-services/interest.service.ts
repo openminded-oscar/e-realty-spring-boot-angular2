@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 import {endpoints} from '../commons';
 import {AbstractService} from './common/abstract.service';
 import {Interest, InterestDto} from '../app-models/interest';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../app-models/realty-obj';
 
 @Injectable({providedIn: 'root'})

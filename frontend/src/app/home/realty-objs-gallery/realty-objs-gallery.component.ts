@@ -1,17 +1,17 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
-import {RealtyObjService} from '../../app-services/realty-obj.service';
-import {RealtyObj} from '../../app-models/realty-obj';
-import {ConfigService, OPERATION_TYPES} from '../../app-services/config.service';
 import {Router} from '@angular/router';
-import {UserService} from '../../app-services/user.service';
 import {BehaviorSubject, Observable, Subject, take} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {RealtyObjService} from '../../app-services/realty-obj.service';
+import {RealtyObj} from '../../app-models/realty-obj';
+import {ConfigService, OPERATION_TYPES} from '../../app-services/config.service';
+import {UserService} from '../../app-services/user.service';
 import {RealtyObjsListComponent} from '../../shared/realty-objs-list/realty-objs-list.component';
 import {WindowService} from '../../app-services/window.service';
-import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {GeolocationWidgetModalComponent} from './geolocation-widget-modal/geolocation-widget-modal.component';
 import {LVIV_COORDINATES} from '../../utils/location-utils';
 

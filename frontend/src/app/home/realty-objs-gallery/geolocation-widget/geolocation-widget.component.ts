@@ -1,10 +1,10 @@
 import {Component, ElementRef, Input, NgZone} from '@angular/core';
 import {LatLng, Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, tileLayer} from 'leaflet';
+import {Router} from '@angular/router';
 import {RealtyObjService} from '../../../app-services/realty-obj.service';
 import {blueMarkerOfLngAndLat, redMarkerOfLatAndLng} from '../../../utils/location-utils';
 import {Geolocation} from '../../../app-models/geolocation';
 import {RealtyObj} from '../../../app-models/realty-obj';
-import {Router} from '@angular/router';
 import {WindowService} from '../../../app-services/window.service';
 
 const MAP_INIT_TIMEOUT_MS = 100;

@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {combineLatest, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {UserService} from '../../app-services/user.service';
 
 @Component({

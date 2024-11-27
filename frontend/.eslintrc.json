@@ -1,6 +1,6 @@
 {
   "root": true,
-  "plugins": ["deprecation", "@typescript-eslint"],
+  "plugins": ["deprecation", "@typescript-eslint", "import"],
   "ignorePatterns": [
     "projects/**/*"
   ],
@@ -34,6 +34,19 @@
             "prefix": "app",
             "style": "camelCase",
             "type": "attribute"
+          }
+        ],
+        "import/first": "error",  // Імпорти повинні бути на початку файлу
+        "import/no-duplicates": "error",  // Не допускаються дублікати імпортів
+        "import/order": [
+          "error",
+          {
+            "groups": [
+              ["builtin", "external"],
+              "internal",
+              ["sibling", "parent"],
+              "index"
+            ]
           }
         ],
         "deprecation/deprecation": "warn",

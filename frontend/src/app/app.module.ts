@@ -1,13 +1,14 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
-import {AppComponent} from './core/app.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
+import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule} from '@abacritt/angularx-social-login';
+import {AppComponent} from './core/app.component';
 import {SignInButtonComponent} from './core/signin-button/sign-in-button.component';
 import {SignupButtonComponent} from './core/signup-button/signup-button.component';
 import {SignOutButtonComponent} from './core/signout-button/sign-out-button.component';
-import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
 import {HttpErrorsInterceptor} from './app-services/common/HttpErrorInterceptor';
 import {AuthHttpInterceptor} from './app-services/common/AuthHttpInterceptor';
 import {CookieService} from './app-services/common/CookieService';
@@ -15,7 +16,6 @@ import {GlobalNotificationComponent} from './core/global-notification/global-not
 import {HeaderComponent} from './core/header/header.component';
 import {SharedModule} from './shared/shared.module';
 import {AppRoutesModule} from './app.routes.module';
-import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule} from '@abacritt/angularx-social-login';
 import {GoogleSignInButtonComponent} from './core/google-sign-in-button/google-sign-in-button.component';
 import {SignInModalComponent} from './core/sign-in-modal/sign-in-modal.component';
 import {SignUpModalComponent} from './core/sign-up-modal/sign-up-modal.component';

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
-import {RealtyObj} from '../../app-models/realty-obj';
 import {BehaviorSubject, Subject} from 'rxjs';
+import {RealtyObj} from '../../app-models/realty-obj';
 import {UserService} from '../../app-services/user.service';
 
 @Component({

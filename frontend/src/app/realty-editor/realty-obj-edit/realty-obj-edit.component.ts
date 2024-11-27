@@ -1,12 +1,14 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
+import {from, Observable, of, Subject, take} from 'rxjs';
+import {catchError, takeUntil, tap} from 'rxjs/operators';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {WizardComponent} from '@rg-software/angular-archwizard';
 import {BUILDING_TYPES, ConfigService, DWELLING_TYPES, OPERATION_TYPES} from '../../app-services/config.service';
 import {FileUploadService} from '../../app-services/file-upload.service';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtorService} from '../../app-services/realtor.service';
-import {from, Observable, of, Subject, take} from 'rxjs';
-import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {
   BasicInfoForm,
   ImportantInfoForm,
@@ -19,11 +21,9 @@ import {Photo, RealtyPhoto, RealtyPhotoType} from '../../app-models/photo';
 import {Realtor} from '../../app-models/realtor';
 import {apiBase} from '../../commons';
 import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 import {AddressService} from '../../app-services/address.service';
 import {AddressByGeolocation, Geolocation} from '../../app-models/geolocation';
-import {WizardComponent} from '@rg-software/angular-archwizard';
 
 export interface SupportedOperation {
   name: string;
