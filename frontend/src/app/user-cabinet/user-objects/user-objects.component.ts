@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {User} from '../../app-models/user';
 import {UserService} from '../../app-services/user.service';
-import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-objects',

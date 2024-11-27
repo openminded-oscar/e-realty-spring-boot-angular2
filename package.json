@@ -3,5 +3,8 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^13.0.0"
+  },
+  "scripts": {
+    "frontend-lint": "cd frontend && npx lint-staged"
   }
 }

@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {Geolocation} from '../../../app-models/geolocation';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {Geolocation} from '../../../app-models/geolocation';
 
 @Component({
   selector: 'app-geolocation-widget-modal',

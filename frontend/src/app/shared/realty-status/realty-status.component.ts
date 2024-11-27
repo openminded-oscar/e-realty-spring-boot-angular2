@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {takeUntil, tap} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {WindowService} from '../../app-services/window.service';
 import {UserService} from '../../app-services/user.service';
-import {takeUntil, tap} from 'rxjs/operators';
-import {Subject} from 'rxjs';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {MessageModalComponent} from '../message-modal/message-modal.component';
 
 @Component({

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 import {UserService} from '../../app-services/user.service';
 import {SignInSignOutService} from '../../app-services/auth/sign-in-sign-out.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'signout-button',

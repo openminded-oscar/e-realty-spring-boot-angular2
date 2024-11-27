@@ -9,10 +9,10 @@ import {
   Validators
 } from '@angular/forms';
 import {NgbActiveModal, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
-import {dateBasedOnNGBDatePicker, ReviewsService} from '../../app-services/reviews.service';
-import {RealtyObj} from '../../app-models/realty-obj';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {dateBasedOnNGBDatePicker, ReviewsService} from '../../app-services/reviews.service';
+import {RealtyObj} from '../../app-models/realty-obj';
 import {ReviewPostDto} from '../../app-models/review';
 
 export function reviewDateTimeValidator(): ValidatorFn {

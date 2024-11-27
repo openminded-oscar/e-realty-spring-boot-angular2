@@ -1,15 +1,15 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Observable, Subject, throwError} from 'rxjs';
+import {catchError, takeUntil, tap} from 'rxjs/operators';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RealtyObj} from '../app-models/realty-obj';
 import {endpoints} from '../commons';
-import {Observable, Subject, throwError} from 'rxjs';
 import {Photo, RealtyPhoto} from '../app-models/photo';
-import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {SortValue} from '../home/realty-objs-gallery/realty-objs-gallery.component';
 import {OPERATION_TYPES} from './config.service';
 import {GlobalNotificationService} from './global-notification.service';
 import {HTTP_CONSTANTS} from './common/HttpErrorInterceptor';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {MessageModalComponent} from '../shared/message-modal/message-modal.component';
 
 export interface PageableResponse<T> {

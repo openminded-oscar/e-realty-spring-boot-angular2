@@ -1,23 +1,23 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { HttpResponse } from '@angular/common/http';
+import {combineLatest, Subject} from 'rxjs';
+import {takeUntil, tap} from 'rxjs/operators';
+import {latLng} from 'leaflet';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
-import {ActivatedRoute} from '@angular/router';
 import {Photo, RealtyPhoto} from '../../app-models/photo';
 import {UserService} from '../../app-services/user.service';
 import {InterestService} from '../../app-services/interest.service';
 import {InterestDto} from '../../app-models/interest';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ReviewsService} from '../../app-services/reviews.service';
 import {ReviewDto} from '../../app-models/review';
-import { HttpResponse } from '@angular/common/http';
-import {combineLatest, Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
 import {User, UserRole} from '../../app-models/user';
 
 import {RealtorContactComponent} from '../../shared/realtor-contact/realtor-contact.component';
 import {DeleteRealtyModalComponent} from '../../shared/delete-realty-modal/delete-realty-modal.component';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
-import {latLng} from 'leaflet';
 
 
 @Component({

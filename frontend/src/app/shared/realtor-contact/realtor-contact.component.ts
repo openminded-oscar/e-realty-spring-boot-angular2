@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {Realtor} from '../../app-models/realtor';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {Realtor} from '../../app-models/realtor';
 
 @Component({
   selector: 'app-realtor-contact',

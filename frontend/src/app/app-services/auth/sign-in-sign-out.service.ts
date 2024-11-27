@@ -1,11 +1,11 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Credentials} from '../../app-models/credentials.model';
-import {AbstractService} from '../common/abstract.service';
-import {endpoints} from '../../commons';
 import {delay, from, Observable, of, Subject, take} from 'rxjs';
 import {catchError, filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Credentials} from '../../app-models/credentials.model';
+import {AbstractService} from '../common/abstract.service';
+import {endpoints} from '../../commons';
 import {UserService} from '../user.service';
 import {SignInModalComponent} from '../../core/sign-in-modal/sign-in-modal.component';
 import {GlobalNotificationService} from '../global-notification.service';

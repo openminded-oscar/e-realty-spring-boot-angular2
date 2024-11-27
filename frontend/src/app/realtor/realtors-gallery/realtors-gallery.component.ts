@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RealtorService} from '../../app-services/realtor.service';
-import {Realtor} from '../../app-models/realtor';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
-import {UserService} from '../../app-services/user.service';
 import {takeUntil} from 'rxjs/operators';
+import {RealtorService} from '../../app-services/realtor.service';
+import {Realtor} from '../../app-models/realtor';
+import {UserService} from '../../app-services/user.service';
 import {User} from '../../app-models/user';
 
 @Component({

@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgbNav} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute} from '@angular/router';
+import {takeUntil} from 'rxjs/operators';
+import {BehaviorSubject, from, Subject} from 'rxjs';
 import {
   MyFavoritesTabPath,
   MyObjectsTabPath,
@@ -11,8 +13,6 @@ import {
 import {ReviewsService} from '../../app-services/reviews.service';
 import {InterestService} from '../../app-services/interest.service';
 import {UserService} from '../../app-services/user.service';
-import {takeUntil} from 'rxjs/operators';
-import {BehaviorSubject, from, Subject} from 'rxjs';
 
 
 @Component({

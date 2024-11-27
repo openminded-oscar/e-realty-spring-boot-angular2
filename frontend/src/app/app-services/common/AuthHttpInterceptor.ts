@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {CookieService} from './CookieService';
 import {Injectable} from '@angular/core';
+import {CookieService} from './CookieService';
 
 @Injectable()
 export class AuthHttpInterceptor implements HttpInterceptor {

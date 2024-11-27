@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {AddressByGeolocation, Geolocation} from '../app-models/geolocation';
 
 import {endpoints} from '../commons';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {HTTP_CONSTANTS} from './common/HttpErrorInterceptor';
 
 @Injectable({providedIn: 'root'})

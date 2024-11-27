@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {GlobalNotificationService, Notification} from '../../app-services/global-notification.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {GlobalNotificationService, Notification} from '../../app-services/global-notification.service';
 
 @Component({
   selector: 'app-global-notification',

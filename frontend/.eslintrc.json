@@ -1,6 +1,6 @@
 {
   "root": true,
-  "plugins": ["deprecation"],
+  "plugins": ["deprecation", "@typescript-eslint", "import"],
   "ignorePatterns": [
     "projects/**/*"
   ],
@@ -22,21 +22,43 @@
       ],
       "rules": {
         "@angular-eslint/component-selector": [
-          "error",
+          "warn",
           {
             "style": "kebab-case",
             "type": "element"
           }
         ],
         "@angular-eslint/directive-selector": [
-          "error",
+          "warn",
           {
             "prefix": "app",
             "style": "camelCase",
             "type": "attribute"
           }
         ],
+        "import/first": "error",  // Імпорти повинні бути на початку файлу
+        "import/no-duplicates": "error",  // Не допускаються дублікати імпортів
+        "import/order": [
+          "error",
+          {
+            "groups": [
+              ["builtin", "external"],
+              "internal",
+              ["sibling", "parent"],
+              "index"
+            ]
+          }
+        ],
         "deprecation/deprecation": "warn",
+        "@typescript-eslint/no-unused-vars": [
+          "warn",
+          {
+            "vars": "all",
+            "args": "none",
+            "ignoreRestSiblings": true,
+            "caughtErrors": "none"
+          }
+        ],
         "quotes": [
           "error",
           "single",  // Enforce single quotes in TS files

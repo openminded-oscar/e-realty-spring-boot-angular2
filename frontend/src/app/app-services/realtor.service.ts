@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 import {endpoints} from '../commons';
 
-import {Observable} from 'rxjs';
 import {Realtor} from '../app-models/realtor';
 import {Photo} from '../app-models/photo';
-import {tap} from 'rxjs/operators';
 import {RealtyObj} from '../app-models/realty-obj';
 import {Review} from '../app-models/review';
 

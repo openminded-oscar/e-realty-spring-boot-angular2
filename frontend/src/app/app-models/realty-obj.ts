@@ -1,7 +1,7 @@
+import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {Photo, RealtyPhoto, RealtyPhotoType} from './photo';
 import {Address} from './address';
 import {Realtor} from './realtor';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {Geolocation} from './geolocation';
 
 export class AddressForm {

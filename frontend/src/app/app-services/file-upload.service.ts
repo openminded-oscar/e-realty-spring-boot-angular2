@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-import {Photo} from '../app-models/photo';
 import {throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
+import {Photo} from '../app-models/photo';
 
 @Injectable({providedIn: 'root'})
 export class FileUploadService {
