@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {mergeWith, Observable, of} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, merge, switchMap, tap} from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged, switchMap, tap} from 'rxjs/operators';
 import {AddressService} from '../../app-services/address.service';
 import {ConfigService} from '../../app-services/config.service';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
