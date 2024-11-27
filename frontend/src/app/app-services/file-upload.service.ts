@@ -21,7 +21,7 @@ export class FileUploadService {
 
     return this.http.post<Photo>(url, formData, options)
       .pipe(
-        catchError(error => throwError(error)),
+        catchError(error => throwError(() => error)),
         tap(res => {
         res.fullUrl = Photo.getLinkByFilename(res.filename);
       }));

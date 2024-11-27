@@ -91,7 +91,7 @@ export abstract class AbstractService<T> {
       });
     } else {
       console.error('Unsupported request: ' + method);
-      return throwError('Unsupported request: ' + method);
+      return throwError(() => 'Unsupported request: ' + method);
     }
 
     return request;
