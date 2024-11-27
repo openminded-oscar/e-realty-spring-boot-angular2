@@ -99,7 +99,7 @@
           }
         },
         "lint": {
-          "builder": "@angular-eslint/eslint-plugin:lint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": [
               "src/**/*.ts",
