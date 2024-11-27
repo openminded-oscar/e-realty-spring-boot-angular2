@@ -30,7 +30,7 @@ export class UserService {
   public updateUserProfileOnServer(user: User): Observable<any> {
     return this.http.patch(`${endpoints.userUpdate}`, user)
       .pipe(
-        catchError((error: any) => throwError(error)),
+        catchError((error: any) => throwError(() => error)),
         tap((userFromServer: User) => {
           if (userFromServer.profilePic) {
             userFromServer.profilePicUrl = Photo.getLinkByFilename(userFromServer.profilePic.filename);

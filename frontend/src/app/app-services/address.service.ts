@@ -32,14 +32,16 @@ export class AddressService {
       .set('lat', lat.toString())
       .set('lng', lng.toString())
       .set('term', term);
-    this.http.get(endpoints.addressesNearby, {params: params}).subscribe(
-      (data: any[]) => {
+    this.http.get(endpoints.addressesNearby, {params: params}).subscribe({
+      next: (data: any[]) => {
         data = data.map(item => item.description);
         this.observableAddresses.next(data);
-      }, error => {
+      },
+      error: (error) => {
         this.observableAddresses.error(error);
         this.observableAddresses = new ReplaySubject(1);
-      });
+      }
+    });
 
     return this.observableAddresses;
   }
