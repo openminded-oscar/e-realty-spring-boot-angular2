@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Credentials} from '../../app-models/credentials.model';
 import {AbstractService} from '../common/abstract.service';
 import {endpoints} from '../../commons';

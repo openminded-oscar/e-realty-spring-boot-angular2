@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Photo} from '../app-models/photo';
 import {throwError} from 'rxjs';
@@ -23,7 +23,7 @@ export class FileUploadService {
       .pipe(
         catchError(error => throwError(() => error)),
         tap(res => {
-        res.fullUrl = Photo.getLinkByFilename(res.filename);
-      }));
+          res.fullUrl = Photo.getLinkByFilename(res.filename);
+        }));
   }
 }
