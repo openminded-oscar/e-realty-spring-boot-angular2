@@ -1,5 +1,6 @@
 {
   "root": true,
+  "plugins": ["deprecation"],
   "ignorePatterns": [
     "projects/**/*"
   ],
@@ -23,7 +24,6 @@
         "@angular-eslint/component-selector": [
           "error",
           {
-            "prefix": "app",
             "style": "kebab-case",
             "type": "element"
           }
@@ -35,7 +35,8 @@
             "style": "camelCase",
             "type": "attribute"
           }
-        ]
+        ],
+        "deprecation/deprecation": "warn"
       }
     },
     {

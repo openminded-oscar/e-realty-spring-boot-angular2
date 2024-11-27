@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RealtorService} from '../../app-services/realtor.service';
 import {Subject} from 'rxjs';
 import {RealtyObj} from '../../app-models/realty-obj';
-import {filter, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-realtor-objects',

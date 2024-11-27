@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {LatLngExpression, Layer, MapOptions, tileLayer} from 'leaflet';
 import {WindowService} from '../../app-services/window.service';
 
@@ -7,7 +7,7 @@ import {WindowService} from '../../app-services/window.service';
   templateUrl: './display-location.component.html',
   styleUrls: ['./display-location.component.scss']
 })
-export class DisplayLocationComponent implements OnInit {
+export class DisplayLocationComponent {
   public options: MapOptions = {
     zoomControl: false,
     zoom: 15,
@@ -29,9 +29,6 @@ export class DisplayLocationComponent implements OnInit {
   ];
 
   constructor(private windowService: WindowService) {
-  }
-
-  ngOnInit(): void {
   }
 
   public openOnGoogleMaps(center) {

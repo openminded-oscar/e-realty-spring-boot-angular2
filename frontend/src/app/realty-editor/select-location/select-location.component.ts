@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {latLng, Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, marker, tileLayer} from 'leaflet';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {latLng, Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, tileLayer} from 'leaflet';
 import {blueMarkerOfLngAndLat} from '../../utils/location-utils';
 import {Geolocation} from '../../app-models/geolocation';
 
@@ -10,7 +10,7 @@ export const LVIV_COORDINATES: Geolocation = {lat: 49.83, lng: 24.01};
   templateUrl: './select-location.component.html',
   styleUrls: ['./select-location.component.scss']
 })
-export class SelectLocationComponent implements OnInit {
+export class SelectLocationComponent {
   public options: MapOptions = {
     zoomControl: true,
     zoom: 11,
@@ -54,9 +54,6 @@ export class SelectLocationComponent implements OnInit {
 
   constructor() {
     this.layers.push(new LayerGroup([this.markers]));
-  }
-
-  ngOnInit(): void {
   }
 
   public onMapClick(mouseClickData: LeafletMouseEvent) {
