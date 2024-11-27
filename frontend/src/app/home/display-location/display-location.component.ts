@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
-import {LatLngExpression, Layer, MapOptions, tileLayer} from 'leaflet';
-import {WindowService} from '../../app-services/window.service';
+import {  Component, Input  } from '@angular/core';
+import { LatLngExpression, Layer, MapOptions, tileLayer } from 'leaflet';
+import { WindowService } from '../../app-services/window.service';
 import {Geolocation} from '../../app-models/geolocation';
 
 @Component({
@@ -34,6 +34,7 @@ export class DisplayLocationComponent {
 
   public openOnGoogleMaps(center: Geolocation) {
     const url = `https://www.google.com/maps?q=${center.lat},${center.lng}`;
+    const test = 'test';
     this.windowService.nativeWindow?.open(url, '_blank');
   }
 }
