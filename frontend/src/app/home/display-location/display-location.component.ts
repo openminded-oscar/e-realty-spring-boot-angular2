@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {LatLngExpression, Layer, MapOptions, tileLayer} from 'leaflet';
 import {WindowService} from '../../app-services/window.service';
 
@@ -7,7 +7,7 @@ import {WindowService} from '../../app-services/window.service';
   templateUrl: './display-location.component.html',
   styleUrls: ['./display-location.component.scss']
 })
-export class DisplayLocationComponent {
+export class DisplayLocationComponent implements OnInit {
   public options: MapOptions = {
     zoomControl: false,
     zoom: 15,
@@ -34,5 +34,8 @@ export class DisplayLocationComponent {
   public openOnGoogleMaps(center) {
     const url = `https://www.google.com/maps?q=${center.lat},${center.lng}`;
     this.windowService.nativeWindow?.open(url, '_blank');
+  }
+
+  ngOnInit(): void {
   }
 }
