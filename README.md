@@ -1,7 +1,6 @@
 # Git clone, after that install dependencies:
-[backend/local/start_resources.sh](backend/local/start_resources.sh)
-
-For pre-commit initialization, please run command: _npx husky_
+1) [backend/local/start_resources.sh](backend/local/start_resources.sh)
+2) For pre-commit initialization, please run command: _npx husky_
 
 # BackEnd start
 ####Dependencies
