@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Geolocation} from '../../../app-models/geolocation';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
@@ -7,15 +7,11 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './geolocation-widget-modal.component.html',
   styleUrls: ['./geolocation-widget-modal.component.scss']
 })
-export class GeolocationWidgetModalComponent implements OnInit {
+export class GeolocationWidgetModalComponent {
   @Input()
   public initialLocation: Geolocation;
   @Input()
   public zoomLevel: number;
 
   constructor(public modal: NgbActiveModal) { }
-
-  ngOnInit(): void {
-  }
-
 }

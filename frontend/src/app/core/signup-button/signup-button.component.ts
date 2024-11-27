@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {SignupService} from '../../app-services/auth/signup.service';
 
 @Component({
@@ -6,11 +6,8 @@ import {SignupService} from '../../app-services/auth/signup.service';
   templateUrl: './signup-button.component.html',
   styleUrls: ['./signup-button.component.scss']
 })
-export class SignupButtonComponent implements OnInit {
+export class SignupButtonComponent {
   constructor(private signupService: SignupService) {
-  }
-
-  ngOnInit(): void {
   }
 
 

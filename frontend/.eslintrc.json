@@ -1,5 +1,6 @@
 {
   "root": true,
+  "plugins": ["deprecation"],
   "ignorePatterns": [
     "projects/**/*"
   ],
@@ -34,7 +35,8 @@
             "style": "camelCase",
             "type": "attribute"
           }
-        ]
+        ],
+        "deprecation/deprecation": "warn"
       }
     },
     {

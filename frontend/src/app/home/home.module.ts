@@ -8,7 +8,7 @@ import {SharedModule} from '../shared/shared.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
 import {ReviewsService} from '../app-services/reviews.service';
-import {LeafletModule} from '@asymmetrik/ngx-leaflet';
+import {LeafletModule} from '@bluehalo/ngx-leaflet';
 import {DisplayLocationComponent} from './display-location/display-location.component';
 import {GeolocationWidgetComponent} from './realty-objs-gallery/geolocation-widget/geolocation-widget.component';
 import {
