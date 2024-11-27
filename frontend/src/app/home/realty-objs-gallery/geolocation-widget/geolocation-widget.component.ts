@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, NgZone, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, NgZone} from '@angular/core';
 import {LatLng, Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, tileLayer} from 'leaflet';
 import {RealtyObjService} from '../../../app-services/realty-obj.service';
 import {blueMarkerOfLngAndLat, redMarkerOfLatAndLng} from '../../../utils/location-utils';
@@ -14,7 +14,7 @@ const MAP_INIT_TIMEOUT_MS = 100;
   templateUrl: './geolocation-widget.component.html',
   styleUrls: ['./geolocation-widget.component.scss']
 })
-export class GeolocationWidgetComponent implements OnInit {
+export class GeolocationWidgetComponent {
   public options: MapOptions = {
     zoomControl: true,
     zoom: 11
@@ -77,9 +77,6 @@ export class GeolocationWidgetComponent implements OnInit {
               public ngZone: NgZone,
               private elementRef: ElementRef) {
     this.layers.push(this.markers, this.clickedMarkerLayer);
-  }
-
-  ngOnInit(): void {
   }
 
   public onMapClick(mouseClickData: LeafletMouseEvent) {

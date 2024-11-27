@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, merge, switchMap, tap} from 'rxjs/operators';
 import {AddressService} from '../../app-services/address.service';
@@ -12,7 +12,7 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/for
     { provide: NG_VALUE_ACCESSOR, useExisting: AddressInputComponent, multi: true }
   ]
 })
-export class AddressInputComponent implements OnInit, ControlValueAccessor {
+export class AddressInputComponent implements ControlValueAccessor {
   // Used for input with autocomplete
   private searching = false;
   private searchFailed = false;
@@ -23,7 +23,6 @@ export class AddressInputComponent implements OnInit, ControlValueAccessor {
 
   public constructor(public addressService: AddressService, public config: ConfigService) {}
 
-  public ngOnInit() {}
 
   public searchAddressForTerm = (text$: Observable<string>) => {
     return text$.pipe(
