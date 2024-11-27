@@ -5,7 +5,6 @@ import {HomeRoutingModule} from './home-routing.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
 import {SharedModule} from '../shared/shared.module';
-import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
 import {ReviewsService} from '../app-services/reviews.service';
 import {LeafletModule} from '@bluehalo/ngx-leaflet';
@@ -15,6 +14,7 @@ import {
   GeolocationWidgetModalComponent
 } from './realty-objs-gallery/geolocation-widget-modal/geolocation-widget-modal.component';
 import {ArchwizardModule} from '@rg-software/angular-archwizard';
+import {InfiniteScrollDirective} from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -24,17 +24,17 @@ import {ArchwizardModule} from '@rg-software/angular-archwizard';
     RealtyObjDetailsComponent,
     DisplayLocationComponent,
   ],
-    imports: [
-        HomeRoutingModule,
-        CommonModule,
-        SharedModule,
-        FormsModule,
-        LeafletModule,
-        InfiniteScrollModule,
-        ReactiveFormsModule,
-        ArchwizardModule,
-        NgOptimizedImage,
-    ],
+  imports: [
+    HomeRoutingModule,
+    CommonModule,
+    SharedModule,
+    FormsModule,
+    LeafletModule,
+    ReactiveFormsModule,
+    ArchwizardModule,
+    NgOptimizedImage,
+    InfiniteScrollDirective
+  ],
   providers: [ReviewsService]
 })
 export class HomeModule {
