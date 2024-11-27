@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './core/app.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SignInButtonComponent} from './core/signin-button/sign-in-button.component';
 import {SignupButtonComponent} from './core/signup-button/signup-button.component';
@@ -23,57 +23,51 @@ import {environment} from '../environments/environment';
 
 const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transports: ['websocket', 'polling']}};
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    SignInButtonComponent,
-    SignupButtonComponent,
-    GoogleSignInButtonComponent,
-    SignOutButtonComponent,
-    GlobalNotificationComponent,
-    HeaderComponent,
-    SignInModalComponent,
-    SignUpModalComponent
-  ],
-  imports: [
-    BrowserModule,
-    SharedModule,
-    HttpClientModule,
-    SocialLoginModule,
-    GoogleSigninButtonModule,
-    AppRoutesModule,
-    BrowserAnimationsModule,
-    SocketIoModule.forRoot(config),
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorsInterceptor,
-      multi: true
-    }, {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthHttpInterceptor,
-      multi: true,
-      deps: [CookieService]
-    },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        lang: 'en',
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              environment.googleClientKey, {
-                oneTapEnabled: false,
-              }
-            ),
-          }]
-      }
-    }],
-  exports: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        SignInButtonComponent,
+        SignupButtonComponent,
+        GoogleSignInButtonComponent,
+        SignOutButtonComponent,
+        GlobalNotificationComponent,
+        HeaderComponent,
+        SignInModalComponent,
+        SignUpModalComponent
+    ],
+    exports: [],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        SharedModule,
+        SocialLoginModule,
+        GoogleSigninButtonModule,
+        AppRoutesModule,
+        BrowserAnimationsModule,
+        SocketIoModule.forRoot(config)], providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorsInterceptor,
+            multi: true
+        }, {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthHttpInterceptor,
+            multi: true,
+            deps: [CookieService]
+        },
+        {
+            provide: 'SocialAuthServiceConfig',
+            useValue: {
+                lang: 'en',
+                autoLogin: false,
+                providers: [
+                    {
+                        id: GoogleLoginProvider.PROVIDER_ID,
+                        provider: new GoogleLoginProvider(environment.googleClientKey, {
+                            oneTapEnabled: false,
+                        }),
+                    }
+                ]
+            }
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {
 }

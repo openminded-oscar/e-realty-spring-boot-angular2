@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {RealtyObj} from '../app-models/realty-obj';
 import {endpoints} from '../commons';
 import {Observable, Subject, throwError} from 'rxjs';

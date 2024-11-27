@@ -9,7 +9,7 @@ import {InterestDto} from '../../app-models/interest';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ReviewsService} from '../../app-services/reviews.service';
 import {ReviewDto} from '../../app-models/review';
-import {HttpResponse} from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import {combineLatest, Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {User, UserRole} from '../../app-models/user';
