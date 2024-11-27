@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 
 
@@ -7,7 +7,7 @@ import {Observable, throwError} from 'rxjs';
 export abstract class AbstractService<T> {
   protected uri;
 
-  constructor(protected http: HttpClient, protected domain: string) {
+  protected constructor(protected http: HttpClient, protected domain: string) {
   }
 
   protected save(item: T): Observable<HttpResponse<any>> {
@@ -32,7 +32,7 @@ export abstract class AbstractService<T> {
     return this.sendRequest('delete', uri);
   }
 
-  protected sendRequest<R>(method: 'get'|'post'|'put'|'delete'|'patch',
+  protected sendRequest<R>(method: 'get' | 'post' | 'put' | 'delete' | 'patch',
                            uri: string,
                            options: {
                              customHeaders?: { [key: string]: string },
@@ -47,7 +47,7 @@ export abstract class AbstractService<T> {
 
     let request;
 
-    const { body, queryParams } = options;
+    const {body, queryParams} = options;
 
     if (method === 'get') {
       const getParams: any = this.buildQueryString(body);
