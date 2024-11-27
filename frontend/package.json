@@ -14,9 +14,7 @@
   "lint-staged": {
     "*.ts": [
       "ng-lint-staged lint --fix --"
-    ],
-    "*.html": "prettier --write",
-    "*.scss": "prettier --write"
+    ]
   },
   "private": true,
   "dependencies": {
