@@ -1,13 +1,13 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
+import {BehaviorSubject, from, Observable, of, Subject, switchMap} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
+import {NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {endpoints} from '../commons';
 import {AbstractService} from './common/abstract.service';
-import {BehaviorSubject, from, Observable, of, Subject, switchMap} from 'rxjs';
 import {Review, ReviewDto, ReviewPostDto, ReviewSelectTimeDto} from '../app-models/review';
-import {map, tap} from 'rxjs/operators';
 import {RealtyObj} from '../app-models/realty-obj';
 import {UserService} from './user.service';
-import {NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ScheduleFormModalComponent} from '../shared/schedule-form-modal/schedule-form-modal.component';
 
 export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {

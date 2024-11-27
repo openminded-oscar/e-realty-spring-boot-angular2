@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RealtorService} from '../../app-services/realtor.service';
 import {Subject} from 'rxjs';
-import {RealtyObj} from '../../app-models/realty-obj';
 import {takeUntil} from 'rxjs/operators';
+import {RealtorService} from '../../app-services/realtor.service';
+import {RealtyObj} from '../../app-models/realty-obj';
 
 @Component({
   selector: 'app-realtor-objects',

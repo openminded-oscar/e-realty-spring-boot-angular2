@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ReviewsService} from '../../app-services/reviews.service';
-import {Review} from '../../app-models/review';
 import {takeUntil} from 'rxjs/operators';
-import {RealtyObj} from '../../app-models/realty-obj';
-import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ReviewsService} from '../../app-services/reviews.service';
+import {Review} from '../../app-models/review';
+import {RealtyObj} from '../../app-models/realty-obj';
+import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-user-reviews',

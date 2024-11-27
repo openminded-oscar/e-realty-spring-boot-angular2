@@ -1,8 +1,8 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {UserManagementService} from '../../app-services/user-management.service';
-import {User, UserRole} from '../../app-models/user';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {UserManagementService} from '../../app-services/user-management.service';
+import {User, UserRole} from '../../app-models/user';
 
 @Component({
   selector: 'app-user-management',

@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {filter} from 'rxjs/operators';
 import {NavigationEnd, Router} from '@angular/router';
+import {Subject} from 'rxjs';
 import {UserService} from '../../app-services/user.service';
 import {User} from '../../app-models/user';
-import {Subject} from 'rxjs';
 
 
 

@@ -1,8 +1,8 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import {Observable, Subject} from 'rxjs';
-import {UserService} from '../app-services/user.service';
 import {filter, map, takeUntil, tap} from 'rxjs/operators';
+import {UserService} from '../app-services/user.service';
 import {SignInSignOutService} from '../app-services/auth/sign-in-sign-out.service';
 
 @Injectable({

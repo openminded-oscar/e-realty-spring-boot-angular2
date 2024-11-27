@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {apiBase} from '../../../commons';
 import {Photo} from '../../../app-models/photo';
 import {FileUploadService} from '../../../app-services/file-upload.service';
 import {GlobalNotificationService} from '../../../app-services/global-notification.service';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
 import {User, UserRole} from '../../../app-models/user';
 import {UserService} from '../../../app-services/user.service';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 
 @Component({

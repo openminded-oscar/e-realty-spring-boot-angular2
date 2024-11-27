@@ -1,9 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {RealtyObjsListComponent} from './realty-objs-list/realty-objs-list.component';
 import {RouterModule} from '@angular/router';
-import {DeleteRealtyModalComponent} from './delete-realty-modal/delete-realty-modal.component';
-import {ScheduleFormModalComponent} from './schedule-form-modal/schedule-form-modal.component';
 import {
   NgbCollapseModule,
   NgbDatepickerModule,
@@ -12,6 +9,9 @@ import {
   NgbToastModule, NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RealtyObjsListComponent} from './realty-objs-list/realty-objs-list.component';
+import {DeleteRealtyModalComponent} from './delete-realty-modal/delete-realty-modal.component';
+import {ScheduleFormModalComponent} from './schedule-form-modal/schedule-form-modal.component';
 import {ConfirmModalComponent} from './confirm-modal/confirm-modal.component';
 import {RealtyObjCardComponent} from './realty-obj-card/realty-obj-card.component';
 import {RealtorContactComponent} from './realtor-contact/realtor-contact.component';
