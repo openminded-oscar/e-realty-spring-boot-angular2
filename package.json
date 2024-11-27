@@ -1,0 +1,7 @@
+{
+  "name": "parent",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^13.0.0"
+  }
+}

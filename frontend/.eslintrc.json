@@ -36,7 +36,15 @@
             "type": "attribute"
           }
         ],
-        "deprecation/deprecation": "warn"
+        "deprecation/deprecation": "warn",
+        "quotes": [
+          "error",
+          "single",  // Enforce single quotes in TS files
+          {
+            "avoidEscape": true,  // Allow escaping quotes if necessary
+            "allowTemplateLiterals": true  // Allow template literals without quote enforcement
+          }
+        ]
       }
     },
     {
