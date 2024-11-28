@@ -26,7 +26,7 @@
           </h3>
           <div *ngIf="availableTimesOfDay.length; else loader" class="row" style="display: flex; flex-direction: row">
             <div class="col-3" style="margin-bottom: 5px" *ngFor="let time of availableTimesOfDay">
-              <button class="btn" [ngClass]="{'btn-dark': time === selectedTime, 'btn-light': time !== selectedTime }"
+              <button class="btn" [ngClass]="{'btn-dark': time === selectedDateTime, 'btn-light': time !== selectedDateTime }"
                       (click)="selectTimeslot(time)">
                 {{ time|date:'HH:mm' }}
               </button>
