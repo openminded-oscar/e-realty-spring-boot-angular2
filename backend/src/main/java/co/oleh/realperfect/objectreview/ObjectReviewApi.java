@@ -60,7 +60,7 @@ public class ObjectReviewApi {
     }
 
     @PostMapping
-    @RateLimitedPerMinute(requestsPerMinute = 1)
+    @RateLimitedPerMinute(requestsPerMinute = 5)
     public ResponseEntity<MyObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user,
                                                         @RequestBody ObjectReviewDto review) throws IOException {
         if (reviewService.findFutureReviewForUserAndObject(user.getId(), review.getRealtyObjId()) != null) {
