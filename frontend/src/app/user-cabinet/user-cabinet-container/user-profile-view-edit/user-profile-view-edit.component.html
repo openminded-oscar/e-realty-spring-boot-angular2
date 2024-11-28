@@ -10,7 +10,7 @@
   </div>
 
   <div style="display: flex; flex-direction: row; gap: 10px;">
-    <div style="width: 180px" class="user-photo-container">
+    <div class="user-photo-container">
       <img *ngIf="user" (error)="setDefaultUserPhoto($event)" class="user-photo"
            src="{{user.profilePicUrl ? user.profilePicUrl: defaultUserPhoto}}">
     </div>
