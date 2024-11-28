@@ -6,6 +6,7 @@ import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.model.RealtyObjectStatus;
+import co.oleh.realperfect.ratelimiter.RateLimited;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import lombok.AllArgsConstructor;
@@ -119,6 +120,7 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/save")
+    @RateLimited(requestsPerMinute = 10)
     public ResponseEntity<RealtyObjectDetailsDto> postRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
                                                                    @Valid @RequestBody RealtyObjectDetailsDto realtyObject) {
         realtyObject.setOwner(new UserDto() {{
