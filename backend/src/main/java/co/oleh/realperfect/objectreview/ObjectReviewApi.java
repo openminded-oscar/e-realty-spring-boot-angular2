@@ -3,7 +3,7 @@ package co.oleh.realperfect.objectreview;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
-import co.oleh.realperfect.ratelimiter.RateLimitedPerMinute;
+import co.oleh.realperfect.ratelimiter.RateLimited;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.model.ObjectReview;
@@ -60,7 +60,7 @@ public class ObjectReviewApi {
     }
 
     @PostMapping
-    @RateLimitedPerMinute(requestsPerMinute = 5)
+    @RateLimited(requestsPerMinute = 5)
     public ResponseEntity<MyObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user,
                                                         @RequestBody ObjectReviewDto review) throws IOException {
         if (reviewService.findFutureReviewForUserAndObject(user.getId(), review.getRealtyObjId()) != null) {
