@@ -55,6 +55,7 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
   public reviewTimeForm: FormGroup;
 
   public availableTimesOfDay: Date[] = [];
+  public selectedDateTime = null;
   public savedReview: ReviewPostDto;
 
   constructor(
@@ -144,6 +145,7 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
   }
 
   public selectTimeslot(time: Date) {
+    this.selectedDateTime = time;
     this.reviewTimeForm.controls.reviewTime.setValue(time);
   }
 
