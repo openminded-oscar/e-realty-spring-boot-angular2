@@ -39,7 +39,7 @@ export class UserProfileViewEditComponent implements OnInit, OnDestroy {
 
     if (this.user.roles.includes(UserRole.Realtor)) {
       this.realtorForm = this.fb.group({
-        isRealtorControl: new FormControl(false),
+        isRealtorControl: new FormControl({value: false, disabled: true}),
       });
       this.isRealtor = true;
       this.realtorForm.setValue({
