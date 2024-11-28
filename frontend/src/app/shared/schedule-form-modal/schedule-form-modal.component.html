@@ -21,11 +21,13 @@
       </div>
       <div style="height: 200px">
         <ng-container>
-          <h3 class="datetime-label timeslots-label" [ngClass]="{'blurred': !availableTimesOfDay?.length}">Available
-            timeslots:</h3>
+          <h3 class="datetime-label timeslots-label" [ngClass]="{'blurred': !availableTimesOfDay?.length}">
+            Available timeslots:
+          </h3>
           <div *ngIf="availableTimesOfDay.length; else loader" class="row" style="display: flex; flex-direction: row">
             <div class="col-3" style="margin-bottom: 5px" *ngFor="let time of availableTimesOfDay">
-              <button class="btn btn-light" (click)="selectTimeslot(time)">
+              <button class="btn" [ngClass]="{'btn-dark': time === selectedTime, 'btn-light': time !== selectedTime }"
+                      (click)="selectTimeslot(time)">
                 {{ time|date:'HH:mm' }}
               </button>
             </div>
