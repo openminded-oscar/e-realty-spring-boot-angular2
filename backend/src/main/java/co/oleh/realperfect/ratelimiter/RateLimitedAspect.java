@@ -41,11 +41,11 @@ public class RateLimitedAspect {
         int requestsPerHour = rateLimited.requestsPerHour();
 
         // Ensure only one of the parameters is set
-        if (requestsPerMinute != -1 && requestsPerHour != -1) {
+        if (requestsPerMinute >= 0 && requestsPerHour >= 0) {
             throw new RateLimitException("Cannot specify both requestsPerMinute and requestsPerHour. Please specify only one.");
         }
 
-        if (requestsPerMinute == -1 && requestsPerHour == -1) {
+        if (requestsPerMinute < 0 && requestsPerHour < 0) {
             throw new RateLimitException("At least one of requestsPerMinute or requestsPerHour must be specified.");
         }
 
