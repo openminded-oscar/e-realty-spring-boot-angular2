@@ -9,8 +9,11 @@ import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
 import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import co.oleh.realperfect.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.LocalTime;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 public class ObjectReviewService {
     public static final int OBJECT_REVIEW_START_HOUR = 10;
     public static final int OBJECT_REVIEW_END_HOUR = 20;
+    public static final int OBJECT_REVIEW_DURATION_MINUTES = 30;
 
     private final RealtyObjectCrudRepository realtyObjectRepository;
     private UserRepository userRepository;
@@ -33,6 +37,8 @@ public class ObjectReviewService {
     private MappingService mappingService;
 
     public MyObjectReviewDto save(ObjectReviewDto objectReview) {
+        verifyNoOverlappingReview(objectReview);
+
         ObjectReview objectReviewEntity = mappingService.map(objectReview, ObjectReview.class);
         RealtyObject realtyObject = realtyObjectRepository.findById(objectReview.getRealtyObjId()).get();
         User user = userRepository.findById(objectReview.getUserId()).get();
@@ -44,6 +50,16 @@ public class ObjectReviewService {
         ObjectReview savedEntity = objectReviewRepository.save(objectReviewEntity);
 
         return mappingService.map(savedEntity, MyObjectReviewDto.class);
+    }
+
+    private void verifyNoOverlappingReview(ObjectReviewDto objectReview) {
+//      Next step is using @Lock(LockModeType.PESSIMISTIC_WRITE) in repo level (do we need it???)
+        Instant beginTime = objectReview.getDateTime();
+        Instant endTime = beginTime.plus(OBJECT_REVIEW_DURATION_MINUTES, ChronoUnit.MINUTES);
+        List<ObjectReview> overlappingReviews = objectReviewRepository.findByRealtyObjIdAndDateTimeBetween(objectReview.getRealtyObjId(), beginTime, endTime);
+        if (!overlappingReviews.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Object review already exists");
+        }
     }
 
     public List<ObjectReview> remove(List<ObjectReview> objectReviews) {
