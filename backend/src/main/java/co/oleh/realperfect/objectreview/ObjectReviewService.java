@@ -1,7 +1,7 @@
 package co.oleh.realperfect.objectreview;
 
-import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
+import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.ObjectReview;
 import co.oleh.realperfect.model.RealtyObject;
@@ -9,7 +9,6 @@ import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
 import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import co.oleh.realperfect.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
