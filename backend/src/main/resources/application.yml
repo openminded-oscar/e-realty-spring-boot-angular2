@@ -74,6 +74,9 @@ logging:
       springframework:
         security: DEBUG
         cache: TRACE
+        orm:
+          jpa:
+            JpaTransactionManager: debug
     com:
       github:
         benmanes:
