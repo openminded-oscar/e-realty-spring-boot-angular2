@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 import static co.oleh.realperfect.model.GeoLocationUtils.ZOOM_LEVEL_FOR_AUTOGENERATE;
