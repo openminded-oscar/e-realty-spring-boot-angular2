@@ -152,6 +152,7 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
   public saveReview(): void {
     this.reviewService.saveReview({
       realtyObjId: this.realtyObject.id,
+      realtorId: this.realtyObject.realtor?.id,
       dateTime: this.reviewTimeForm.controls.reviewTime.value
     }).pipe(
       takeUntil(this.destroy$),

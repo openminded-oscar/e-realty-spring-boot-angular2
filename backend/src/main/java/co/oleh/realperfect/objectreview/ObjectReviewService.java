@@ -1,17 +1,22 @@
 package co.oleh.realperfect.objectreview;
 
+import co.oleh.realperfect.auth.SpringSecurityUser;
+import co.oleh.realperfect.emails.EmailSenderService;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.ObjectReview;
+import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
 import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import co.oleh.realperfect.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
@@ -24,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class ObjectReviewService {
     public static final int OBJECT_REVIEW_START_HOUR = 10;
@@ -31,22 +37,30 @@ public class ObjectReviewService {
     public static final int OBJECT_REVIEW_DURATION_MINUTES = 30;
 
     private final RealtyObjectCrudRepository realtyObjectRepository;
+
+    private EmailSenderService emailService;
     private UserRepository userRepository;
     private ObjectReviewRepository objectReviewRepository;
     private MappingService mappingService;
 
     public MyObjectReviewDto save(ObjectReviewDto objectReview) {
+        // mao dto to object review
         verifyNoOverlappingReview(objectReview);
-
         ObjectReview objectReviewEntity = mappingService.map(objectReview, ObjectReview.class);
+
+        //save review
         RealtyObject realtyObject = realtyObjectRepository.findById(objectReview.getRealtyObjId()).get();
         User user = userRepository.findById(objectReview.getUserId()).get();
 
         objectReviewEntity.setRealtor(realtyObject.getRealtor());
         objectReviewEntity.setUser(user);
         objectReviewEntity.setRealtyObj(realtyObject);
-
         ObjectReview savedEntity = objectReviewRepository.save(objectReviewEntity);
+
+        // emails sending
+        objectReview.setId(savedEntity.getId());
+        emailService.sendObjectReviewSetForUserAsync(user, objectReview, realtyObject, realtyObject.getRealtor());
+        emailService.sendObjectReviewSetForRealtorAsync(user, objectReview, realtyObject, realtyObject.getRealtor());
 
         return mappingService.map(savedEntity, MyObjectReviewDto.class);
     }
@@ -55,18 +69,39 @@ public class ObjectReviewService {
 //      Next step is using @Lock(LockModeType.PESSIMISTIC_WRITE) in repo level (do we need it???)
         Instant beginTime = objectReview.getDateTime();
         Instant endTime = beginTime.plus(OBJECT_REVIEW_DURATION_MINUTES, ChronoUnit.MINUTES);
-        List<ObjectReview> overlappingReviews = objectReviewRepository.findByRealtyObjIdAndDateTimeBetween(objectReview.getRealtyObjId(), beginTime, endTime);
+        List<ObjectReview> overlappingReviews =
+                objectReviewRepository.findByRealtyObjIdAndDateTimeBetween(objectReview.getRealtyObjId(), beginTime,
+                        endTime);
         if (!overlappingReviews.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Object review already exists");
         }
     }
 
-    public List<ObjectReview> remove(List<ObjectReview> objectReviews) {
+    public List<ObjectReview> remove(List<ObjectReview> objectReviews, SpringSecurityUser user) {
+        User userFromDb = userRepository.findById(user.getId()).get();
+
         for (ObjectReview objectReview : objectReviews) {
+            Realtor realtor = objectReview.getRealtor();
+            RealtyObject realtyObject = objectReview.getRealtyObj();
+
             objectReviewRepository.deleteById(objectReview.getId());
+
+            emailService.sendObjectReviewCancelAsync(userFromDb, objectReview, realtyObject, realtor);
         }
 
         return objectReviews;
+    }
+
+    @Transactional
+    public int approveReviewById(Long objectReviewId) {
+        return objectReviewRepository.updateApprovedStatus(objectReviewId, true);
+    }
+
+    public ObjectReviewDto findReviewById(Long objectReviewId) {
+        ObjectReview objectReview =
+                objectReviewRepository.findById(objectReviewId).get();
+
+        return this.mappingService.map(objectReview, ObjectReviewDto.class);
     }
 
     public List<ObjectReview> findReviewForUserAndObject(Long userId, Long objectId) {
@@ -136,13 +171,8 @@ public class ObjectReviewService {
         return availableSlots;
     }
 
-    public List<ObjectReviewDto> findReviewsForObject(Long realtyObjId) {
-        List<ObjectReview> reviews = objectReviewRepository.findByRealtyObjId(realtyObjId);
-
-        return reviews.stream().map(review -> this.mappingService.map(review, ObjectReviewDto.class)).collect(Collectors.toList());
-    }
-
-    public ObjectReview findById(Long objectId) {
-        return objectReviewRepository.findById(objectId).get();
+    public void deleteReviewById(Long reviewId) {
+        // TODO verify user
+        this.objectReviewRepository.deleteById(reviewId);
     }
 }

@@ -1,11 +1,17 @@
 import {RealtyObj} from './realty-obj';
 import {User} from './user';
 
+export enum ReviewAction {
+  CONFIRM = 'confirm',
+  CANCEL = 'cancel'
+}
+
 export interface Review {
   id?: number;
   user: User;
   realtyObj: RealtyObj;
   dateTime: Date;
+  approved?: Boolean;
 }
 
 export interface ReviewDto {
@@ -24,5 +30,6 @@ export interface ReviewPostDto {
 
 export interface ReviewSelectTimeDto {
   realtyObjId?: number;
+  realtorId?: number;
   dateTime: Date;
 }

@@ -31,7 +31,7 @@ public class EmailConfirmationToken {
     public EmailConfirmationToken(User user) {
         this.user = user;
         this.createdDate = new Date();
-        this.expirationDate = new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000); // 24-hour expiration
+        this.expirationDate = new Date(System.currentTimeMillis() + 1 * 60 * 60 * 1000); // 1-hour expiration
         this.token = UUID.randomUUID().toString();
     }
 }

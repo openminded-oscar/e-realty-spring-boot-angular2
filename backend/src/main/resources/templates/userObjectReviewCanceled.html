@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Object Review</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; text-align: center;">
+<h1 style="color: #333;">
+    You Just <strong>Removed</strong> A Review For Realty Object In <span th:text="${realtyObject.address.city}"></span>!
+</h1>
+<div th:replace="sharedRealtyObjectBlock :: realtyObject(${realtyObject})"></div>
+</body>
+</html>

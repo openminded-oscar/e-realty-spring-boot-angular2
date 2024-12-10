@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Object Review</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; line-height: 1.6;">
+<h1 style="text-align: center;">User Scheduled a Review For Your Managed Object</h1>
+<div style="margin: 20px 0;">
+    <h2>User Details</h2>
+    <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+    <p th:if="${user.phoneNumber != null}"><strong>Phone:</strong> <span th:text="${user.phoneNumber}"></span></p>
+    <div th:replace="sharedRealtyObjectBlock :: realtyObject(${realtyObject})"></div>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    <a th:href="${appRoot + '/realty-object/' + realtyObject.id + '/confirm-review/' + reviewId}"
+       style="display: inline-block; background-color: #007BFF; color: white; padding: 10px 20px; margin: 5px; text-decoration: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">Confirm
+        Review</a>
+    <a th:href="${appRoot + '/realty-object/' + realtyObject.id + '/cancel-review/' + reviewId}"
+       style="display: inline-block; background-color: #DC3545; color: white; padding: 10px 20px; margin: 5px; text-decoration: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;"
+       target="_blank">Cancel</a>
+</div>
+
+<script>
+    function confirmReview() {
+        alert("You have confirmed the review.");
+    }
+
+    function rescheduleReview() {
+        alert("You have chosen to reschedule the review.");
+    }
+
+    function cancelReview() {
+        alert("You have canceled the review.");
+    }
+</script>
+</body>
+</html>

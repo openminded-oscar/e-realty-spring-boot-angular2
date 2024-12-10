@@ -49,11 +49,10 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
   }
 
   public saveReview(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<ReviewPostDto> {
-    const utcDatetime = reviewSelectTimeDto.dateTime;
-
     const review = {
       realtyObjId: reviewSelectTimeDto.realtyObjId,
-      dateTime: utcDatetime
+      realtorId: reviewSelectTimeDto.realtorId,
+      dateTime: reviewSelectTimeDto.dateTime
     };
 
     return this.sendRequest<ReviewPostDto>('post', '', {body: review}).pipe(
@@ -74,12 +73,36 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     );
   }
 
-  public remove(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
-    return this.sendRequest<ReviewDto>('delete', `/${realtyObjId}`).pipe(
+  public removeByObject(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
+    return this.sendRequest<ReviewDto>('delete', `/by-object/${realtyObjId}`).pipe(
       tap(() => {
         const currentReviews = this.currentUserReviews.value;
         const updatedReviews = currentReviews.filter(
           review => review.realtyObj.id !== realtyObjId
+        );
+        this.currentUserReviews.next(updatedReviews);
+      })
+    );
+  }
+
+  public removeReviewById(reviewId: number) {
+    return this.sendRequest<ReviewDto>('delete', `/${reviewId}`).pipe(
+      tap(() => {
+        const currentReviews = this.currentUserReviews.value;
+        const updatedReviews = currentReviews.filter(
+          review => review.realtyObj.id !== reviewId
+        );
+        this.currentUserReviews.next(updatedReviews);
+      })
+    );
+  }
+
+  public approveReview(reviewId: number) {
+    return this.sendRequest<ReviewDto>('post', `/${reviewId}/approve`).pipe(
+      tap(() => {
+        const currentReviews = this.currentUserReviews.value;
+        const updatedReviews = currentReviews.filter(
+          review => review.realtyObj.id !== reviewId
         );
         this.currentUserReviews.next(updatedReviews);
       })
@@ -99,12 +122,19 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
   }
 
   public getForObjectAndCurrentUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
-    return this.sendRequest('get', `/${realtyObjId}`);
+    return this.sendRequest('get', `/by-object/${realtyObjId}`);
   }
 
   public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     return this.sendRequest('get', `/slots-for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`);
+  }
+
+
+  public getById(reviewId: number): Observable<Review> {
+    return this.sendRequest<Review>('get', `/${reviewId}`).pipe(
+      map(r => r.body)
+    );
   }
 
   ngOnDestroy(): void {

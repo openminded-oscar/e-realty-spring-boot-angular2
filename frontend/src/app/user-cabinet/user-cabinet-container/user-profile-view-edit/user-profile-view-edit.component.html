@@ -19,23 +19,23 @@
          class="user-title-container">
       <div>
         <div class="form-row">
-          <input [attr.disabled]="!isEditMode?true:null" placeholder="Name"
+          <input [disabled]="!isEditMode?true:null" placeholder="Name"
                  [(ngModel)]="user.name"
                  name="name" type="text">
         </div>
         <div class="form-row">
-          <input [attr.disabled]="!isEditMode?true:null" placeholder="Surname"
+          <input [disabled]="!isEditMode?true:null" placeholder="Surname"
                  [(ngModel)]="user.surname" name="surname" type="text">
         </div>
 
         <div class="form-row">
-          <input [attr.disabled]="!isEditMode?true:null" placeholder="Email"
+          <input [disabled]="!isEditMode?true:null" placeholder="Email"
                  [(ngModel)]="user.email"
                  name="email" type="email">
         </div>
 
         <div class="form-row">
-          <input [attr.disabled]="!isEditMode?true:null" placeholder="Phone Number"
+          <input [disabled]="!isEditMode?true:null" placeholder="Phone Number"
                  [(ngModel)]="user.phoneNumber" name="email" type="text">
         </div>
 

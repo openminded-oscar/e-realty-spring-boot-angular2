@@ -46,7 +46,7 @@ export class UserReviewsComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(ConfirmModalComponent);
     modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';
     modalRef.result.then(res => {
-      this.reviewService.remove(realtyObj.id).subscribe();
+      this.reviewService.removeByObject(realtyObj.id).subscribe();
     });
   }
 
