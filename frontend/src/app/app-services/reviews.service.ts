@@ -89,8 +89,10 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     );
   }
 
-  public removeReviewById(reviewId: number) {
-    return this.sendRequest<ReviewDto>('delete', `/${reviewId}`).pipe(
+  public removeReviewById(reviewId: number, reason: string) {
+    return this.sendRequest<ReviewDto>('delete', `/${reviewId}`, {
+      body: {reason: reason ?? null}
+    }).pipe(
       tap(() => {
         const currentReviews = this.currentUserReviews.value;
         const updatedReviews = currentReviews.filter(

@@ -8,6 +8,7 @@ import {Review} from '../../app-models/review';
 import {isFutureDate} from '../../utils/time-utils';
 import {ConfirmModalComponent} from '../confirm-modal/confirm-modal.component';
 import {ReviewsService} from '../../app-services/reviews.service';
+import {CancelReviewModalComponent} from '../cancel-review-modal/cancel-review-modal.component';
 
 @Component({
   selector: 'app-realty-obj-review-card',
@@ -33,15 +34,16 @@ export class RealtyObjReviewCardComponent implements OnDestroy {
   public showRealtyObjectCreatedAt!: boolean;
 
   protected readonly isFutureDate = isFutureDate;
+  @Input()
+  public showActionButtons!: boolean;
 
   constructor(public modalService: NgbModal, public reviewsService: ReviewsService) {
   }
 
   public cancelReview(review: Review): void {
-    const modalRef = this.modalService.open(ConfirmModalComponent);
-    modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';
-    modalRef.result.then(res => {
-      this.reviewsService.removeReviewById(review.id)
+    const modalRef = this.modalService.open(CancelReviewModalComponent);
+    modalRef.result.then(resultMessage => {
+      this.reviewsService.removeReviewById(review.id, resultMessage)
         .pipe(takeUntil(this.destroy$))
         .subscribe();
     });

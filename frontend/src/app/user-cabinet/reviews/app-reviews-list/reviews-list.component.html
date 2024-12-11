@@ -1,6 +1,6 @@
 <div id="itemsContainer" class="row" *ngIf="reviews.length; else noReviews">
   <div *ngFor="let review of reviews; trackBy: trackById" class="col-md-6 col-lg-4">
-    <app-realty-obj-review-card [review]="review" [showRealtyObjectCreatedAt]="true">
+    <app-realty-obj-review-card [review]="review" [showActionButtons]="showActionButtons" [showRealtyObjectCreatedAt]="true">
     </app-realty-obj-review-card>
   </div>
 </div>

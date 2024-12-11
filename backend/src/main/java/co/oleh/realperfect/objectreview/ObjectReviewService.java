@@ -77,7 +77,7 @@ public class ObjectReviewService {
         }
     }
 
-    public List<ObjectReview> remove(List<ObjectReview> objectReviews, SpringSecurityUser user) {
+    public List<ObjectReview> removeByObjectId(List<ObjectReview> objectReviews, SpringSecurityUser user) {
         User userFromDb = userRepository.findById(user.getId()).get();
 
         for (ObjectReview objectReview : objectReviews) {
@@ -86,15 +86,10 @@ public class ObjectReviewService {
 
             objectReviewRepository.deleteById(objectReview.getId());
 
-            emailService.sendObjectReviewCancelAsync(userFromDb, objectReview, realtyObject, realtor);
+            emailService.sendObjectReviewCancelAsync("Reviews Removed For RealtyObject", userFromDb, objectReview, realtyObject, realtor);
         }
 
         return objectReviews;
-    }
-
-    @Transactional
-    public int approveReviewById(Long objectReviewId) {
-        return objectReviewRepository.updateApprovedStatus(objectReviewId, true);
     }
 
     public ObjectReviewDto findReviewById(Long objectReviewId) {
@@ -171,8 +166,18 @@ public class ObjectReviewService {
         return availableSlots;
     }
 
-    public void deleteReviewById(Long reviewId) {
+    @Transactional
+    public int approveReviewById(Long objectReviewId) {
+        // send email
+        return objectReviewRepository.updateApprovedStatus(objectReviewId, true);
+    }
+
+    @Transactional
+    public void deleteReviewById(Long reviewId, SpringSecurityUser user, String reason) {
         // TODO verify user
+        User userFromDb = userRepository.findById(user.getId()).get();
+        ObjectReview objectReview = this.objectReviewRepository.findById(reviewId).get();
+        this.emailService.sendObjectReviewCancelAsync(reason, userFromDb, objectReview, objectReview.getRealtyObj(), objectReview.getRealtor());
         this.objectReviewRepository.deleteById(reviewId);
     }
 }

@@ -9,6 +9,8 @@ import {Review} from '../../../app-models/review';
 export class ReviewsListComponent {
   @Input()
   public reviews: Review[] = [];
+  @Input() showActionButtons!: boolean;
+
 
   constructor() {
   }

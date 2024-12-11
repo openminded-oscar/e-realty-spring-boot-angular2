@@ -19,7 +19,7 @@
           Scheduled for {{ review.dateTime | date: 'MMM d, HH:mm':'local' }}
         </div>
         <div style="display: flex">
-          <ng-container *ngIf="review.approved; else approveOrCancel">
+          <ng-container *ngIf="review.approved || !showActionButtons; else approveOrCancel">
             <button (click)="cancelReview(review)">Cancel And Notify</button>
           </ng-container>
           <ng-template #approveOrCancel>

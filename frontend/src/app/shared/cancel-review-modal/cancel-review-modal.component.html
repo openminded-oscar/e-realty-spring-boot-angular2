@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h4 class="modal-title">Confirmation Of Review Cancellation<span></span></h4>
+  <button type="button" class="close" aria-label="Close" (click)="cancel()">
+    <span>&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>{{ message }}</p>
+  <input class="form-control" minlength="5" maxlength="200" [formControl]="reasonFormControl">
+</div>
+<div class="modal-footer">
+  <button [ngbTooltip]="'Canceling With No Reason is Not Recommended'" type="button" style="color: gray; opacity: 0.65;" class="btn btn-link" (click)="confirm()">
+    Cancel with No Reason
+  </button>
+  <button type="button" [disabled]="reasonFormControl.invalid" class="btn btn-danger" (click)="confirm()">Cancel!</button>
+</div>

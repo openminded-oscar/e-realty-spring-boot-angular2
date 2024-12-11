@@ -44,13 +44,14 @@ public class EmailSenderService {
         this.emailConfirmationTokenRepository = emailConfirmationTokenRepository;
     }
 
-    public CompletableFuture<Void> sendObjectReviewCancelAsync(User user,
+    public CompletableFuture<Void> sendObjectReviewCancelAsync(String reason,
+                                                               User user,
                                                                ObjectReview objectReview,
                                                                RealtyObject realtyObject,
                                                                Realtor realtor) {
         return CompletableFuture.runAsync(() -> {
             try {
-                sendObjectReviewCancelForUser(user, objectReview, realtyObject, realtor);
+                sendObjectReviewCancelForUser(reason, user, objectReview, realtyObject, realtor);
                 log.info("completeAsyncSendObjectReviewCancelForUser {}: {}", user.getId(), objectReview.getId());
             } catch (MessagingException e) {
                 log.error(e.getMessage(), e);
@@ -102,12 +103,16 @@ public class EmailSenderService {
         log.info("Email confirmation sent to {}", email);
     }
 
-    public void sendObjectReviewCancelForUser(User user, ObjectReview objectReview, RealtyObject realtyObject,
+    public void sendObjectReviewCancelForUser(String reason, User user, ObjectReview objectReview,
+                                              RealtyObject realtyObject,
                                               Realtor realtor) throws MessagingException {
         String email = user.getEmail();
 
         Context context = new Context();
         context.setVariable("appRoot", appRoot);
+        if (reason != null) {
+            context.setVariable("reason", reason);
+        }
         context.setVariable("reviewId", objectReview.getId());
         context.setVariable("user", user);
         context.setVariable("realtyObject", realtyObject);
@@ -172,7 +177,7 @@ public class EmailSenderService {
 
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom("noreply@noreply.com");
-        helper.setTo(String.join(",", to));
+        helper.setTo(to.toArray(new String[0]));
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
 

@@ -6,6 +6,7 @@ import {Observable, Subject} from 'rxjs';
 import {ReviewsService} from '../../app-services/reviews.service';
 import {Review, ReviewAction, ReviewDto} from '../../app-models/review';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
+import {CancelReviewModalComponent} from '../../shared/cancel-review-modal/cancel-review-modal.component';
 
 @Component({
   selector: 'app-realty-obj-details-container',
@@ -41,8 +42,8 @@ export class RealtyObjDetailsContainerComponent implements OnInit, OnDestroy {
       });
   }
 
-  public removeReview(reviewId: number) {
-    this.reviewsService.removeReviewById(reviewId)
+  public removeReview(reviewId: number, reason: string) {
+    this.reviewsService.removeReviewById(reviewId, reason)
       .pipe(takeUntil(this.destroy$))
       .subscribe();
   }
@@ -64,12 +65,9 @@ export class RealtyObjDetailsContainerComponent implements OnInit, OnDestroy {
   }
 
   public openReviewRemoveDialog(review: Review | ReviewDto) {
-    const modalRef = this.modalService.open(ConfirmModalComponent);
-    modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';  // Passing custom message
-    modalRef.result.then((result) => {
-      if (result) {
-        this.removeReview(review.id);
-      }
+    const modalRef = this.modalService.open(CancelReviewModalComponent);
+    modalRef.result.then((resultMessage) => {
+      this.removeReview(review.id, resultMessage);
     });
   }
 

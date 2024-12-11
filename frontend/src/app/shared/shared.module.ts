@@ -21,6 +21,7 @@ import {ReviewsListComponent} from '../user-cabinet/reviews/app-reviews-list/rev
 import {ReviewsFilterComponent} from '../user-cabinet/reviews/app-reviews-filter/reviews-filter.component';
 import {RealtyObjCardComponent} from './realty-obj-card/realty-obj-card.component';
 import {RealtyObjReviewCardComponent} from './realty-obj-card/realty-obj-review-card.component';
+import {CancelReviewModalComponent} from './cancel-review-modal/cancel-review-modal.component';
 
 const components = [
   RealtorContactComponent,
@@ -33,6 +34,7 @@ const components = [
   DeleteRealtyModalComponent,
   ScheduleFormModalComponent,
   ConfirmModalComponent,
+  CancelReviewModalComponent,
   MessageModalComponent,
   RealtyStatusComponent
 ];

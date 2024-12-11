@@ -85,8 +85,9 @@ public class ObjectReviewApi {
     @DeleteMapping(value = "/{reviewId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Boolean> removeReviewById(@AuthenticationPrincipal SpringSecurityUser user,
+                                                    @RequestBody CancelReviewDto body,
                                                     @PathVariable Long reviewId) {
-        reviewService.deleteReviewById(reviewId);
+        reviewService.deleteReviewById(reviewId, user, body.getReason());
 
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
@@ -97,7 +98,7 @@ public class ObjectReviewApi {
         Long userId = user.getId();
 
         List<ObjectReview> reviews = reviewService.findReviewForUserAndObject(userId, realtyObjId);
-        List<ObjectReview> removedReviews = reviewService.remove(reviews, user);
+        List<ObjectReview> removedReviews = reviewService.removeByObjectId(reviews, user);
 
         return new ResponseEntity<>(removedReviews, HttpStatus.OK);
     }
