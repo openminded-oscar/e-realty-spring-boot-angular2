@@ -20,10 +20,10 @@
         </div>
         <div style="display: flex">
           <ng-container *ngIf="review.approved; else approveOrCancel">
-            <button (click)="cancelReview(review.realtyObj)">Cancel And Notify</button>
+            <button (click)="cancelReview(review)">Cancel And Notify</button>
           </ng-container>
           <ng-template #approveOrCancel>
-            <button (click)="cancelReview(review.realtyObj)">Cancel</button>
+            <button (click)="cancelReview(review)">Cancel</button>
             <button (click)="approveReview(review)">Approve</button>
           </ng-template>
         </div>

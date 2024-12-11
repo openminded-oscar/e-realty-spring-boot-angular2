@@ -37,11 +37,11 @@ export class RealtyObjReviewCardComponent implements OnDestroy {
   constructor(public modalService: NgbModal, public reviewsService: ReviewsService) {
   }
 
-  public cancelReview(realtyObj: RealtyObj): void {
+  public cancelReview(review: Review): void {
     const modalRef = this.modalService.open(ConfirmModalComponent);
     modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';
     modalRef.result.then(res => {
-      this.reviewsService.removeByObject(realtyObj.id)
+      this.reviewsService.removeReviewById(review.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe();
     });

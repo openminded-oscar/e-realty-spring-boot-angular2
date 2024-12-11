@@ -3,6 +3,7 @@ import {Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {RealtorService} from '../../../app-services/realtor.service';
 import {filterByReviewType, Review, ReviewFilter} from '../../../app-models/review';
+import {ReviewsService} from '../../../app-services/reviews.service';
 
 @Component({
   selector: 'app-realtor-reviews',
@@ -16,11 +17,11 @@ export class RealtorReviewsComponent implements OnInit, OnDestroy {
   public filteredReviews: Review[] = [];
   public filter: ReviewFilter = 'all';
 
-  constructor(public realtorService: RealtorService) {
+  constructor(public reviewsService: ReviewsService) {
   }
 
   ngOnInit(): void {
-    this.realtorService.getMyAsRealtorReviews()
+    this.reviewsService.currentRealtorReviews$
       .pipe(
         takeUntil(this.destroy$),
         tap(reviews => {
