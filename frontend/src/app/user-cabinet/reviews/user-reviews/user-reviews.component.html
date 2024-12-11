@@ -1,2 +1,2 @@
-<app-reviews-filter [filter]="'all'" (filterChanged)="onFilterChanged($event)"></app-reviews-filter>
+<app-reviews-filter [filter]="filter" (filterChanged)="onFilterChanged($event)"></app-reviews-filter>
 <app-reviews-list [reviews]="filteredReviews"></app-reviews-list>

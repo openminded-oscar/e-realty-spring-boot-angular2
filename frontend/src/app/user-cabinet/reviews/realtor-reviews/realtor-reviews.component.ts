@@ -14,7 +14,7 @@ export class RealtorReviewsComponent implements OnInit, OnDestroy {
 
   public allRealtorReviews: Review[];
   public filteredReviews: Review[] = [];
-  public filter: ReviewFilter = 'unapproved';
+  public filter: ReviewFilter = 'all';
 
   constructor(public realtorService: RealtorService) {
   }

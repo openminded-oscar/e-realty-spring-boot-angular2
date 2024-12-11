@@ -44,7 +44,7 @@ export const filterByReviewType = (reviews: Review[], filter: ReviewFilter): Rev
   } else if (filter === 'future') {
     return reviews.filter(review => isFutureDate(review.dateTime));
   } else if (filter === 'past') {
-    return reviews.filter(review => isFutureDate(review.dateTime));
+    return reviews.filter(review => !isFutureDate(review.dateTime));
   } else if (filter === 'unapproved') {
     return reviews.filter(review => !review.approved);
   }
