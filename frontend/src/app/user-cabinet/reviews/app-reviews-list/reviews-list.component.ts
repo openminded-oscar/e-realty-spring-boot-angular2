@@ -15,20 +15,7 @@ export class ReviewsListComponent {
   @Input()
   public reviews: Review[] = [];
 
-  constructor(public modalService: NgbModal,
-              public reviewService: ReviewsService) {
-  }
-
-  public cancelReview(realtyObj: RealtyObj): void {
-    const modalRef = this.modalService.open(ConfirmModalComponent);
-    modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';
-    modalRef.result.then(res => {
-      this.reviewService.removeByObject(realtyObj.id).subscribe();
-    });
-  }
-
-  public isFutureDate(dateTime: Date): boolean {
-    return isFutureDate(dateTime);
+  constructor() {
   }
 
   public trackById(index: number, obj: Review): number {

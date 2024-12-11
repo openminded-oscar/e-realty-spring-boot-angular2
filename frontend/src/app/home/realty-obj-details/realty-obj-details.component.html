@@ -71,8 +71,13 @@
           <div class="description-block--content">
             <div class="scheduled-review-block" *ngIf="user && currentReview">
               <div>
-                <i class="fa fa-calendar"></i> review
-                for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
+                <ng-container *ngIf="currentReview.approved; else notApprovedIcon">
+                  <i class="fa fa-calendar"></i>
+                </ng-container>
+                <ng-template #notApprovedIcon>
+                  <i style="color: red" class="fa fa-clock"></i>
+                </ng-template>
+                review for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
               </div>
               <div class="btn-link" style="margin-left: 8px; cursor: pointer" (click)="openReviewRemoveDialog()">
                 Cancel
@@ -91,9 +96,9 @@
       <div class="col-md-5 main-info-block">
         <app-location [center]="geolocation"></app-location>
         <ng-container *ngIf="currentObject.realtor">
-        <div class="realtor-link btn-link" style="margin-top: 18px" (click)="openRealtorContacts()">
-          {{ currentObject.realtor?.name }}&nbsp;{{ currentObject.realtor?.surname }}, realtor
-        </div>
+          <div class="realtor-link btn-link" style="margin-top: 18px" (click)="openRealtorContacts()">
+            {{ currentObject.realtor?.name }}&nbsp;{{ currentObject.realtor?.surname }}, realtor
+          </div>
         </ng-container>
       </div>
 

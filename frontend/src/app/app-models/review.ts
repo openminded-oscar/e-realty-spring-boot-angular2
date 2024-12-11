@@ -22,6 +22,7 @@ export interface ReviewDto {
   userId: number;
   realtyObjId: number;
   dateTime: Date;
+  approved?: Boolean;
 }
 
 export interface ReviewPostDto {
