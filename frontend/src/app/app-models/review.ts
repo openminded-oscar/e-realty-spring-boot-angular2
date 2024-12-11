@@ -1,5 +1,6 @@
 import {RealtyObj} from './realty-obj';
 import {User} from './user';
+import {isFutureDate} from '../utils/time-utils';
 
 export type ReviewFilter = 'all' | 'future' | 'past' | 'unapproved';
 
@@ -34,4 +35,16 @@ export interface ReviewSelectTimeDto {
   realtyObjId?: number;
   realtorId?: number;
   dateTime: Date;
+}
+
+export const filterByReviewType = (reviews: Review[], filter: ReviewFilter): Review[] => {
+  if (filter === 'all') {
+    return [...reviews];
+  } else if (filter === 'future') {
+    return reviews.filter(review => isFutureDate(review.dateTime));
+  } else if (filter === 'past') {
+    return reviews.filter(review => isFutureDate(review.dateTime));
+  } else if (filter === 'unapproved') {
+    return reviews.filter(review => !review.approved);
+  }
 }

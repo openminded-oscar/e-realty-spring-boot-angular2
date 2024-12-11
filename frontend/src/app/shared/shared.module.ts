@@ -17,9 +17,13 @@ import {RealtyObjCardComponent} from './realty-obj-card/realty-obj-card.componen
 import {RealtorContactComponent} from './realtor-contact/realtor-contact.component';
 import { RealtyStatusComponent } from './realty-status/realty-status.component';
 import { MessageModalComponent } from './message-modal/message-modal.component';
+import {ReviewsListComponent} from '../user-cabinet/reviews/app-reviews-list/reviews-list.component';
+import {ReviewsFilterComponent} from '../user-cabinet/reviews/app-reviews-filter/reviews-filter.component';
 
 const components = [
   RealtorContactComponent,
+  ReviewsListComponent,
+  ReviewsFilterComponent,
   RealtyObjsListComponent,
   RealtyObjCardComponent,
   DeleteRealtyModalComponent,
