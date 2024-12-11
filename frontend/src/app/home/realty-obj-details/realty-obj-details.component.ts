@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import { HttpResponse } from '@angular/common/http';
+import {HttpResponse} from '@angular/common/http';
 import {combineLatest, Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {latLng} from 'leaflet';
@@ -12,12 +12,11 @@ import {UserService} from '../../app-services/user.service';
 import {InterestService} from '../../app-services/interest.service';
 import {InterestDto} from '../../app-models/interest';
 import {ReviewsService} from '../../app-services/reviews.service';
-import {ReviewDto} from '../../app-models/review';
+import {Review, ReviewDto} from '../../app-models/review';
 import {User, UserRole} from '../../app-models/user';
 
 import {RealtorContactComponent} from '../../shared/realtor-contact/realtor-contact.component';
 import {DeleteRealtyModalComponent} from '../../shared/delete-realty-modal/delete-realty-modal.component';
-import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 
 
 @Component({
@@ -27,10 +26,11 @@ import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.co
 })
 export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public RealtyObjectStatus = RealtyObjectStatus;
+
   public currentObject: RealtyObj;
+  public currentReview: ReviewDto = null;
   public enlargedPhoto: string;
   public isInterested = false;
-  public currentReview: ReviewDto = null;
 
   private destroy$ = new Subject<boolean>();
 
@@ -38,15 +38,15 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public defaultRealtorPhoto = 'https://placehold.co/600x400?text=Realtor+photo';
   public user: User;
   public isRealtorOrAdmin = false;
-  private currentUserObjects: RealtyObj[] = [];
   public isMyObject = false;
-  public get geolocation () {
+  @Output() removeClicked = new EventEmitter<ReviewDto>();
+
+  public get geolocation() {
     return this.currentObject?.address?.lat && this.currentObject?.address?.lng && latLng({
       lat: this.currentObject.address.lat,
       lng: this.currentObject.address.lng
     });
   }
-
 
   constructor(public realtyObjService: RealtyObjService,
               public userService: UserService,
@@ -62,7 +62,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         tap(user => {
           this.user = user;
           this.isRealtorOrAdmin = user?.roles.includes(UserRole.Realtor) || user?.roles.includes(UserRole.Admin);
-          this.currentUserObjects = user ? user.realtyObjects : [];
         })
       ),
       this.route.params
@@ -78,12 +77,11 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
               if (!user) {
                 return;
               } else {
-                this.initUserObjectRelatedData();
+                this.initFavoritesAndReviewsData();
               }
             });
         }
       });
-
   }
 
   public setEnlargedPhoto(photo: RealtyPhoto) {
@@ -110,10 +108,12 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initUserObjectRelatedData() {
+  private initFavoritesAndReviewsData() {
     const id = this.currentObject.id;
-    if (this.currentUserObjects) {
-      const object = this.currentUserObjects.find((obj) => obj.id === id);
+    const currentUserObjects = this.user?.realtyObjects ?? [];
+
+    if (currentUserObjects.length) {
+      const object = currentUserObjects.find((obj) => obj.id === id);
       this.isMyObject = !!object;
     }
 
@@ -137,11 +137,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-  }
-
-  public setDefaultRealtorPhoto(event: Event) {
-    const imgElement = event.target as HTMLImageElement;
-    imgElement.src = this.defaultRealtorPhoto;
   }
 
   public setDefaultRealtyObjectPhoto(event: ErrorEvent) {
@@ -183,20 +178,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  public removeReview() {
-    this.reviewsService.remove(this.currentObject.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.currentReview = null);
-  }
-
   public openReviewRemoveDialog() {
-    const modalRef = this.modalService.open(ConfirmModalComponent);
-    modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';  // Passing custom message
-    modalRef.result.then((result) => {
-      if (result) {
-        this.removeReview();
-      }
-    }).catch((error) => {
-    });
+    this.removeClicked.next(this.currentReview);
   }
 }

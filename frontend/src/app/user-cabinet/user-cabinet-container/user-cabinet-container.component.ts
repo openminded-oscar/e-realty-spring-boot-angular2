@@ -13,6 +13,7 @@ import {
 import {ReviewsService} from '../../app-services/reviews.service';
 import {InterestService} from '../../app-services/interest.service';
 import {UserService} from '../../app-services/user.service';
+import {RealtorService} from '../../app-services/realtor.service';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class UserCabinetContainerComponent implements OnInit, OnDestroy {
 
   constructor(public reviewsService: ReviewsService,
               public userService: UserService,
+              public realtorService: RealtorService,
               public route: ActivatedRoute,
               public interestsService: InterestService) {
   }
@@ -50,6 +52,7 @@ export class UserCabinetContainerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(isRealtor => {
         if (isRealtor) {
+          this.reviewsService.getMyAsRealtorReviews().subscribe();
           this.activeLinksSubject.next([...this.realtorLinks, ...this.userLinks]);
         } else {
           this.activeLinksSubject.next([...this.userLinks]);

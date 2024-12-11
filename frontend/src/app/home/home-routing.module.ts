@@ -4,6 +4,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {RealtyObjsGalleryComponent} from './realty-objs-gallery/realty-objs-gallery.component';
 import {RealtyObjDetailsComponent} from './realty-obj-details/realty-obj-details.component';
 import {AuthGuard} from '../app-guards/auth.guard';
+import {RealtyObjDetailsContainerComponent} from './realty-obj-details/realty-obj-details-container.component';
+import {ReviewAction} from '../app-models/review';
 
 const appRoutes: Routes = [
   {
@@ -22,7 +24,17 @@ const appRoutes: Routes = [
   },
   {
     path: 'realty-object/:objectId',
-    component: RealtyObjDetailsComponent
+    component: RealtyObjDetailsContainerComponent
+  },
+  {
+    path: 'realty-object/:objectId/cancel-review/:reviewId',
+    component: RealtyObjDetailsContainerComponent,
+    data: { reviewActionType: ReviewAction.CANCEL }
+  },
+  {
+    path: 'realty-object/:objectId/confirm-review/:reviewId',
+    component: RealtyObjDetailsContainerComponent,
+    data: { reviewActionType: ReviewAction.CONFIRM }
   },
   {
     path: 'realty-object/:objectId/editor',

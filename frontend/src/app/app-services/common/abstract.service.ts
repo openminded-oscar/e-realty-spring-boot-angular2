@@ -87,7 +87,8 @@ export abstract class AbstractService<T> {
       request = this.http.delete<R>(this.domain + uri, {
         headers,
         observe: 'response',
-        params: params
+        params: params,
+        body
       });
     } else {
       console.error('Unsupported request: ' + method);

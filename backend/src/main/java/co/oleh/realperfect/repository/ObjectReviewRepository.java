@@ -1,16 +1,20 @@
 package co.oleh.realperfect.repository;
 
-import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.model.ObjectReview;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Repository
 public interface ObjectReviewRepository extends JpaRepository<ObjectReview, Long> {
+    @Modifying
+    @Query("UPDATE ObjectReview e SET e.approved = :approved WHERE e.id = :id")
+    int updateApprovedStatus(@Param("id") Long id, @Param("approved") boolean approved);
     List<ObjectReview> findByUserIdOrderByDateTimeDesc(Long userId);
     List<ObjectReview> findByRealtyObjId(Long realtyObjId);
     List<ObjectReview> findByRealtyObjIdAndDateTimeBetween(Long realtyObjId, Instant start, Instant end);

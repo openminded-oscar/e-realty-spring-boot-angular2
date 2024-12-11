@@ -6,13 +6,13 @@ import {
   UserProfileViewEditComponent
 } from './user-cabinet-container/user-profile-view-edit/user-profile-view-edit.component';
 import {UserObjectsComponent} from './user-objects/user-objects.component';
-import {UserReviewsComponent} from './user-reviews/user-reviews.component';
+import {UserReviewsComponent} from './reviews/user-reviews/user-reviews.component';
 import {UserCabinetContainerComponent} from './user-cabinet-container/user-cabinet-container.component';
 import {SharedModule} from '../shared/shared.module';
 import {UserFavoritesComponent} from './user-favorites/user-favorites.component';
 import {UserCabinetRoutingModule} from './user-cabinet.routing/user-cabinet.routing.module';
 import {RealtorObjectsComponent} from './realtor-objects/realtor-objects.component';
-import {RealtorReviewsComponent} from './realtor-reviews/realtor-reviews.component';
+import {RealtorReviewsComponent} from './reviews/realtor-reviews/realtor-reviews.component';
 import {ReviewsService} from '../app-services/reviews.service';
 
 
