@@ -4,7 +4,7 @@
          src="{{realtyObject.mainPhotoPath?realtyObject.mainPhotoPath:'https://placehold.co/600x400'}}"
          alt="">
     <div class="image-overlay-text">
-      <ng-content></ng-content>
+      <ng-content select="[imageOverlayContent]"></ng-content>
     </div>
   </div>
   <div class="caption">

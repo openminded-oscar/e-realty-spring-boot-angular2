@@ -10,28 +10,28 @@ import {UserService} from '../../app-services/user.service';
   styleUrls: ['./realty-obj-card.component.scss']
 })
 export class RealtyObjCardComponent implements OnInit, OnDestroy {
+  private _realtyObject: RealtyObj;
   @Input()
   public set realtyObject(value: RealtyObj) {
     this._realtyObject = value;
   }
+
   public get realtyObject(): RealtyObj {
     return this._realtyObject;
   }
 
-  constructor(private userService: UserService,
-              private cdr: ChangeDetectorRef) {
-  }
-  private destroy$ = new Subject<boolean>();
-  public isMyObject: boolean;
-  private _realtyObject: RealtyObj;
   @Input()
   public showCreatedAt = false;
   @Input()
-  showManageStatusOptions = false;
-  public currentUserObjects: RealtyObj[];
-  public RealtyObjectStatus = RealtyObjectStatus;
+  public showManageStatusOptions = false;
+  public isMyObject: boolean;
+  private destroy$ = new Subject<boolean>();
 
   protected readonly RealtyObj = RealtyObj;
+
+  constructor(private userService: UserService,
+              private cdr: ChangeDetectorRef) {
+  }
 
   ngOnInit(): void {
     combineLatest([
@@ -39,12 +39,11 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
     ]).pipe(
       takeUntil(this.destroy$)
     ).subscribe(([user]) => {
+      let currentUserObjects = [];
       if (user) {
-        this.currentUserObjects = user.realtyObjects;
-      } else {
-        this.currentUserObjects = [];
+        currentUserObjects = user.realtyObjects;
       }
-      this.isMyObject = !!this.currentUserObjects?.find((obj) => obj.id === this.realtyObject.id);
+      this.isMyObject = !!currentUserObjects?.find((obj) => obj.id === this.realtyObject.id);
       this.cdr.detectChanges();
     });
   }

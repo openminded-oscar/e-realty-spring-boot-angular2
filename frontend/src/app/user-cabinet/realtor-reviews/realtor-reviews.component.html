@@ -8,12 +8,15 @@
   <label>
     Past <input type="radio" name="filter" (change)="setFilter('past')" [checked]="filter === 'past'">
   </label>
+  <label>
+    Pending <input type="radio" name="filter" (change)="setFilter('unapproved')" [checked]="filter === 'unapproved'">
+  </label>
 </div>
 
 <div id="itemsContainer" class="row" *ngIf="filteredReviews.length; else noReviews">
   <div *ngFor="let review of filteredReviews; trackBy: trackById" class="col-md-6 col-lg-4">
     <app-realty-obj-card [showCreatedAt]="true" [realtyObject]="review.realtyObj">
-      <ng-container *ngIf="review.dateTime">
+      <ng-container imageOverlayContent *ngIf="review.dateTime">
         <ng-container *ngIf="isFutureDate(review.dateTime); else pastDate">
           <div style="display: flex; flex-direction: row; justify-content: space-between">
             <div>

@@ -1,6 +1,8 @@
 import {RealtyObj} from './realty-obj';
 import {User} from './user';
 
+export type ReviewFilter = 'all' | 'future' | 'past' | 'unapproved';
+
 export enum ReviewAction {
   CONFIRM = 'confirm',
   CANCEL = 'cancel'
