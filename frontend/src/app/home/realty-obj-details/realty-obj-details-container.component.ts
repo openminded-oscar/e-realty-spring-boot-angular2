@@ -4,13 +4,13 @@ import {ActivatedRoute} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 import {ReviewsService} from '../../app-services/reviews.service';
-import {Review, ReviewAction} from '../../app-models/review';
+import {Review, ReviewAction, ReviewDto} from '../../app-models/review';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-realty-obj-details-container',
   template: `
-    <app-realty-obj-details></app-realty-obj-details>
+    <app-realty-obj-details (removeClicked)="openReviewRemoveDialog($event)"></app-realty-obj-details>
   `,
   styles: ``
 })
@@ -63,7 +63,7 @@ export class RealtyObjDetailsContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  public openReviewRemoveDialog(review: Review) {
+  public openReviewRemoveDialog(review: Review | ReviewDto) {
     const modalRef = this.modalService.open(ConfirmModalComponent);
     modalRef.componentInstance.message = 'Are you sure you want to cancel this review?';  // Passing custom message
     modalRef.result.then((result) => {

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpResponse} from '@angular/common/http';
@@ -12,7 +12,7 @@ import {UserService} from '../../app-services/user.service';
 import {InterestService} from '../../app-services/interest.service';
 import {InterestDto} from '../../app-models/interest';
 import {ReviewsService} from '../../app-services/reviews.service';
-import {ReviewDto} from '../../app-models/review';
+import {Review, ReviewDto} from '../../app-models/review';
 import {User, UserRole} from '../../app-models/user';
 
 import {RealtorContactComponent} from '../../shared/realtor-contact/realtor-contact.component';
@@ -39,6 +39,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
   public user: User;
   public isRealtorOrAdmin = false;
   public isMyObject = false;
+  @Output() removeClicked = new EventEmitter<ReviewDto>();
 
   public get geolocation() {
     return this.currentObject?.address?.lat && this.currentObject?.address?.lng && latLng({
@@ -138,11 +139,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public setDefaultRealtorPhoto(event: Event) {
-    const imgElement = event.target as HTMLImageElement;
-    imgElement.src = this.defaultRealtorPhoto;
-  }
-
   public setDefaultRealtyObjectPhoto(event: ErrorEvent) {
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = this.defaultRealtyObjectPhoto;
@@ -180,5 +176,9 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  public openReviewRemoveDialog() {
+    this.removeClicked.next(this.currentReview);
   }
 }

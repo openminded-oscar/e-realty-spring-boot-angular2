@@ -75,11 +75,12 @@
                   <i class="fa fa-calendar"></i>
                 </ng-container>
                 <ng-template #notApprovedIcon>
-                  <i style="color: red" class="fa fa-clock"></i>
+                  <i [ngbTooltip]="'Review Is Not Yet Approved'" style="color: red" class="fa fa-clock"></i>
                 </ng-template>
                 review for {{ currentReview.dateTime|date:'MMM d, HH:mm':'local' }}
               </div>
-              <div class="btn-link" style="margin-left: 8px; cursor: pointer" (click)="openReviewRemoveDialog()">
+              <div class="btn-link" style="margin-left: 8px; cursor: pointer"
+                   (click)="openReviewRemoveDialog()">
                 Cancel
               </div>
             </div>
