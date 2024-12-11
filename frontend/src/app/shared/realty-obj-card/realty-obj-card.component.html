@@ -1,49 +1,17 @@
-<div class="thumbnail">
-  <div class="thumbnail-image-container" style="position: relative;">
-    <img class="thumbnail-image"
-         src="{{realtyObject.mainPhotoPath?realtyObject.mainPhotoPath:'https://placehold.co/600x400'}}"
-         alt="">
-    <div class="image-overlay-text">
-      <ng-content></ng-content>
-    </div>
-  </div>
-  <div class="caption">
-    <div class="caption-top-row">
-      <h4 style="flex: 1;">
+<app-realty-obj-card-details [realtyObject]="realtyObject" [isMyObject]="isMyObject">
+  <ng-container topRow>
+    <h4 style="flex: 1;">
         <span [routerLink]="['/realty-object', realtyObject.id]"
               style="cursor: pointer">{{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}</span>
-      </h4>
-      <ng-container *ngIf="showManageStatusOptions">
-        <app-realty-status-editor [realtyObject]="realtyObject"></app-realty-status-editor>
-      </ng-container>
-      <div>
-        <div *ngIf="isMyObject">
-          <a [routerLink]="['/realty-object', realtyObject.id, 'editor']" style="padding: 0 5px;"
-             class="btn btn-info btn-block">Edit</a>
-        </div>
-      </div>
-    </div>
+    </h4>
+    <ng-container *ngIf="showManageStatusOptions">
+      <app-realty-status-editor [realtyObject]="realtyObject"></app-realty-status-editor>
+    </ng-container>
     <div>
-      <div class="description--row" style="display:flex; flex-direction: row; justify-content: space-between">
-        <div *ngIf="realtyObject.price" style="font-weight: 500">
-          Price: ${{ realtyObject.price }}
-        </div>
-        <div *ngIf="realtyObject.priceForRent" style="font-weight: 500">
-          Rent: ${{ realtyObject.priceForRent }}/month
-        </div>
-        <div style="font-weight: 400" *ngIf="showCreatedAt && realtyObject.createdAt" class="created-at">
-          <span>Since&nbsp;{{ realtyObject.createdAt | date: 'shortDate':'local' }}</span>
-        </div>
+      <div *ngIf="isMyObject">
+        <a [routerLink]="['/realty-object', realtyObject.id, 'editor']" style="padding: 0 5px;"
+           class="btn btn-info btn-block">Edit</a>
       </div>
-      <p class="description--row">
-        {{ realtyObject.roomsAmount }} rooms, {{ realtyObject.totalArea }}
-        sq.m., {{ realtyObject.floor }} floor of
-        {{ realtyObject.totalFloors }} <span
-        class="pull-right">{{ realtyObject.hasRepairing ? 'Repaired' : '' }}</span>
-      </p>
-      <p class="description--row description-content--text">{{ realtyObject.description }}</p>
     </div>
-    <a [routerLink]="['/realty-object', realtyObject.id]" style="border: 1px solid black" class="btn btn-block">Watch
-      details</a>
-  </div>
-</div>
+  </ng-container>
+</app-realty-obj-card-details>

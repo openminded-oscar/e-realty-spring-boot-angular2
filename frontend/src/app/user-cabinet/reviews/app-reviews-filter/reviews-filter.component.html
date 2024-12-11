@@ -1,0 +1,14 @@
+<div style="display: flex; flex-direction: row; justify-content: start; gap: 50px">
+  <label>
+    All <input type="radio" name="filter" (change)="setFilter('all')" [checked]="filter === 'all'">
+  </label>
+  <label>
+    Future <input type="radio" name="filter" (change)="setFilter('future')" [checked]="filter === 'future'">
+  </label>
+  <label>
+    Past <input type="radio" name="filter" (change)="setFilter('past')" [checked]="filter === 'past'">
+  </label>
+  <label>
+    Pending <input type="radio" name="filter" (change)="setFilter('unapproved')" [checked]="filter === 'unapproved'">
+  </label>
+</div>

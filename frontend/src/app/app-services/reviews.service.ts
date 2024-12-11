@@ -27,6 +27,10 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
   private currentUserReviews = new BehaviorSubject<Review[]>([]);
   public currentUserReviews$ = this.currentUserReviews.asObservable();
 
+  private currentRealtorReviews = new BehaviorSubject<Review[]>([]);
+  public currentRealtorReviews$ = this.currentRealtorReviews.asObservable();
+
+
   constructor(public http: HttpClient,
               public modalService: NgbModal,
               public userService: UserService) {
@@ -49,11 +53,10 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
   }
 
   public saveReview(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<ReviewPostDto> {
-    const utcDatetime = reviewSelectTimeDto.dateTime;
-
     const review = {
       realtyObjId: reviewSelectTimeDto.realtyObjId,
-      dateTime: utcDatetime
+      realtorId: reviewSelectTimeDto.realtorId,
+      dateTime: reviewSelectTimeDto.dateTime
     };
 
     return this.sendRequest<ReviewPostDto>('post', '', {body: review}).pipe(
@@ -74,14 +77,60 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     );
   }
 
-  public remove(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
-    return this.sendRequest<ReviewDto>('delete', `/${realtyObjId}`).pipe(
+  public getMyAsRealtorReviews(): Observable<Review[]> {
+    return this.http.get<Review[]>(endpoints.realtorReview).pipe(
+      tap(res => {
+        const realtyObjects = res.map(r => r.realtyObj);
+        (realtyObjects ?? []).forEach(value => {
+          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+        });
+        this.currentRealtorReviews.next(res);
+      })
+    );
+  }
+
+  public removeReviewById(reviewId: number, reason: string) {
+    return this.sendRequest<ReviewDto>('delete', `/${reviewId}`, {
+      body: {reason: reason ?? null}
+    }).pipe(
       tap(() => {
         const currentReviews = this.currentUserReviews.value;
         const updatedReviews = currentReviews.filter(
-          review => review.realtyObj.id !== realtyObjId
+          review => review.realtyObj.id !== reviewId
         );
         this.currentUserReviews.next(updatedReviews);
+
+        const currentRealtorReviews = this.currentRealtorReviews.value;
+        const updatedRealtorReviews = currentRealtorReviews.filter(
+          review => review.realtyObj.id !== reviewId
+        );
+        this.currentRealtorReviews.next(updatedRealtorReviews);
+      })
+    );
+  }
+
+  public approveReview(reviewId: number) {
+    return this.sendRequest<ReviewDto>('post', `/${reviewId}/approve`).pipe(
+      tap(() => {
+        const currentReviews = this.currentUserReviews.value;
+        currentReviews.forEach(
+          review => {
+            if (review.id === reviewId) {
+              review.approved = true;
+            }
+          }
+        );
+        this.currentUserReviews.next(currentReviews.slice());
+
+        const currentRealtorReviews = this.currentRealtorReviews.value;
+        currentRealtorReviews.forEach(
+          review => {
+            if (review.id === reviewId) {
+              review.approved = true;
+            }
+          }
+        );
+        this.currentRealtorReviews.next(currentRealtorReviews.slice());
       })
     );
   }
@@ -99,12 +148,19 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
   }
 
   public getForObjectAndCurrentUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
-    return this.sendRequest('get', `/${realtyObjId}`);
+    return this.sendRequest('get', `/by-object/${realtyObjId}`);
   }
 
   public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     return this.sendRequest('get', `/slots-for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`);
+  }
+
+
+  public getById(reviewId: number): Observable<Review> {
+    return this.sendRequest<Review>('get', `/${reviewId}`).pipe(
+      map(r => r.body)
+    );
   }
 
   ngOnDestroy(): void {

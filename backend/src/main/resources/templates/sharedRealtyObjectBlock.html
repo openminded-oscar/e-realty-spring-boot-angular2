@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="realtyObject(realtyObject)">
+    <div>
+        <h2>Realty Object Details</h2>
+        <a th:href="${appRoot + '/realty-object/' + realtyObject.id}">View On Site</a>
+        <p th:if="${realtyObject.address != null and realtyObject.address.geolocation.x != null and realtyObject.address.geolocation.y != null}">
+            <strong>Area:</strong>
+            <a th:href="'https://www.google.com/maps?q=' + ${realtyObject.address.geolocation.y} + ',' + ${realtyObject.address.geolocation.x}"
+               target="_blank">
+                View on Map
+            </a>
+        </p>
+        <p th:unless="${realtyObject.address != null and realtyObject.address.geolocation.x != null and realtyObject.address.geolocation.y != null}">
+            <strong>Area:</strong> Address or coordinates not available
+        </p>
+    </div>
+</th:block>
+</html>

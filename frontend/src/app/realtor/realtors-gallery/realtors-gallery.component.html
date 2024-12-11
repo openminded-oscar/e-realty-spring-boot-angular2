@@ -4,7 +4,7 @@
       <img class="realtor-photo" (error)="setDefaultRealtorPhoto($event)" [src]="realtor?.profilePic ? realtor.profilePic.fullUrl: defaultRealtorPhoto"/>
     </div>
     <div class="row">
-      <a class="btn" (click)="goToRealtor(realtor)">{{realtor.name}} {{realtor.surname}}</a>
+      <a class="btn">{{realtor.name}} {{realtor.surname}}</a>
     </div>
   </div>
 </div>

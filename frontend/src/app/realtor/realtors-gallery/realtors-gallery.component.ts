@@ -41,11 +41,6 @@ export class RealtorsGalleryComponent implements OnInit, OnDestroy {
     imgElement.src = this.defaultRealtorPhoto;
   }
 
-  public goToRealtor(realtor: Realtor) {
-    if (this.user) {
-      this.router.navigateByUrl(`/realtor/${realtor.id}`).then();
-    }
-  }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);

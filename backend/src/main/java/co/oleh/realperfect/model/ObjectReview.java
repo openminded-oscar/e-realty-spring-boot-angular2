@@ -19,6 +19,7 @@ public class ObjectReview extends AuditableEntity {
     private Realtor realtor;
     private RealtyObject realtyObj;
     private Instant dateTime;
+    public Boolean approved;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,5 +68,19 @@ public class ObjectReview extends AuditableEntity {
 
     public void setDateTime(Instant dateTime) {
         this.dateTime = dateTime;
+    }
+
+    @Column(name = "approved")
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    @PrePersist
+    private void preCreate() {
+        this.approved = false;
     }
 }

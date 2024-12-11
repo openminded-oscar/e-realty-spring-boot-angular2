@@ -15,6 +15,7 @@ import {GeolocationWidgetComponent} from './realty-objs-gallery/geolocation-widg
 import {
   GeolocationWidgetModalComponent
 } from './realty-objs-gallery/geolocation-widget-modal/geolocation-widget-modal.component';
+import {RealtyObjDetailsContainerComponent} from './realty-obj-details/realty-obj-details-container.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {
     GeolocationWidgetModalComponent,
     RealtyObjsGalleryComponent,
     RealtyObjDetailsComponent,
+    RealtyObjDetailsContainerComponent,
     DisplayLocationComponent,
   ],
   imports: [

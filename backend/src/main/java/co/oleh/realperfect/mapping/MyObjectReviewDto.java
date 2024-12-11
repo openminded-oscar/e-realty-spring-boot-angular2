@@ -10,4 +10,5 @@ public class MyObjectReviewDto {
     Long userId;
     RealtyObjectDetailsDto realtyObj;
     Instant dateTime;
+    Boolean approved;
 }
