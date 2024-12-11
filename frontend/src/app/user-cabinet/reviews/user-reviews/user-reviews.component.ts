@@ -2,15 +2,15 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ReviewsService} from '../../app-services/reviews.service';
-import {Review, ReviewFilter} from '../../app-models/review';
-import {RealtyObj} from '../../app-models/realty-obj';
-import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
+import {ReviewsService} from '../../../app-services/reviews.service';
+import {Review, ReviewFilter} from '../../../app-models/review';
+import {RealtyObj} from '../../../app-models/realty-obj';
+import {ConfirmModalComponent} from '../../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-user-reviews',
   templateUrl: './user-reviews.component.html',
-  styleUrls: ['./user-reviews.component.scss']
+  styles: ``
 })
 export class UserReviewsComponent implements OnInit, OnDestroy {
   public reviews: Review[] = [];
