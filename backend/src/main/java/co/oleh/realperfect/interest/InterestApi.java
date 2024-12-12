@@ -38,11 +38,14 @@ public class InterestApi {
     }
 
     @PostMapping
-    public ResponseEntity<Interest> saveInterest(@RequestBody InterestDto interest) {
-        if (interestService.findInterestForUserAndObject(interest.getUserId(), interest.getRealtyObjId()) != null) {
+    public ResponseEntity<MyInterestDto> saveInterest(@RequestBody InterestDto interestDto) {
+        if (interestService.findInterestForUserAndObject(interestDto.getUserId(), interestDto.getRealtyObjId()) != null) {
             throw new RuntimeException("There is already such interest");
         }
-        return new ResponseEntity<>(interestService.save(interest), HttpStatus.OK);
+
+        MyInterestDto savedInterest = interestService.save(interestDto);
+
+        return new ResponseEntity<>(savedInterest, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{realtyObjId}")

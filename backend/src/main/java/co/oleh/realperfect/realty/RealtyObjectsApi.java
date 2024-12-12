@@ -9,10 +9,14 @@ import co.oleh.realperfect.model.RealtyObjectStatus;
 import co.oleh.realperfect.ratelimiter.RateLimited;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,14 +24,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/realty-objects")
 @AllArgsConstructor()
+@Slf4j
 public class RealtyObjectsApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(RealtyObjectsApi.class);
     public static final int DEFAULT_BY_LOCATION_ZOOM_LEVEL = 10;
@@ -74,7 +77,12 @@ public class RealtyObjectsApi {
     @DeleteMapping("/{objectId}")
     @RolesAllowed({"USER", "REALTOR", "ADMIN"})
     public ResponseEntity<Boolean> deleteRealtyObject(@PathVariable Long objectId) {
-        return new ResponseEntity<>(realtyObjectsService.delete(objectId), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(realtyObjectsService.delete(objectId), HttpStatus.OK);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Error while removing realty object" + objectId + e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        }
     }
 
     @GetMapping(value = "/by-geolocation")

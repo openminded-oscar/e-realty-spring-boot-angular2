@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
@@ -153,13 +154,18 @@ public class RealtyObjectsService {
         return this.realtyObjectCrudRepository.updateRealtyObjectStatusById(objectId, realtyObjectStatus);
     }
 
+    @Transactional
     public Boolean delete(Long objectId) {
+        // TODO remove all related photos
+        // TODO remove all related document photos
+        // TODO remove all related interests
         Instant oneWeekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
         if (!objectReviewRepository.findByRealtyObjIdAndDateTimeAfter(objectId, oneWeekAgo).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You Can Not Remove Objects With Future Or Recent" +
                     " Reviews");
         }
         this.realtyObjectCrudRepository.deleteById(objectId);
+
         return true;
     }
 }

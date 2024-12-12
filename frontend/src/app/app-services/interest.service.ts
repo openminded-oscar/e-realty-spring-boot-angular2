@@ -44,7 +44,7 @@ export class InterestService extends AbstractService <InterestDto> {
       tap(() => {
         const currentInterests = this.currentUserInterests.value;
         const updatedInterests = currentInterests.filter(
-          interest => interest.realtyObj.id !== realtyObjId
+          interest => interest.realtyObj?.id !== realtyObjId
         );
         this.currentUserInterests.next(updatedInterests);
       })
