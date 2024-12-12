@@ -38,6 +38,7 @@ public class ObjectReviewApi {
     private RealtorService realtorService;
 
     @GetMapping(value = "/my-reviews-list")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<MyObjectReviewDto>> findReviewsForUser(@AuthenticationPrincipal SpringSecurityUser user) {
         Long userId = user.getId();
         List<MyObjectReviewDto> objectReviewDtos = reviewService.findReviewsForUser(userId);
@@ -59,6 +60,7 @@ public class ObjectReviewApi {
     }
 
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     @RateLimited(requestsPerMinute = 5)
     public ResponseEntity<MyObjectReviewDto> saveReview(@AuthenticationPrincipal SpringSecurityUser user,
                                                         @RequestBody ObjectReviewDto reviewDto) throws IOException {
@@ -93,6 +95,7 @@ public class ObjectReviewApi {
     }
 
     @DeleteMapping(value = "/by-object/{realtyObjId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ObjectReview>> removeReviewsForObject(@AuthenticationPrincipal SpringSecurityUser user,
                                                                      @PathVariable Long realtyObjId) {
         Long userId = user.getId();
@@ -104,6 +107,7 @@ public class ObjectReviewApi {
     }
 
     @GetMapping(value = "/{reviewId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ObjectReviewDto> getReviewById(@AuthenticationPrincipal SpringSecurityUser user,
                                                                      @PathVariable Long reviewId) {
         ObjectReviewDto objectReview = reviewService.findReviewById(reviewId);
@@ -111,6 +115,7 @@ public class ObjectReviewApi {
     }
 
     @GetMapping(value = "/by-object/{realtyObjId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ObjectReviewDto> getReviewForObjectAndUser(@AuthenticationPrincipal SpringSecurityUser user,
                                                                      @PathVariable Long realtyObjId) {
         ObjectReviewDto objectReview = reviewService.findFutureReviewForUserAndObject(user.getId(), realtyObjId);
@@ -118,6 +123,7 @@ public class ObjectReviewApi {
     }
 
     @GetMapping(value = "/my-as-realtor")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<MyObjectReviewDto>> getReviewsForRealtor(@AuthenticationPrincipal SpringSecurityUser user) {
         Realtor realtor = this.realtorService.findRealtorByUserId(user.getId());
 
