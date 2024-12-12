@@ -15,6 +15,8 @@ import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
 import co.oleh.realperfect.repository.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
 
 @Service
+@Slf4j
 public class RealtyObjectsService {
     private final RealtyObjectCrudRepository realtyObjectCrudRepository;
     private final RealtyObjectFilterRepository realtyObjectFilterRepository;
@@ -156,6 +159,7 @@ public class RealtyObjectsService {
 
     @Transactional
     public Boolean delete(Long objectId) {
+        // TODO remove all target operations
         // TODO remove all related photos
         // TODO remove all related document photos
         // TODO remove all related interests
@@ -164,7 +168,12 @@ public class RealtyObjectsService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You Can Not Remove Objects With Future Or Recent" +
                     " Reviews");
         }
-        this.realtyObjectCrudRepository.deleteById(objectId);
+        try {
+            this.realtyObjectCrudRepository.deleteById(objectId);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Error while removing realty object" + objectId + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
 
         return true;
     }
