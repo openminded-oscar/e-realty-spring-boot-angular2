@@ -28,7 +28,7 @@ public class InterestService {
     private MappingService mappingService;
 
 
-    public Interest save(InterestDto interestDto) {
+    public MyInterestDto save(InterestDto interestDto) {
         server.getRoomOperations(Room.POST_ROOM.name()).sendEvent(SocketEvent.LOAD_POST_PAGE.name(), interestDto);
         Interest interest = this.mappingService.map(interestDto, Interest.class);
 
@@ -38,7 +38,9 @@ public class InterestService {
         interest.setUser(user);
         interest.setRealtyObj(realtyObject);
 
-        return interestRepository.save(interest);
+        Interest interestSaved = interestRepository.save(interest);
+
+        return this.mappingService.map(interestSaved, MyInterestDto.class);
     }
 
     public InterestDto remove(InterestDto interest) {
