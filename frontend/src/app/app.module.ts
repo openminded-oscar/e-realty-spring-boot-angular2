@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
 import {GoogleLoginProvider, GoogleSigninButtonModule, SocialLoginModule} from '@abacritt/angularx-social-login';
@@ -20,10 +20,13 @@ import {GoogleSignInButtonComponent} from './core/google-sign-in-button/google-s
 import {SignInModalComponent} from './core/sign-in-modal/sign-in-modal.component';
 import {SignUpModalComponent} from './core/sign-up-modal/sign-up-modal.component';
 import {environment} from '../environments/environment';
+import {DataLoaderComponent} from './core/data-loader/data-loader.component';
+import {LoaderInterceptor} from './app-services/common/LoaderInterceptor';
 
 const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transports: ['websocket', 'polling']}};
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
         AppComponent,
         SignInButtonComponent,
         SignupButtonComponent,
@@ -32,16 +35,24 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
         GlobalNotificationComponent,
         HeaderComponent,
         SignInModalComponent,
-        SignUpModalComponent
+        SignUpModalComponent,
+        DataLoaderComponent
     ],
     exports: [],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
         SharedModule,
         SocialLoginModule,
         GoogleSigninButtonModule,
         AppRoutesModule,
         BrowserAnimationsModule,
         SocketIoModule.forRoot(config)], providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: LoaderInterceptor,
+            multi: true
+        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: HttpErrorsInterceptor,
@@ -68,6 +79,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
             }
         },
         provideHttpClient(withInterceptorsFromDi())
-    ] })
+    ]
+})
 export class AppModule {
 }

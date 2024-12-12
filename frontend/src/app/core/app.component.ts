@@ -10,6 +10,7 @@ import {GlobalNotificationService} from '../app-services/global-notification.ser
 import {User} from '../app-models/user';
 import {RealtyObj} from '../app-models/realty-obj';
 import {SignInSignOutService} from '../app-services/auth/sign-in-sign-out.service';
+import {LoaderService} from '../app-services/loader.service';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
               public socketService: SampleSocketService,
               public socialAuthService: SocialAuthService,
               public notificationService: GlobalNotificationService,
+              public loaderService: LoaderService,
               public userService: UserService) {
   }
 
