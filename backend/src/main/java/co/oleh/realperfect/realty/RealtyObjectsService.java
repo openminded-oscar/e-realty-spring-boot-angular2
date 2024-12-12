@@ -156,6 +156,7 @@ public class RealtyObjectsService {
 
     @Transactional
     public Boolean delete(Long objectId) {
+        // TODO remove all target operations
         // TODO remove all related photos
         // TODO remove all related document photos
         // TODO remove all related interests
