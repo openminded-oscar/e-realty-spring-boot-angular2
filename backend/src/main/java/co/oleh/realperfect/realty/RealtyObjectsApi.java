@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -77,12 +76,7 @@ public class RealtyObjectsApi {
     @DeleteMapping("/{objectId}")
     @RolesAllowed({"USER", "REALTOR", "ADMIN"})
     public ResponseEntity<Boolean> deleteRealtyObject(@PathVariable Long objectId) {
-        try {
-            return new ResponseEntity<>(realtyObjectsService.delete(objectId), HttpStatus.OK);
-        } catch (DataIntegrityViolationException e) {
-            log.error("Error while removing realty object" + objectId + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
-        }
+        return new ResponseEntity<>(realtyObjectsService.delete(objectId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/by-geolocation")
