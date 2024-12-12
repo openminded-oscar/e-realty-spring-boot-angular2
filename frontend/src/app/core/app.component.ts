@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
@@ -29,13 +29,17 @@ export class AppComponent implements OnInit, OnDestroy {
                 public socialAuthService: SocialAuthService,
                 public notificationService: GlobalNotificationService,
                 public loaderService: LoaderService,
+                public cdr: ChangeDetectorRef,
                 public userService: UserService) {
-        this.loaderService.isLoading$.pipe(
-            tap(isLoading => this.isLoading = isLoading)
-        ).subscribe();
     }
 
     public ngOnInit(): void {
+        this.loaderService.isLoading$.pipe(
+            tap(isLoading => {
+                this.isLoading = isLoading;
+                this.cdr.detectChanges();
+            })
+        ).subscribe();
         if (localStorage.getItem('token')) {
             this.userService.fetchUserStatus();
         } else {
