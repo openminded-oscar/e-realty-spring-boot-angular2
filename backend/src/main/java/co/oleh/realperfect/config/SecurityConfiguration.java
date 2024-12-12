@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                         // Public endpoints
                         .requestMatchers(
                                 "/api/**",
+                                "/error",
                                 "/login/oauth2/**",
                                 "/index.html",
                                 "/"
