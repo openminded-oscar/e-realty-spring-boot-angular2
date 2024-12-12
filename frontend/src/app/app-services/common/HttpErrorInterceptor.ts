@@ -37,7 +37,7 @@ export class HttpErrorsInterceptor implements HttpInterceptor {
     private showError(response: HttpErrorResponse): void {
         let message = '';
 
-        if (typeof response.error === 'object') {
+        if (response.error && typeof response.error === 'object') {
             message = _.isArray(response.error.errors) ? this.generateMultipleErrorsMessage(response) : response.error.message;
         } else {
             message = response.error || response.message;
