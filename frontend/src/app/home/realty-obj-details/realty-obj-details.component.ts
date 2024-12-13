@@ -2,8 +2,8 @@ import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core'
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpResponse} from '@angular/common/http';
-import {combineLatest, Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, skip, Subject} from 'rxjs';
+import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {latLng} from 'leaflet';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
@@ -67,16 +67,18 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                 const id = params['objectId'];
                 if (id) {
                     this.realtyObjService.findById(id)
-                        .pipe(takeUntil(this.destroy$))
-                        .subscribe(realtyObj => {
-                            this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
-                            this.currentObject = realtyObj;
-                            if (!user) {
-                                return;
-                            } else {
+                        .pipe(
+                            takeUntil(this.destroy$),
+                            tap(realtyObj => {
+                                this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
+                                this.currentObject = realtyObj;
+                            }),
+                            filter(r => !!user),
+                            tap(() => {
                                 this.initFavoritesAndReviewsData();
-                            }
-                        });
+                            })
+                        )
+                        .subscribe();
                 }
             });
     }
@@ -163,19 +165,36 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         }
 
         this.interestService.getForObjectAndCurrentUser(this.currentObject.id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(interestResponse => {
-                if (interestResponse.body) {
-                    this.isInterested = true;
-                }
-            });
+            .pipe(
+                tap(interestResponse => {
+                    if (interestResponse.body) {
+                        this.isInterested = true;
+                    }
+                }),
+                takeUntil(this.destroy$)
+            )
+            .subscribe();
 
         this.reviewsService.getForObjectAndCurrentUser(this.currentObject.id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((reviewsResponse: HttpResponse<ReviewDto>) => {
-                if (reviewsResponse.body) {
-                    this.currentReview = reviewsResponse.body;
-                }
-            });
+            .pipe(
+                switchMap((reviewsResponse: HttpResponse<ReviewDto>) => {
+                    if (reviewsResponse.body) {
+                        this.currentReview = reviewsResponse.body;
+                    }
+                    return this.reviewsService.currentUserReviews$.pipe(
+                        takeUntil(this.destroy$),
+                        // wait until user made some actions
+                        skip(1),
+                        tap((v) => {
+                            const findReview = v.find(v => v.realtyObj.id === this.currentObject.id);
+                            this.currentReview = findReview ? {
+                                ...findReview,
+                                userId: findReview.user.id,
+                                realtyObjId: findReview.realtyObj.id
+                            } : null;
+                        }));
+                }),
+                takeUntil(this.destroy$)
+            ).subscribe();
     }
 }
