@@ -11,160 +11,161 @@ import {UserService} from './user.service';
 import {ScheduleFormModalComponent} from '../shared/schedule-form-modal/schedule-form-modal.component';
 
 export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
-  return new Date(
-    reviewDate.year,
-    reviewDate.month - 1,
-    reviewDate.day,
-    0,
-    0,
-    0
-  );
+    return new Date(
+        reviewDate.year,
+        reviewDate.month - 1,
+        reviewDate.day,
+        0,
+        0,
+        0
+    );
 };
 
 @Injectable()
 export class ReviewsService extends AbstractService<ReviewDto> implements OnDestroy {
-  private destroy$ = new Subject<boolean>();
-  private currentUserReviews = new BehaviorSubject<Review[]>([]);
-  public currentUserReviews$ = this.currentUserReviews.asObservable();
+    private destroy$ = new Subject<boolean>();
+    private currentUserReviews = new BehaviorSubject<Review[]>([]);
+    public currentUserReviews$ = this.currentUserReviews.asObservable();
 
-  private currentRealtorReviews = new BehaviorSubject<Review[]>([]);
-  public currentRealtorReviews$ = this.currentRealtorReviews.asObservable();
+    private currentRealtorReviews = new BehaviorSubject<Review[]>([]);
+    public currentRealtorReviews$ = this.currentRealtorReviews.asObservable();
 
 
-  constructor(public http: HttpClient,
-              public modalService: NgbModal,
-              public userService: UserService) {
-    super(http, endpoints.review);
-  }
+    constructor(public http: HttpClient,
+                public modalService: NgbModal,
+                public userService: UserService) {
+        super(http, endpoints.review);
+    }
 
-  public scheduleReviewFlow(object: RealtyObj): Observable<ReviewPostDto> {
-    const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
-    modalRef.componentInstance.realtyObject = object;
+    public scheduleReviewFlow(object: RealtyObj): Observable<ReviewPostDto> {
+        const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
+        modalRef.componentInstance.realtyObject = object;
 
-    return from(modalRef.result).pipe(
-      switchMap((value: ReviewPostDto) => {
-        if (value) {
-          return of(value);
-        } else {
-          return of(null);
-        }
-      })
-    );
-  }
+        return from(modalRef.result).pipe(
+            switchMap((value: ReviewPostDto) => {
+                if (value) {
+                    return of(value);
+                } else {
+                    return of(null);
+                }
+            })
+        );
+    }
 
-  public saveReview(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<ReviewPostDto> {
-    const review = {
-      realtyObjId: reviewSelectTimeDto.realtyObjId,
-      realtorId: reviewSelectTimeDto.realtorId,
-      dateTime: reviewSelectTimeDto.dateTime
-    };
+    public getMyAsRealtorReviews(): Observable<Review[]> {
+        return this.http.get<Review[]>(endpoints.realtorReview).pipe(
+            tap(res => {
+                const realtyObjects = res.map(r => r.realtyObj);
+                (realtyObjects ?? []).forEach(value => {
+                    value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+                });
+                this.currentRealtorReviews.next(res);
+            })
+        );
+    }
 
-    return this.sendRequest<ReviewPostDto>('post', '', {body: review}).pipe(
-      tap(res => {
-        const currentReviews = this.currentUserReviews.value;
-        const updatedReview = {
-          ...res.body,
-          realtyObj: {
-            ...res.body.realtyObj,
-            mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
-          },
-          user: this.userService.getCurrentUserValue()
+    public saveReview(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<ReviewPostDto> {
+        const review = {
+            realtyObjId: reviewSelectTimeDto.realtyObjId,
+            realtorId: reviewSelectTimeDto.realtorId,
+            dateTime: reviewSelectTimeDto.dateTime
         };
-        const updatedReviews = [updatedReview, ...currentReviews];
-        this.currentUserReviews.next(updatedReviews);
-      }),
-      map(res => res.body)
-    );
-  }
 
-  public getMyAsRealtorReviews(): Observable<Review[]> {
-    return this.http.get<Review[]>(endpoints.realtorReview).pipe(
-      tap(res => {
-        const realtyObjects = res.map(r => r.realtyObj);
-        (realtyObjects ?? []).forEach(value => {
-          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
-        });
-        this.currentRealtorReviews.next(res);
-      })
-    );
-  }
-
-  public removeReviewById(reviewId: number, reason: string) {
-    return this.sendRequest<ReviewDto>('delete', `/${reviewId}`, {
-      body: {reason: reason ?? null}
-    }).pipe(
-      tap(() => {
-        const currentReviews = this.currentUserReviews.value;
-        const updatedReviews = currentReviews.filter(
-          review => review.realtyObj.id !== reviewId
+        return this.sendRequest<ReviewPostDto>('post', '', {body: review}).pipe(
+            tap(res => {
+                const currentReviews = this.currentUserReviews.value;
+                const updatedReview = {
+                    ...res.body,
+                    realtyObj: {
+                        ...res.body.realtyObj,
+                        mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
+                    },
+                    user: this.userService.getCurrentUserValue()
+                };
+                const updatedReviews = [updatedReview, ...currentReviews];
+                
+                this.currentUserReviews.next(updatedReviews);
+            }),
+            map(res => res.body)
         );
-        this.currentUserReviews.next(updatedReviews);
+    }
 
-        const currentRealtorReviews = this.currentRealtorReviews.value;
-        const updatedRealtorReviews = currentRealtorReviews.filter(
-          review => review.realtyObj.id !== reviewId
+    public removeReviewById(reviewId: number, reason: string) {
+        return this.sendRequest<ReviewDto>('delete', `/${reviewId}`, {
+            body: {reason: reason ?? null}
+        }).pipe(
+            tap(() => {
+                const currentReviews = this.currentUserReviews.value;
+                const updatedReviews = currentReviews.filter(
+                    review => review.realtyObj.id !== reviewId
+                );
+                this.currentUserReviews.next(updatedReviews);
+
+                const currentRealtorReviews = this.currentRealtorReviews.value;
+                const updatedRealtorReviews = currentRealtorReviews.filter(
+                    review => review.realtyObj.id !== reviewId
+                );
+                this.currentRealtorReviews.next(updatedRealtorReviews);
+            })
         );
-        this.currentRealtorReviews.next(updatedRealtorReviews);
-      })
-    );
-  }
+    }
 
-  public approveReview(reviewId: number) {
-    return this.sendRequest<ReviewDto>('post', `/${reviewId}/approve`).pipe(
-      tap(() => {
-        const currentReviews = this.currentUserReviews.value;
-        currentReviews.forEach(
-          review => {
-            if (review.id === reviewId) {
-              review.approved = true;
-            }
-          }
+    public approveReview(reviewId: number) {
+        return this.sendRequest<ReviewDto>('post', `/${reviewId}/approve`).pipe(
+            tap(() => {
+                const currentReviews = this.currentUserReviews.value;
+                currentReviews.forEach(
+                    review => {
+                        if (review.id === reviewId) {
+                            review.approved = true;
+                        }
+                    }
+                );
+                this.currentUserReviews.next(currentReviews.slice());
+
+                const currentRealtorReviews = this.currentRealtorReviews.value;
+                currentRealtorReviews.forEach(
+                    review => {
+                        if (review.id === reviewId) {
+                            review.approved = true;
+                        }
+                    }
+                );
+                this.currentRealtorReviews.next(currentRealtorReviews.slice());
+            })
         );
-        this.currentUserReviews.next(currentReviews.slice());
+    }
 
-        const currentRealtorReviews = this.currentRealtorReviews.value;
-        currentRealtorReviews.forEach(
-          review => {
-            if (review.id === reviewId) {
-              review.approved = true;
-            }
-          }
+    public getAllReviewsForUser(): Observable<HttpResponse<Review[]>> {
+        return this.sendRequest<Review[]>('get', `/my-reviews-list`).pipe(
+            tap(res => {
+                const realtyObjects = res.body.map(r => r.realtyObj);
+                (realtyObjects ?? []).forEach(value => {
+                    value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+                });
+                this.currentUserReviews.next(res.body);
+            })
         );
-        this.currentRealtorReviews.next(currentRealtorReviews.slice());
-      })
-    );
-  }
+    }
 
-  public getAllReviewsForUser(): Observable<HttpResponse<Review[]>> {
-    return this.sendRequest<Review[]>('get', `/my-reviews-list`).pipe(
-      tap(res => {
-        const realtyObjects = res.body.map(r => r.realtyObj);
-        (realtyObjects ?? []).forEach(value => {
-          value.mainPhotoPath = RealtyObj.getMainPhoto(value);
-        });
-        this.currentUserReviews.next(res.body);
-      })
-    );
-  }
+    public getForObjectAndCurrentUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
+        return this.sendRequest('get', `/by-object/${realtyObjId}`);
+    }
 
-  public getForObjectAndCurrentUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
-    return this.sendRequest('get', `/by-object/${realtyObjId}`);
-  }
-
-  public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return this.sendRequest('get', `/slots-for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`);
-  }
+    public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return this.sendRequest('get', `/slots-for-object/${realtyObjId}/${date.toISOString()}?timezone=${timezone}`);
+    }
 
 
-  public getById(reviewId: number): Observable<Review> {
-    return this.sendRequest<Review>('get', `/${reviewId}`).pipe(
-      map(r => r.body)
-    );
-  }
+    public getById(reviewId: number): Observable<Review> {
+        return this.sendRequest<Review>('get', `/${reviewId}`).pipe(
+            map(r => r.body)
+        );
+    }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
+    ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
+    }
 }

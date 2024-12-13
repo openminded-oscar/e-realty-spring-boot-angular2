@@ -1,17 +1,19 @@
 package co.oleh.realperfect.objectreview;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
-import co.oleh.realperfect.emails.EmailSenderService;
+import co.oleh.realperfect.emails.EmailsService;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.ObjectReview;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
+import co.oleh.realperfect.model.user.RoleUtils;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
 import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import co.oleh.realperfect.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,7 +40,7 @@ public class ObjectReviewService {
 
     private final RealtyObjectCrudRepository realtyObjectRepository;
 
-    private EmailSenderService emailService;
+    private EmailsService emailService;
     private UserRepository userRepository;
     private ObjectReviewRepository objectReviewRepository;
     private MappingService mappingService;
@@ -59,8 +61,12 @@ public class ObjectReviewService {
 
         // emails sending
         objectReview.setId(savedEntity.getId());
-        emailService.sendObjectReviewSetForUserAsync(user, objectReview, realtyObject, realtyObject.getRealtor());
-        emailService.sendObjectReviewSetForRealtorAsync(user, objectReview, realtyObject, realtyObject.getRealtor());
+        try {
+            emailService.sendObjectReviewSetForUser(user, objectReview, realtyObject, realtyObject.getRealtor());
+            emailService.sendObjectReviewSetForRealtor(user, objectReview, realtyObject, realtyObject.getRealtor());
+        } catch (MessagingException e) {
+            log.error("MailingErrorWhileReviewSaving {} {}", objectReview.getId(), e.getMessage());
+        }
 
         return mappingService.map(savedEntity, MyObjectReviewDto.class);
     }
@@ -77,6 +83,7 @@ public class ObjectReviewService {
         }
     }
 
+    @Transactional
     public List<ObjectReview> removeByObjectId(List<ObjectReview> objectReviews, SpringSecurityUser user) {
         User userFromDb = userRepository.findById(user.getId()).get();
 
@@ -86,7 +93,12 @@ public class ObjectReviewService {
 
             objectReviewRepository.deleteById(objectReview.getId());
 
-            emailService.sendObjectReviewCancelAsync("Reviews Removed For RealtyObject", userFromDb, objectReview, realtyObject, realtor);
+            try {
+                emailService.sendObjectReviewCancelForUser("Reviews Removed For RealtyObject", userFromDb, objectReview,
+                        realtyObject, realtor);
+            } catch (MessagingException e) {
+                log.error("MailingErrorWhileReviewRemoveByObjectId {} {}", objectReview.getId(), e.getMessage());
+            }
         }
 
         return objectReviews;
@@ -94,7 +106,9 @@ public class ObjectReviewService {
 
     public ObjectReviewDto findReviewById(Long objectReviewId) {
         ObjectReview objectReview =
-                objectReviewRepository.findById(objectReviewId).get();
+                objectReviewRepository.findById(objectReviewId).orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Object review not found")
+                );
 
         return this.mappingService.map(objectReview, ObjectReviewDto.class);
     }
@@ -153,11 +167,7 @@ public class ObjectReviewService {
         Instant currentHourToCheck = houseOpeningTime;
         Instant twoHoursFromNow = Instant.now().plus(2, ChronoUnit.HOURS);
         while (houseClosingTime.isAfter(currentHourToCheck)) {
-            if (currentHourToCheck.isBefore(twoHoursFromNow)) {
-                break;
-            }
-            if (!busyTimes.contains(currentHourToCheck) &&
-                    currentHourToCheck.isAfter(Instant.now())) {
+            if (currentHourToCheck.isAfter(twoHoursFromNow) && !busyTimes.contains(currentHourToCheck)) {
                 availableSlots.add(currentHourToCheck);
             }
             currentHourToCheck = currentHourToCheck.plus(1, ChronoUnit.HOURS);
@@ -167,17 +177,37 @@ public class ObjectReviewService {
     }
 
     @Transactional
-    public int approveReviewById(Long objectReviewId) {
-        // send email
-        return objectReviewRepository.updateApprovedStatus(objectReviewId, true);
+    public int approveReviewById(Long objectReviewId, SpringSecurityUser user) {
+        ObjectReview objectReview = this.objectReviewRepository.findById(objectReviewId).get();
+        int approveResult = objectReviewRepository.updateApprovedStatus(objectReviewId, true);
+        User userFromDb = userRepository.findById(user.getId()).get();
+
+        try {
+            this.emailService.sendObjectReviewApproved(userFromDb, objectReview, objectReview.getRealtyObj(),
+                    objectReview.getRealtor());
+        } catch (MessagingException e) {
+            log.error("MailingErrorWhileReviewApproveReviewById {} {}", objectReview.getId(), e.getMessage());
+        }
+
+        return approveResult;
     }
 
     @Transactional
     public void deleteReviewById(Long reviewId, SpringSecurityUser user, String reason) {
-        // TODO verify user
         User userFromDb = userRepository.findById(user.getId()).get();
         ObjectReview objectReview = this.objectReviewRepository.findById(reviewId).get();
-        this.emailService.sendObjectReviewCancelAsync(reason, userFromDb, objectReview, objectReview.getRealtyObj(), objectReview.getRealtor());
-        this.objectReviewRepository.deleteById(reviewId);
+        if (RoleUtils.containsAuthority(user, RoleUtils.REALTOR_ROLE) ||
+                objectReview.getRealtyObj().getOwner().getId().equals(user.getId())) {
+            this.objectReviewRepository.deleteById(reviewId);
+            try {
+                this.emailService.sendObjectReviewCancelForUser(reason, userFromDb, objectReview,
+                        objectReview.getRealtyObj(),
+                        objectReview.getRealtor());
+            } catch (MessagingException e) {
+                log.error("MailingErrorWhileDeleteReviewById {} {}", objectReview.getId(), e.getMessage());
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient permissions");
+        }
     }
 }
