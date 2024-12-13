@@ -10,7 +10,7 @@
     Congrats! A Review For Realty Object In <span th:text="${realtyObject.address.city}"></span> <strong>Approved</strong>!
 </h1>
 <div>
-    <h2>By <span th:text="${user.email}"></span>:</h2>
+    <h2>By <span th:text="${user.email}"></span></h2>
 </div>
 <div th:replace="shared/sharedRealtyObjectBlock :: realtyObject(${realtyObject})">
 </div>

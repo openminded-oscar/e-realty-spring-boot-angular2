@@ -1,7 +1,7 @@
 package co.oleh.realperfect.objectreview;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
-import co.oleh.realperfect.emails.EmailsByPurposeService;
+import co.oleh.realperfect.emails.EmailsAsyncWrapperService;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
@@ -39,7 +39,7 @@ public class ObjectReviewService {
 
     private final RealtyObjectCrudRepository realtyObjectRepository;
 
-    private EmailsByPurposeService emailService;
+    private EmailsAsyncWrapperService emailService;
     private UserRepository userRepository;
     private ObjectReviewRepository objectReviewRepository;
     private MappingService mappingService;
@@ -168,10 +168,10 @@ public class ObjectReviewService {
 
     @Transactional
     public int approveReviewById(Long objectReviewId, SpringSecurityUser user) {
+        ObjectReview objectReview = this.objectReviewRepository.findById(objectReviewId).get();
         int approveResult = objectReviewRepository.updateApprovedStatus(objectReviewId, true);
         User userFromDb = userRepository.findById(user.getId()).get();
 
-        ObjectReview objectReview = this.objectReviewRepository.findById(objectReviewId).get();
         this.emailService.sendObjectReviewApprovedAsync(userFromDb, objectReview, objectReview.getRealtyObj(),
                 objectReview.getRealtor());
 

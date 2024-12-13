@@ -10,7 +10,6 @@ import co.oleh.realperfect.repository.EmailConfirmationTokenRepository;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
@@ -39,62 +38,7 @@ public class EmailsByPurposeService {
         this.emailConfirmationTokenRepository = emailConfirmationTokenRepository;
     }
 
-    @Async
-    public void sendObjectReviewCancelAsync(String reason,
-                                            User user,
-                                            ObjectReview objectReview,
-                                            RealtyObject realtyObject,
-                                            Realtor realtor) {
-        try {
-            sendObjectReviewCancelForUser(reason, user, objectReview, realtyObject, realtor);
-            log.info("completeAsyncSendObjectReviewCancelForUser {}: {}", user.getId(), objectReview.getId());
-        } catch (MessagingException e) {
-            log.error("errorCode: sendObjectReviewCancel | userId: {} | objectReviewId: {} | reason: {}",
-                    user.getId(), objectReview.getId(), reason, e);
-        }
-    }
-
-    @Async
-    public void sendObjectReviewSetForUserAsync(User user,
-                                                ObjectReviewDto objectReview,
-                                                RealtyObject realtyObject,
-                                                Realtor realtor) {
-        try {
-            sendObjectReviewSetForUser(user, objectReview, realtyObject, realtor);
-            log.info("completeAsyncSendObjectReviewSetForUser {}: {}", user.getId(), objectReview.getId());
-        } catch (MessagingException e) {
-            log.error("errorCode: sendObjectReviewSetForUser | userId: {} | objectReviewDtoId: {} | realtyObjectId: {}",
-                    user.getId(), objectReview.getId(), realtyObject.getId(), e);
-        }
-    }
-
-    @Async
-    public void sendObjectReviewSetForRealtorAsync(User user,
-                                                   ObjectReviewDto objectReview,
-                                                   RealtyObject realtyObject,
-                                                   Realtor realtor) {
-        try {
-            sendObjectReviewSetForRealtor(user, objectReview, realtyObject, realtor);
-            log.info("completeAsyncSendObjectReviewSetForRealtor {}: {}", user.getId(), objectReview.getId());
-        } catch (MessagingException e) {
-            log.error("errorCode: sendObjectReviewSetForRealtor | userId: {} | objectReviewDtoId: {} | realtyObjectId: {}",
-                    user.getId(), objectReview.getId(), realtyObject.getId(), e);
-        }
-    }
-
-    @Async
-    public void sendObjectReviewApprovedAsync(User userFromDb, ObjectReview objectReview, RealtyObject realtyObj,
-                                              Realtor realtor) {
-        try {
-            this.sendObjectReviewApproved(userFromDb, objectReview, realtyObj, realtor);
-            log.info("completeAsyncSendObjectReviewApproved {}: {}", userFromDb.getId(), objectReview.getId());
-        } catch (MessagingException e) {
-            log.error("errorCode: sendObjectReviewApproved | userId: {} | objectReviewId: {} | realtyObjectId: {}",
-                    userFromDb.getId(), objectReview.getId(), realtyObj.getId(), e);
-        }
-    }
-
-
+    @Transactional
     public void sendEmailRegistrationConfirm(User user) throws MessagingException {
         EmailConfirmationToken tokenEntity = new EmailConfirmationToken(user);
         String tokenString = tokenEntity.getToken();
@@ -111,6 +55,7 @@ public class EmailsByPurposeService {
         log.info("Email confirmation sent to {}", email);
     }
 
+    @Transactional
     public void sendObjectReviewCancelForUser(String reason, User user, ObjectReview objectReview,
                                               RealtyObject realtyObject,
                                               Realtor realtor) throws MessagingException {
@@ -133,6 +78,7 @@ public class EmailsByPurposeService {
         log.info("RealPerfectObjectReview removed sent to user {}", email);
     }
 
+    @Transactional
     public void sendObjectReviewSetForUser(User user, ObjectReviewDto objectReview, RealtyObject realtyObject,
                                            Realtor realtor) throws MessagingException {
         String email = user.getEmail();
@@ -151,6 +97,7 @@ public class EmailsByPurposeService {
         log.info("RealPerfectObjectReview sent to user {}", email);
     }
 
+    @Transactional
     public void sendObjectReviewSetForRealtor(User user,
                                               ObjectReviewDto objectReview,
                                               RealtyObject realtyObject,
@@ -170,7 +117,8 @@ public class EmailsByPurposeService {
         log.info("RealPerfectObjectReview {} sent to realtor {}", objectReview.getId(), email);
     }
 
-    protected void sendObjectReviewApproved(User userFromDb, ObjectReview objectReview, RealtyObject realtyObj,
+    @Transactional
+    public void sendObjectReviewApproved(User userFromDb, ObjectReview objectReview, RealtyObject realtyObj,
                                             Realtor realtor) throws MessagingException {
         String email = userFromDb.getEmail();
 
