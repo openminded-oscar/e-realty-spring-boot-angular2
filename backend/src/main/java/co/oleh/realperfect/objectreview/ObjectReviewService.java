@@ -1,7 +1,7 @@
 package co.oleh.realperfect.objectreview;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
-import co.oleh.realperfect.emails.EmailsByPurposeService;
+import co.oleh.realperfect.emails.EmailsService;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
@@ -40,7 +40,7 @@ public class ObjectReviewService {
 
     private final RealtyObjectCrudRepository realtyObjectRepository;
 
-    private EmailsByPurposeService emailService;
+    private EmailsService emailService;
     private UserRepository userRepository;
     private ObjectReviewRepository objectReviewRepository;
     private MappingService mappingService;
@@ -83,6 +83,7 @@ public class ObjectReviewService {
         }
     }
 
+    @Transactional
     public List<ObjectReview> removeByObjectId(List<ObjectReview> objectReviews, SpringSecurityUser user) {
         User userFromDb = userRepository.findById(user.getId()).get();
 

@@ -19,7 +19,7 @@ import java.util.Collections;
 
 @Service
 @Slf4j
-public class EmailsByPurposeService {
+public class EmailsService {
     @Value("${server.apiRoot}")
     private String apiRoot;
     @Value("${server.appRoot}")
@@ -29,9 +29,9 @@ public class EmailsByPurposeService {
     private final TemplateEngine templateEngine;
     private final EmailConfirmationTokenRepository emailConfirmationTokenRepository;
 
-    public EmailsByPurposeService(EmailUtilityService emailUtilityService,
-                                  TemplateEngine templateEngine,
-                                  EmailConfirmationTokenRepository emailConfirmationTokenRepository) {
+    public EmailsService(EmailUtilityService emailUtilityService,
+                         TemplateEngine templateEngine,
+                         EmailConfirmationTokenRepository emailConfirmationTokenRepository) {
         this.emailUtilityService = emailUtilityService;
         this.templateEngine = templateEngine;
         this.emailConfirmationTokenRepository = emailConfirmationTokenRepository;
@@ -48,7 +48,7 @@ public class EmailsByPurposeService {
                 <a href=\"%s\">Click here to complete registration</a>
                 """, confirmationLink);
         String email = user.getEmail();
-        this.emailUtilityService.sendHtmlMessage(Collections.singletonList(email), "Registration Confirmation",
+        this.emailUtilityService.sendHtmlMessageAsync(Collections.singletonList(email), "Registration Confirmation",
                 htmlContent);
         log.info("Email confirmation sent to {}", email);
     }
@@ -68,7 +68,7 @@ public class EmailsByPurposeService {
         context.setVariable("realtyObject", realtyObject);
         String htmlContent = templateEngine.process("userObjectReviewCanceled", context);
 
-        this.emailUtilityService.sendHtmlMessage(Arrays.asList(email, realtor.getUser().getEmail()),
+        this.emailUtilityService.sendHtmlMessageAsync(Arrays.asList(email, realtor.getUser().getEmail()),
                 "RealPerfect Object Review Removed",
                 htmlContent);
 
@@ -86,7 +86,7 @@ public class EmailsByPurposeService {
         context.setVariable("realtyObject", realtyObject);
         String htmlContent = templateEngine.process("userObjectReviewScheduled", context);
 
-        this.emailUtilityService.sendHtmlMessage(Collections.singletonList(email),
+        this.emailUtilityService.sendHtmlMessageAsync(Collections.singletonList(email),
                 "RealPerfect Object Review Scheduled And Send To Realtor",
                 htmlContent);
 
@@ -106,7 +106,7 @@ public class EmailsByPurposeService {
         context.setVariable("reviewId", objectReview.getId());
         String htmlContent = templateEngine.process("userObjectReviewScheduledForRealtor", context);
 
-        this.emailUtilityService.sendHtmlMessage(Collections.singletonList(email),
+        this.emailUtilityService.sendHtmlMessageAsync(Collections.singletonList(email),
                 "RealPerfect Object Review Scheduled And Waiting Confirmation",
                 htmlContent);
         log.info("RealPerfectObjectReview {} sent to realtor {}", objectReview.getId(), email);
@@ -124,7 +124,7 @@ public class EmailsByPurposeService {
 
         String htmlContent = templateEngine.process("userObjectReviewApproved", context);
 
-        this.emailUtilityService.sendHtmlMessage(Arrays.asList(email, realtor.getUser().getEmail()),
+        this.emailUtilityService.sendHtmlMessageAsync(Arrays.asList(email, realtor.getUser().getEmail()),
                 "RealPerfect Object Review Approved!",
                 htmlContent);
         log.info("RealPerfectObjectReview {} approved", objectReview.getId());
