@@ -4,6 +4,21 @@ import {Address} from './address';
 import {Realtor} from './realtor';
 import {Geolocation} from './geolocation';
 
+export type RealtyObjectByStatusFilter = 'all' | 'active' | 'archived' | 'drafts';
+
+export const filterByObjectStatus =
+    (realtyObjects: RealtyObj[], filter: RealtyObjectByStatusFilter): RealtyObj[] => {
+    if (filter === 'all') {
+        return [...realtyObjects];
+    } else if (filter === 'active') {
+        return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.ACTIVE);
+    } else if (filter === 'archived') {
+        return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.ARCHIVED);
+    } else if (filter === 'drafts') {
+        return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.DRAFT);
+    }
+}
+
 export class AddressForm {
   city: FormControl<string>;
   street: FormControl<string>;

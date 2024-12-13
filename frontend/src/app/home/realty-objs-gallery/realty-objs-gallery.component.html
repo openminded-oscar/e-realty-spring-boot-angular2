@@ -110,6 +110,8 @@
          [infiniteScrollDistance]="2"
          [infiniteScrollThrottle]="50"
          (scrolled)="onScroll()">
-        <realty-objs-list [realtyObjectsPortion]="currentObjectsPortion$|async"></realty-objs-list>
+        <realty-objs-list [realtyObjectsPortion]="currentObjectsPortion$|async"
+                          [displayMode]="'accumulateByPortion'"
+        ></realty-objs-list>
     </div>
 </div>
