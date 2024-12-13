@@ -7,11 +7,10 @@
 </head>
 <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px">
 <h1 style="color: #333; text-align: center;">
-    A Review For Realty Object In <span th:text="${realtyObject.address.city}"></span> <strong>Cancelled</strong>!
+    Congrats! A Review For Realty Object In <span th:text="${realtyObject.address.city}"></span> <strong>Approved</strong>!
 </h1>
 <div>
-    <h2 th:if="${reason != null}">Reason Mentioned by <span th:text="${user.email}"></span>:</h2>
-    <span th:text="${reason}"></span>
+    <h2>By <span th:text="${user.email}"></span>:</h2>
 </div>
 <div th:replace="shared/sharedRealtyObjectBlock :: realtyObject(${realtyObject})">
 </div>

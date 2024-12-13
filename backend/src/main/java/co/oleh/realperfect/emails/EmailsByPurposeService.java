@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -166,10 +167,24 @@ public class EmailsByPurposeService {
         this.emailUtilityService.sendHtmlMessage(Collections.singletonList(email),
                 "RealPerfect Object Review Scheduled And Waiting Confirmation",
                 htmlContent);
-        log.info("RealPerfectObjectReview sent to realtor {}", email);
+        log.info("RealPerfectObjectReview {} sent to realtor {}", objectReview.getId(), email);
     }
 
-    private void sendObjectReviewApproved(User userFromDb, ObjectReview objectReview, RealtyObject realtyObj,
-                                          Realtor realtor) throws MessagingException {
+    protected void sendObjectReviewApproved(User userFromDb, ObjectReview objectReview, RealtyObject realtyObj,
+                                            Realtor realtor) throws MessagingException {
+        String email = userFromDb.getEmail();
+
+        Context context = new Context();
+        context.setVariable("appRoot", appRoot);
+        context.setVariable("user", userFromDb);
+        context.setVariable("realtyObject", realtyObj);
+        context.setVariable("reviewId", objectReview.getId());
+
+        String htmlContent = templateEngine.process("userObjectReviewApproved", context);
+
+        this.emailUtilityService.sendHtmlMessage(Arrays.asList(email, realtor.getUser().getEmail()),
+                "RealPerfect Object Review Approved!",
+                htmlContent);
+        log.info("RealPerfectObjectReview {} approved", objectReview.getId());
     }
 }
