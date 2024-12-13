@@ -12,7 +12,7 @@
     <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
     <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
     <p th:if="${user.phoneNumber != null}"><strong>Phone:</strong> <span th:text="${user.phoneNumber}"></span></p>
-    <div th:replace="sharedRealtyObjectBlock :: realtyObject(${realtyObject})"></div>
+    <div th:replace="shared/sharedRealtyObjectBlock :: realtyObject(${realtyObject})"></div>
 </div>
 <div style="text-align: center; margin-top: 20px;">
     <a th:href="${appRoot + '/realty-object/' + realtyObject.id + '/confirm-review/' + reviewId}"

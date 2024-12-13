@@ -80,7 +80,7 @@ public class ObjectReviewApi {
     public ResponseEntity<Boolean> approveReviewById(@AuthenticationPrincipal SpringSecurityUser user,
                                                      @PathVariable Long reviewId) {
         Objects.requireNonNull(user, "User must not be null");
-        Boolean approved = this.reviewService.approveReviewById(reviewId) > 0;
+        Boolean approved = this.reviewService.approveReviewById(reviewId, user) > 0;
         return new ResponseEntity<>(approved, HttpStatus.OK);
     }
 
