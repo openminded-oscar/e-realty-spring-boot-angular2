@@ -1,7 +1,7 @@
 package co.oleh.realperfect.objectreview;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
-import co.oleh.realperfect.emails.EmailsAsyncWrapperService;
+import co.oleh.realperfect.emails.EmailsByPurposeService;
 import co.oleh.realperfect.mapping.MyObjectReviewDto;
 import co.oleh.realperfect.mapping.ObjectReviewDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
@@ -13,6 +13,7 @@ import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.repository.ObjectReviewRepository;
 import co.oleh.realperfect.repository.RealtyObjectCrudRepository;
 import co.oleh.realperfect.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class ObjectReviewService {
 
     private final RealtyObjectCrudRepository realtyObjectRepository;
 
-    private EmailsAsyncWrapperService emailService;
+    private EmailsByPurposeService emailService;
     private UserRepository userRepository;
     private ObjectReviewRepository objectReviewRepository;
     private MappingService mappingService;
@@ -60,8 +61,12 @@ public class ObjectReviewService {
 
         // emails sending
         objectReview.setId(savedEntity.getId());
-        emailService.sendObjectReviewSetForUserAsync(user, objectReview, realtyObject, realtyObject.getRealtor());
-        emailService.sendObjectReviewSetForRealtorAsync(user, objectReview, realtyObject, realtyObject.getRealtor());
+        try {
+            emailService.sendObjectReviewSetForUser(user, objectReview, realtyObject, realtyObject.getRealtor());
+            emailService.sendObjectReviewSetForRealtor(user, objectReview, realtyObject, realtyObject.getRealtor());
+        } catch (MessagingException e) {
+            log.error("MailingErrorWhileReviewSaving {} {}", objectReview.getId(), e.getMessage());
+        }
 
         return mappingService.map(savedEntity, MyObjectReviewDto.class);
     }
@@ -87,8 +92,12 @@ public class ObjectReviewService {
 
             objectReviewRepository.deleteById(objectReview.getId());
 
-            emailService.sendObjectReviewCancelAsync("Reviews Removed For RealtyObject", userFromDb, objectReview,
-                    realtyObject, realtor);
+            try {
+                emailService.sendObjectReviewCancelForUser("Reviews Removed For RealtyObject", userFromDb, objectReview,
+                        realtyObject, realtor);
+            } catch (MessagingException e) {
+                log.error("MailingErrorWhileReviewRemoveByObjectId {} {}", objectReview.getId(), e.getMessage());
+            }
         }
 
         return objectReviews;
@@ -172,8 +181,12 @@ public class ObjectReviewService {
         int approveResult = objectReviewRepository.updateApprovedStatus(objectReviewId, true);
         User userFromDb = userRepository.findById(user.getId()).get();
 
-        this.emailService.sendObjectReviewApprovedAsync(userFromDb, objectReview, objectReview.getRealtyObj(),
-                objectReview.getRealtor());
+        try {
+            this.emailService.sendObjectReviewApproved(userFromDb, objectReview, objectReview.getRealtyObj(),
+                    objectReview.getRealtor());
+        } catch (MessagingException e) {
+            log.error("MailingErrorWhileReviewApproveReviewById {} {}", objectReview.getId(), e.getMessage());
+        }
 
         return approveResult;
     }
@@ -185,8 +198,13 @@ public class ObjectReviewService {
         if (RoleUtils.containsAuthority(user, RoleUtils.REALTOR_ROLE) ||
                 objectReview.getRealtyObj().getOwner().getId().equals(user.getId())) {
             this.objectReviewRepository.deleteById(reviewId);
-            this.emailService.sendObjectReviewCancelAsync(reason, userFromDb, objectReview, objectReview.getRealtyObj(),
-                    objectReview.getRealtor());
+            try {
+                this.emailService.sendObjectReviewCancelForUser(reason, userFromDb, objectReview,
+                        objectReview.getRealtyObj(),
+                        objectReview.getRealtor());
+            } catch (MessagingException e) {
+                log.error("MailingErrorWhileDeleteReviewById {} {}", objectReview.getId(), e.getMessage());
+            }
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient permissions");
         }

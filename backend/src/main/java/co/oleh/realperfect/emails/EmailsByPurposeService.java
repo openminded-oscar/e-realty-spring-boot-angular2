@@ -11,7 +11,6 @@ import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -38,7 +37,6 @@ public class EmailsByPurposeService {
         this.emailConfirmationTokenRepository = emailConfirmationTokenRepository;
     }
 
-    @Transactional
     public void sendEmailRegistrationConfirm(User user) throws MessagingException {
         EmailConfirmationToken tokenEntity = new EmailConfirmationToken(user);
         String tokenString = tokenEntity.getToken();
@@ -55,7 +53,6 @@ public class EmailsByPurposeService {
         log.info("Email confirmation sent to {}", email);
     }
 
-    @Transactional
     public void sendObjectReviewCancelForUser(String reason, User user, ObjectReview objectReview,
                                               RealtyObject realtyObject,
                                               Realtor realtor) throws MessagingException {
@@ -78,7 +75,6 @@ public class EmailsByPurposeService {
         log.info("RealPerfectObjectReview removed sent to user {}", email);
     }
 
-    @Transactional
     public void sendObjectReviewSetForUser(User user, ObjectReviewDto objectReview, RealtyObject realtyObject,
                                            Realtor realtor) throws MessagingException {
         String email = user.getEmail();
@@ -97,7 +93,6 @@ public class EmailsByPurposeService {
         log.info("RealPerfectObjectReview sent to user {}", email);
     }
 
-    @Transactional
     public void sendObjectReviewSetForRealtor(User user,
                                               ObjectReviewDto objectReview,
                                               RealtyObject realtyObject,
@@ -117,7 +112,6 @@ public class EmailsByPurposeService {
         log.info("RealPerfectObjectReview {} sent to realtor {}", objectReview.getId(), email);
     }
 
-    @Transactional
     public void sendObjectReviewApproved(User userFromDb, ObjectReview objectReview, RealtyObject realtyObj,
                                             Realtor realtor) throws MessagingException {
         String email = userFromDb.getEmail();
