@@ -1,21 +1,9 @@
-<!--<div style="display: flex; flex-direction: row; justify-content: start; gap: 50px">-->
-<!--  <label>-->
-<!--    All <input type="radio" name="filter" (change)="setFilter('all')" [checked]="filter === 'all'">-->
-<!--  </label>-->
-<!--  <label>-->
-<!--    Active <input type="radio" name="filter" (change)="setFilter('active')" [checked]="filter === 'active'">-->
-<!--  </label>-->
-<!--  <label>-->
-<!--    Drafts <input type="radio" name="filter" (change)="setFilter('drafts')" [checked]="filter === 'drafts'">-->
-<!--  </label>-->
-<!--  <label>-->
-<!--    Archived <input type="radio" name="filter" (change)="setFilter('archived')" [checked]="filter === 'archived'">-->
-<!--  </label>-->
-<!--</div>-->
-<realty-objs-list *ngIf="realtorObjects?.length; else noObjectsTemplate"
+<app-objects-in-profile-filter [filter]="filter" (filterChanged)="setFilter($event)"></app-objects-in-profile-filter>
+<realty-objs-list *ngIf="filteredObjects?.length; else noObjectsTemplate"
+                  [displayMode]="'reset'"
                   [showManageStatusOptions]="true"
                   [showCreatedAt]="true"
-                  [realtyObjectsPortion]="realtorObjects"></realty-objs-list>
+                  [realtyObjectsPortion]="filteredObjects"></realty-objs-list>
 <ng-template #noObjectsTemplate>
   <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
     <div>For Now You Haven't Been Assigned To Any Objects. Enjoy Using Our Service!</div>
