@@ -96,7 +96,9 @@ public class ObjectReviewService {
 
     public ObjectReviewDto findReviewById(Long objectReviewId) {
         ObjectReview objectReview =
-                objectReviewRepository.findById(objectReviewId).get();
+                objectReviewRepository.findById(objectReviewId).orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Object review not found")
+                );
 
         return this.mappingService.map(objectReview, ObjectReviewDto.class);
     }

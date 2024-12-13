@@ -1,9 +1,9 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpResponse} from '@angular/common/http';
-import {combineLatest, skip, Subject} from 'rxjs';
-import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {filter, takeUntil, tap} from 'rxjs/operators';
 import {latLng} from 'leaflet';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
@@ -12,11 +12,13 @@ import {UserService} from '../../app-services/user.service';
 import {InterestService} from '../../app-services/interest.service';
 import {InterestDto} from '../../app-models/interest';
 import {ReviewsService} from '../../app-services/reviews.service';
-import {ReviewDto} from '../../app-models/review';
+import {Review, ReviewAction, ReviewDto} from '../../app-models/review';
 import {User, UserRole} from '../../app-models/user';
 
 import {RealtorContactComponent} from '../../shared/realtor-contact/realtor-contact.component';
 import {DeleteRealtyModalComponent} from '../../shared/delete-realty-modal/delete-realty-modal.component';
+import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
+import {CancelReviewModalComponent} from '../../shared/cancel-review-modal/cancel-review-modal.component';
 
 
 @Component({
@@ -35,7 +37,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     public user: User;
     public isRealtorOrAdmin = false;
     public isMyObject = false;
-    @Output() removeClicked = new EventEmitter<ReviewDto>();
+
     private destroy$ = new Subject<boolean>();
 
     constructor(public realtyObjService: RealtyObjService,
@@ -76,6 +78,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                             filter(r => !!user),
                             tap(() => {
                                 this.initFavoritesAndReviewsData();
+                                this.checkForRouteReviewAction(params);
                             })
                         )
                         .subscribe();
@@ -151,8 +154,40 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
             .subscribe();
     }
 
-    public openReviewRemoveDialog() {
-        this.removeClicked.next(this.currentReview);
+    public removeReview(reviewId: number, reason: string) {
+        this.reviewsService.removeReviewById(reviewId, reason)
+            .pipe(
+                tap(t => {
+                    if (reviewId === this.currentReview?.id) {
+                        this.currentReview = null;
+                    }
+                }),
+                takeUntil(this.destroy$)
+            )
+            .subscribe();
+    }
+
+    public approveReview(reviewId: number) {
+        this.reviewsService.approveReview(reviewId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe();
+    }
+
+    public openReviewApproveDialog(review: Review) {
+        const modalRef = this.modalService.open(ConfirmModalComponent);
+        modalRef.componentInstance.message = 'Are you sure you want to approve the review?';  // Passing custom message
+        modalRef.result.then((result) => {
+            if (result) {
+                this.approveReview(review.id);
+            }
+        });
+    }
+
+    public openReviewRemoveDialog(review: Review | ReviewDto) {
+        const modalRef = this.modalService.open(CancelReviewModalComponent);
+        modalRef.result.then((resultMessage) => {
+            this.removeReview(review.id, resultMessage);
+        });
     }
 
     private initFavoritesAndReviewsData() {
@@ -177,24 +212,31 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
 
         this.reviewsService.getForObjectAndCurrentUser(this.currentObject.id)
             .pipe(
-                switchMap((reviewsResponse: HttpResponse<ReviewDto>) => {
+                tap((reviewsResponse: HttpResponse<ReviewDto>) => {
                     if (reviewsResponse.body) {
                         this.currentReview = reviewsResponse.body;
                     }
-                    return this.reviewsService.currentUserReviews$.pipe(
-                        takeUntil(this.destroy$),
-                        // wait until user made some actions
-                        skip(1),
-                        tap((v) => {
-                            const findReview = v.find(v => v.realtyObj.id === this.currentObject.id);
-                            this.currentReview = findReview ? {
-                                ...findReview,
-                                userId: findReview.user.id,
-                                realtyObjId: findReview.realtyObj.id
-                            } : null;
-                        }));
                 }),
                 takeUntil(this.destroy$)
             ).subscribe();
+    }
+
+    private checkForRouteReviewAction(params) {
+        const reviewActionType: ReviewAction = this.route.snapshot.data['reviewActionType'];
+        const reviewId = params['reviewId'];
+        if (reviewId) {
+            this.requestReviewDetails(reviewId)
+                .subscribe((review: Review) => {
+                    if (reviewActionType === ReviewAction.CONFIRM) {
+                        this.openReviewApproveDialog(review);
+                    } else if (reviewActionType === ReviewAction.CANCEL) {
+                        this.openReviewRemoveDialog(review);
+                    }
+                });
+        }
+    }
+
+    private requestReviewDetails(reviewId: number): Observable<Review> {
+        return this.reviewsService.getById(reviewId);
     }
 }
