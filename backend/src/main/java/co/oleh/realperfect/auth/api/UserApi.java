@@ -3,12 +3,11 @@ package co.oleh.realperfect.auth.api;
 import co.oleh.realperfect.auth.CredentialsValidator;
 import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.auth.UserService;
-import co.oleh.realperfect.emails.EmailSenderService;
+import co.oleh.realperfect.emails.EmailsByPurposeService;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.user.EmailConfirmationStatus;
-import co.oleh.realperfect.model.user.EmailConfirmationToken;
 import co.oleh.realperfect.model.user.EmailPasswordDto;
 import co.oleh.realperfect.model.user.User;
 import lombok.AllArgsConstructor;
@@ -28,7 +27,7 @@ import jakarta.validation.Valid;
 public class UserApi {
     private final MappingService mappingService;
     private UserService userService;
-    private EmailSenderService emailSenderService;
+    private EmailsByPurposeService emailSenderService;
     private CredentialsValidator credentialsValidator;
 
     @InitBinder("credentials")

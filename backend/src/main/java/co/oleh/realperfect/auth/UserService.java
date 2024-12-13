@@ -1,7 +1,7 @@
 package co.oleh.realperfect.auth;
 
 import co.oleh.realperfect.config.cache.CacheNames;
-import co.oleh.realperfect.emails.EmailSenderService;
+import co.oleh.realperfect.emails.EmailsByPurposeService;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
@@ -38,7 +38,7 @@ public class UserService {
     private RealtorRepository realtorRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private EmailSenderService emailSenderService;
+    private EmailsByPurposeService emailSenderService;
 
     public UserSelfDto patchProfile(Long id, UserProfileDto userDto) {
         User user =
