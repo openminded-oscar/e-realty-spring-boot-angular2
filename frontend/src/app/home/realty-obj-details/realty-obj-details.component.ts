@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpResponse} from '@angular/common/http';
-import {combineLatest, skip, Subject, switchMap} from 'rxjs';
+import {combineLatest, of, skip, Subject, switchMap} from 'rxjs';
 import {filter, takeUntil, tap} from 'rxjs/operators';
 import {latLng} from 'leaflet';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
@@ -64,26 +64,31 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                 })
             ),
             this.route.params
-        ]).pipe(takeUntil(this.destroy$))
-            .subscribe(([user, params]) => {
-                const id = params['objectId'];
-                if (id) {
-                    this.realtyObjService.findById(id)
-                        .pipe(
-                            takeUntil(this.destroy$),
-                            tap(realtyObj => {
-                                this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
-                                this.currentObject = realtyObj;
-                            }),
-                            filter(r => !!user),
-                            tap(() => {
-                                this.initFavoritesAndReviewsData();
-                                this.checkForRouteReviewAction(params);
-                            })
-                        )
-                        .subscribe();
-                }
-            });
+        ]).pipe(
+                takeUntil(this.destroy$),
+                tap(([user, params]) => {
+                    const id = params['objectId'];
+                    if (id) {
+                        this.realtyObjService.findById(id)
+                            .pipe(
+                                takeUntil(this.destroy$),
+                                tap(realtyObj => {
+                                    this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
+                                    this.currentObject = realtyObj;
+                                }),
+                                filter(r => !!user),
+                                tap(() => {
+                                    this.initFavoritesAndReviewsData();
+                                    this.checkForRouteReviewAction(params);
+                                })
+                            )
+                            .subscribe();
+                    } else {
+                        return of(null);
+                    }
+                })
+            )
+            .subscribe();
     }
 
     public setEnlargedPhoto(photo: RealtyPhoto) {
@@ -156,10 +161,15 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         modalRef.result.then();
     }
 
-    public openReviewRemoveDialog(review: Review) {
+    public openReviewRemoveDialog(review: Review | ReviewDto) {
         const modalRef = this.modalService.open(CancelReviewModalComponent);
         modalRef.componentInstance.review = review;
         modalRef.result.then();
+    }
+
+    public ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
     }
 
     private initFavoritesAndReviewsData() {
@@ -220,10 +230,5 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                     }
                 });
         }
-    }
-
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }
