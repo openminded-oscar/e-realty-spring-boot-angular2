@@ -205,11 +205,11 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                         // takes 1st time review data from request above
                         skip(1),
                         tap((v) => {
-                            const findReview = v.find(v => v.realtyObj.id === this.currentObject.id);
+                            const findReview = v.find(v => v.id === this.currentReview.id);
                             this.currentReview = findReview ? {
                                 ...findReview,
-                                userId: findReview.user.id,
-                                realtyObjId: findReview.realtyObj.id
+                                userId: findReview.user?.id,
+                                realtyObjId: findReview.realtyObj?.id
                             } : null;
                         }))
                 }),
