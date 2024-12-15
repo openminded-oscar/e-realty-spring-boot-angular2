@@ -99,23 +99,24 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
         );
     }
 
-    public approveReview(reviewId: number) {
-        return this.sendRequest<ReviewDto>('post', `/${reviewId}/approve`).pipe(
+    public approveReview(currentReview: Review) {
+        return this.sendRequest<ReviewDto>('post', `/${currentReview.id}/approve`).pipe(
             tap(() => {
                 const currentReviews = this.currentUserReviews.value;
                 currentReviews.forEach(
                     review => {
-                        if (review.id === reviewId) {
+                        if (review.id === currentReview.id) {
                             review.approved = true;
                         }
                     }
                 );
+
                 this.currentUserReviews.next(currentReviews.slice());
 
                 const currentRealtorReviews = this.currentRealtorReviews.value;
                 currentRealtorReviews.forEach(
                     review => {
-                        if (review.id === reviewId) {
+                        if (review.id === currentReview.id) {
                             review.approved = true;
                         }
                     }

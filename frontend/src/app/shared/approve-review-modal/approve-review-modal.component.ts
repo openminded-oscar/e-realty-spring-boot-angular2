@@ -20,14 +20,14 @@ export class ApproveReviewModalComponent implements OnDestroy {
     }
 
     public confirm() {
-        this.approveReview(this.review.id)
+        this.approveReview(this.review)
             .subscribe({
                 complete: () => this.activeModal.close(true)
             });
     }
 
-    public approveReview(reviewId: number): Observable<any> {
-        return this.reviewsService.approveReview(reviewId)
+    public approveReview(review: Review): Observable<any> {
+        return this.reviewsService.approveReview(review)
             .pipe(takeUntil(this.destroy$));
     }
 

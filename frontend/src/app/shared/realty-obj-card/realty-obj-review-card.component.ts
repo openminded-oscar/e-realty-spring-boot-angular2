@@ -54,7 +54,7 @@ export class RealtyObjReviewCardComponent implements OnDestroy {
     modalRef.componentInstance.message = 'Are you sure you want to approve the review?';  // Passing custom message
     modalRef.result.then((result) => {
       if (result) {
-        this.reviewsService.approveReview(review.id)
+        this.reviewsService.approveReview(review)
           .pipe(takeUntil(this.destroy$))
           .subscribe();
       }
