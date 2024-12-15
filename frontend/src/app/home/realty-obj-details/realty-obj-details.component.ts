@@ -199,19 +199,23 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                         this.currentReview = reviewsResponse.body;
                     }
                 }),
-                switchMap((v) => {
-                    return this.reviewsService.currentUserReviews$.pipe(
+                tap((v) => {
+                    this.reviewsService.approvedReviewId$.pipe(
                         takeUntil(this.destroy$),
-                        // takes 1st time review data from request above
                         skip(1),
-                        tap((v) => {
-                            const findReview = v.find(v => v.id === this.currentReview.id);
-                            this.currentReview = findReview ? {
-                                ...findReview,
-                                userId: findReview.user?.id,
-                                realtyObjId: findReview.realtyObj?.id
-                            } : null;
-                        }))
+                        tap((id) => {
+                            if (id && id === this.currentReview?.id) {
+                                this.currentReview.approved = true;
+                            }
+                        })).subscribe();
+                    this.reviewsService.canceledReviewId$.pipe(
+                        takeUntil(this.destroy$),
+                        skip(1),
+                        tap((id) => {
+                            if (id && id === this.currentReview?.id) {
+                                this.currentReview = null;
+                            }
+                        })).subscribe();
                 }),
             ).subscribe();
     }

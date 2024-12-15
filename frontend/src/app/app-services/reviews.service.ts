@@ -24,6 +24,13 @@ export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
 @Injectable()
 export class ReviewsService extends AbstractService<ReviewDto> implements OnDestroy {
     private destroy$ = new Subject<boolean>();
+    private approvedReviewId = new BehaviorSubject<number>(null);
+    public approvedReviewId$ = this.approvedReviewId.asObservable();
+
+    private canceledReviewId = new BehaviorSubject<number>(null);
+    public canceledReviewId$ = this.canceledReviewId.asObservable();
+
+
     private currentUserReviews = new BehaviorSubject<Review[]>([]);
     public currentUserReviews$ = this.currentUserReviews.asObservable();
 
@@ -70,10 +77,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                 const updatedReviews = [updatedReview, ...currentReviews];
 
                 this.currentUserReviews.next(updatedReviews);
-                // TODO update currentRealtorReviews if related to current realtor
-                // const currentRealtorReviews = this.currentRealtorReviews.value;
-                // const updatedRealtorReviews = [updatedReview, ...currentRealtorReviews];
-                // this.currentRealtorReviews.next(updatedRealtorReviews);
+                // TODO update currentRealtorReviews if related to current realtor? (THINK IF NEEDED currently not impacted on multiple view)
             }),
             map(res => res.body)
         );
@@ -84,6 +88,8 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
             body: {reason: reason ?? null}
         }).pipe(
             tap(() => {
+                this.canceledReviewId.next(reviewId);
+
                 const currentReviews = this.currentUserReviews.value;
                 const updatedReviews = currentReviews.filter(
                     review => review.id !== reviewId
@@ -102,6 +108,8 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     public approveReview(currentReview: Review) {
         return this.sendRequest<ReviewDto>('post', `/${currentReview.id}/approve`).pipe(
             tap(() => {
+                this.approvedReviewId.next(currentReview.id);
+
                 const currentReviews = this.currentUserReviews.value;
                 currentReviews.forEach(
                     review => {
