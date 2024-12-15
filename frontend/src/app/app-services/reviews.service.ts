@@ -37,21 +37,6 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
         super(http, endpoints.review);
     }
 
-    public scheduleReviewFlow(object: RealtyObj): Observable<ReviewPostDto> {
-        const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
-        modalRef.componentInstance.realtyObject = object;
-
-        return from(modalRef.result).pipe(
-            switchMap((value: ReviewPostDto) => {
-                if (value) {
-                    return of(value);
-                } else {
-                    return of(null);
-                }
-            })
-        );
-    }
-
     public getMyAsRealtorReviews(): Observable<Review[]> {
         return this.http.get<Review[]>(endpoints.realtorReview).pipe(
             tap(res => {
@@ -83,8 +68,12 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                     user: this.userService.getCurrentUserValue()
                 };
                 const updatedReviews = [updatedReview, ...currentReviews];
-                
+
                 this.currentUserReviews.next(updatedReviews);
+                // TODO update currentRealtorReviews if related to current realtor
+                // const currentRealtorReviews = this.currentRealtorReviews.value;
+                // const updatedRealtorReviews = [updatedReview, ...currentRealtorReviews];
+                // this.currentRealtorReviews.next(updatedRealtorReviews);
             }),
             map(res => res.body)
         );
@@ -97,7 +86,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
             tap(() => {
                 const currentReviews = this.currentUserReviews.value;
                 const updatedReviews = currentReviews.filter(
-                    review => review.realtyObj.id !== reviewId
+                    review => review.id !== reviewId
                 );
                 this.currentUserReviews.next(updatedReviews);
 
@@ -161,6 +150,22 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     public getById(reviewId: number): Observable<Review> {
         return this.sendRequest<Review>('get', `/${reviewId}`).pipe(
             map(r => r.body)
+        );
+    }
+
+
+    public scheduleReviewFlow(object: RealtyObj): Observable<ReviewPostDto> {
+        const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
+        modalRef.componentInstance.realtyObject = object;
+
+        return from(modalRef.result).pipe(
+            switchMap((value: ReviewPostDto) => {
+                if (value) {
+                    return of(value);
+                } else {
+                    return of(null);
+                }
+            })
         );
     }
 

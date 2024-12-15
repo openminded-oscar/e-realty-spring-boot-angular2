@@ -28,6 +28,7 @@ import {CancelReviewModalComponent} from './cancel-review-modal/cancel-review-mo
 import {
     ObjectsInProfileFilterComponent
 } from '../user-cabinet/user-objects/objects-in-profile-filter/objects-in-profile-filter.component';
+import {ApproveReviewModalComponent} from './approve-review-modal/approve-review-modal.component';
 
 const components = [
     ObjectsInProfileFilterComponent,
@@ -41,6 +42,7 @@ const components = [
     DeleteRealtyModalComponent,
     ScheduleFormModalComponent,
     ConfirmModalComponent,
+    ApproveReviewModalComponent,
     CancelReviewModalComponent,
     MessageModalComponent,
     RealtyStatusComponent

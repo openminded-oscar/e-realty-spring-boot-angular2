@@ -159,8 +159,7 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
       tap(reviewDto => {
         this.savedReview = reviewDto;
       })
-    )
-      .subscribe();
+    ).subscribe();
 
   }
 
