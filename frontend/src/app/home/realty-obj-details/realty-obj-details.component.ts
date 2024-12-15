@@ -66,26 +66,25 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
             this.route.params
         ]).pipe(
                 takeUntil(this.destroy$),
-                tap(([user, params]) => {
+                switchMap(([user, params]) => {
                     const id = params['objectId'];
-                    if (id) {
-                        this.realtyObjService.findById(id)
-                            .pipe(
-                                takeUntil(this.destroy$),
-                                tap(realtyObj => {
-                                    this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
-                                    this.currentObject = realtyObj;
-                                }),
-                                filter(r => !!user),
-                                tap(() => {
-                                    this.initFavoritesAndReviewsData();
-                                    this.checkForRouteReviewAction(params);
-                                })
-                            )
-                            .subscribe();
-                    } else {
+                    if (!id) {
                         return of(null);
                     }
+                    return this.realtyObjService.findById(id)
+                        .pipe(
+                            takeUntil(this.destroy$),
+                            tap(realtyObj => {
+                                this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
+                                this.currentObject = realtyObj;
+                            }),
+                            filter(r => !!user),
+                            tap(() => {
+                                this.initFavoritesAndReviewsData();
+                                this.checkForRouteReviewAction(params);
+                            })
+                        );
+
                 })
             )
             .subscribe();
