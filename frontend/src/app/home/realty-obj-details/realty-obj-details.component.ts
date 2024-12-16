@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpResponse} from '@angular/common/http';
-import {combineLatest, skip, Subject} from 'rxjs';
+import {combineLatest, of, skip, Subject, switchMap} from 'rxjs';
 import {filter, takeUntil, tap} from 'rxjs/operators';
 import {latLng} from 'leaflet';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
@@ -64,11 +64,14 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                 })
             ),
             this.route.params
-        ]).pipe(takeUntil(this.destroy$))
-            .subscribe(([user, params]) => {
-                const id = params['objectId'];
-                if (id) {
-                    this.realtyObjService.findById(id)
+        ]).pipe(
+                takeUntil(this.destroy$),
+                switchMap(([user, params]) => {
+                    const id = params['objectId'];
+                    if (!id) {
+                        return of(null);
+                    }
+                    return this.realtyObjService.findById(id)
                         .pipe(
                             takeUntil(this.destroy$),
                             tap(realtyObj => {
@@ -80,10 +83,11 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                                 this.initFavoritesAndReviewsData();
                                 this.checkForRouteReviewAction(params);
                             })
-                        )
-                        .subscribe();
-                }
-            });
+                        );
+
+                })
+            )
+            .subscribe();
     }
 
     public setEnlargedPhoto(photo: RealtyPhoto) {
@@ -156,10 +160,15 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         modalRef.result.then();
     }
 
-    public openReviewRemoveDialog(review: Review) {
+    public openReviewRemoveDialog(review: Review | ReviewDto) {
         const modalRef = this.modalService.open(CancelReviewModalComponent);
         modalRef.componentInstance.review = review;
         modalRef.result.then();
+    }
+
+    public ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
     }
 
     private initFavoritesAndReviewsData() {
@@ -189,17 +198,23 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                     if (reviewsResponse.body) {
                         this.currentReview = reviewsResponse.body;
                     }
-                    this.reviewsService.currentUserReviews$.pipe(
+                }),
+                tap((v) => {
+                    this.reviewsService.approvedReviewId$.pipe(
                         takeUntil(this.destroy$),
-                        // only take 1st time from endpoint details
-                        skip(1),
-                        tap((v) => {
-                            const findReview = v.find(v => v.realtyObj.id === this.currentObject.id);
-                            this.currentReview = findReview ? {
-                                ...findReview,
-                                userId: findReview.user.id,
-                                realtyObjId: findReview.realtyObj.id
-                            } : null;
+                        filter(id => !!id),
+                        tap((id) => {
+                            if (id && id === this.currentReview?.id) {
+                                this.currentReview.approved = true;
+                            }
+                        })).subscribe();
+                    this.reviewsService.canceledReviewId$.pipe(
+                        takeUntil(this.destroy$),
+                        filter(id => !!id),
+                        tap((id) => {
+                            if (id && id === this.currentReview?.id) {
+                                this.currentReview = null;
+                            }
                         })).subscribe();
                 }),
             ).subscribe();
@@ -218,10 +233,5 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                     }
                 });
         }
-    }
-
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

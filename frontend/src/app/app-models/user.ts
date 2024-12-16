@@ -20,6 +20,7 @@ export interface User {
   profilePic?: Photo;
   phoneNumber: string;
 
+  realtorId?: number;
   realtorDetails?: any;
   realtyObjects?: RealtyObj[];
 

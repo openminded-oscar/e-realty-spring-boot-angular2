@@ -24,6 +24,13 @@ export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
 @Injectable()
 export class ReviewsService extends AbstractService<ReviewDto> implements OnDestroy {
     private destroy$ = new Subject<boolean>();
+    private approvedReviewId = new BehaviorSubject<number>(null);
+    public approvedReviewId$ = this.approvedReviewId.asObservable();
+
+    private canceledReviewId = new BehaviorSubject<number>(null);
+    public canceledReviewId$ = this.canceledReviewId.asObservable();
+
+
     private currentUserReviews = new BehaviorSubject<Review[]>([]);
     public currentUserReviews$ = this.currentUserReviews.asObservable();
 
@@ -58,22 +65,35 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
 
         return this.sendRequest<ReviewPostDto>('post', '', {body: review}).pipe(
             tap(res => {
+                const user = this.userService.getCurrentUserValue();
+
                 const currentReviews = this.currentUserReviews.value;
-                const updatedReview = {
+                const createdReview = {
                     ...res.body,
                     realtyObj: {
                         ...res.body.realtyObj,
                         mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
                     },
-                    user: this.userService.getCurrentUserValue()
+                    user
                 };
-                const updatedReviews = [updatedReview, ...currentReviews];
-
+                const updatedReviews = [createdReview, ...currentReviews];
                 this.currentUserReviews.next(updatedReviews);
-                // TODO update currentRealtorReviews if related to current realtor
-                // const currentRealtorReviews = this.currentRealtorReviews.value;
-                // const updatedRealtorReviews = [updatedReview, ...currentRealtorReviews];
-                // this.currentRealtorReviews.next(updatedRealtorReviews);
+
+                const realtorId = user.realtorId;
+                if (realtorId && res.body.realtorId === realtorId) {
+                    const currentRealtorReviews = this.currentRealtorReviews.value;
+                    const createdRealtorReview = {
+                        ...res.body,
+                        realtyObj: {
+                            ...res.body.realtyObj,
+                            mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
+                        },
+                        user
+                    };
+                    const updatedRealtorReviews = [createdRealtorReview, ...currentRealtorReviews];
+
+                    this.currentRealtorReviews.next(updatedRealtorReviews);
+                }
             }),
             map(res => res.body)
         );
@@ -84,6 +104,8 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
             body: {reason: reason ?? null}
         }).pipe(
             tap(() => {
+                this.canceledReviewId.next(reviewId);
+
                 const currentReviews = this.currentUserReviews.value;
                 const updatedReviews = currentReviews.filter(
                     review => review.id !== reviewId
@@ -92,30 +114,33 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
 
                 const currentRealtorReviews = this.currentRealtorReviews.value;
                 const updatedRealtorReviews = currentRealtorReviews.filter(
-                    review => review.realtyObj.id !== reviewId
+                    review => review.id !== reviewId
                 );
                 this.currentRealtorReviews.next(updatedRealtorReviews);
             })
         );
     }
 
-    public approveReview(reviewId: number) {
-        return this.sendRequest<ReviewDto>('post', `/${reviewId}/approve`).pipe(
+    public approveReview(currentReview: Review) {
+        return this.sendRequest<ReviewDto>('post', `/${currentReview.id}/approve`).pipe(
             tap(() => {
+                this.approvedReviewId.next(currentReview.id);
+
                 const currentReviews = this.currentUserReviews.value;
                 currentReviews.forEach(
                     review => {
-                        if (review.id === reviewId) {
+                        if (review.id === currentReview.id) {
                             review.approved = true;
                         }
                     }
                 );
+
                 this.currentUserReviews.next(currentReviews.slice());
 
                 const currentRealtorReviews = this.currentRealtorReviews.value;
                 currentRealtorReviews.forEach(
                     review => {
-                        if (review.id === reviewId) {
+                        if (review.id === currentReview.id) {
                             review.approved = true;
                         }
                     }
