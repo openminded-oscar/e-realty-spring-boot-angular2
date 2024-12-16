@@ -15,7 +15,6 @@ CREATE TABLE `tbl_user` (
                             `realtor_id` bigint DEFAULT NULL,
                             `created_at` datetime(6) DEFAULT NULL,
                             `updated_at` datetime(6) DEFAULT NULL,
-                            `realter_id` bigint DEFAULT NULL,
                             `photo_id` bigint DEFAULT NULL,
                             `profile_pic` varchar(255) DEFAULT NULL,
                             `email` varchar(255) NOT NULL,
@@ -23,7 +22,6 @@ CREATE TABLE `tbl_user` (
                             PRIMARY KEY (`id`),
                             KEY `FKecos2jf3rywyoo11l4qigm403` (`photo_id`),
                             KEY `FK9ia3vn2v05ga54wxnpjnh0sye` (`realtor_id`),
-                            KEY `FKrj96m2s4qg3gfls7bskw7t9dw` (`realter_id`),
                             CONSTRAINT `FKecos2jf3rywyoo11l4qigm403` FOREIGN KEY (`photo_id`) REFERENCES `tbl_user_photo` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2042 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
