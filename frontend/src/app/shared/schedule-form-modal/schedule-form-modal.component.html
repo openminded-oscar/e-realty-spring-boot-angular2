@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h4 class="modal-title" id="modal-basic-title">Please select the date and time</h4>
-  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+  <button type="button" class="close" aria-label="Close" (click)="crossIconClicked()">
     <span>&times;</span>
   </button>
 </div>
@@ -50,7 +50,7 @@
           (click)="saveReview()">Save
   </button>
   <ng-template #closeModalBlock>
-    <button (click)="close(savedReview)">
+    <button (click)="closeAfterSave()">
       Close
     </button>
   </ng-template>

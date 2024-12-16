@@ -7,15 +7,15 @@ import co.oleh.realperfect.auth.UserService;
 import co.oleh.realperfect.calendar.GoogleCalendarWrapperService;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
+import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.user.*;
+import co.oleh.realperfect.realtor.RealtorService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,7 +24,10 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static co.oleh.realperfect.model.user.RoleUtils.REALTOR_ROLE;
 
 @RestController
 @RequestScope
@@ -32,16 +35,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SigninApi {
     private final UserService userService;
+    private final RealtorService realtorService;
     private final MappingService mappingService;
     private final AuthenticationService tokenAuthenticationService;
     private final GoogleTokenVerifier googleTokenVerifier;
 
     public SigninApi(UserService userService,
+                     RealtorService realtorService,
                      MappingService mappingService,
                      AuthenticationService tokenAuthenticationService,
                      GoogleTokenVerifier googleTokenVerifier,
                      GoogleCalendarWrapperService googleCalendarWrapper) {
         this.userService = userService;
+        this.realtorService = realtorService;
         this.mappingService = mappingService;
         this.tokenAuthenticationService = tokenAuthenticationService;
         this.googleTokenVerifier = googleTokenVerifier;
@@ -50,33 +56,38 @@ public class SigninApi {
     @GetMapping("/with-token")
     public UserSelfDto signedinWithToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = null;
 
-        if (authentication != null) {
-            if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-                DefaultOidcUser defaultOidcUser = (DefaultOidcUser) authentication.getPrincipal();
-                user = userService.findByGoogleUserIdTokenSubject(defaultOidcUser.getSubject());
-            } else if (authentication.getPrincipal() instanceof DefaultOAuth2User) {
-                DefaultOAuth2User defaultOidcUser = (DefaultOAuth2User) authentication.getPrincipal();
-                user = userService.findByGoogleUserIdTokenSubject((String) defaultOidcUser.getAttributes().get("sub"));
-            } else if (authentication.getPrincipal() instanceof SpringSecurityUser) {
-                Long userId = ((SpringSecurityUser) authentication.getPrincipal()).getId();
-                user = userService.findById(userId);
-            } else {
-                return null;
-            }
-        } else {
+        if (authentication == null || !(authentication.getPrincipal() instanceof SpringSecurityUser)) {
             return null;
         }
-        if (!user.getRealtyObjects().isEmpty()) {
-            List<RealtyObject> sortedRealtyObjects = user.getRealtyObjects().stream()
-                    .sorted(Comparator.comparing(RealtyObject::getCreatedAt, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
-                    .collect(Collectors.toList());
-            user.setRealtyObjects(sortedRealtyObjects);
+
+        Long userId = ((SpringSecurityUser) authentication.getPrincipal()).getId();
+        User user = userService.findById(userId);
+        if (user == null) {
+            return null; // or throw a custom exception
         }
 
-        return this.mappingService.map(user, UserSelfDto.class);
+        // Sort RealtyObjects
+        List<RealtyObject> sortedRealtyObjects = user.getRealtyObjects().stream()
+                .sorted(Comparator.comparing(RealtyObject::getCreatedAt,
+                        Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                .collect(Collectors.toList());
+        user.setRealtyObjects(sortedRealtyObjects);
+
+        // Check if user is a Realtor
+        boolean isRealtor = user.getRoles().stream()
+                .anyMatch(role -> REALTOR_ROLE.equals(role.getName()));
+        Realtor realtor = isRealtor ? realtorService.findRealtorByUserId(user.getId()) : null;
+
+        // Map User to DTO
+        UserSelfDto userSelfDto = mappingService.map(user, UserSelfDto.class);
+        if (userSelfDto != null && realtor != null) {
+            userSelfDto.setRealtorId(realtor.getId());
+        }
+
+        return userSelfDto;
     }
+
 
     @PostMapping
     public Token signIn(@RequestBody EmailPasswordDto credentials) {
@@ -91,7 +102,8 @@ public class SigninApi {
     }
 
     @PostMapping("/google")
-    public Token signInViaGoogle(@RequestBody GoogleAccountData googleAccountData) throws IOException, GeneralSecurityException {
+    public Token signInViaGoogle(@RequestBody GoogleAccountData googleAccountData) throws IOException,
+            GeneralSecurityException {
         GoogleIdToken verifiedIdToken =
                 googleTokenVerifier.verifyGoogleTokenAndGetSubject(googleAccountData.getIdToken());
 
@@ -111,5 +123,4 @@ public class SigninApi {
 
         return new Token(tokenString);
     }
-
 }

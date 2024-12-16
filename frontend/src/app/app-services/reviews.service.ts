@@ -24,6 +24,13 @@ export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
 @Injectable()
 export class ReviewsService extends AbstractService<ReviewDto> implements OnDestroy {
     private destroy$ = new Subject<boolean>();
+    private approvedReviewId = new BehaviorSubject<number>(null);
+    public approvedReviewId$ = this.approvedReviewId.asObservable();
+
+    private canceledReviewId = new BehaviorSubject<number>(null);
+    public canceledReviewId$ = this.canceledReviewId.asObservable();
+
+
     private currentUserReviews = new BehaviorSubject<Review[]>([]);
     public currentUserReviews$ = this.currentUserReviews.asObservable();
 
@@ -35,21 +42,6 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                 public modalService: NgbModal,
                 public userService: UserService) {
         super(http, endpoints.review);
-    }
-
-    public scheduleReviewFlow(object: RealtyObj): Observable<ReviewPostDto> {
-        const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
-        modalRef.componentInstance.realtyObject = object;
-
-        return from(modalRef.result).pipe(
-            switchMap((value: ReviewPostDto) => {
-                if (value) {
-                    return of(value);
-                } else {
-                    return of(null);
-                }
-            })
-        );
     }
 
     public getMyAsRealtorReviews(): Observable<Review[]> {
@@ -83,8 +75,9 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                     user: this.userService.getCurrentUserValue()
                 };
                 const updatedReviews = [updatedReview, ...currentReviews];
-                
+
                 this.currentUserReviews.next(updatedReviews);
+                // TODO update currentRealtorReviews if related to current realtor? (THINK IF NEEDED currently not impacted on multiple view)
             }),
             map(res => res.body)
         );
@@ -95,38 +88,43 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
             body: {reason: reason ?? null}
         }).pipe(
             tap(() => {
+                this.canceledReviewId.next(reviewId);
+
                 const currentReviews = this.currentUserReviews.value;
                 const updatedReviews = currentReviews.filter(
-                    review => review.realtyObj.id !== reviewId
+                    review => review.id !== reviewId
                 );
                 this.currentUserReviews.next(updatedReviews);
-
+                
                 const currentRealtorReviews = this.currentRealtorReviews.value;
                 const updatedRealtorReviews = currentRealtorReviews.filter(
-                    review => review.realtyObj.id !== reviewId
+                    review => review.id !== reviewId
                 );
                 this.currentRealtorReviews.next(updatedRealtorReviews);
             })
         );
     }
 
-    public approveReview(reviewId: number) {
-        return this.sendRequest<ReviewDto>('post', `/${reviewId}/approve`).pipe(
+    public approveReview(currentReview: Review) {
+        return this.sendRequest<ReviewDto>('post', `/${currentReview.id}/approve`).pipe(
             tap(() => {
+                this.approvedReviewId.next(currentReview.id);
+
                 const currentReviews = this.currentUserReviews.value;
                 currentReviews.forEach(
                     review => {
-                        if (review.id === reviewId) {
+                        if (review.id === currentReview.id) {
                             review.approved = true;
                         }
                     }
                 );
+
                 this.currentUserReviews.next(currentReviews.slice());
 
                 const currentRealtorReviews = this.currentRealtorReviews.value;
                 currentRealtorReviews.forEach(
                     review => {
-                        if (review.id === reviewId) {
+                        if (review.id === currentReview.id) {
                             review.approved = true;
                         }
                     }
@@ -161,6 +159,22 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     public getById(reviewId: number): Observable<Review> {
         return this.sendRequest<Review>('get', `/${reviewId}`).pipe(
             map(r => r.body)
+        );
+    }
+
+
+    public scheduleReviewFlow(object: RealtyObj): Observable<ReviewPostDto> {
+        const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
+        modalRef.componentInstance.realtyObject = object;
+
+        return from(modalRef.result).pipe(
+            switchMap((value: ReviewPostDto) => {
+                if (value) {
+                    return of(value);
+                } else {
+                    return of(null);
+                }
+            })
         );
     }
 
