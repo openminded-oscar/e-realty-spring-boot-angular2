@@ -202,7 +202,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                 tap((v) => {
                     this.reviewsService.approvedReviewId$.pipe(
                         takeUntil(this.destroy$),
-                        skip(1),
+                        filter(id => !!id),
                         tap((id) => {
                             if (id && id === this.currentReview?.id) {
                                 this.currentReview.approved = true;
@@ -210,7 +210,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                         })).subscribe();
                     this.reviewsService.canceledReviewId$.pipe(
                         takeUntil(this.destroy$),
-                        skip(1),
+                        filter(id => !!id),
                         tap((id) => {
                             if (id && id === this.currentReview?.id) {
                                 this.currentReview = null;
