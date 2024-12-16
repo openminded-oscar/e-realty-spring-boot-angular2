@@ -95,10 +95,10 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                     review => review.id !== reviewId
                 );
                 this.currentUserReviews.next(updatedReviews);
-
+                
                 const currentRealtorReviews = this.currentRealtorReviews.value;
                 const updatedRealtorReviews = currentRealtorReviews.filter(
-                    review => review.realtyObj.id !== reviewId
+                    review => review.id !== reviewId
                 );
                 this.currentRealtorReviews.next(updatedRealtorReviews);
             })

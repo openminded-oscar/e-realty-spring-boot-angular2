@@ -18,7 +18,8 @@ public class UserSelfDto {
      String surname;
      String phoneNumber;
      UserPhoto profilePic;
-     RealtorDto realtorDetails;
+     Long realtorId;
+//     RealtorDto realtorDetails;
      List<RealtyObjectDetailsDto> realtyObjects;
      Instant createdAt;
      Instant updatedAt;
