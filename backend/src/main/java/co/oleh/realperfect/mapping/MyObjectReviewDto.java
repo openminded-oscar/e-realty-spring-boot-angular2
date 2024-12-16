@@ -8,6 +8,7 @@ import java.time.Instant;
 public class MyObjectReviewDto {
     Long id;
     Long userId;
+    Long realtorId;
     RealtyObjectDetailsDto realtyObj;
     Instant dateTime;
     Boolean approved;

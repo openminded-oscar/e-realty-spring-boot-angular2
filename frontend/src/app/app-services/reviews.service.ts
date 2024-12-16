@@ -65,19 +65,35 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
 
         return this.sendRequest<ReviewPostDto>('post', '', {body: review}).pipe(
             tap(res => {
+                const user = this.userService.getCurrentUserValue();
+
                 const currentReviews = this.currentUserReviews.value;
-                const updatedReview = {
+                const createdReview = {
                     ...res.body,
                     realtyObj: {
                         ...res.body.realtyObj,
                         mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
                     },
-                    user: this.userService.getCurrentUserValue()
+                    user
                 };
-                const updatedReviews = [updatedReview, ...currentReviews];
-
+                const updatedReviews = [createdReview, ...currentReviews];
                 this.currentUserReviews.next(updatedReviews);
-                // TODO update currentRealtorReviews if related to current realtor? (THINK IF NEEDED currently not impacted on multiple view)
+
+                const realtorId = user.realtorId;
+                if (realtorId && res.body.realtorId === realtorId) {
+                    const currentRealtorReviews = this.currentRealtorReviews.value;
+                    const createdRealtorReview = {
+                        ...res.body,
+                        realtyObj: {
+                            ...res.body.realtyObj,
+                            mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
+                        },
+                        user
+                    };
+                    const updatedRealtorReviews = [createdRealtorReview, ...currentRealtorReviews];
+
+                    this.currentRealtorReviews.next(updatedRealtorReviews);
+                }
             }),
             map(res => res.body)
         );
@@ -95,7 +111,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                     review => review.id !== reviewId
                 );
                 this.currentUserReviews.next(updatedReviews);
-                
+
                 const currentRealtorReviews = this.currentRealtorReviews.value;
                 const updatedRealtorReviews = currentRealtorReviews.filter(
                     review => review.id !== reviewId
