@@ -32,7 +32,7 @@ export interface SupportedOperation {
 }
 
 @Component({
-  selector: 'new-object',
+  selector: 'object-editor',
   templateUrl: './realty-obj-edit.component.html',
   styleUrls: ['./realty-obj-edit.scss']
 })

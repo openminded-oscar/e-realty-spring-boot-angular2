@@ -1,6 +1,7 @@
 package co.oleh.realperfect.realty;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
+import co.oleh.realperfect.emails.EmailsService;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
@@ -15,6 +16,7 @@ import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
 import co.oleh.realperfect.repository.*;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -31,6 +33,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
@@ -43,18 +46,21 @@ public class RealtyObjectsService {
     private final ObjectReviewRepository objectReviewRepository;
     private final RealtyObjectPhotoRepository realtyObjectPhotoRepository;
     private final ConfirmationDocPhotoRepository confirmationDocPhotoRepository;
+    private final EmailsService emailsService;
     private final RealtorService realtorService;
     private final MappingService mappingService;
     private final UserRepository userRepository;
 
     public RealtyObjectsService(RealtyObjectFilterRepository realtyObjectFilterRepository,
                                 UserRepository userRepository,
+                                EmailsService emailsService,
                                 ConfirmationDocPhotoRepository confirmationDocPhotoRepository,
                                 ObjectReviewRepository objectReviewRepository,
                                 RealtyObjectPhotoRepository realtyObjectPhotoRepository,
                                 RealtyObjectCrudRepository realtyObjectCrudRepository,
                                 RealtorService realtorService,
                                 MappingService mappingService) {
+        this.emailsService = emailsService;
         this.confirmationDocPhotoRepository = confirmationDocPhotoRepository;
         this.objectReviewRepository = objectReviewRepository;
         this.realtyObjectFilterRepository = realtyObjectFilterRepository;
@@ -91,15 +97,39 @@ public class RealtyObjectsService {
         return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
     }
 
-    public RealtyObjectDetailsDto save(RealtyObjectDetailsDto realtyObjectDetailsDto) {
+    public RealtyObjectDetailsDto insert(@Valid RealtyObjectDetailsDto realtyObjectDto,
+                                         SpringSecurityUser springUser) {
+        RealtyObject realtyObjectSaved = this.save(realtyObjectDto, Optional.empty());
+
+        if (realtyObjectDto.getRealtor() != null) {
+            Realtor realtor = this.realtorService.findById(realtyObjectDto.getRealtor().getId());
+            User user = this.userRepository.findById(springUser.getId()).get();
+            if (realtor != null) {
+                this.emailsService.sendNewObjectSetForRealtor(user, realtyObjectSaved, realtor);
+            }
+        }
+
+        return this.mappingService.map(realtyObjectSaved, RealtyObjectDetailsDto.class);
+    }
+
+    public RealtyObjectDetailsDto update(@Valid RealtyObjectDetailsDto realtyObject, Long objectId) {
+        realtyObject.setId(objectId);
+
+        RealtyObject existingObjectInDb = this.realtyObjectCrudRepository.findById(realtyObject.getId()).get();
+        RealtyObject realtyObjectSaved = this.save(realtyObject, Optional.of(existingObjectInDb));
+
+        return this.mappingService.map(realtyObjectSaved, RealtyObjectDetailsDto.class);
+    }
+
+    private RealtyObject save(RealtyObjectDetailsDto realtyObjectDetailsDto,
+                              Optional<RealtyObject> existingRealtyObject) {
         RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
         if (realtyObject.getAddress().getGeolocation() == null) {
             realtyObject.getAddress().setGeolocation(GeoLocationUtils.lonLatToPoint(1, 1));
         }
 
-        if (realtyObjectDetailsDto.getId() != null) {
-            RealtyObject existingObjectInDb =
-                    this.realtyObjectCrudRepository.findById(realtyObjectDetailsDto.getId()).get();
+        if (existingRealtyObject.isPresent()) {
+            RealtyObject existingObjectInDb = existingRealtyObject.get();
             realtyObject.setStatus(existingObjectInDb.getStatus());
         }
         if (realtyObjectDetailsDto.getRealtor() != null) {
@@ -127,9 +157,7 @@ public class RealtyObjectsService {
             realtyObject.setConfirmationDocPhoto(confPhoto);
         }
 
-        RealtyObject createdObject = realtyObjectCrudRepository.save(realtyObject);
-
-        return this.mappingService.map(createdObject, RealtyObjectDetailsDto.class);
+        return realtyObjectCrudRepository.save(realtyObject);
     }
 
     public RealtyObjectDetailsDto getObjectById(Long objectId) {

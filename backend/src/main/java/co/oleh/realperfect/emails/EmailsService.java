@@ -37,7 +37,7 @@ public class EmailsService {
         this.emailConfirmationTokenRepository = emailConfirmationTokenRepository;
     }
 
-    public void sendEmailRegistrationConfirm(User user) throws MessagingException {
+    public void sendEmailRegistrationConfirm(User user) {
         EmailConfirmationToken tokenEntity = new EmailConfirmationToken(user);
         String tokenString = tokenEntity.getToken();
 
@@ -91,6 +91,23 @@ public class EmailsService {
                 htmlContent);
 
         log.info("RealPerfectObjectReview sent to user {}", email);
+    }
+
+    public void sendNewObjectSetForRealtor(User user,
+                                              RealtyObject realtyObject,
+                                              Realtor realtor) {
+        String realtorEmail = realtor.getUser().getEmail();
+
+        Context context = new Context();
+        context.setVariable("appRoot", appRoot);
+        context.setVariable("user", user);
+        context.setVariable("realtyObject", realtyObject);
+        String htmlContent = templateEngine.process("userObjectAddedForRealtorEmail", context);
+
+        this.emailUtilityService.sendHtmlMessageAsync(Collections.singletonList(realtorEmail),
+                "New Realty Object Added For you As Realtor",
+                htmlContent);
+        log.info("RealPerfectObjectAdded {} sent to realtor {}", realtyObject.getId(), realtorEmail);
     }
 
     public void sendObjectReviewSetForRealtor(User user,
