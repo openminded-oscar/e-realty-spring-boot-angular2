@@ -1,0 +1,27 @@
+<div class="modal-content" *ngIf="user">
+    <div class="modal-header">
+        <h5 class="modal-title" id="realtorModalLabel">{{ message }}</h5>
+    </div>
+    <div class="modal-body">
+        <div class="text-center">
+            <img *ngIf="user.profilePic" [src]="user.profilePicUrl ?? user.profilePic?.fullUrl" alt="Profile Picture"
+                 class="img-fluid mb-3" style="width: 150px; height: 150px;">
+            <h5>{{ user.name }}&nbsp;{{ user.surname }}
+                <ng-container *ngIf="userTitle">, {{ userTitle }}</ng-container>
+            </h5>
+            <ng-container *ngIf="user.email">
+                <p><strong>Email:&nbsp;</strong>
+                    <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+                </p>
+            </ng-container>
+            <ng-container *ngIf="user.phoneNumber">
+                <p><strong>Phone Number:&nbsp;</strong>
+                    <a [href]="'tel:' + user.phoneNumber">{{ user.phoneNumber }}</a>
+                </p>
+            </ng-container>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Close</button>
+    </div>
+</div>

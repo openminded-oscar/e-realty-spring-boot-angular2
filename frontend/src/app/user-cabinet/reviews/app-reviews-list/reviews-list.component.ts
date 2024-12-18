@@ -1,21 +1,24 @@
 import {Component, Input} from '@angular/core';
-import {Review} from '../../../app-models/review';
+import {RelatedReviewDto} from '../../../app-models/review';
 
 @Component({
-  selector: 'app-reviews-list',
-  templateUrl: './reviews-list.component.html',
-  styles: ``
+    selector: 'app-reviews-list',
+    templateUrl: './reviews-list.component.html',
+    styles: ``
 })
 export class ReviewsListComponent {
-  @Input()
-  public reviews: Review[] = [];
-  @Input() showActionButtons!: boolean;
+    @Input()
+    public reviews: RelatedReviewDto[] = [];
+    @Input()
+    showActionButtons!: boolean;
+    @Input()
+    revieweeShouldBeDisplayed: boolean;
 
 
-  constructor() {
-  }
+    constructor() {
+    }
 
-  public trackById(index: number, obj: Review): number {
-    return obj.id;
-  }
+    public trackById(index: number, obj: RelatedReviewDto): number {
+        return obj.id;
+    }
 }

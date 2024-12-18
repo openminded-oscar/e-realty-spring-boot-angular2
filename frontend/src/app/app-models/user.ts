@@ -7,6 +7,15 @@ export enum UserRole {
   Realtor = 'REALTOR',
 }
 
+export interface UserProfile {
+    name: string
+    surname: string;
+    phoneNumber: string;
+    email: string;
+    profilePicUrl?: string;
+    profilePic?: Photo;
+}
+
 export interface User {
   id?: number;
   login?: string;

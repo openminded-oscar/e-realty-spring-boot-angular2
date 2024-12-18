@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpResponse} from '@angular/common/http';
-import {combineLatest, of, skip, Subject, switchMap} from 'rxjs';
+import {combineLatest, of, Subject, switchMap} from 'rxjs';
 import {filter, takeUntil, tap} from 'rxjs/operators';
 import {latLng} from 'leaflet';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
@@ -12,10 +12,10 @@ import {UserService} from '../../app-services/user.service';
 import {InterestService} from '../../app-services/interest.service';
 import {InterestDto} from '../../app-models/interest';
 import {ReviewsService} from '../../app-services/reviews.service';
-import {Review, ReviewAction, ReviewDto} from '../../app-models/review';
+import {RelatedReviewDto, ReviewAction, ReviewDto} from '../../app-models/review';
 import {User, UserRole} from '../../app-models/user';
 
-import {RealtorContactComponent} from '../../shared/realtor-contact/realtor-contact.component';
+import {UserContactModalComponent} from '../../shared/realtor-contact/user-contact-modal.component';
 import {DeleteRealtyModalComponent} from '../../shared/delete-realty-modal/delete-realty-modal.component';
 import {CancelReviewModalComponent} from '../../shared/cancel-review-modal/cancel-review-modal.component';
 import {ApproveReviewModalComponent} from '../../shared/approve-review-modal/approve-review-modal.component';
@@ -120,8 +120,10 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     }
 
     public openRealtorContacts() {
-        const modalRef = this.modalService.open(RealtorContactComponent);
-        (modalRef.componentInstance as RealtorContactComponent).realtor = this.currentObject.realtor;
+        const modalRef = this.modalService.open(UserContactModalComponent);
+        (modalRef.componentInstance as UserContactModalComponent).user = this.currentObject.realtor;
+        (modalRef.componentInstance as UserContactModalComponent).message = 'Realtor Contact Information';
+        (modalRef.componentInstance as UserContactModalComponent).userTitle = 'realtor';
     }
 
     public promptDelete() {
@@ -153,14 +155,14 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
             .subscribe();
     }
 
-    public openReviewApproveDialog(review: Review) {
+    public openReviewApproveDialog(review: RelatedReviewDto) {
         const modalRef = this.modalService.open(ApproveReviewModalComponent);
         modalRef.componentInstance.review = review;
         modalRef.componentInstance.message = 'Are you sure you want to approve the review?';  // Passing custom message
         modalRef.result.then();
     }
 
-    public openReviewRemoveDialog(review: Review | ReviewDto) {
+    public openReviewRemoveDialog(review: RelatedReviewDto) {
         const modalRef = this.modalService.open(CancelReviewModalComponent);
         modalRef.componentInstance.review = review;
         modalRef.result.then();
@@ -169,6 +171,13 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroy$.next(true);
         this.destroy$.complete();
+    }
+
+    public openCancelDialog() {
+        this.reviewsService.getById(this.currentReview.id)
+            .subscribe((review: RelatedReviewDto) => {
+                this.openReviewRemoveDialog(review);
+            });
     }
 
     private initFavoritesAndReviewsData() {
@@ -225,7 +234,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         const reviewId = params['reviewId'];
         if (reviewId) {
             this.reviewsService.getById(reviewId)
-                .subscribe((review: Review) => {
+                .subscribe((review: RelatedReviewDto) => {
                     if (reviewActionType === ReviewAction.CONFIRM) {
                         this.openReviewApproveDialog(review);
                     } else if (reviewActionType === ReviewAction.CANCEL) {
