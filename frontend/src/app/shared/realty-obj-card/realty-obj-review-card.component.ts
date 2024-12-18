@@ -22,9 +22,7 @@ export class RealtyObjReviewCardComponent implements OnDestroy {
     @Input()
     public showRealtyObjectCreatedAt!: boolean;
     @Input()
-    public revieweeShouldBeDisplayed = false;
-    @Input()
-    public showActionButtons!: boolean;
+    public isRealtorMode!: boolean;
     protected readonly isFutureDate = isFutureDate;
     private destroy$ = new Subject<boolean>();
 

@@ -6,7 +6,7 @@
                       style="cursor: pointer">{{ realtyObject.address.street }}
                     ,&nbsp;{{ realtyObject.address.city }}</span>
             </div>
-            <div style="cursor: pointer" *ngIf="revieweeShouldBeDisplayed && review.user">
+            <div style="cursor: pointer" *ngIf="isRealtorMode && review.user">
                 <app-user-profile-image (click)="openUserDetailsDialog(review.user)"
                                         [ngbTooltip]="review.user?.name + ' will review'"
                                         [user]="review.user"></app-user-profile-image>
@@ -25,7 +25,7 @@
                     Scheduled for {{ review.dateTime | date: 'MMM d, HH:mm':'local' }}
                 </div>
                 <div style="display: flex">
-                    <ng-container *ngIf="review.approved || !showActionButtons; else approveOrCancel">
+                    <ng-container *ngIf="review.approved || !isRealtorMode; else approveOrCancel">
                         <button (click)="cancelReview(review)">Cancel And Notify</button>
                     </ng-container>
                     <ng-template #approveOrCancel>

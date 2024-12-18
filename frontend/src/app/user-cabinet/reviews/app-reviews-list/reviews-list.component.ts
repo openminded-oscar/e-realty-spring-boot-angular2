@@ -10,9 +10,7 @@ export class ReviewsListComponent {
     @Input()
     public reviews: RelatedReviewDto[] = [];
     @Input()
-    showActionButtons!: boolean;
-    @Input()
-    revieweeShouldBeDisplayed: boolean;
+    isRealtorMode!: boolean;
 
 
     constructor() {

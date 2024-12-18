@@ -6,8 +6,10 @@
         <div class="text-center">
             <img *ngIf="user.profilePic" [src]="user.profilePicUrl ?? user.profilePic?.fullUrl" alt="Profile Picture"
                  class="img-fluid mb-3" style="width: 150px; height: 150px;">
-            <h5>{{ user.name }}&nbsp;{{ user.surname }}
-                <ng-container *ngIf="userTitle">, {{ userTitle }}</ng-container>
+            <h5 style="white-space: nowrap">
+                <!-- @formatter:off -->
+                {{ user.name }}&nbsp;{{ user.surname }}<ng-container *ngIf="userTitle">, {{ userTitle }}</ng-container>
+                <!-- @formatter:on -->
             </h5>
             <ng-container *ngIf="user.email">
                 <p><strong>Email:&nbsp;</strong>
