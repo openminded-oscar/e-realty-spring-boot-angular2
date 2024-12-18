@@ -1,5 +1,5 @@
 import {RealtyObj} from './realty-obj';
-import {User} from './user';
+import {User, UserProfile} from './user';
 import {isFutureDate} from '../utils/time-utils';
 
 export type ReviewFilter = 'all' | 'future' | 'past' | 'unapproved';
@@ -9,10 +9,11 @@ export enum ReviewAction {
     CANCEL = 'cancel'
 }
 
-export interface Review {
+export interface RelatedReviewDto {
     id?: number;
-    user: User;
+    user: UserProfile;
     realtyObj: RealtyObj;
+    realtorId: number;
     dateTime: Date;
     approved?: Boolean;
 }
@@ -25,21 +26,13 @@ export interface ReviewDto {
     approved?: Boolean;
 }
 
-export interface ReviewPostDto {
-    id?: number;
-    userId: number;
-    realtorId: number;
-    realtyObj: RealtyObj;
-    dateTime: Date;
-}
-
 export interface ReviewSelectTimeDto {
     realtyObjId?: number;
     realtorId?: number;
     dateTime: Date;
 }
 
-export const filterByReviewType = (reviews: Review[], filter: ReviewFilter): Review[] => {
+export const filterByReviewType = <T extends RelatedReviewDto> (reviews: (T)[], filter: ReviewFilter): T[] => {
     if (filter === 'all') {
         return [...reviews];
     } else if (filter === 'future') {

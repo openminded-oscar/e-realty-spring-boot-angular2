@@ -1,0 +1,5 @@
+<img style="height: 100%; border-radius: 50%;" *ngIf="user?.profilePicUrl; else avatarIcon"
+     [src]="user.profilePicUrl" alt="">
+<ng-template #avatarIcon>
+    <i class="fa fa-user"></i>
+</ng-template>

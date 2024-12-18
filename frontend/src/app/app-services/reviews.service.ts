@@ -5,10 +5,11 @@ import {map, tap} from 'rxjs/operators';
 import {NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {endpoints} from '../commons';
 import {AbstractService} from './common/abstract.service';
-import {Review, ReviewDto, ReviewPostDto, ReviewSelectTimeDto} from '../app-models/review';
+import {RelatedReviewDto, ReviewDto, ReviewSelectTimeDto} from '../app-models/review';
 import {RealtyObj} from '../app-models/realty-obj';
 import {UserService} from './user.service';
 import {ScheduleFormModalComponent} from '../shared/schedule-form-modal/schedule-form-modal.component';
+import {Photo} from '../app-models/photo';
 
 export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
     return new Date(
@@ -31,10 +32,10 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     public canceledReviewId$ = this.canceledReviewId.asObservable();
 
 
-    private currentUserReviews = new BehaviorSubject<Review[]>([]);
+    private currentUserReviews = new BehaviorSubject<RelatedReviewDto[]>([]);
     public currentUserReviews$ = this.currentUserReviews.asObservable();
 
-    private currentRealtorReviews = new BehaviorSubject<Review[]>([]);
+    private currentRealtorReviews = new BehaviorSubject<RelatedReviewDto[]>([]);
     public currentRealtorReviews$ = this.currentRealtorReviews.asObservable();
 
 
@@ -44,9 +45,13 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
         super(http, endpoints.review);
     }
 
-    public getMyAsRealtorReviews(): Observable<Review[]> {
-        return this.http.get<Review[]>(endpoints.realtorReview).pipe(
+    public getMyAsRealtorReviews(): Observable<RelatedReviewDto[]> {
+        return this.http.get<RelatedReviewDto[]>(endpoints.realtorReview).pipe(
             tap(res => {
+                const users = res.map(r=>r.user);
+                users.forEach((user) => {
+                    user.profilePicUrl = user.profilePic ? Photo.getLinkByFilename(user.profilePic?.filename) : null;
+                })
                 const realtyObjects = res.map(r => r.realtyObj);
                 (realtyObjects ?? []).forEach(value => {
                     value.mainPhotoPath = RealtyObj.getMainPhoto(value);
@@ -56,15 +61,31 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
         );
     }
 
-    public saveReview(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<ReviewPostDto> {
+    public getAllReviewsForUser(): Observable<HttpResponse<RelatedReviewDto[]>> {
+        return this.sendRequest<RelatedReviewDto[]>('get', `/my-reviews-list`).pipe(
+            tap(res => {
+                const users = res.body.map(r=>r.user);
+                users.forEach((user) => {
+                    user.profilePicUrl = user.profilePic ? Photo.getLinkByFilename(user.profilePic?.filename) : null;
+                })
+                const realtyObjects = res.body.map(r => r.realtyObj);
+                (realtyObjects ?? []).forEach(value => {
+                    value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+                });
+                this.currentUserReviews.next(res.body);
+            })
+        );
+    }
+
+    public saveReview(reviewSelectTimeDto: ReviewSelectTimeDto): Observable<RelatedReviewDto> {
         const review = {
             realtyObjId: reviewSelectTimeDto.realtyObjId,
             realtorId: reviewSelectTimeDto.realtorId,
             dateTime: reviewSelectTimeDto.dateTime
         };
 
-        return this.sendRequest<ReviewPostDto>('post', '', {body: review}).pipe(
-            tap(res => {
+        return this.sendRequest<RelatedReviewDto>('post', '', {body: review}).pipe(
+            tap((res: HttpResponse<RelatedReviewDto>) => {
                 const user = this.userService.getCurrentUserValue();
 
                 const currentReviews = this.currentUserReviews.value;
@@ -75,7 +96,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                         mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
                     },
                     user
-                };
+                } as RelatedReviewDto;
                 const updatedReviews = [createdReview, ...currentReviews];
                 this.currentUserReviews.next(updatedReviews);
 
@@ -89,7 +110,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                             mainPhotoPath: RealtyObj.getMainPhoto(res.body.realtyObj)
                         },
                         user
-                    };
+                    } as RelatedReviewDto;
                     const updatedRealtorReviews = [createdRealtorReview, ...currentRealtorReviews];
 
                     this.currentRealtorReviews.next(updatedRealtorReviews);
@@ -121,7 +142,7 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
         );
     }
 
-    public approveReview(currentReview: Review) {
+    public approveReview(currentReview: RelatedReviewDto) {
         return this.sendRequest<ReviewDto>('post', `/${currentReview.id}/approve`).pipe(
             tap(() => {
                 this.approvedReviewId.next(currentReview.id);
@@ -150,20 +171,14 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
         );
     }
 
-    public getAllReviewsForUser(): Observable<HttpResponse<Review[]>> {
-        return this.sendRequest<Review[]>('get', `/my-reviews-list`).pipe(
-            tap(res => {
-                const realtyObjects = res.body.map(r => r.realtyObj);
-                (realtyObjects ?? []).forEach(value => {
-                    value.mainPhotoPath = RealtyObj.getMainPhoto(value);
-                });
-                this.currentUserReviews.next(res.body);
-            })
-        );
-    }
-
     public getForObjectAndCurrentUser(realtyObjId: number): Observable<HttpResponse<ReviewDto>> {
         return this.sendRequest('get', `/by-object/${realtyObjId}`);
+    }
+
+    public getById(reviewId: number): Observable<RelatedReviewDto> {
+        return this.sendRequest<RelatedReviewDto>('get', `/${reviewId}`).pipe(
+            map(r => r.body)
+        );
     }
 
     public getForObjectAndDate(realtyObjId: number, date: Date): Observable<HttpResponse<Date[]>> {
@@ -172,19 +187,13 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
     }
 
 
-    public getById(reviewId: number): Observable<Review> {
-        return this.sendRequest<Review>('get', `/${reviewId}`).pipe(
-            map(r => r.body)
-        );
-    }
 
-
-    public scheduleReviewFlow(object: RealtyObj): Observable<ReviewPostDto> {
+    public scheduleReviewFlow(object: RealtyObj): Observable<RelatedReviewDto> {
         const modalRef = this.modalService.open(ScheduleFormModalComponent, {ariaLabelledBy: 'modal-basic-title'});
         modalRef.componentInstance.realtyObject = object;
 
         return from(modalRef.result).pipe(
-            switchMap((value: ReviewPostDto) => {
+            switchMap((value: RelatedReviewDto) => {
                 if (value) {
                     return of(value);
                 } else {

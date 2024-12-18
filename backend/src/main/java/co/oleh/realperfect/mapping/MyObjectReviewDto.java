@@ -7,7 +7,7 @@ import java.time.Instant;
 @Data
 public class MyObjectReviewDto {
     Long id;
-    Long userId;
+    UserProfileDto user;
     Long realtorId;
     RealtyObjectDetailsDto realtyObj;
     Instant dateTime;

@@ -4,12 +4,13 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {RealtyObj} from '../../app-models/realty-obj';
-import {Review} from '../../app-models/review';
+import {RelatedReviewDto} from '../../app-models/review';
 import {isFutureDate} from '../../utils/time-utils';
-import {ConfirmModalComponent} from '../confirm-modal/confirm-modal.component';
 import {ReviewsService} from '../../app-services/reviews.service';
 import {CancelReviewModalComponent} from '../cancel-review-modal/cancel-review-modal.component';
 import {ApproveReviewModalComponent} from '../approve-review-modal/approve-review-modal.component';
+import {UserProfile} from '../../app-models/user';
+import {UserContactModalComponent} from '../realtor-contact/user-contact-modal.component';
 
 @Component({
     selector: 'app-realty-obj-review-card',
@@ -21,32 +22,32 @@ export class RealtyObjReviewCardComponent implements OnDestroy {
     @Input()
     public showRealtyObjectCreatedAt!: boolean;
     @Input()
-    public showActionButtons!: boolean;
+    public isRealtorMode!: boolean;
     protected readonly isFutureDate = isFutureDate;
     private destroy$ = new Subject<boolean>();
 
     constructor(public modalService: NgbModal, public reviewsService: ReviewsService) {
     }
 
-    private _review!: Review;
+    private _review!: RelatedReviewDto;
 
-    public get review(): Review {
+    public get review(): RelatedReviewDto {
         return this._review;
     }
 
     @Input()
-    public set review(value: Review) {
+    public set review(value: RelatedReviewDto) {
         this._review = value;
         this.realtyObject = value?.realtyObj;
     }
 
-    public cancelReview(review: Review): void {
+    public cancelReview(review: RelatedReviewDto): void {
         const modalRef = this.modalService.open(CancelReviewModalComponent);
         modalRef.componentInstance.review = review;
         modalRef.result.then();
     }
 
-    public approveReview(review: Review) {
+    public approveReview(review: RelatedReviewDto) {
         const modalRef = this.modalService.open(ApproveReviewModalComponent);
         modalRef.componentInstance.review = review;
         modalRef.componentInstance.message = 'Are you sure you want to approve the review?';  // Passing custom message
@@ -57,6 +58,14 @@ export class RealtyObjReviewCardComponent implements OnDestroy {
                     .subscribe();
             }
         });
+    }
+
+    public openUserDetailsDialog(user: UserProfile) {
+        const modalRef = this.modalService.open(UserContactModalComponent);
+        (modalRef.componentInstance as UserContactModalComponent).user = this.review.user;
+        (modalRef.componentInstance as UserContactModalComponent).message = 'User Contact Information';
+        (modalRef.componentInstance as UserContactModalComponent).userTitle = 'will review the object';
+        modalRef.result.then();
     }
 
     ngOnDestroy(): void {

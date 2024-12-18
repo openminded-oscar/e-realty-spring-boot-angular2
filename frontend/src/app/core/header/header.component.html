@@ -1,42 +1,39 @@
 <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark p-3">
-  <a class="navbar-brand" href="/">RealPerfect</a>
-  <button class="navbar-toggler"
-          type="button"
-          (click)="isMenuCollapsed = !isMenuCollapsed">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" [ngbCollapse]="isMenuCollapsed">
-    <ul class="navbar-nav me-auto">
-      <li class="nav-item" (click)="closeMenu()">
-        <a class="nav-link" [class.active]="isActiveRoute('/buy') || isDefaultRoute()" [routerLink]="['/buy']"
-           routerLinkActive="active">Buy</a>
-      </li>
-      <li class="nav-item" (click)="closeMenu()">
-        <a class="nav-link" [class.active]="isActiveRoute('/rent')" [routerLink]="['/rent']"
-           routerLinkActive="active">Rent</a>
-      </li>
-      <li class="nav-item" (click)="closeMenu()">
-        <a class="nav-link" [class.active]="isActiveRoute('/realtors')" [routerLink]="['/realtors']"
-           routerLinkActive="active">Realtors</a>
-      </li>
-    </ul>
+    <a class="navbar-brand" href="/">RealPerfect</a>
+    <button class="navbar-toggler"
+            type="button"
+            (click)="isMenuCollapsed = !isMenuCollapsed">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [ngbCollapse]="isMenuCollapsed">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item" (click)="closeMenu()">
+                <a class="nav-link" [class.active]="isActiveRoute('/buy') || isDefaultRoute()" [routerLink]="['/buy']"
+                   routerLinkActive="active">Buy</a>
+            </li>
+            <li class="nav-item" (click)="closeMenu()">
+                <a class="nav-link" [class.active]="isActiveRoute('/rent')" [routerLink]="['/rent']"
+                   routerLinkActive="active">Rent</a>
+            </li>
+            <li class="nav-item" (click)="closeMenu()">
+                <a class="nav-link" [class.active]="isActiveRoute('/realtors')" [routerLink]="['/realtors']"
+                   routerLinkActive="active">Realtors</a>
+            </li>
+        </ul>
 
-    <div class="menu-right-block" style="display: flex">
-      <div class="nav-item owner-item mobile-fixed-size-button-block" *ngIf="this.userService.isAdmin$ | async">
-        <a class="btn btn-light nav-link" routerLink="/admin" (click)="closeMenu()">Admin Section</a>
-      </div>
-      <div *ngIf="!isAuthenticated" style="display: flex; flex-direction: row; gap: 10px">
-        <signup-button></signup-button>
-        <signin-button></signin-button>
-      </div>
-      <signout-button class="mobile-fixed-size-button-block"  *ngIf="isAuthenticated" (click)="closeMenu()"></signout-button>
-      <div class="nav-to-profile" *ngIf="isAuthenticated" [routerLink]="['/profile']" (click)="closeMenu()">
-        <img style="height: 100%; border-radius: 50%;" *ngIf="user?.profilePicUrl; else avatarIcon"
-             [src]="user.profilePicUrl" alt="">
-        <ng-template #avatarIcon>
-          <i class="fa fa-user"></i>
-        </ng-template>
-      </div>
+        <div class="menu-right-block" style="display: flex">
+            <div class="nav-item owner-item mobile-fixed-size-button-block" *ngIf="this.userService.isAdmin$ | async">
+                <a class="btn btn-light nav-link" routerLink="/admin" (click)="closeMenu()">Admin Section</a>
+            </div>
+            <div *ngIf="!isAuthenticated" style="display: flex; flex-direction: row; gap: 10px">
+                <signup-button></signup-button>
+                <signin-button></signin-button>
+            </div>
+            <signout-button class="mobile-fixed-size-button-block" *ngIf="isAuthenticated"
+                            (click)="closeMenu()"></signout-button>
+            <div class="nav-to-profile" *ngIf="isAuthenticated" [routerLink]="['/profile']" (click)="closeMenu()">
+                <app-user-profile-image [user]="user"></app-user-profile-image>
+            </div>
+        </div>
     </div>
-  </div>
 </nav>
