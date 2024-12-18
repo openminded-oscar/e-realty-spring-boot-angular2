@@ -1,8 +1,8 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {BehaviorSubject, of, Subject, timer} from 'rxjs';
+import {map, switchMap, takeUntil} from 'rxjs/operators';
 import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {UserService} from '../app-services/user.service';
 import {SampleSocketService} from '../app-services/socket/sample-socket.service';
@@ -11,7 +11,7 @@ import {User} from '../app-models/user';
 import {RealtyObj} from '../app-models/realty-obj';
 import {SignInSignOutService} from '../app-services/auth/sign-in-sign-out.service';
 import {LoaderService} from '../app-services/loader.service';
-
+import {MIN_LOADER_SHOW_TIME} from './data-loader/data-loader.component';
 
 @Component({
     selector: 'app-root',
@@ -19,8 +19,8 @@ import {LoaderService} from '../app-services/loader.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    public isLoading = false;
     private destroy$ = new Subject<boolean>();
+    public isLoading$ = new BehaviorSubject<boolean>(false);
 
     constructor(public http: HttpClient,
                 public signinSignoutService: SignInSignOutService,
@@ -35,11 +35,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.loaderService.isLoading$.pipe(
-            tap(isLoading => {
-                this.isLoading = isLoading;
-                this.cdr.detectChanges();
+            switchMap(isLoading => {
+                if (isLoading) {
+                    return of(isLoading);
+                } else {
+                    return timer(MIN_LOADER_SHOW_TIME).pipe(map(() => isLoading));
+                }
             })
-        ).subscribe();
+        ).subscribe(isLoading => {
+            this.isLoading$.next(isLoading);
+            this.cdr.detectChanges();
+        });
+
         if (localStorage.getItem('token')) {
             this.userService.fetchUserStatus();
         } else {
