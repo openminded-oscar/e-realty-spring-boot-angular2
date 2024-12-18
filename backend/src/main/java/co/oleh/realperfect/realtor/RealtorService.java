@@ -47,7 +47,7 @@ public class RealtorService {
     }
 
     public Realtor findById(Long objectId) {
-        return realtorRepository.findById(objectId).get();
+        return realtorRepository.findById(objectId).orElse(null);
     }
 
     public Realtor findRealtorByUserId(Long id) {

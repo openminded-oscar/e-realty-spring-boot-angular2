@@ -2,6 +2,7 @@ package co.oleh.realperfect.realty;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.config.cache.CacheNames;
+import co.oleh.realperfect.emails.EmailsService;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
@@ -37,6 +38,7 @@ public class RealtyObjectsApi {
     private RealtyObjectsService realtyObjectsService;
     private RealtyObjectsByGeolocationService realtyObjectsByGeolocationService;
     private RealtorService realtorService;
+    private EmailsService emailsService;
 
     @GetMapping(value = "/{objectId}")
     public ResponseEntity<RealtyObjectDetailsDto> getObjectDetails(@PathVariable Long objectId) {
@@ -128,7 +130,20 @@ public class RealtyObjectsApi {
         realtyObject.setOwner(new UserDto() {{
             setId(user.getId());
         }});
-        RealtyObjectDetailsDto addedObject = realtyObjectsService.save(realtyObject);
+        RealtyObjectDetailsDto addedObject = realtyObjectsService.insert(realtyObject, user);
+
+        return new ResponseEntity<>(addedObject, HttpStatus.OK);
+    }
+
+    @PutMapping("/save/{objectId}")
+    @RateLimited(requestsPerMinute = 10)
+    public ResponseEntity<RealtyObjectDetailsDto> putRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
+                                                                  @Valid @RequestBody RealtyObjectDetailsDto realtyObject,
+                                                                  @PathVariable Long objectId) {
+        realtyObject.setOwner(new UserDto() {{
+            setId(user.getId());
+        }});
+        RealtyObjectDetailsDto addedObject = realtyObjectsService.update(realtyObject, objectId);
 
         return new ResponseEntity<>(addedObject, HttpStatus.OK);
     }

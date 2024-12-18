@@ -82,7 +82,7 @@ export class RealtyObjService implements OnDestroy {
   }
 
   public create(realtyObj: Partial<RealtyObj>): Observable<RealtyObj> {
-    return this.callSaveOnServer(realtyObj)
+    return this.callSaveOnServer(realtyObj, 'POST')
       .pipe(
         tap(createdObject => {
           const messageModal = this.dialogService.open(MessageModalComponent);
@@ -95,7 +95,7 @@ export class RealtyObjService implements OnDestroy {
   }
 
   public update(realtyObj: Partial<RealtyObj>): Observable<RealtyObj> {
-    return this.callSaveOnServer(realtyObj).pipe(
+    return this.callSaveOnServer(realtyObj, 'PUT').pipe(
       tap(updatedObject => {
         this.notificationService.showNotification('The object was saved!');
       }), catchError((error) => {
@@ -105,8 +105,10 @@ export class RealtyObjService implements OnDestroy {
     );
   }
 
-  private callSaveOnServer(realtyObj: Partial<RealtyObj>) {
-    return this.http.post<RealtyObj>(endpoints.realtyObj.add, realtyObj, {
+  private callSaveOnServer(realtyObj: Partial<RealtyObj>, method: 'POST' | 'PUT') {
+    const urlPath = endpoints.realtyObj.add + (method === 'POST'?'': '/' + realtyObj.id)
+    return this.http.request<RealtyObj>(method, urlPath, {
+      body: realtyObj,
       headers: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}
     }).pipe(
       takeUntil(this.destroy$),
