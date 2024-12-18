@@ -2,9 +2,9 @@ package co.oleh.realperfect.realty.filtering;
 
 import co.oleh.realperfect.model.OperationType;
 import co.oleh.realperfect.model.RealtyObject;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
-import jakarta.persistence.criteria.*;
 import java.util.Collection;
 
 public class RealtyObjectSpecification implements Specification<RealtyObject> {
@@ -18,6 +18,9 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
     public Predicate toPredicate(Root<RealtyObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         Path<String> keyPath = getField(root, filterItem.getField());
         String value = filterItem.getValue();
+        if (value == null) {
+            return null;
+        }
 
         FilterOperation filterOperation = filterItem.getOperation();
         switch (filterOperation) {
