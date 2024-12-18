@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {ReviewsService} from '../../../app-services/reviews.service';
-import {filterByReviewType, Review, ReviewFilter} from '../../../app-models/review';
+import {filterByReviewType, RelatedReviewDto, ReviewFilter} from '../../../app-models/review';
 
 @Component({
   selector: 'app-user-reviews',
@@ -12,8 +12,8 @@ import {filterByReviewType, Review, ReviewFilter} from '../../../app-models/revi
 export class UserReviewsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
-  public allUserReviews: Review[] = [];
-  public filteredReviews: Review[] = [];
+  public allUserReviews: RelatedReviewDto[] = [];
+  public filteredReviews: RelatedReviewDto[] = [];
   public filter: ReviewFilter = 'all';
 
   constructor(public reviewService: ReviewsService) {

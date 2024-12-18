@@ -17,7 +17,7 @@ import {ConfirmModalComponent} from './confirm-modal/confirm-modal.component';
 import {
     RealtyObjCardDetailsComponent
 } from './realty-obj-card/realty-obj-card-details/realty-obj-card-details.component';
-import {RealtorContactComponent} from './realtor-contact/realtor-contact.component';
+import {UserContactModalComponent} from './realtor-contact/user-contact-modal.component';
 import {RealtyStatusComponent} from './realty-status/realty-status.component';
 import {MessageModalComponent} from './message-modal/message-modal.component';
 import {ReviewsListComponent} from '../user-cabinet/reviews/app-reviews-list/reviews-list.component';
@@ -29,10 +29,11 @@ import {
     ObjectsInProfileFilterComponent
 } from '../user-cabinet/user-objects/objects-in-profile-filter/objects-in-profile-filter.component';
 import {ApproveReviewModalComponent} from './approve-review-modal/approve-review-modal.component';
+import {UserProfileImageComponent} from '../core/header/user-profile-image/user-profile-image.component';
 
 const components = [
     ObjectsInProfileFilterComponent,
-    RealtorContactComponent,
+    UserContactModalComponent,
     ReviewsListComponent,
     ReviewsFilterComponent,
     RealtyObjsListComponent,
@@ -45,7 +46,8 @@ const components = [
     ApproveReviewModalComponent,
     CancelReviewModalComponent,
     MessageModalComponent,
-    RealtyStatusComponent
+    RealtyStatusComponent,
+    UserProfileImageComponent
 ];
 
 @NgModule({

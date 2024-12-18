@@ -1,38 +1,44 @@
 <app-realty-obj-card-details [realtyObject]="realtyObject">
-  <ng-container topRow>
-    <h4 style="display: flex; justify-content: space-between; flex: 1;">
-      <div>
-        <span [routerLink]="['/realty-object', realtyObject.id]"
-              style="cursor: pointer">{{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}</span>
-      </div>
-      <div *ngIf="!review.approved">
-        <div style="width: 20px; color: red" [ngbTooltip]="'Review Is Not Yet Approved'">
-          <i class="fas fa-clock"></i>
-        </div>
-      </div>
-    </h4>
-  </ng-container>
-  <ng-container imageOverlayContent *ngIf="review.dateTime">
-    <ng-container *ngIf="isFutureDate(review.dateTime); else pastDate">
-      <div style="display: flex; flex-direction: row; justify-content: space-between">
-        <div>
-          Scheduled for {{ review.dateTime | date: 'MMM d, HH:mm':'local' }}
-        </div>
-        <div style="display: flex">
-          <ng-container *ngIf="review.approved || !showActionButtons; else approveOrCancel">
-            <button (click)="cancelReview(review)">Cancel And Notify</button>
-          </ng-container>
-          <ng-template #approveOrCancel>
-            <button (click)="cancelReview(review)">Cancel</button>
-            <button (click)="approveReview(review)">Approve</button>
-          </ng-template>
-        </div>
-      </div>
+    <ng-container topRow>
+        <h4 style="display: flex; justify-content: space-between; flex: 1; max-height: 30px">
+            <div style="flex: 1">
+                <span [routerLink]="['/realty-object', realtyObject.id]"
+                      style="cursor: pointer">{{ realtyObject.address.street }}
+                    ,&nbsp;{{ realtyObject.address.city }}</span>
+            </div>
+            <div style="cursor: pointer" *ngIf="isRealtorMode && review.user">
+                <app-user-profile-image (click)="openUserDetailsDialog(review.user)"
+                                        [ngbTooltip]="review.user?.name + ' will review'"
+                                        [user]="review.user"></app-user-profile-image>
+            </div>
+            <div *ngIf="!review.approved">
+                <div style="width: 20px; color: red" [ngbTooltip]="'Review Is Not Yet Approved'">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+        </h4>
     </ng-container>
-    <ng-template #pastDate>
-      <div>
-        Reviewed on {{ review.dateTime | date: 'MMM d, HH:mm':'local' }}
-      </div>
-    </ng-template>
-  </ng-container>
+    <ng-container imageOverlayContent *ngIf="review.dateTime">
+        <ng-container *ngIf="isFutureDate(review.dateTime); else pastDate">
+            <div style="display: flex; flex-direction: row; justify-content: space-between">
+                <div>
+                    Scheduled for {{ review.dateTime | date: 'MMM d, HH:mm':'local' }}
+                </div>
+                <div style="display: flex">
+                    <ng-container *ngIf="review.approved || !isRealtorMode; else approveOrCancel">
+                        <button (click)="cancelReview(review)">Cancel And Notify</button>
+                    </ng-container>
+                    <ng-template #approveOrCancel>
+                        <button (click)="cancelReview(review)">Cancel</button>
+                        <button (click)="approveReview(review)">Approve</button>
+                    </ng-template>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #pastDate>
+            <div>
+                Reviewed on {{ review.dateTime | date: 'MMM d, HH:mm':'local' }}
+            </div>
+        </ng-template>
+    </ng-container>
 </app-realty-obj-card-details>

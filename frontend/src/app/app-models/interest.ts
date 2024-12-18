@@ -1,5 +1,5 @@
 import {RealtyObj} from './realty-obj';
-import {Review} from './review';
+import {RelatedReviewDto} from './review';
 
 export interface InterestDto {
   id?: number;
@@ -10,6 +10,6 @@ export interface InterestDto {
 export interface Interest {
   id?: number;
   userId: number;
-  reviewScheduled?: Review;
+  reviewScheduled?: RelatedReviewDto;
   realtyObj: RealtyObj;
 }

@@ -1,11 +1,13 @@
 <div id="itemsContainer" class="row" *ngIf="reviews.length; else noReviews">
-  <div *ngFor="let review of reviews; trackBy: trackById" class="col-md-6 col-lg-4">
-    <app-realty-obj-review-card [review]="review" [showActionButtons]="showActionButtons" [showRealtyObjectCreatedAt]="true">
-    </app-realty-obj-review-card>
-  </div>
+    <div *ngFor="let review of reviews; trackBy: trackById" class="col-md-6 col-lg-4">
+        <app-realty-obj-review-card [review]="review"
+                                    [isRealtorMode]="isRealtorMode"
+                                    [showRealtyObjectCreatedAt]="true">
+        </app-realty-obj-review-card>
+    </div>
 </div>
 <ng-template #noReviews>
-  <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
-    <div>No Matching Reviews. Enjoy Using Our Service!</div>
-  </div>
+    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
+        <div>No Matching Reviews. Enjoy Using Our Service!</div>
+    </div>
 </ng-template>

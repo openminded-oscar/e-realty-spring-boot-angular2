@@ -13,7 +13,7 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {dateBasedOnNGBDatePicker, ReviewsService} from '../../app-services/reviews.service';
 import {RealtyObj} from '../../app-models/realty-obj';
-import {ReviewPostDto} from '../../app-models/review';
+import {RelatedReviewDto} from '../../app-models/review';
 
 export function reviewDateTimeValidator(): ValidatorFn {
     return (formGroup: AbstractControl): ValidationErrors => {
@@ -53,7 +53,7 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
     public reviewTimeForm: FormGroup;
     public availableTimesOfDay: Date[] = [];
     public selectedDateTime = null;
-    public savedReview: ReviewPostDto;
+    public savedReview: RelatedReviewDto;
     private destroy$ = new Subject<boolean>();
 
     constructor(
