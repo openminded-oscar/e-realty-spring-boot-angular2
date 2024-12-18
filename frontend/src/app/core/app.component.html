@@ -1,5 +1,5 @@
 <app-global-notification></app-global-notification>
-<ng-container *ngIf="isLoading">
+<ng-container *ngIf="isLoading$|async">
   <app-data-loader style="position: fixed; /* Sticks the loader to the viewport */
     top: 0;
     left: 0;
