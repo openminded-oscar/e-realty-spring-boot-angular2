@@ -34,8 +34,7 @@ export class RealtorObjectsComponent implements OnInit, OnDestroy {
     }
 
     public applyFilter(): void {
-        this.filteredObjects = filterByObjectStatus(this.allRealtorObjects, this.filter)
-        debugger
+        this.filteredObjects = filterByObjectStatus(this.allRealtorObjects, this.filter);
     }
 
     public setFilter(filterSelected: RealtyObjectByStatusFilter) {
