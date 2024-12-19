@@ -7,9 +7,8 @@ import co.oleh.realperfect.emails.EmailsService;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
-import co.oleh.realperfect.model.user.EmailConfirmationStatus;
-import co.oleh.realperfect.model.user.EmailPasswordDto;
-import co.oleh.realperfect.model.user.User;
+import co.oleh.realperfect.model.user.*;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +18,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/user")
@@ -71,5 +73,24 @@ public class UserApi {
     public UserSelfDto updateMyProfile(@AuthenticationPrincipal SpringSecurityUser currentUser,
                                        @Valid @RequestBody UserProfileDto user) {
         return userService.patchProfile(currentUser.getId(), user);
+    }
+
+    @PostMapping("/forgot-password")
+    public Map<String, Boolean> forgotPassword(@Valid @RequestBody ForgotPasswordDto forgotPasswordDto) throws MessagingException {
+        String email = forgotPasswordDto.getEmail();
+        User user = this.userService.findByLogin(email);
+        try {
+            emailSenderService.sendForgotPasswordConfirm(user);
+        } catch (Exception e) {
+            log.error("ErrorWhileSendingUserForgotPasswordConfirmation letter {}. Details: {}", user.getEmail(), e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
+        return Map.ofEntries(Map.entry("forgotPasswordConfirmation", true));
+    }
+
+    @PostMapping("/reset-password")
+    public UserSelfDto resetPassword(@Valid @RequestBody ResetPasswordDto forgotPasswordDto) {
+        throw new RuntimeException("Not implemented yet");
     }
 }

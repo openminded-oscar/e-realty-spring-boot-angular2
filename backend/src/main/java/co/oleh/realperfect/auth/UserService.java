@@ -109,7 +109,7 @@ public class UserService {
             try {
                 this.emailSenderService.sendEmailRegistrationConfirm(user);
             } catch (Exception e) {
-                log.error("ErrorWhileSendingUserAccountConfirmation repeat letter {}. Details: {}", user.getEmail(),
+                log.error("ErrorWhileSendingUserAccountConfirmation letter {}. Details: {}", user.getEmail(),
                         e.getMessage());
             }
             return EmailConfirmationStatus.TOKEN_EXPIRED;
