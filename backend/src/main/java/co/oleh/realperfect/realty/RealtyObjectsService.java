@@ -105,7 +105,7 @@ public class RealtyObjectsService {
             Realtor realtor = this.realtorService.findById(realtyObjectDto.getRealtor().getId());
             User user = this.userRepository.findById(springUser.getId()).get();
             if (realtor != null) {
-                this.emailsService.sendNewObjectSetForRealtor(user, realtyObjectSaved, realtor);
+                this.emailsService.sendNewObjectSetForRealtorAsync(user, realtyObjectSaved, realtor);
             }
         }
 
