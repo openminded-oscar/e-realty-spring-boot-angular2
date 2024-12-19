@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class InterestApi {
     @PostMapping
     public ResponseEntity<MyInterestDto> saveInterest(@RequestBody InterestDto interestDto) {
         if (interestService.findInterestForUserAndObject(interestDto.getUserId(), interestDto.getRealtyObjId()) != null) {
-            throw new RuntimeException("There is already such interest");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already such interest");
         }
 
         MyInterestDto savedInterest = interestService.save(interestDto);
