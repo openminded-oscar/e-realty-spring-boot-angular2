@@ -10,17 +10,17 @@ import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.user.*;
 import co.oleh.realperfect.repository.EmailConfirmationTokenRepository;
 import co.oleh.realperfect.repository.RealtorRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 import co.oleh.realperfect.repository.RoleRepository;
 import co.oleh.realperfect.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -96,25 +96,24 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-
+    @Transactional
     public EmailConfirmationStatus confirmUserByToken(String token) {
         EmailConfirmationToken confirmationToken = emailConfirmationTokenRepository.findByToken(token);
-
         if (confirmationToken == null) {
             return EmailConfirmationStatus.TOKEN_NOT_FOUND;
         }
-
-        User user = confirmationToken.getUser();
         if (isTokenExpired(confirmationToken)) {
-            try {
-                this.emailSenderService.sendEmailRegistrationConfirm(user);
-            } catch (Exception e) {
-                log.error("ErrorWhileSendingUserAccountConfirmation letter {}. Details: {}", user.getEmail(),
-                        e.getMessage());
-            }
             return EmailConfirmationStatus.TOKEN_EXPIRED;
         }
+        User user = confirmationToken.getUser();
+        try {
+            this.emailSenderService.sendEmailRegistrationConfirm(user);
+        } catch (Exception e) {
+            log.error("ErrorWhileSendingUserAccountConfirmation letter {}. Details: {}", user.getEmail(),
+                    e.getMessage());
+        }
 
+        this.emailConfirmationTokenRepository.deleteById(confirmationToken.getId());
         if (user.getUserConfirmed()) {
             return EmailConfirmationStatus.USER_ALREADY_CONFIRMED;
         }
@@ -124,6 +123,7 @@ public class UserService {
         return EmailConfirmationStatus.EMAIL_CONFIRMED;
     }
 
+    @Transactional
     public ResetPasswordStatus resetPassword(ResetPasswordDto resetPasswordDto) {
         String token = resetPasswordDto.getConfirmationCode();
         EmailConfirmationToken confirmationToken = emailConfirmationTokenRepository.findByToken(token);
@@ -134,15 +134,16 @@ public class UserService {
 
         User user = confirmationToken.getUser();
         if (isTokenExpired(confirmationToken)) {
-            try {
-                this.emailSenderService.sendEmailRegistrationConfirm(user);
-            } catch (Exception e) {
-                log.error("ErrorWhileSendingUserPasswordReset letter {}. Details: {}", user.getEmail(),
-                        e.getMessage());
-            }
             return ResetPasswordStatus.TOKEN_EXPIRED;
         }
+        try {
+            this.emailSenderService.sendEmailRegistrationConfirm(user);
+        } catch (Exception e) {
+            log.error("ErrorWhileSendingUserPasswordReset letter {}. Details: {}", user.getEmail(),
+                    e.getMessage());
+        }
 
+        this.emailConfirmationTokenRepository.deleteById(confirmationToken.getId());
         resetUserPassword(user, resetPasswordDto.getNewPassword());
 
         return ResetPasswordStatus.EMAIL_CONFIRMED;
