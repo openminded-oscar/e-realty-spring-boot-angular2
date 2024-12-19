@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -66,7 +67,7 @@ public class ObjectReviewApi {
                                                         @RequestBody ObjectReviewDto reviewDto) throws IOException {
         reviewDto.setUserId(user.getId());
         if (reviewService.findFutureReviewForUserAndObject(user.getId(), reviewDto.getRealtyObjId()) != null) {
-            throw new RuntimeException("There is already such review");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already such review");
         }
         googleCalendarWrapperService.addReviewToUserCalendar(reviewDto, user);
 
