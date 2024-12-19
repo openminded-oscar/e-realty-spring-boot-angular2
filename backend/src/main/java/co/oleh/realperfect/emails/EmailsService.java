@@ -37,7 +37,24 @@ public class EmailsService {
         this.emailConfirmationTokenRepository = emailConfirmationTokenRepository;
     }
 
-    public void sendEmailRegistrationConfirm(User user) {
+    public void sendForgotPasswordConfirm(User user) throws MessagingException {
+        EmailConfirmationToken tokenEntity = new EmailConfirmationToken(user);
+        String tokenString = tokenEntity.getToken();
+
+        this.emailConfirmationTokenRepository.save(tokenEntity);
+
+        String htmlContent = String.format("""
+                Hereby reset password at RealPerfect Best realty service!
+                Your resetting key is %s.</br>
+                We recommend that you use unique, long, complex passwords for all of your accounts. To make generating and remembering your passwords easier, we also suggest using a password management tool.
+                """, tokenString);
+        String email = user.getEmail();
+        this.emailUtilityService.sendHtmlMessage(Collections.singletonList(email), "Password Recovery",
+                htmlContent);
+        log.info("Email confirmation sent to {}", email);
+    }
+
+    public void sendEmailRegistrationConfirm(User user) throws MessagingException {
         EmailConfirmationToken tokenEntity = new EmailConfirmationToken(user);
         String tokenString = tokenEntity.getToken();
 
@@ -48,7 +65,7 @@ public class EmailsService {
                 <a href=\"%s\">Click here to complete registration</a>
                 """, confirmationLink);
         String email = user.getEmail();
-        this.emailUtilityService.sendHtmlMessageAsync(Collections.singletonList(email), "Registration Confirmation",
+        this.emailUtilityService.sendHtmlMessage(Collections.singletonList(email), "Registration Confirmation",
                 htmlContent);
         log.info("Email confirmation sent to {}", email);
     }
