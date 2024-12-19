@@ -7,9 +7,9 @@ import co.oleh.realperfect.emails.EmailsService;
 import co.oleh.realperfect.mapping.UserProfileDto;
 import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
-import co.oleh.realperfect.model.user.EmailConfirmationStatus;
-import co.oleh.realperfect.model.user.EmailPasswordDto;
-import co.oleh.realperfect.model.user.User;
+import co.oleh.realperfect.model.user.*;
+import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/user")
@@ -48,7 +49,8 @@ public class UserApi {
         try {
             emailSenderService.sendEmailRegistrationConfirm(user);
         } catch (Exception e) {
-            log.error("ErrorWhileSendingUserAccountConfirmation letter {}. Details: {}", user.getEmail(), e.getMessage());
+            log.error("ErrorWhileSendingUserAccountConfirmation letter {}. Details: {}", user.getEmail(),
+                    e.getMessage());
         }
 
         return this.mappingService.map(user, UserSelfDto.class);
@@ -71,5 +73,35 @@ public class UserApi {
     public UserSelfDto updateMyProfile(@AuthenticationPrincipal SpringSecurityUser currentUser,
                                        @Valid @RequestBody UserProfileDto user) {
         return userService.patchProfile(currentUser.getId(), user);
+    }
+
+    @PostMapping("/forgot-password")
+    public Map<String, Boolean> forgotPassword(@Valid @RequestBody ForgotPasswordDto forgotPasswordDto) throws MessagingException {
+        String email = forgotPasswordDto.getEmail();
+        User user = this.userService.findByLogin(email);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found.");
+        }
+        try {
+            emailSenderService.sendForgotPasswordConfirm(user);
+        } catch (Exception e) {
+            log.error("ErrorWhileSendingUserForgotPasswordConfirmation letter {}. Details: {}", user.getEmail(),
+                    e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
+        return Map.ofEntries(Map.entry("forgotPasswordConfirmation", true));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDto forgotPasswordDto) {
+        ResetPasswordStatus status =
+                this.userService.resetPassword(forgotPasswordDto);
+
+        return switch (status) {
+            case TOKEN_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found.");
+            case TOKEN_EXPIRED -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is invalid or expired.");
+            case EMAIL_CONFIRMED -> ResponseEntity.ok("Password reset successfully!");
+        };
     }
 }

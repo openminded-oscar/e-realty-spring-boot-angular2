@@ -22,6 +22,7 @@ import {SignUpModalComponent} from './core/sign-up-modal/sign-up-modal.component
 import {environment} from '../environments/environment';
 import {DataLoaderComponent} from './core/data-loader/data-loader.component';
 import {LoaderInterceptor} from './app-services/common/LoaderInterceptor';
+import {ForgotPasswordModalComponent} from './core/forgot-password-modal/forgot-password-modal.component';
 
 const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transports: ['websocket', 'polling']}};
 
@@ -36,6 +37,7 @@ const config: SocketIoConfig = {url: 'http://localhost:8081', options: {transpor
         HeaderComponent,
         SignInModalComponent,
         SignUpModalComponent,
+        ForgotPasswordModalComponent,
         DataLoaderComponent
     ],
     exports: [],

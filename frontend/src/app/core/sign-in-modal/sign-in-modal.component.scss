@@ -18,3 +18,13 @@
     padding-right: 0
   }
 }
+
+.forgot-password-btn {
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &--container {
+    margin-bottom: 15px;
+    text-align: right;
+  }
+}

@@ -10,6 +10,7 @@ import {UserService} from '../user.service';
 import {SignInModalComponent} from '../../core/sign-in-modal/sign-in-modal.component';
 import {GlobalNotificationService} from '../global-notification.service';
 import {HTTP_CONSTANTS} from '../common/HttpErrorInterceptor';
+import {dismissAllModal} from './auth.util';
 
 export interface SignInResponse {
   token: string;
@@ -27,7 +28,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
   }
 
   public signIn(text?: string) {
-    this.dismissAllModal().pipe(
+    dismissAllModal(this.modalService).pipe(
       take(1),
       // wait delay for prev modals closed
       delay(200),
@@ -42,7 +43,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
       catchError((body) => {
         const errorMessage = body?.error?.message || 'Sign-in failed. Please try again.';
         this.globalNotificationService.showErrorNotification(errorMessage);
-        return this.dismissAllModal().pipe(switchMap(() => of(null)));
+        return dismissAllModal(this.modalService).pipe(switchMap(() => of(null)));
       })
     ).subscribe();
   }
@@ -72,14 +73,6 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
             localStorage.setItem('token', res.body.token);
           }
         ));
-  }
-
-  private dismissAllModal(): Observable<void> {
-    return new Observable((observer) => {
-      this.modalService.dismissAll();
-      observer.next();
-      observer.complete();
-    });
   }
 
   private openSignInModal(text: string) {
