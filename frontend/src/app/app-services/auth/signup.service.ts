@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {delay, from, Observable, of, Subject, switchMap, take} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {catchError, filter, tap} from 'rxjs/operators';
@@ -9,6 +9,7 @@ import {endpoints} from '../../commons';
 import {SignUpModalComponent} from '../../core/sign-up-modal/sign-up-modal.component';
 import {GlobalNotificationService} from '../global-notification.service';
 import {MessageModalComponent} from '../../shared/message-modal/message-modal.component';
+import {HTTP_CONSTANTS} from '../common/HttpErrorInterceptor';
 
 @Injectable({providedIn: 'root'})
 export class SignupService extends AbstractService<Credentials> implements OnDestroy {
@@ -34,8 +35,8 @@ export class SignupService extends AbstractService<Credentials> implements OnDes
                 const modal = this.modalService.open(MessageModalComponent);
                 modal.componentInstance.message = 'Account Created! Check your email for confirmation!';
             }),
-            catchError((error) => {
-                const errorMessage = error?.message || 'Sign-Up failed. Please try again.';
+            catchError((errorResponse: HttpErrorResponse) => {
+                const errorMessage = errorResponse?.error?.message || 'Sign-Up failed. Please try again.';
                 this.globalNotificationService.showErrorNotification(errorMessage);
                 return this.dismissAllModal().pipe(switchMap(() => of(null)));
             })
@@ -43,7 +44,7 @@ export class SignupService extends AbstractService<Credentials> implements OnDes
     }
 
     public signUpRequest(credentials: Credentials): Observable<HttpResponse<any>> {
-        return this.sendRequest<any>('post', '', {body: credentials});
+        return this.sendRequest<any>('post', '', {body: credentials, customHeaders: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}});
     }
 
     private dismissAllModal(): Observable<void> {

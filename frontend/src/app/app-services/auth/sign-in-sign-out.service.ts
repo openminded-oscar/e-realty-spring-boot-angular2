@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {delay, from, Observable, of, Subject, take} from 'rxjs';
 import {catchError, filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -40,7 +40,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
       tap((reqResult) => {
         this.userService.fetchUserStatus();
       }),
-      catchError((body) => {
+      catchError((body: HttpErrorResponse) => {
         const errorMessage = body?.error?.message || 'Sign-in failed. Please try again.';
         this.globalNotificationService.showErrorNotification(errorMessage);
         return dismissAllModal(this.modalService).pipe(switchMap(() => of(null)));
