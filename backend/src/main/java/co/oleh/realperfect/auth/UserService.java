@@ -120,7 +120,37 @@ public class UserService {
         }
 
         confirmUser(user);
+
         return EmailConfirmationStatus.EMAIL_CONFIRMED;
+    }
+
+    public ResetPasswordStatus resetPassword(ResetPasswordDto resetPasswordDto) {
+        String token = resetPasswordDto.getConfirmationCode();
+        EmailConfirmationToken confirmationToken = emailConfirmationTokenRepository.findByToken(token);
+
+        if (confirmationToken == null) {
+            return ResetPasswordStatus.TOKEN_NOT_FOUND;
+        }
+
+        User user = confirmationToken.getUser();
+        if (isTokenExpired(confirmationToken)) {
+            try {
+                this.emailSenderService.sendEmailRegistrationConfirm(user);
+            } catch (Exception e) {
+                log.error("ErrorWhileSendingUserPasswordReset letter {}. Details: {}", user.getEmail(),
+                        e.getMessage());
+            }
+            return ResetPasswordStatus.TOKEN_EXPIRED;
+        }
+
+        resetUserPassword(user, resetPasswordDto.getNewPassword());
+
+        return ResetPasswordStatus.EMAIL_CONFIRMED;
+    }
+
+    public void resetUserPassword(User user, String newPassword) {
+        userRepository.setPasswordById(user.getId(), bCryptPasswordEncoder.encode(newPassword));
+        userCache.evictUserCache(user.getId());
     }
 
     public void confirmUser(User user) {

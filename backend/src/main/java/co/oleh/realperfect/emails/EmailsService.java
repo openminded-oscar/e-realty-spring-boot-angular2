@@ -45,7 +45,7 @@ public class EmailsService {
 
         String htmlContent = String.format("""
                 Hereby reset password at RealPerfect Best realty service!
-                Your resetting key is {}
+                Your resetting key is %s.</br>
                 We recommend that you use unique, long, complex passwords for all of your accounts. To make generating and remembering your passwords easier, we also suggest using a password management tool.
                 """, tokenString);
         String email = user.getEmail();

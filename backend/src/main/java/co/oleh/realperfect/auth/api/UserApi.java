@@ -9,6 +9,7 @@ import co.oleh.realperfect.mapping.UserSelfDto;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.model.user.*;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
@@ -50,7 +49,8 @@ public class UserApi {
         try {
             emailSenderService.sendEmailRegistrationConfirm(user);
         } catch (Exception e) {
-            log.error("ErrorWhileSendingUserAccountConfirmation letter {}. Details: {}", user.getEmail(), e.getMessage());
+            log.error("ErrorWhileSendingUserAccountConfirmation letter {}. Details: {}", user.getEmail(),
+                    e.getMessage());
         }
 
         return this.mappingService.map(user, UserSelfDto.class);
@@ -79,10 +79,14 @@ public class UserApi {
     public Map<String, Boolean> forgotPassword(@Valid @RequestBody ForgotPasswordDto forgotPasswordDto) throws MessagingException {
         String email = forgotPasswordDto.getEmail();
         User user = this.userService.findByLogin(email);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found.");
+        }
         try {
             emailSenderService.sendForgotPasswordConfirm(user);
         } catch (Exception e) {
-            log.error("ErrorWhileSendingUserForgotPasswordConfirmation letter {}. Details: {}", user.getEmail(), e.getMessage());
+            log.error("ErrorWhileSendingUserForgotPasswordConfirmation letter {}. Details: {}", user.getEmail(),
+                    e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
@@ -90,7 +94,14 @@ public class UserApi {
     }
 
     @PostMapping("/reset-password")
-    public UserSelfDto resetPassword(@Valid @RequestBody ResetPasswordDto forgotPasswordDto) {
-        throw new RuntimeException("Not implemented yet");
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDto forgotPasswordDto) {
+        ResetPasswordStatus status =
+                this.userService.resetPassword(forgotPasswordDto);
+
+        return switch (status) {
+            case TOKEN_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found.");
+            case TOKEN_EXPIRED -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is invalid or expired.");
+            case EMAIL_CONFIRMED -> ResponseEntity.ok("Password reset successfully!");
+        };
     }
 }

@@ -11,8 +11,10 @@ import {ForgotPasswordService} from '../../app-services/auth/forgot-password.ser
 })
 export class ForgotPasswordModalComponent implements OnInit {
     public forgotPasswordForm: FormGroup;
+    public resetPasswordForm: FormGroup;
 
     public emailSubmitted = false;
+
 
     constructor(public modal: NgbActiveModal,
                 public forgotPasswordService: ForgotPasswordService,
@@ -23,6 +25,20 @@ export class ForgotPasswordModalComponent implements OnInit {
     ngOnInit(): void {
         this.forgotPasswordForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
+        });
+
+        this.resetPasswordForm = this.fb.group({
+            confirmationCode: ['', [Validators.required]],
+            newPassword: [{value: '', disabled: true}, [Validators.required]],
+        });
+
+        this.resetPasswordForm.get('confirmationCode')!.valueChanges.subscribe(value => {
+            const newPasswordControl = this.resetPasswordForm.get('newPassword');
+            if (value) {
+                newPasswordControl!.enable();
+            } else {
+                newPasswordControl!.disable();
+            }
         });
     }
 
@@ -40,13 +56,12 @@ export class ForgotPasswordModalComponent implements OnInit {
     }
 
     public submitConfirmationCode() {
-        const code = 'code'; // TODO grab confirmation code
-        const newPassword = 'newPassword'; // TODO grab confirmation code
-        this.forgotPasswordService.resetPasswordRequest(newPassword, code)
+        const {newPassword, confirmationCode} = this.resetPasswordForm.value;
+        this.forgotPasswordService.resetPasswordRequest(newPassword, confirmationCode)
             .pipe(take(1))
             .subscribe({
                 next: r => {
-                    this.emailSubmitted = true;
+                    this.modal.close();
                 }
             });
     }
