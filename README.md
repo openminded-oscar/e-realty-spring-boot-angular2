@@ -7,6 +7,7 @@
 * Maven 3, Java 16, Docker, MySQLV8
 ####Build
 * application-local.yml file required for local run
+* (recommended) run create db schema by sql commands in file (current file is data-structure.12.2024.sql)
 * `mvn spring-boot:run -Dspring-boot.run.profiles=local -P local|prod`
 
 # FrontEnd dependencies and build

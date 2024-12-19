@@ -61,7 +61,7 @@ public class UserApi {
         EmailConfirmationStatus status = userService.confirmUserByToken(token);
 
         return switch (status) {
-            case TOKEN_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found.");
+            case TOKEN_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can Not Process The Token.");
             case TOKEN_EXPIRED -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is invalid or expired.");
             case USER_ALREADY_CONFIRMED ->
                     ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is already confirmed.");
@@ -99,7 +99,7 @@ public class UserApi {
                 this.userService.resetPassword(forgotPasswordDto);
 
         return switch (status) {
-            case TOKEN_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found.");
+            case TOKEN_NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can Not Process The Token.");
             case TOKEN_EXPIRED -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is invalid or expired.");
             case EMAIL_CONFIRMED -> ResponseEntity.ok("Password reset successfully!");
         };
