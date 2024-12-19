@@ -10,6 +10,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Service
 @Slf4j
@@ -21,13 +24,27 @@ public class EmailUtilityService {
     }
 
     @Async
-    public void sendHtmlMessageAsync(List<String> to, String subject, String htmlBody) {
+    public void sendHtmlMessageAsync(List<String> to,
+                                     String subject,
+                                     String htmlBody) {
         try {
             this.sendHtmlMessage(to, subject, htmlBody);
         } catch (MessagingException e) {
             log.error("EmailSendingAsyncException {} for subject {}", e.getMessage(), subject );
         }
+    }
 
+    @Async
+    public void sendHtmlMessageAsync(List<String> to,
+                                     String subject,
+                                     String htmlBody,
+                                     Consumer<Exception> exceptionProcessor) {
+        try {
+            this.sendHtmlMessage(to, subject, htmlBody);
+        } catch (Exception e) {
+            log.error("EmailSendingAsyncException {} for subject {}", e.getMessage(), subject );
+            exceptionProcessor.accept(e);
+        }
     }
 
     public void sendHtmlMessage(List<String> to, String subject, String htmlBody) throws MessagingException {
