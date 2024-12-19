@@ -70,9 +70,9 @@ public class EmailsService {
         log.info("Email confirmation sent to {}", email);
     }
 
-    public void sendObjectReviewCancelForUser(String reason, User user, ObjectReview objectReview,
-                                              RealtyObject realtyObject,
-                                              Realtor realtor) throws MessagingException {
+    public void sendObjectReviewCancelForUserAsync(String reason, User user, ObjectReview objectReview,
+                                                   RealtyObject realtyObject,
+                                                   Realtor realtor) {
         String email = user.getEmail();
 
         Context context = new Context();
@@ -87,13 +87,18 @@ public class EmailsService {
 
         this.emailUtilityService.sendHtmlMessageAsync(Arrays.asList(email, realtor.getUser().getEmail()),
                 "RealPerfect Object Review Removed",
-                htmlContent);
+                htmlContent,
+                (Exception e) -> {
+                    if (e instanceof MessagingException) {
+                        log.error("sendObjectReviewCancelForUserAsyncError {}", e.getMessage());
+                    }
+                });
 
         log.info("RealPerfectObjectReview removed sent to user {}", email);
     }
 
-    public void sendObjectReviewSetForUser(User user, ObjectReviewDto objectReview, RealtyObject realtyObject,
-                                           Realtor realtor) throws MessagingException {
+    public void sendObjectReviewSetForUserAsync(User user, ObjectReviewDto objectReview, RealtyObject realtyObject,
+                                                Realtor realtor) {
         String email = user.getEmail();
 
         Context context = new Context();
@@ -105,14 +110,19 @@ public class EmailsService {
 
         this.emailUtilityService.sendHtmlMessageAsync(Collections.singletonList(email),
                 "RealPerfect Object Review Scheduled And Send To Realtor",
-                htmlContent);
+                htmlContent,
+                (Exception e) -> {
+                    if (e instanceof MessagingException) {
+                        log.error("sendObjectReviewSetForUserAsyncError Occurred on Email sending {}", e.getMessage());
+                    }
+                });
 
         log.info("RealPerfectObjectReview sent to user {}", email);
     }
 
-    public void sendNewObjectSetForRealtor(User user,
-                                              RealtyObject realtyObject,
-                                              Realtor realtor) {
+    public void sendNewObjectSetForRealtorAsync(User user,
+                                                RealtyObject realtyObject,
+                                                Realtor realtor) {
         String realtorEmail = realtor.getUser().getEmail();
 
         Context context = new Context();
@@ -123,14 +133,19 @@ public class EmailsService {
 
         this.emailUtilityService.sendHtmlMessageAsync(Collections.singletonList(realtorEmail),
                 "New Realty Object Added For you As Realtor",
-                htmlContent);
+                htmlContent, (Exception e) -> {
+                    if (e instanceof MessagingException) {
+                        log.error("sendNewObjectForRealtorAsyncError Occurred on Email sending {}",
+                                e.getMessage());
+                    }
+                });
         log.info("RealPerfectObjectAdded {} sent to realtor {}", realtyObject.getId(), realtorEmail);
     }
 
-    public void sendObjectReviewSetForRealtor(User user,
-                                              ObjectReviewDto objectReview,
-                                              RealtyObject realtyObject,
-                                              Realtor realtor) throws MessagingException {
+    public void sendObjectReviewSetForRealtorAsync(User user,
+                                                   ObjectReviewDto objectReview,
+                                                   RealtyObject realtyObject,
+                                                   Realtor realtor) {
         String email = realtor.getUser().getEmail();
 
         Context context = new Context();
@@ -142,12 +157,18 @@ public class EmailsService {
 
         this.emailUtilityService.sendHtmlMessageAsync(Collections.singletonList(email),
                 "RealPerfect Object Review Scheduled And Waiting Confirmation",
-                htmlContent);
+                htmlContent,
+                (Exception e) -> {
+                    if (e instanceof MessagingException) {
+                        log.error("sendObjectReviewSetForRealtorAsyncError Occurred on Email sending {}",
+                                e.getMessage());
+                    }
+                });
         log.info("RealPerfectObjectReview {} sent to realtor {}", objectReview.getId(), email);
     }
 
-    public void sendObjectReviewApproved(User userFromDb, ObjectReview objectReview, RealtyObject realtyObj,
-                                            Realtor realtor) throws MessagingException {
+    public void sendObjectReviewApprovedAsync(User userFromDb, ObjectReview objectReview, RealtyObject realtyObj,
+                                              Realtor realtor) {
         String email = userFromDb.getEmail();
 
         Context context = new Context();
@@ -160,7 +181,13 @@ public class EmailsService {
 
         this.emailUtilityService.sendHtmlMessageAsync(Arrays.asList(email, realtor.getUser().getEmail()),
                 "RealPerfect Object Review Approved!",
-                htmlContent);
+                htmlContent,
+                (Exception e) -> {
+                    if (e instanceof MessagingException) {
+                        log.error("sendObjectReviewApprovedAsyncError Occurred on Email sending {}", e.getMessage());
+                    }
+                });
+
         log.info("RealPerfectObjectReview {} approved", objectReview.getId());
     }
 }
