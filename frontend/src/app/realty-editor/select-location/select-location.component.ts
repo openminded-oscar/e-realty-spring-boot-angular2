@@ -34,15 +34,15 @@ export class SelectLocationComponent {
         this.layers.push(new LayerGroup([this.markers]));
     }
 
-    private _initialLocation: Geolocation;
+    private _location: Geolocation;
 
-    public get initialLocation(): Geolocation {
-        return this._initialLocation;
+    public get location(): Geolocation {
+        return this._location;
     }
 
     @Input()
-    public set initialLocation(value: Geolocation) {
-        this._initialLocation = value;
+    public set location(value: Geolocation) {
+        this._location = value;
         if (value?.lat && value?.lng) {
             this.currentLocation = {
                 lng: value.lng,

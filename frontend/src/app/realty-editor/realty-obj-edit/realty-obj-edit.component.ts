@@ -57,8 +57,8 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     public initialLocation: Geolocation;
     public location: Geolocation;
     public currentRegion: CityOnMap;
-    private destroy$ = new Subject<boolean>();
     public editModeInitialized = false;
+    private destroy$ = new Subject<boolean>();
 
     constructor(
         public fb: FormBuilder,
@@ -328,15 +328,13 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     }
 
     private populateRealtyForm(realtyObj: RealtyObj): void {
-        if (realtyObj) {
-            this.initialLocation = {
-                lng: realtyObj.address.lng,
-                lat: realtyObj.address.lat
-            };
-            this.location = {
-                ...this.initialLocation
-            };
-        }
+        this.initialLocation = {
+            lng: realtyObj.address.lng,
+            lat: realtyObj.address.lat
+        };
+        this.location = {
+            ...this.initialLocation
+        };
 
         this.realtyForm.patchValue({
             basicInfoFormGroup: {
