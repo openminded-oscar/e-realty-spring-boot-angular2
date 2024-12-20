@@ -32,15 +32,15 @@
           <div class="form-horizontal">
             <div class="form-group row" [formGroupName]="'address'">
               <label class="col-md-1 col-form-label text-right">City:</label>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <input class="form-control" style="width: 100%" [formControlName]="'city'">
               </div>
               <label class="col-md-1 col-form-label text-right">Street:</label>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <input class="form-control" style="width: 100%" [formControlName]="'street'">
               </div>
               <label class="col-md-1 col-form-label text-right" for="number-of-street-input">Building number:</label>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <input id="number-of-street-input" name="buildingNumber" type="text"
                        class="form-control"
                        [formControlName]="'numberOfStreet'">
@@ -48,7 +48,7 @@
             </div>
             <div class="form-group row">
               <label class="col-md-1 col-form-label text-right">Dwelling type:</label>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <select [formControlName]="'dwellingType'" name="dwellingType" class="select-input form-control">
                   <option *ngFor="let dwellingType of dwellingTypes" [value]="dwellingType">{{ dwellingType }}
                   </option>
@@ -57,7 +57,7 @@
               <ng-container [formGroupName]="'address'">
                 <label class="col-md-1 col-form-label text-right" for="apt-number-input">Apt.
                   number:</label>
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <input id="apt-number-input" [formControlName]="'apartmentNumber'"
                          name="flatNum"
                          type="text"
@@ -65,23 +65,23 @@
                 </div>
               </ng-container>
               <label class="col-md-1 col-form-label text-right" for="rooms-amount-input">Rooms amount:</label>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <input id="rooms-amount-input" name="rooms" type="number" class="form-control"
                        [formControlName]="'roomsAmount'">
               </div>
+
+                <label class="col-form-label col-md-1 text-right">Building type:</label>
+                <div class="col-md-2">
+                    <select [formControlName]="'buildingType'" name="buildingType" class="form-control">
+                        <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
+                        </option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-group row">
-              <label class="col-form-label col-md-1 text-right">Building type:</label>
-              <div class="col-md-3">
-                <select [formControlName]="'buildingType'" name="buildingType" class="form-control">
-                  <option *ngFor="let buildingType of buildingTypes" [ngValue]="buildingType">{{ buildingType }}
-                  </option>
-                </select>
-              </div>
-
               <label class="col-form-label col-md-1 text-right">Living Area:</label>
-              <div class="col-md-3" style="display: flex; justify-content: space-between">
+              <div class="col-md-2" style="display: flex; justify-content: space-between">
                 <div>
                   <input id="living-area-input" name="livingArea" type="number" class="form-control"
                          placeholder="65"
@@ -99,7 +99,7 @@
               </div>
 
               <label class="col-form-label col-md-1 text-right">Floor:</label>
-              <div class="col-md-3" style="display: flex; justify-content: space-between">
+              <div class="col-md-2" style="display: flex; justify-content: space-between">
                 <div>
                   <input id="floor-input" name="floor" type="number" class="form-control"
                          placeholder="3"
