@@ -52,12 +52,13 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     public importantInfoFormGroup: FormGroup<ImportantInfoForm>;
     public photosFormGroup: FormGroup<PhotosForm>;
     public objectId: number;
-    public location: Geolocation;
-    public initialLocation: Geolocation;
     public addressByGeolocation: AddressByGeolocation;
-    private destroy$ = new Subject<boolean>();
     public supportedRegions: CityOnMap[] = [];
+    public initialLocation: Geolocation;
+    public location: Geolocation;
     public currentRegion: CityOnMap;
+    private destroy$ = new Subject<boolean>();
+    public editModeInitialized = false;
 
     constructor(
         public fb: FormBuilder,
@@ -251,7 +252,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     private initFormControls() {
         this.basicInfoFormGroup = this.fb.group<BasicInfoForm>({
             address: this.fb.group({
-                region: this.fb.control(null, Validators.required),
+                region: this.fb.control(null),
                 city: this.fb.control('', Validators.required),
                 street: this.fb.control('', Validators.required),
                 numberOfStreet: this.fb.control('', [Validators.required, Validators.minLength(1)]),
@@ -281,6 +282,9 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
         this.basicInfoFormGroup.get('address.region').valueChanges.subscribe(value => {
             this.currentRegion = this.supportedRegions.find(r => r.id === Number(value));
+            if (!this.initialLocation || this.editModeInitialized) {
+                this.initialLocation = this.currentRegion;
+            }
         });
 
         const operationsFormArray: FormArray<FormGroup<OperationFormGroup>> = new FormArray([]);
@@ -383,6 +387,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
                 checked: realtyObj.targetOperations.includes(operationName)
             });
         });
+        this.editModeInitialized = true;
     }
 
     private uploadFile(file: File, endpoint: string): Observable<Photo> {
