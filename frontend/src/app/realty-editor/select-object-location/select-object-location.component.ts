@@ -32,6 +32,8 @@ export class SelectObjectLocationComponent {
         this.layers.push(new LayerGroup([this.markers]));
     }
 
+    // @Input()
+    // public userDefaultRegion: CityOnMap; // when implement - this param should not recenter if location point already set
 
     private _regionChanged!: CityOnMap;
     get regionChanged(): CityOnMap {
@@ -42,7 +44,7 @@ export class SelectObjectLocationComponent {
         this._regionChanged = value;
 
         if (value?.lat && value?.lng) {
-            this.options.center = this.currentLocation;
+            this.options.center = value;
             if (this.map) {
                 this.map.setView(value, this.map.getZoom(), {animate: true});
             }

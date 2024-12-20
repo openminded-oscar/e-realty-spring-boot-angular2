@@ -53,11 +53,13 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     public photosFormGroup: FormGroup<PhotosForm>;
     public objectId: number;
     public addressByGeolocation: AddressByGeolocation;
-    public supportedRegions: CityOnMap[] = [];
     public initialLocation: Geolocation;
     public location: Geolocation;
     public regionChanged: CityOnMap;
+    public supportedRegions: CityOnMap[] = [];
     private destroy$ = new Subject<boolean>();
+
+    public isCreateMode: Boolean = null;
 
     constructor(
         public fb: FormBuilder,
@@ -85,10 +87,13 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
             if (params['objectId']) {
+                this.isCreateMode = false;
                 this.objectId = params['objectId'];
                 this.realtyObjService.findById(params['objectId'])
                     .pipe(takeUntil(this.destroy$))
                     .subscribe(realtyObj => this.populateRealtyForm(realtyObj));
+            } else {
+                this.isCreateMode = true;
             }
         });
     }
