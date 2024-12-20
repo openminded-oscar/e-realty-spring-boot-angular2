@@ -13,8 +13,7 @@ export const LVIV_COORDINATES: Geolocation = {lat: 49.83, lng: 24.01};
 export class SelectLocationComponent {
   public options: MapOptions = {
     zoomControl: true,
-    zoom: 11,
-    center: latLng(LVIV_COORDINATES),
+    zoom: 11
   };
   public layers: Layer[] = [
     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -38,6 +37,7 @@ export class SelectLocationComponent {
         lng: value.lng,
         lat: value.lat
       };
+      this.options.center = this.currentLocation;
       this.addMarkerOnMap(value.lat, value.lng);
       if (this.map) {
         this.map.setView(value, this.map.getZoom(), {animate: true});

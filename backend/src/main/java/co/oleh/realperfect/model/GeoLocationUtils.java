@@ -92,7 +92,7 @@ public class GeoLocationUtils {
 
         // Coordinates of regional centers in Ukraine (latitude, longitude)
         geoSegments.add(new GeoSegment(30.5234, 50.4501)); // Kyiv
-        geoSegments.add(new GeoSegment(30.7181, 46.4825)); // Odessa
+        geoSegments.add(new GeoSegment(30.7181, 46.4825)); // Odesa
         geoSegments.add(new GeoSegment(36.2304, 49.9935)); // Kharkiv
         geoSegments.add(new GeoSegment(34.8044, 48.6196)); // Dnipro
         geoSegments.add(new GeoSegment(24.0297, 49.8397)); // Lviv

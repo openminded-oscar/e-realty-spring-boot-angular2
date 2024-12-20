@@ -20,7 +20,6 @@ export enum BUILDING_TYPES {
 @Injectable({providedIn: 'root'})
 export class ConfigService {
   constructor() { }
-  private _userRegion: CityOnMap = {'name': 'Львів', 'lat': 49.8430008, 'lng': 24.0215309};
   private _supportedOperations: string[] = Object.values(OPERATION_TYPES);
   private _supportedDwellingTypes: string[] = Object.values(DWELLING_TYPES);
   private _supportedBuildingTypes: string[] = Object.values(BUILDING_TYPES);
@@ -44,14 +43,5 @@ export class ConfigService {
 
   get supportedOperations(): string[] {
     return this._supportedOperations;
-  }
-
-
-  get userRegion(): CityOnMap {
-    return this._userRegion;
-  }
-
-  set userRegion(value: CityOnMap) {
-    this._userRegion = value;
   }
 }
