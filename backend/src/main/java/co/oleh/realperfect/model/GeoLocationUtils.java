@@ -94,21 +94,21 @@ public class GeoLocationUtils {
         geoSegments.add(new GeoSegment(30.5234, 50.4501)); // Kyiv
         geoSegments.add(new GeoSegment(30.7181, 46.4825)); // Odesa
         geoSegments.add(new GeoSegment(36.2304, 49.9935)); // Kharkiv
-        geoSegments.add(new GeoSegment(34.8044, 48.6196)); // Dnipro
+        geoSegments.add(new GeoSegment(35.0462, 48.4647)); // Dnipro
         geoSegments.add(new GeoSegment(24.0297, 49.8397)); // Lviv
         geoSegments.add(new GeoSegment(28.4826, 49.2328)); // Vinnytsia
-        geoSegments.add(new GeoSegment(26.2516, 50.6199)); // Zhytomyr
-        geoSegments.add(new GeoSegment(26.5805, 48.2908)); // Chernivtsi
+        geoSegments.add(new GeoSegment(28.6587, 50.2547)); // Zhytomyr
+        geoSegments.add(new GeoSegment(25.9403, 48.2915)); // Chernivtsi
         geoSegments.add(new GeoSegment(35.1318, 47.8388)); // Zaporizhzhia
         geoSegments.add(new GeoSegment(37.6187, 47.0971)); // Donetsk
         geoSegments.add(new GeoSegment(32.6169, 46.6354)); // Kherson
         geoSegments.add(new GeoSegment(32.0621, 49.4229)); // Cherkasy
-        geoSegments.add(new GeoSegment(31.9946, 49.4444)); // Kropyvnytskyi
-        geoSegments.add(new GeoSegment(30.1325, 50.9077)); // Rivne
-        geoSegments.add(new GeoSegment(35.0443, 48.0196)); // Poltava
+        geoSegments.add(new GeoSegment(32.2623, 48.5079)); // Kropyvnytskyi
+        geoSegments.add(new GeoSegment(26.2516, 50.6199)); // Rivne
+        geoSegments.add(new GeoSegment(34.5514, 49.5883)); // Poltava
         geoSegments.add(new GeoSegment(31.8906, 46.9750)); // Mykolaiv
-        geoSegments.add(new GeoSegment(27.6326, 50.2579)); // Khmelnytskyi
-        geoSegments.add(new GeoSegment(35.8497, 48.8833)); // Luhansk
+        geoSegments.add(new GeoSegment(26.9794, 49.4197)); // Khmelnytskyi
+        geoSegments.add(new GeoSegment(39.3495, 48.5735)); // Luhansk
         geoSegments.add(new GeoSegment(33.4729, 47.8131)); // Kryvyi Rih (though not an oblast capital, it's a major city)
         geoSegments.add(new GeoSegment(25.3429, 50.7472)); // Lutsk
         geoSegments.add(new GeoSegment(24.7097, 48.9226)); // Ivano-Frankivsk

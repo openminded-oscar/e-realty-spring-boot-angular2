@@ -57,7 +57,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     public initialLocation: Geolocation;
     public location: Geolocation;
     public currentRegion: CityOnMap;
-    public editModeInitialized = false;
     private destroy$ = new Subject<boolean>();
 
     constructor(
@@ -281,9 +280,8 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         });
 
         this.basicInfoFormGroup.get('address.region').valueChanges.subscribe(value => {
-            this.currentRegion = this.supportedRegions.find(r => r.id === Number(value));
-            if (!this.initialLocation || this.editModeInitialized) {
-                this.initialLocation = this.currentRegion;
+            if (this.basicInfoFormGroup.get('address.region').dirty) {
+                this.currentRegion = this.supportedRegions.find(r => r.id === Number(value));
             }
         });
 
@@ -332,6 +330,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
             lng: realtyObj.address.lng,
             lat: realtyObj.address.lat
         };
+
         this.location = {
             ...this.initialLocation
         };
@@ -385,7 +384,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
                 checked: realtyObj.targetOperations.includes(operationName)
             });
         });
-        this.editModeInitialized = true;
     }
 
     private uploadFile(file: File, endpoint: string): Observable<Photo> {

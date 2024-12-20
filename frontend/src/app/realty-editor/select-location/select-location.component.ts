@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, tileLayer} from 'leaflet';
+
 import {blueMarkerOfLngAndLat} from '../../utils/location-utils';
 import {Geolocation} from '../../app-models/geolocation';
-
-export const LVIV_COORDINATES: Geolocation = {lat: 49.83, lng: 24.01};
+import {CityOnMap} from '../../app-models/city-on-map';
 
 @Component({
     selector: 'app-select-location',
@@ -25,8 +25,6 @@ export class SelectLocationComponent {
 
     @Output()
     public locationSelected = new EventEmitter<Geolocation>();
-    @Input()
-    public editModeInitialized = false;
     public currentLocation: Geolocation;
     private map: Map;
 
@@ -34,12 +32,27 @@ export class SelectLocationComponent {
         this.layers.push(new LayerGroup([this.markers]));
     }
 
-    private _location: Geolocation;
 
+    private _region!: CityOnMap;
+    get region(): CityOnMap {
+        return this._region;
+    }
+    @Input()
+    set region(value: CityOnMap) {
+        this._region = value;
+
+        if (value?.lat && value?.lng) {
+            this.options.center = this.currentLocation;
+            if (this.map) {
+                this.map.setView(value, this.map.getZoom(), {animate: true});
+            }
+        }
+    }
+
+    private _location: Geolocation;
     public get location(): Geolocation {
         return this._location;
     }
-
     @Input()
     public set location(value: Geolocation) {
         this._location = value;
@@ -49,9 +62,7 @@ export class SelectLocationComponent {
                 lat: value.lat
             };
             this.options.center = this.currentLocation;
-            if (this.editModeInitialized) {
                 this.addMarkerOnMap(value.lat, value.lng);
-            }
             if (this.map) {
                 this.map.setView(value, this.map.getZoom(), {animate: true});
             }

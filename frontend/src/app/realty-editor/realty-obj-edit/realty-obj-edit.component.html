@@ -38,7 +38,7 @@
           <div style="display: flex; flex-direction: row; align-items: center; justify-content: center">
             <div class="geomap-container">
               <app-select-location [location]="initialLocation"
-                                   [editModeInitialized]="editModeInitialized"
+                                   [region]="currentRegion"
                                    (locationSelected)="changeLocation($event)"></app-select-location>
             </div>
           </div>
