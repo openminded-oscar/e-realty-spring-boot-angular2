@@ -37,6 +37,7 @@ export class SelectLocationComponent {
     get region(): CityOnMap {
         return this._region;
     }
+
     @Input()
     set region(value: CityOnMap) {
         this._region = value;
@@ -53,6 +54,7 @@ export class SelectLocationComponent {
     public get location(): Geolocation {
         return this._location;
     }
+
     @Input()
     public set location(value: Geolocation) {
         this._location = value;
@@ -62,7 +64,7 @@ export class SelectLocationComponent {
                 lat: value.lat
             };
             this.options.center = this.currentLocation;
-                this.addMarkerOnMap(value.lat, value.lng);
+            this.addMarkerOnMap(value.lat, value.lng);
             if (this.map) {
                 this.map.setView(value, this.map.getZoom(), {animate: true});
             }
