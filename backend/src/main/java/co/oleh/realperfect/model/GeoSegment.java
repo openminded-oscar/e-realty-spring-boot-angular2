@@ -7,8 +7,15 @@ import java.util.Objects;
 
 @Data
 public class GeoSegment {
+    private String name;
     private final double centerLatitude;
     private final double centerLongitude;
+
+    public GeoSegment(String name, double longitude, double latitude) {
+        this.centerLatitude = latitude;
+        this.centerLongitude = longitude;
+        this.name = name;
+    }
 
     public GeoSegment(double longitude, double latitude) {
         this.centerLatitude = latitude;
@@ -18,6 +25,7 @@ public class GeoSegment {
     @Override
     public String toString() {
         return "Segment{" +
+                "name=" + (name != null ? name : "") +
                 "latitude=" + centerLatitude +
                 ", longitude=" + centerLongitude +
                 '}';
@@ -27,7 +35,8 @@ public class GeoSegment {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof GeoSegment that)) return false;
-        return Double.compare(centerLatitude, that.centerLatitude) == 0 && Double.compare(centerLongitude, that.centerLongitude) == 0;
+        return Double.compare(centerLatitude, that.centerLatitude) == 0 && Double.compare(centerLongitude,
+                that.centerLongitude) == 0;
     }
 
     @Override

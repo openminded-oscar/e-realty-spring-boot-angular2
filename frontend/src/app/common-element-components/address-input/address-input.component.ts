@@ -25,22 +25,23 @@ export class AddressInputComponent implements ControlValueAccessor {
 
 
   public searchAddressForTerm = (text$: Observable<string>) => {
-    return text$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap(() => this.searching = true),
-      switchMap(term =>
-        this.addressService.getAddressesByTerm(term, this.config.userRegion.lat, this.config.userRegion.lng).pipe(
-          tap(() => this.searchFailed = false),
-          catchError(() => {
-            this.searchFailed = true;
-            return of([]);
-          })
-        )
-      ),
-      tap(() => this.searching = false),
-      mergeWith(this.hideSearchingWhenUnsubscribed)
-    );
+      throw new Error('Not implemented yet');
+    // return text$.pipe(
+    //   debounceTime(300),
+    //   distinctUntilChanged(),
+    //   tap(() => this.searching = true),
+    //   switchMap(term =>
+    //     this.addressService.getAddressesByTerm(term, this.config.userRegion.lat, this.config.userRegion.lng).pipe(
+    //       tap(() => this.searchFailed = false),
+    //       catchError(() => {
+    //         this.searchFailed = true;
+    //         return of([]);
+    //       })
+    //     )
+    //   ),
+    //   tap(() => this.searching = false),
+    //   mergeWith(this.hideSearchingWhenUnsubscribed)
+    // );
   }
 
   public selectedItemFromAutocomplete(value: any) {

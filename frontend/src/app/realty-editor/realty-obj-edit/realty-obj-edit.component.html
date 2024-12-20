@@ -4,20 +4,41 @@
       <h5 class="text-center">Please Fill Information On The Object:</h5>
       <aw-wizard [navBarLayout]="'large-empty'">
         <aw-wizard-step stepTitle="Select Your Place on Map">
-          <div class="text-right mb-2 action-buttons">
-            <button type="button"
-                    class="btn btn-info"
-                    (click)="confirmLocationAndNavigate()">Next Step
-            </button>
-            <button type="button"
-                    class="btn btn-dark"
-                    [disabled]="realtyForm.invalid"
-                    (click)="saveRealtyObject()">Save
-            </button>
-          </div>
+            <div style="display: flex; justify-content: center; align-items: flex-start; position: relative;">
+                <div style="text-align: center;">
+                    <h6 class="text-right">Select Your Region:</h6>
+                    <div [formGroup]="basicInfoFormGroup">
+                        <ng-container [formGroupName]="'address'">
+                        <select  [formControlName]="'region'"
+                                class="form-control"
+                                name="selected-region"
+                                style="text-align: center">
+                            <option value="" disabled>Select Region</option> <!-- Placeholder option -->
+                            <option *ngFor="let region of supportedRegions" [value]="region.id">
+                                {{ region.name }}
+                            </option>
+                        </select>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="text-right mb-2 action-buttons" style="position: absolute; right: 10px;">
+                    <button type="button"
+                            class="btn btn-info"
+                            (click)="confirmLocationAndNavigate()">Next Step
+                    </button>
+                    <button type="button"
+                            class="btn btn-dark"
+                            [disabled]="realtyForm.invalid"
+                            (click)="saveRealtyObject()">Save
+                    </button>
+                </div>
+            </div>
+
           <div style="display: flex; flex-direction: row; align-items: center; justify-content: center">
             <div class="geomap-container">
-              <app-select-location [initialLocation]="initialLocation"
+              <app-select-location [location]="initialLocation"
+                                   [regionChanged]="regionChanged"
                                    (locationSelected)="changeLocation($event)"></app-select-location>
             </div>
           </div>

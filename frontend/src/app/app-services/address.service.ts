@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
+import {Observable, of, ReplaySubject, Subject} from 'rxjs';
 import {AddressByGeolocation, Geolocation} from '../app-models/geolocation';
 
 import {endpoints} from '../commons';
 import {HTTP_CONSTANTS} from './common/HttpErrorInterceptor';
+import {CityOnMap, supportedRegions} from '../app-models/city-on-map';
 
 @Injectable({providedIn: 'root'})
 export class AddressService {
@@ -12,6 +13,10 @@ export class AddressService {
   private observableCities = new ReplaySubject(1);
 
   constructor(private http: HttpClient) {
+  }
+
+  public supportedRegions(forceRefresh?: boolean): Observable<CityOnMap[]> {
+      return of(supportedRegions);
   }
 
   public getAddressesByLatLong(geo: Geolocation): Observable<AddressByGeolocation> {
@@ -44,19 +49,5 @@ export class AddressService {
     });
 
     return this.observableAddresses;
-  }
-
-  public getSupportedCities(forceRefresh?: boolean) {
-    this.http.get(endpoints.supportedCities).subscribe({
-      next: (data) => {
-        this.observableCities.next(data);
-      },
-      error: (error) => {
-        this.observableCities.error(error);
-        this.observableCities = new ReplaySubject(1);
-      }
-    });
-
-    return this.observableCities;
   }
 }

@@ -16,15 +16,15 @@ export class UserRegionInputComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.currentCity = this.config.userRegion;
+    // this.currentCity = this.config.userRegion;
     this.baseCities = [this.currentCity];
-    this.addressService.getSupportedCities().subscribe((data: CityOnMap[]) => {
+    this.addressService.supportedRegions().subscribe((data: CityOnMap[]) => {
       this.baseCities = data;
     });
   }
 
   public onChangeRegion(value) {
-    this.config.userRegion = value;
+    // this.config.userRegion = value;
   }
 
   public compareRegions(r1: CityOnMap, r2: CityOnMap) {

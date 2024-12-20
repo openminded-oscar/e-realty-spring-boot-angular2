@@ -100,7 +100,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     public isFilterCollapsed = false;
 
     public ngOnInit() {
-        this.isFilterCollapsed = this.windowService.nativeWindow?.innerWidth < 768;
+        this.isFilterCollapsed = this.windowService.nativeWindow?.innerWidth < 576;
         this.resolveTargetOperations();
         this.buildingTypes = this.config.supportedBuildingTypes;
         this.resetFiltersAndLoadInitialObjects();

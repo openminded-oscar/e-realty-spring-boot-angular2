@@ -7,6 +7,7 @@ import jakarta.validation.constraints.DecimalMin;
 
 @Data
 public class AddressDto {
+    private RegionDto region;
     private String city;
     private String street;
     private String numberOfStreet;
