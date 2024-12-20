@@ -109,7 +109,7 @@ public class GeoLocationUtils {
         geoSegments.add(new GeoSegment(31.8906, 46.9750)); // Mykolaiv
         geoSegments.add(new GeoSegment(26.9794, 49.4197)); // Khmelnytskyi
         geoSegments.add(new GeoSegment(39.3495, 48.5735)); // Luhansk
-        geoSegments.add(new GeoSegment(33.4729, 47.8131)); // Kryvyi Rih (though not an oblast capital, it's a major city)
+        geoSegments.add(new GeoSegment(33.4729, 47.9051)); // Kryvyi Rih (though not an oblast capital, it's a major city)
         geoSegments.add(new GeoSegment(25.3429, 50.7472)); // Lutsk
         geoSegments.add(new GeoSegment(24.7097, 48.9226)); // Ivano-Frankivsk
         geoSegments.add(new GeoSegment(31.2849, 51.4982)); // Chernihiv

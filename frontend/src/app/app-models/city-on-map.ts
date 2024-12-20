@@ -31,7 +31,7 @@ export const supportedRegions = [
         { id: 16, name: 'Mykolaiv', lat: 46.9750, lng: 31.8906 },
         { id: 17, name: 'Khmelnytskyi', lat: 49.4197, lng: 26.9794 },
         { id: 18, name: 'Luhansk', lat: 48.5735, lng: 39.3495 },
-        { id: 19, name: 'Kryvyi Rih', lat: 47.8131, lng: 33.4729 },
+        { id: 19, name: 'Kryvyi Rih', lat: 47.9051, lng: 33.4729 },
         { id: 20, name: 'Lutsk', lat: 50.7472, lng: 25.3429 },
         { id: 21, name: 'Ivano-Frankivsk', lat: 48.9226, lng: 24.7097 },
         { id: 22, name: 'Chernihiv', lat: 51.4982, lng: 31.2849 },
