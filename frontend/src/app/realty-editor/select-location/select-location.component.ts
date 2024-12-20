@@ -1,80 +1,93 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {latLng, Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, tileLayer} from 'leaflet';
+import {Layer, LayerGroup, LeafletMouseEvent, Map, MapOptions, tileLayer} from 'leaflet';
+
 import {blueMarkerOfLngAndLat} from '../../utils/location-utils';
 import {Geolocation} from '../../app-models/geolocation';
-
-export const LVIV_COORDINATES: Geolocation = {lat: 49.83, lng: 24.01};
+import {CityOnMap} from '../../app-models/city-on-map';
 
 @Component({
-  selector: 'app-select-location',
-  templateUrl: './select-location.component.html',
-  styleUrls: ['./select-location.component.scss']
+    selector: 'app-select-location',
+    templateUrl: './select-location.component.html',
+    styleUrls: ['./select-location.component.scss']
 })
 export class SelectLocationComponent {
-  public options: MapOptions = {
-    zoomControl: true,
-    zoom: 11,
-    center: latLng(LVIV_COORDINATES),
-  };
-  public layers: Layer[] = [
-    tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      noWrap: true
-    })
-  ];
-  public markers: LayerGroup = new LayerGroup();
+    public options: MapOptions = {
+        zoomControl: true,
+        zoom: 11
+    };
+    public layers: Layer[] = [
+        tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            noWrap: true
+        })
+    ];
+    public markers: LayerGroup = new LayerGroup();
 
-  @Output()
-  public locationSelected = new EventEmitter<Geolocation>();
+    @Output()
+    public locationSelected = new EventEmitter<Geolocation>();
+    public currentLocation: Geolocation;
+    private map: Map;
 
-  private _initialLocation: Geolocation;
-  private map: Map;
-
-  @Input()
-  public set initialLocation(value: Geolocation) {
-    this._initialLocation = value;
-    if (value?.lat && value?.lng) {
-      this.currentLocation = {
-        lng: value.lng,
-        lat: value.lat
-      };
-      this.addMarkerOnMap(value.lat, value.lng);
-      if (this.map) {
-        this.map.setView(value, this.map.getZoom(), {animate: true});
-      }
+    constructor() {
+        this.layers.push(new LayerGroup([this.markers]));
     }
-  }
-
-  public get initialLocation(): Geolocation {
-    return this._initialLocation;
-  }
-
-  public currentLocation: Geolocation;
 
 
-  constructor() {
-    this.layers.push(new LayerGroup([this.markers]));
-  }
+    private _region!: CityOnMap;
+    get region(): CityOnMap {
+        return this._region;
+    }
+    @Input()
+    set region(value: CityOnMap) {
+        this._region = value;
 
-  public onMapClick(mouseClickData: LeafletMouseEvent) {
-    const {lat, lng} = mouseClickData.latlng;
+        if (value?.lat && value?.lng) {
+            this.options.center = this.currentLocation;
+            if (this.map) {
+                this.map.setView(value, this.map.getZoom(), {animate: true});
+            }
+        }
+    }
 
-    this.addMarkerOnMap(lat, lng);
+    private _location: Geolocation;
+    public get location(): Geolocation {
+        return this._location;
+    }
+    @Input()
+    public set location(value: Geolocation) {
+        this._location = value;
+        if (value?.lat && value?.lng) {
+            this.currentLocation = {
+                lng: value.lng,
+                lat: value.lat
+            };
+            this.options.center = this.currentLocation;
+                this.addMarkerOnMap(value.lat, value.lng);
+            if (this.map) {
+                this.map.setView(value, this.map.getZoom(), {animate: true});
+            }
+        }
+    }
 
-    this.currentLocation = mouseClickData.latlng;
-    this.locationSelected.emit(this.currentLocation);
-  }
+    public onMapClick(mouseClickData: LeafletMouseEvent) {
+        const {lat, lng} = mouseClickData.latlng;
 
-  private addMarkerOnMap(lat: number, lng: number) {
-    const newMarker = blueMarkerOfLngAndLat(lat, lng);
-    this.markers.clearLayers();
-    this.markers.addLayer(newMarker);
-  }
+        this.addMarkerOnMap(lat, lng);
 
-  public onMapReady(map: Map) {
-    this.map = map;
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 0);
-  }
+        this.currentLocation = mouseClickData.latlng;
+        this.locationSelected.emit(this.currentLocation);
+    }
+
+    public onMapReady(map: Map) {
+        this.map = map;
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 0);
+    }
+
+    private addMarkerOnMap(lat: number, lng: number) {
+        const newMarker = blueMarkerOfLngAndLat(lat, lng);
+        this.markers.clearLayers();
+        this.markers.addLayer(newMarker);
+    }
 }

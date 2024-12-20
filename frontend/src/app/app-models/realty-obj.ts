@@ -3,6 +3,7 @@ import {Photo, RealtyPhoto, RealtyPhotoType} from './photo';
 import {Address} from './address';
 import {Realtor} from './realtor';
 import {Geolocation} from './geolocation';
+import {CityOnMap} from './city-on-map';
 
 export type RealtyObjectByStatusFilter = 'all' | 'active' | 'archived' | 'drafts';
 
@@ -20,6 +21,7 @@ export const filterByObjectStatus =
 }
 
 export class AddressForm {
+  region: FormControl<number|CityOnMap>;
   city: FormControl<string>;
   street: FormControl<string>;
   numberOfStreet: FormControl<string>;

@@ -106,7 +106,7 @@ export class RealtyObjService implements OnDestroy {
   }
 
   private callSaveOnServer(realtyObj: Partial<RealtyObj>, method: 'POST' | 'PUT') {
-    const urlPath = endpoints.realtyObj.add + (method === 'POST'?'': '/' + realtyObj.id)
+    const urlPath = endpoints.realtyObj.add + (method === 'POST'?'': '/' + realtyObj.id);
     return this.http.request<RealtyObj>(method, urlPath, {
       body: realtyObj,
       headers: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}

@@ -1,10 +1,12 @@
 package co.oleh.realperfect.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import org.locationtech.jts.geom.Point;
 
 @Embeddable
 public class Address {
+	private Region region;
 	private String city;
 	private String street;
 	private String numberOfStreet;
@@ -53,5 +55,14 @@ public class Address {
 
 	public void setNumberOfStreet(String numberOfStreet) {
 		this.numberOfStreet = numberOfStreet;
+	}
+
+	@Embedded
+	public Region getRegion() {
+		return region;
+	}
+
+	public void setRegion(Region region) {
+		this.region = region;
 	}
 }

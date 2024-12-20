@@ -53,6 +53,7 @@ public class RealtyObjectDetailsDto {
         Boolean realtorAware;
         @Valid
         AddressDto address;
+
         UserDto owner;
         RealtorDto realtor;
         List<RealtyObjectPhoto> photos;

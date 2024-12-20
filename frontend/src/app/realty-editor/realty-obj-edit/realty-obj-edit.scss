@@ -3,6 +3,10 @@
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/mixins';
 
+label {
+  text-align: right;
+}
+
 .geomap-container {
   width: 50%;
   @include media-breakpoint-down(lg) {

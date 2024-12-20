@@ -10,12 +10,12 @@ import {FileUploadService} from '../../app-services/file-upload.service';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
 import {RealtorService} from '../../app-services/realtor.service';
 import {
-  BasicInfoForm,
-  ImportantInfoForm,
-  OperationFormGroup,
-  PhotosForm,
-  RealtyForm,
-  RealtyObj
+    BasicInfoForm,
+    ImportantInfoForm,
+    OperationFormGroup,
+    PhotosForm,
+    RealtyForm,
+    RealtyObj
 } from '../../app-models/realty-obj';
 import {Photo, RealtyPhoto, RealtyPhotoType} from '../../app-models/photo';
 import {Realtor} from '../../app-models/realtor';
@@ -24,347 +24,370 @@ import {operationPricesValidator, valueGteThanTotal} from './validation.utils';
 import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
 import {AddressService} from '../../app-services/address.service';
 import {AddressByGeolocation, Geolocation} from '../../app-models/geolocation';
+import {CityOnMap} from '../../app-models/city-on-map';
 
 export interface SupportedOperation {
-  name: string;
-  value: string;
-  checked: boolean;
+    name: string;
+    value: string;
+    checked: boolean;
 }
 
 @Component({
-  selector: 'object-editor',
-  templateUrl: './realty-obj-edit.component.html',
-  styleUrls: ['./realty-obj-edit.scss']
+    selector: 'object-editor',
+    templateUrl: './realty-obj-edit.component.html',
+    styleUrls: ['./realty-obj-edit.scss']
 })
 export class RealtyObjEditComponent implements OnInit, OnDestroy {
-  @ViewChild(WizardComponent)
-  public wizard: WizardComponent;
-  public operationsInputValues: SupportedOperation[] = this.config.supportedOperations.map(value => ({
-      value, name: value, checked: value === OPERATION_TYPES.SELLING
-  }));
-  public dwellingTypes: string[] = this.config.supportedDwellingTypes;
-  public buildingTypes: string[] = this.config.supportedBuildingTypes;
-  public realtors: Realtor[];
-  public photoType = RealtyPhotoType;
-  private destroy$ = new Subject<boolean>();
+    @ViewChild(WizardComponent)
+    public wizard: WizardComponent;
+    public operationsInputValues: SupportedOperation[] = this.config.supportedOperations.map(value => ({
+        value, name: value, checked: value === OPERATION_TYPES.SELLING
+    }));
+    public dwellingTypes: string[] = this.config.supportedDwellingTypes;
+    public buildingTypes: string[] = this.config.supportedBuildingTypes;
+    public realtors: Realtor[];
+    public photoType = RealtyPhotoType;
+    public realtyForm: FormGroup<RealtyForm>;
+    public basicInfoFormGroup: FormGroup<BasicInfoForm>;
+    public importantInfoFormGroup: FormGroup<ImportantInfoForm>;
+    public photosFormGroup: FormGroup<PhotosForm>;
+    public objectId: number;
+    public addressByGeolocation: AddressByGeolocation;
+    public supportedRegions: CityOnMap[] = [];
+    public initialLocation: Geolocation;
+    public location: Geolocation;
+    public currentRegion: CityOnMap;
+    private destroy$ = new Subject<boolean>();
 
-  public realtyForm: FormGroup<RealtyForm>;
-  public basicInfoFormGroup: FormGroup<BasicInfoForm>;
-  public importantInfoFormGroup: FormGroup<ImportantInfoForm>;
-  public photosFormGroup: FormGroup<PhotosForm>;
-  public objectId: number;
-  public location: Geolocation;
-  public initialLocation: Geolocation;
-
-  public addressByGeolocation: AddressByGeolocation;
-
-
-  constructor(
-    public fb: FormBuilder,
-    public config: ConfigService,
-    public fileUploadService: FileUploadService,
-    public realtyObjService: RealtyObjService,
-    public realtorsService: RealtorService,
-    public addressService: AddressService,
-    public dialogService: NgbModal,
-    public route: ActivatedRoute,
-    public router: Router,
-  ) {
-  }
-
-  ngOnInit(): void {
-    this.initFormControls();
-
-    this.realtorsService.getRealtors()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(realtors => this.realtors = realtors);
-
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      if (params['objectId']) {
-        this.objectId = params['objectId'];
-        this.realtyObjService.findById(params['objectId'])
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(realtyObj => this.populateRealtyForm(realtyObj));
-      }
-    });
-  }
-
-  private initFormControls() {
-    this.basicInfoFormGroup = this.fb.group<BasicInfoForm>({
-      address: this.fb.group({
-        city: this.fb.control('', Validators.required),
-        street: this.fb.control('', Validators.required),
-        numberOfStreet: this.fb.control('', [Validators.required, Validators.minLength(1)]),
-        apartmentNumber: this.fb.control(null, Validators.required),
-      }),
-      dwellingType: this.fb.control(DWELLING_TYPES.APARTMENT, Validators.required),
-      buildingType: this.fb.control(BUILDING_TYPES.BRICK, Validators.required),
-      floor: this.fb.control(null, Validators.required),
-      totalFloors: this.fb.control(null, Validators.required),
-      totalArea: this.fb.control(null, Validators.required),
-      livingArea: this.fb.control(null, Validators.required),
-      roomsAmount: this.fb.control(null, Validators.required)
-    }, {
-      validators: [
-        valueGteThanTotal('floor', 'totalFloors'),
-        valueGteThanTotal('livingArea', 'totalArea')
-      ]
-    });
-    this.basicInfoFormGroup.get('dwellingType').valueChanges.subscribe(value => {
-      const aptControl = this.basicInfoFormGroup.get('address.apartmentNumber');
-      if (value !== 'APARTMENT') {
-        aptControl.disable();
-      } else {
-        aptControl.enable();
-      }
-    });
-
-    const operationsFormArray: FormArray<FormGroup<OperationFormGroup>> = new FormArray([]);
-    this.operationsInputValues.forEach(operation => {
-      const operationControlGroup = this.fb.group<OperationFormGroup>({
-        name: this.fb.control(operation.name, Validators.required),
-        checked: this.fb.control(operation.checked)
-      });
-      operationsFormArray.push(operationControlGroup);
-    });
-
-    this.importantInfoFormGroup = this.fb.group<ImportantInfoForm>({
-      description: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
-      otherInfo: this.fb.control('', Validators.maxLength(64)),
-      foundationYear: this.fb.control(null, [Validators.required, Validators.min(1500)]),
-      hasRepairing: this.fb.control(false),
-      hasGarage: this.fb.control(false),
-      hasCellar: this.fb.control(false),
-      hasLoft: this.fb.control(false),
-      targetOperations: operationsFormArray,
-      price: this.fb.control(null),
-      priceForRent: this.fb.control(null),
-      realtor: this.fb.control(null, Validators.required)
-    }, {
-      validators: [
-        operationPricesValidator()
-      ]
-    });
-
-    this.photosFormGroup = this.fb.group<PhotosForm>({
-      confirmationDocPhoto: this.fb.control<RealtyPhoto>(null, Validators.required), // Type for confirmationDocPhoto
-      photos: this.fb.array<FormControl<RealtyPhoto>>([]) // Type for photos FormArray
-    });
-
-    this.realtyForm = this.fb.group<RealtyForm>({
-      geolocation: new FormControl<Geolocation>(null),
-      basicInfoFormGroup: this.basicInfoFormGroup,
-      importantInfoFormGroup: this.importantInfoFormGroup,
-      photosFormGroup: this.photosFormGroup,
-    });
-  }
-
-  private populateRealtyForm(realtyObj: RealtyObj): void {
-    if (realtyObj) {
-      this.initialLocation = {
-        lng: realtyObj.address.lng,
-        lat: realtyObj.address.lat
-      };
-      this.location = {
-        ...this.initialLocation
-      };
+    constructor(
+        public fb: FormBuilder,
+        public config: ConfigService,
+        public fileUploadService: FileUploadService,
+        public realtyObjService: RealtyObjService,
+        public realtorsService: RealtorService,
+        public addressService: AddressService,
+        public dialogService: NgbModal,
+        public route: ActivatedRoute,
+        public router: Router,
+    ) {
     }
 
-    this.realtyForm.patchValue({
-      basicInfoFormGroup: {
-        address: realtyObj.address,
-        dwellingType: realtyObj.dwellingType,
-        buildingType: realtyObj.buildingType,
-        floor: realtyObj.floor,
-        totalFloors: realtyObj.totalFloors,
-        roomsAmount: realtyObj.roomsAmount,
-        totalArea: realtyObj.totalArea,
-        livingArea: realtyObj.livingArea,
-      },
-      importantInfoFormGroup: {
-        description: realtyObj.description,
-        otherInfo: realtyObj.otherInfo,
-        foundationYear: realtyObj.foundationYear,
-        hasRepairing: realtyObj.hasRepairing,
-        hasGarage: realtyObj.hasGarage,
-        hasCellar: realtyObj.hasCellar,
-        hasLoft: realtyObj.hasLoft,
-        price: realtyObj.price,
-        priceForRent: realtyObj.priceForRent,
-        realtor: realtyObj.realtor?.id,
-      },
-      photosFormGroup: {
-        confirmationDocPhoto: realtyObj.confirmationDocPhoto
-      },
-      geolocation: {
-        lat: realtyObj.address.lat,
-        lng: realtyObj.address.lng
-      }
-    });
-    realtyObj.photos.forEach(photo => {
-      const control = this.fb.group({
-        id: [photo.id],
-        fullUrl: [photo.fullUrl],
-        type: [photo.type || this.photoType.REALTY_PLAIN]
-      });
-      (this.photosFormGroup.controls.photos as FormArray).push(control);
-    });
-    this.operationsInputValues.forEach((op, index) => {
-      const operationName = op.value;
-      (this.importantInfoFormGroup.controls.targetOperations as FormArray).at(index).setValue({
-        name: operationName,
-        checked: realtyObj.targetOperations.includes(operationName)
-      });
-    });
-  }
+    ngOnInit(): void {
+        this.initFormControls();
 
-  public saveRealtyObject(): void {
-    if (this.realtyForm.valid) {
-      const realtyObjFormData = {
-        ...this.objectId ? {id: this.objectId} : {},
-        ...this.realtyForm.controls.basicInfoFormGroup.value,
-        address: {
-          ...this.realtyForm.controls.basicInfoFormGroup.value.address ?? {},
-          ...this.realtyForm.controls.geolocation.value ?? {}
-        },
-        ...this.realtyForm.controls.importantInfoFormGroup.value,
-        ...this.realtyForm.controls.photosFormGroup.value,
-      };
-      const includedOperationsNames: string[] = [];
-      if (realtyObjFormData.targetOperations) {
-        (realtyObjFormData.targetOperations).forEach((allowedAtIndex: {
-            checked: boolean,
-            name: string
-          }, index: number) => {
-            if (allowedAtIndex.checked) {
-              includedOperationsNames.push(this.operationsInputValues[index].name);
+        this.addressService.supportedRegions()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(regions => this.supportedRegions = regions);
+
+        this.realtorsService.getRealtors()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(realtors => this.realtors = realtors);
+
+        this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
+            if (params['objectId']) {
+                this.objectId = params['objectId'];
+                this.realtyObjService.findById(params['objectId'])
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe(realtyObj => this.populateRealtyForm(realtyObj));
             }
-          }
-        );
-      }
-      if (realtyObjFormData.realtor) {
-        const realtorId = Number(realtyObjFormData.realtor);
-        realtyObjFormData.realtor = this.realtors.find(r => {
-          return r.id === realtorId;
-        });
-      }
-
-      const saveFunc = realtyObjFormData.id
-        ? (data: Partial<RealtyObj>) => this.realtyObjService.update(data)
-        : (data: Partial<RealtyObj>) => this.realtyObjService.create(data);
-      saveFunc({
-        ...realtyObjFormData,
-        targetOperations: includedOperationsNames as string[],
-        realtor: realtyObjFormData.realtor as Realtor
-      }).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe(object => {
-        this.router.navigate(['/realty-object', object.id]).then();
-      });
-    }
-  }
-
-  public onVerificationPictureSelecting(event: Event): void {
-    const fileList = (event as any).target.files;
-    if (fileList.length > 0) {
-      this.uploadFile(fileList[0], '/upload-photo/confirm-object')
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (data: RealtyPhoto) => {
-            this.photosFormGroup.patchValue({confirmationDocPhoto: data});
-          },
-          error: error => console.log('File upload error:', error)
         });
     }
-  }
 
-  public onRealtyObjPictureSelecting(event: Event): void {
-    const fileList = (event as any).target.files;
-    if (fileList.length > 0) {
-      this.uploadFile(fileList[0], '/upload-photo/object')
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((photo: RealtyPhoto) => {
-          const photosArray = this.photosFormGroup.get('photos') as FormArray;
-          const type = (photosArray.length === 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
-          photosArray.push(this.fb.group({
-            id: [photo.id],
-            fullUrl: [photo.fullUrl],
-            type: type
-          }));
-        });
-    }
-  }
-
-  private uploadFile(file: File, endpoint: string): Observable<Photo> {
-    return this.fileUploadService.upload(file, `${apiBase}${endpoint}`)
-      .pipe(takeUntil(this.destroy$));
-  }
-
-  public makeMain(index: number): void {
-    const photoControlArray = this.realtyForm.get('photosFormGroup.photos') as FormArray;
-    for (let i = 0; i < photoControlArray.length; ++i) {
-      const control = photoControlArray.at(i) as FormControl;
-      control.setValue({
-        ...control.value,
-        type: i === index ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN
-      });
-    }
-  }
-
-  public deletePhoto(index: number): void {
-    const photosArray = this.realtyForm.get('photosFormGroup.photos') as FormArray;
-    photosArray.removeAt(index);
-    if (photosArray.length > 0) {
-      const currentValue = photosArray.at(0).value;
-      photosArray.at(0).setValue({
-        ...currentValue,
-        type: RealtyPhotoType.REALTY_MAIN
-      });
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
-
-  public changeLocation(location: Geolocation) {
-    this.location = location;
-    this.realtyForm.get('geolocation').setValue(location);
-    if (this.location?.lat !== this.initialLocation?.lat || this.location?.lng !== this.initialLocation?.lng) {
-      this.addressService.getAddressesByLatLong(location)
-        .subscribe(addressByGeolocation => {
-          this.addressByGeolocation = addressByGeolocation;
-        });
-    }
-  }
-
-  public confirmLocationAndNavigate() {
-    if (!this.location?.lat || !this.location?.lng) {
-      const modalRef = this.dialogService.open(ConfirmModalComponent);
-      modalRef.componentInstance.message =
-        'Setting no Geolocation will limit your object visibility on our maps. Proceed?';
-      from(modalRef.result)
-        .pipe(
-          take(1),
-          catchError(() => of(false)),
-          tap(v => {
-            if (v) {
-              this.wizard.goToNextStep();
+    public saveRealtyObject(): void {
+        if (this.realtyForm.valid) {
+            const realtyObjFormData = {
+                ...this.objectId ? {id: this.objectId} : {},
+                ...this.realtyForm.controls.basicInfoFormGroup.value,
+                address: {
+                    ...this.realtyForm.controls.basicInfoFormGroup.value.address ?? {},
+                    ...this.realtyForm.controls.geolocation.value ?? {}
+                },
+                ...this.realtyForm.controls.importantInfoFormGroup.value,
+                ...this.realtyForm.controls.photosFormGroup.value,
+            };
+            const includedOperationsNames: string[] = [];
+            if (realtyObjFormData.targetOperations) {
+                (realtyObjFormData.targetOperations).forEach((allowedAtIndex: {
+                        checked: boolean,
+                        name: string
+                    }, index: number) => {
+                        if (allowedAtIndex.checked) {
+                            includedOperationsNames.push(this.operationsInputValues[index].name);
+                        }
+                    }
+                );
             }
-          }),
-        )
-        .subscribe();
-    } else {
-      this.wizard.goToNextStep();
-    }
-  }
+            if (realtyObjFormData.realtor) {
+                const realtorId = Number(realtyObjFormData.realtor);
+                realtyObjFormData.realtor = this.realtors.find(r => {
+                    return r.id === realtorId;
+                });
+            }
+            if (realtyObjFormData.address?.region) {
+                const regionId = Number(realtyObjFormData.address.region);
+                realtyObjFormData.address.region = this.supportedRegions.find(r => {
+                    return r.id === regionId;
+                });
+            }
 
-  public autofillAddressFromMapIfChanged(): void {
-    if (this.addressByGeolocation &&
-      (this.location?.lat !== this.initialLocation?.lat || this.location?.lng !== this.initialLocation?.lng)) {
-      this.basicInfoFormGroup.get('address.city')?.setValue(this.addressByGeolocation.city);
-      this.basicInfoFormGroup.get('address.street')?.setValue(this.addressByGeolocation.street);
+            const saveFunc = realtyObjFormData.id
+                ? (data: Partial<RealtyObj>) => this.realtyObjService.update(data)
+                : (data: Partial<RealtyObj>) => this.realtyObjService.create(data);
+            saveFunc({
+                ...realtyObjFormData,
+                address: {
+                    ...realtyObjFormData.address,
+                    region: realtyObjFormData.address?.region as CityOnMap
+                },
+                targetOperations: includedOperationsNames as string[],
+                realtor: realtyObjFormData.realtor as Realtor
+            }).pipe(
+                takeUntil(this.destroy$)
+            ).subscribe(object => {
+                this.router.navigate(['/realty-object', object.id]).then();
+            });
+        }
     }
-  }
+
+    public onVerificationPictureSelecting(event: Event): void {
+        const fileList = (event as any).target.files;
+        if (fileList.length > 0) {
+            this.uploadFile(fileList[0], '/upload-photo/confirm-object')
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: (data: RealtyPhoto) => {
+                        this.photosFormGroup.patchValue({confirmationDocPhoto: data});
+                    },
+                    error: error => console.log('File upload error:', error)
+                });
+        }
+    }
+
+    public onRealtyObjPictureSelecting(event: Event): void {
+        const fileList = (event as any).target.files;
+        if (fileList.length > 0) {
+            this.uploadFile(fileList[0], '/upload-photo/object')
+                .pipe(takeUntil(this.destroy$))
+                .subscribe((photo: RealtyPhoto) => {
+                    const photosArray = this.photosFormGroup.get('photos') as FormArray;
+                    const type = (photosArray.length === 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
+                    photosArray.push(this.fb.group({
+                        id: [photo.id],
+                        fullUrl: [photo.fullUrl],
+                        type: type
+                    }));
+                });
+        }
+    }
+
+    public makeMain(index: number): void {
+        const photoControlArray = this.realtyForm.get('photosFormGroup.photos') as FormArray;
+        for (let i = 0; i < photoControlArray.length; ++i) {
+            const control = photoControlArray.at(i) as FormControl;
+            control.setValue({
+                ...control.value,
+                type: i === index ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN
+            });
+        }
+    }
+
+    public deletePhoto(index: number): void {
+        const photosArray = this.realtyForm.get('photosFormGroup.photos') as FormArray;
+        photosArray.removeAt(index);
+        if (photosArray.length > 0) {
+            const currentValue = photosArray.at(0).value;
+            photosArray.at(0).setValue({
+                ...currentValue,
+                type: RealtyPhotoType.REALTY_MAIN
+            });
+        }
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
+    }
+
+    public changeLocation(location: Geolocation) {
+        this.location = location;
+        this.realtyForm.get('geolocation').setValue(location);
+        if (this.location?.lat !== this.initialLocation?.lat || this.location?.lng !== this.initialLocation?.lng) {
+            this.addressService.getAddressesByLatLong(location)
+                .subscribe(addressByGeolocation => {
+                    this.addressByGeolocation = addressByGeolocation;
+                });
+        }
+    }
+
+    public confirmLocationAndNavigate() {
+        if (!this.location?.lat || !this.location?.lng) {
+            const modalRef = this.dialogService.open(ConfirmModalComponent);
+            modalRef.componentInstance.message =
+                'Setting no Geolocation will limit your object visibility on our maps. Proceed?';
+            from(modalRef.result)
+                .pipe(
+                    take(1),
+                    catchError(() => of(false)),
+                    tap(v => {
+                        if (v) {
+                            this.wizard.goToNextStep();
+                        }
+                    }),
+                )
+                .subscribe();
+        } else {
+            this.wizard.goToNextStep();
+        }
+    }
+
+    public autofillAddressFromMapIfChanged(): void {
+        if (this.addressByGeolocation &&
+            (this.location?.lat !== this.initialLocation?.lat || this.location?.lng !== this.initialLocation?.lng)) {
+            this.basicInfoFormGroup.get('address.city')?.setValue(this.addressByGeolocation.city);
+            this.basicInfoFormGroup.get('address.street')?.setValue(this.addressByGeolocation.street);
+        }
+    }
+
+    private initFormControls() {
+        this.basicInfoFormGroup = this.fb.group<BasicInfoForm>({
+            address: this.fb.group({
+                region: this.fb.control(null),
+                city: this.fb.control('', Validators.required),
+                street: this.fb.control('', Validators.required),
+                numberOfStreet: this.fb.control('', [Validators.required, Validators.minLength(1)]),
+                apartmentNumber: this.fb.control(null, Validators.required),
+            }),
+            dwellingType: this.fb.control(DWELLING_TYPES.APARTMENT, Validators.required),
+            buildingType: this.fb.control(BUILDING_TYPES.BRICK, Validators.required),
+            floor: this.fb.control(null, Validators.required),
+            totalFloors: this.fb.control(null, Validators.required),
+            totalArea: this.fb.control(null, Validators.required),
+            livingArea: this.fb.control(null, Validators.required),
+            roomsAmount: this.fb.control(null, Validators.required)
+        }, {
+            validators: [
+                valueGteThanTotal('floor', 'totalFloors'),
+                valueGteThanTotal('livingArea', 'totalArea')
+            ]
+        });
+        this.basicInfoFormGroup.get('dwellingType').valueChanges.subscribe(value => {
+            const aptControl = this.basicInfoFormGroup.get('address.apartmentNumber');
+            if (value !== 'APARTMENT') {
+                aptControl.disable();
+            } else {
+                aptControl.enable();
+            }
+        });
+
+        this.basicInfoFormGroup.get('address.region').valueChanges.subscribe(value => {
+            if (this.basicInfoFormGroup.get('address.region').dirty) {
+                this.currentRegion = this.supportedRegions.find(r => r.id === Number(value));
+            }
+        });
+
+        const operationsFormArray: FormArray<FormGroup<OperationFormGroup>> = new FormArray([]);
+        this.operationsInputValues.forEach(operation => {
+            const operationControlGroup = this.fb.group<OperationFormGroup>({
+                name: this.fb.control(operation.name, Validators.required),
+                checked: this.fb.control(operation.checked)
+            });
+            operationsFormArray.push(operationControlGroup);
+        });
+
+        this.importantInfoFormGroup = this.fb.group<ImportantInfoForm>({
+            description: this.fb.control('', [Validators.required, Validators.maxLength(255)]),
+            otherInfo: this.fb.control('', Validators.maxLength(64)),
+            foundationYear: this.fb.control(null, [Validators.required, Validators.min(1500)]),
+            hasRepairing: this.fb.control(false),
+            hasGarage: this.fb.control(false),
+            hasCellar: this.fb.control(false),
+            hasLoft: this.fb.control(false),
+            targetOperations: operationsFormArray,
+            price: this.fb.control(null),
+            priceForRent: this.fb.control(null),
+            realtor: this.fb.control(null, Validators.required)
+        }, {
+            validators: [
+                operationPricesValidator()
+            ]
+        });
+
+        this.photosFormGroup = this.fb.group<PhotosForm>({
+            confirmationDocPhoto: this.fb.control<RealtyPhoto>(null, Validators.required), // Type for confirmationDocPhoto
+            photos: this.fb.array<FormControl<RealtyPhoto>>([]) // Type for photos FormArray
+        });
+
+        this.realtyForm = this.fb.group<RealtyForm>({
+            geolocation: new FormControl<Geolocation>(null),
+            basicInfoFormGroup: this.basicInfoFormGroup,
+            importantInfoFormGroup: this.importantInfoFormGroup,
+            photosFormGroup: this.photosFormGroup,
+        });
+    }
+
+    private populateRealtyForm(realtyObj: RealtyObj): void {
+        this.initialLocation = {
+            lng: realtyObj.address.lng,
+            lat: realtyObj.address.lat
+        };
+
+        this.location = {
+            ...this.initialLocation
+        };
+
+        this.realtyForm.patchValue({
+            basicInfoFormGroup: {
+                address: {
+                    ...realtyObj.address,
+                    region: realtyObj.address.region?.id
+                },
+                dwellingType: realtyObj.dwellingType,
+                buildingType: realtyObj.buildingType,
+                floor: realtyObj.floor,
+                totalFloors: realtyObj.totalFloors,
+                roomsAmount: realtyObj.roomsAmount,
+                totalArea: realtyObj.totalArea,
+                livingArea: realtyObj.livingArea,
+            },
+            importantInfoFormGroup: {
+                description: realtyObj.description,
+                otherInfo: realtyObj.otherInfo,
+                foundationYear: realtyObj.foundationYear,
+                hasRepairing: realtyObj.hasRepairing,
+                hasGarage: realtyObj.hasGarage,
+                hasCellar: realtyObj.hasCellar,
+                hasLoft: realtyObj.hasLoft,
+                price: realtyObj.price,
+                priceForRent: realtyObj.priceForRent,
+                realtor: realtyObj.realtor?.id,
+            },
+            photosFormGroup: {
+                confirmationDocPhoto: realtyObj.confirmationDocPhoto
+            },
+            geolocation: {
+                lat: realtyObj.address.lat,
+                lng: realtyObj.address.lng
+            }
+        });
+        realtyObj.photos.forEach(photo => {
+            const control = this.fb.group({
+                id: [photo.id],
+                fullUrl: [photo.fullUrl],
+                type: [photo.type || this.photoType.REALTY_PLAIN]
+            });
+            (this.photosFormGroup.controls.photos as FormArray).push(control);
+        });
+        this.operationsInputValues.forEach((op, index) => {
+            const operationName = op.value;
+            (this.importantInfoFormGroup.controls.targetOperations as FormArray).at(index).setValue({
+                name: operationName,
+                checked: realtyObj.targetOperations.includes(operationName)
+            });
+        });
+    }
+
+    private uploadFile(file: File, endpoint: string): Observable<Photo> {
+        return this.fileUploadService.upload(file, `${apiBase}${endpoint}`)
+            .pipe(takeUntil(this.destroy$));
+    }
 }
