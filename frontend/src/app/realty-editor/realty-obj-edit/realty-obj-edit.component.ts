@@ -56,7 +56,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     public supportedRegions: CityOnMap[] = [];
     public initialLocation: Geolocation;
     public location: Geolocation;
-    public currentRegion: CityOnMap;
+    public regionChanged: CityOnMap;
     private destroy$ = new Subject<boolean>();
 
     constructor(
@@ -281,7 +281,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
         this.basicInfoFormGroup.get('address.region').valueChanges.subscribe(value => {
             if (this.basicInfoFormGroup.get('address.region').dirty) {
-                this.currentRegion = this.supportedRegions.find(r => r.id === Number(value));
+                this.regionChanged = this.supportedRegions.find(r => r.id === Number(value));
             }
         });
 

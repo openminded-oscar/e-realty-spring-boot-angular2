@@ -33,14 +33,13 @@ export class SelectLocationComponent {
     }
 
 
-    private _region!: CityOnMap;
-    get region(): CityOnMap {
-        return this._region;
+    private _regionChanged!: CityOnMap;
+    get regionChanged(): CityOnMap {
+        return this._regionChanged;
     }
-
     @Input()
-    set region(value: CityOnMap) {
-        this._region = value;
+    set regionChanged(value: CityOnMap) {
+        this._regionChanged = value;
 
         if (value?.lat && value?.lng) {
             this.options.center = this.currentLocation;
@@ -54,7 +53,6 @@ export class SelectLocationComponent {
     public get location(): Geolocation {
         return this._location;
     }
-
     @Input()
     public set location(value: Geolocation) {
         this._location = value;
