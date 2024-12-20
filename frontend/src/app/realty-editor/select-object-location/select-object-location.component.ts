@@ -6,11 +6,11 @@ import {Geolocation} from '../../app-models/geolocation';
 import {CityOnMap} from '../../app-models/city-on-map';
 
 @Component({
-    selector: 'app-select-location',
-    templateUrl: './select-location.component.html',
-    styleUrls: ['./select-location.component.scss']
+    selector: 'app-select-object-location',
+    templateUrl: './select-object-location.component.html',
+    styleUrls: ['./select-object-location.component.scss']
 })
-export class SelectLocationComponent {
+export class SelectObjectLocationComponent {
     public options: MapOptions = {
         zoomControl: true,
         zoom: 11
