@@ -4,7 +4,9 @@
 @import 'node_modules/bootstrap/scss/mixins';
 
 label {
-  text-align: right;
+  @include media-breakpoint-up(md) {
+    text-align: right;
+  }
 }
 
 .geomap-container {

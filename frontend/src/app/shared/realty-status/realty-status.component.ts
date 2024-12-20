@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {takeUntil, tap} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {map, takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
@@ -27,18 +27,14 @@ export class RealtyStatusComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.isAdmin$.pipe(
-      takeUntil(this.destroy$),
-      tap(value => {
-        this.isRealtorOrAdmin = value;
-      })
-    ).subscribe();
-    this.userService.isRealtor$.pipe(
-      takeUntil(this.destroy$),
-      tap(value => {
-        this.isRealtorOrAdmin = value;
-      })
-    ).subscribe();
+      combineLatest([this.userService.isAdmin$, this.userService.isRealtor$])
+          .pipe(
+              map(([isAdmin, isRealtor]) => isAdmin || isRealtor), // Check if either condition is true
+              takeUntil(this.destroy$),
+              tap(value => {
+                  this.isRealtorOrAdmin = value;
+              })
+          ).subscribe();
   }
 
   public activateObject(realtyObject: RealtyObj) {

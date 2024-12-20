@@ -37,9 +37,9 @@
 
           <div style="display: flex; flex-direction: row; align-items: center; justify-content: center">
             <div class="geomap-container">
-              <app-select-location [location]="initialLocation"
+              <app-select-object-location [location]="initialLocation"
                                    [regionChanged]="regionChanged"
-                                   (locationSelected)="changeLocation($event)"></app-select-location>
+                                   (locationSelected)="changeLocation($event)"></app-select-object-location>
             </div>
           </div>
         </aw-wizard-step>

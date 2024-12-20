@@ -5,7 +5,7 @@ import {LeafletModule} from '@bluehalo/ngx-leaflet';
 import {ArchwizardModule} from '@rg-software/angular-archwizard';
 import {RealtyObjEditComponent} from './realty-obj-edit/realty-obj-edit.component';
 import {SharedModule} from '../shared/shared.module';
-import {SelectLocationComponent} from './select-location/select-location.component';
+import {SelectObjectLocationComponent} from './select-object-location/select-object-location.component';
 
 export const routes: Routes = [
   {
@@ -15,7 +15,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [RealtyObjEditComponent, SelectLocationComponent],
+  declarations: [RealtyObjEditComponent, SelectObjectLocationComponent],
   imports: [
     CommonModule,
     SharedModule,
