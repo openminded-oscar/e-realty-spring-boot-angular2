@@ -39,11 +39,12 @@ export interface SupportedOperation {
 export class RealtyObjEditComponent implements OnInit, OnDestroy {
   @ViewChild(WizardComponent)
   public wizard: WizardComponent;
-
-  public operationsInputValues: SupportedOperation[];
+  public operationsInputValues: SupportedOperation[] = this.config.supportedOperations.map(value => ({
+      value, name: value, checked: value === OPERATION_TYPES.SELLING
+  }));
+  public dwellingTypes: string[] = this.config.supportedDwellingTypes;
+  public buildingTypes: string[] = this.config.supportedBuildingTypes;
   public realtors: Realtor[];
-  public dwellingTypes: string[];
-  public buildingTypes: string[];
   public photoType = RealtyPhotoType;
   private destroy$ = new Subject<boolean>();
 
@@ -72,12 +73,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.operationsInputValues = this.config.supportedOperations.map(value => ({
-      value, name: value, checked: value === OPERATION_TYPES.SELLING
-    }));
-    this.dwellingTypes = this.config.supportedDwellingTypes;
-    this.buildingTypes = this.config.supportedBuildingTypes;
-
     this.initFormControls();
 
     this.realtorsService.getRealtors()
