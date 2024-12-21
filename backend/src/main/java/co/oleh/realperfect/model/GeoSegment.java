@@ -7,13 +7,18 @@ import java.util.Objects;
 
 @Data
 public class GeoSegment {
+    private Long id;
     private String name;
     private final double centerLatitude;
     private final double centerLongitude;
 
+    public GeoSegment(Long id, String name, double longitude, double latitude) {
+        this(name, longitude, latitude);
+        this.id = id;
+    }
+
     public GeoSegment(String name, double longitude, double latitude) {
-        this.centerLatitude = latitude;
-        this.centerLongitude = longitude;
+        this(longitude, latitude);
         this.name = name;
     }
 

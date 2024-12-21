@@ -91,31 +91,31 @@ public class GeoLocationUtils {
         List<GeoSegment> geoSegments = new ArrayList<>();
 
         // Coordinates of regional centers in Ukraine (latitude, longitude)
-        geoSegments.add(new GeoSegment(30.5234, 50.4501)); // Kyiv
-        geoSegments.add(new GeoSegment(30.7181, 46.4825)); // Odesa
-        geoSegments.add(new GeoSegment(36.2304, 49.9935)); // Kharkiv
-        geoSegments.add(new GeoSegment(35.0462, 48.4647)); // Dnipro
-        geoSegments.add(new GeoSegment(24.0297, 49.8397)); // Lviv
-        geoSegments.add(new GeoSegment(28.4826, 49.2328)); // Vinnytsia
-        geoSegments.add(new GeoSegment(28.6587, 50.2547)); // Zhytomyr
-        geoSegments.add(new GeoSegment(25.9403, 48.2915)); // Chernivtsi
-        geoSegments.add(new GeoSegment(35.1318, 47.8388)); // Zaporizhzhia
-        geoSegments.add(new GeoSegment(37.6187, 47.0971)); // Donetsk
-        geoSegments.add(new GeoSegment(32.6169, 46.6354)); // Kherson
-        geoSegments.add(new GeoSegment(32.0621, 49.4229)); // Cherkasy
-        geoSegments.add(new GeoSegment(32.2623, 48.5079)); // Kropyvnytskyi
-        geoSegments.add(new GeoSegment(26.2516, 50.6199)); // Rivne
-        geoSegments.add(new GeoSegment(34.5514, 49.5883)); // Poltava
-        geoSegments.add(new GeoSegment(31.8906, 46.9750)); // Mykolaiv
-        geoSegments.add(new GeoSegment(26.9794, 49.4197)); // Khmelnytskyi
-        geoSegments.add(new GeoSegment(39.3495, 48.5735)); // Luhansk
-        geoSegments.add(new GeoSegment(33.4729, 47.9051)); // Kryvyi Rih (though not an oblast capital, it's a major city)
-        geoSegments.add(new GeoSegment(25.3429, 50.7472)); // Lutsk
-        geoSegments.add(new GeoSegment(24.7097, 48.9226)); // Ivano-Frankivsk
-        geoSegments.add(new GeoSegment(31.2849, 51.4982)); // Chernihiv
-        geoSegments.add(new GeoSegment(22.2947, 48.6210)); // Uzhhorod
-        geoSegments.add(new GeoSegment(34.8021, 50.9077)); // Sumy
-        geoSegments.add(new GeoSegment(25.5934, 49.5535)); // Ternopil
+        geoSegments.add(new GeoSegment(1L, "Kyiv", 30.5234, 50.4501));
+        geoSegments.add(new GeoSegment(5L, "Lviv", 24.0297, 49.8397));
+        geoSegments.add(new GeoSegment(2L,"Odesa", 30.7181, 46.4825));
+        geoSegments.add(new GeoSegment(3L, "Kharkiv", 36.2304, 49.9935));
+        geoSegments.add(new GeoSegment(4L, "Dnipro", 35.0462, 48.4647));
+        geoSegments.add(new GeoSegment(20L, "Lutsk", 25.3429, 50.7472));
+        geoSegments.add(new GeoSegment(21L, "Ivano-Frankivsk", 24.7097, 48.9226));
+        geoSegments.add(new GeoSegment(23L, "Uzhhorod", 22.2947, 48.6210));
+        geoSegments.add(new GeoSegment(25L, "Ternopil", 25.5934, 49.5535));
+        geoSegments.add(new GeoSegment(6L, "Vinnytsia", 28.4826, 49.2328));
+        geoSegments.add(new GeoSegment(7L, "Zhytomyr", 28.6587, 50.2547));
+        geoSegments.add(new GeoSegment(8L, "Chernivtsi", 25.9403, 48.2915));
+        geoSegments.add(new GeoSegment(9L, "Zaporizhzhia", 35.1318, 47.8388));
+        geoSegments.add(new GeoSegment(11L, "Kherson", 32.6169, 46.6354));
+        geoSegments.add(new GeoSegment(12L, "Cherkasy", 32.0621, 49.4229));
+        geoSegments.add(new GeoSegment(13L, "Kropyvnytskyi", 32.2623, 48.5079));
+        geoSegments.add(new GeoSegment(14L, "Rivne", 26.2516, 50.6199));
+        geoSegments.add(new GeoSegment(15L, "Poltava", 34.5514, 49.5883));
+        geoSegments.add(new GeoSegment(16L, "Mykolaiv", 31.8906, 46.9750));
+        geoSegments.add(new GeoSegment(17L, "Khmelnytskyi", 26.9794, 49.4197));
+        geoSegments.add(new GeoSegment(10L, "Donetsk", 37.6187, 47.0971));
+        geoSegments.add(new GeoSegment(18L, "Luhansk", 39.3495, 48.5735));
+        geoSegments.add(new GeoSegment(19L, "Kryvyi Rih", 33.4729, 47.9051));
+        geoSegments.add(new GeoSegment(22L, "Chernihiv", 31.2849, 51.4982));
+        geoSegments.add(new GeoSegment(24L, "Sumy", 34.8021, 50.9077));
 
         return geoSegments;
     }
