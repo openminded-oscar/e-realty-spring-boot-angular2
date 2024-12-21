@@ -9,7 +9,7 @@ import {GlobalNotificationService} from '../global-notification.service';
 import {SignInSignOutService} from '../auth/sign-in-sign-out.service';
 
 export const HTTP_CONSTANTS = {
-    SKIP_INTERCEPTOR_HEADER: 'Skip-Interceptor'
+    SKIP_ERROR_INTERCEPTOR_HEADER: 'Skip-Error-Interceptor'
 };
 
 @Injectable()
@@ -51,8 +51,8 @@ export class HttpErrorsInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let skipError = false;
-        if (req.headers.has(HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER)) {
-            const headers = req.headers.delete(HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER);
+        if (req.headers.has(HTTP_CONSTANTS.SKIP_ERROR_INTERCEPTOR_HEADER)) {
+            const headers = req.headers.delete(HTTP_CONSTANTS.SKIP_ERROR_INTERCEPTOR_HEADER);
             req = req.clone({headers});
             skipError = true;
         }

@@ -89,7 +89,7 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
 
   private signInRequest(credentials: Credentials): Observable<HttpResponse<SignInResponse>> {
     return this.sendRequest<SignInResponse>('post', endpoints.signin, {
-      customHeaders: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'},
+      customHeaders: {[HTTP_CONSTANTS.SKIP_ERROR_INTERCEPTOR_HEADER]: 'true'},
       body: credentials,
     })
       .pipe(

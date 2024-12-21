@@ -3,24 +3,30 @@
         <div class="row card" [formGroup]="filterForm">
             <div class="card-header">
                 <div class="card-header--part" style="position: relative; display: flex; flex: 1;">
-                    <input name="city"
-                           (keyup.enter)="loadInitialObjects()"
-                           [placeholder]="'Type City'"
-                           [formControlName]="'city'"
-                           class="form-control city-input">
-                    <span class="location-icon" (click)="openRealtyOnMapWidget()">
+                    <select [formControlName]="'region'"
+                            class="form-control"
+                            name="selected-region"
+                            (change)="onRegionChange()"
+                    >
+                        <option value="0" selected>All Regions</option> <!-- Placeholder option -->
+                        <option *ngFor="let region of supportedRegions" [value]="region.id">
+                            {{ region.name }}
+                        </option>
+                    </select>
+                    <span *ngIf="filterForm?.controls.region.value" class="location-icon"
+                          (click)="openRealtyOnMapWidget(filterForm?.controls.region.value)">
                         <i class="fas fa-location-dot"></i>
                     </span>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="d-flex justify-content-between align-items-center">
                     <div class="filter--value-container card-header--part" ngbDropdown>
                         <button
                                 id="orderByDropdownMenuButton"
                                 class="btn btn-outline-secondary"
                                 ngbDropdownToggle
                         >
-                            By {{ selectedOrderingOption.display }}
+                            Order By {{ selectedOrderingOption.display }}
                         </button>
                         <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
                             <button
@@ -51,43 +57,86 @@
 
             <div class="other-filters--section form-group card-body" [ngbCollapse]="isFilterCollapsed">
                 <div class="other-filters">
-                    Street
-                    <input (keyup.enter)="loadInitialObjects()" name="street" [formControlName]="'street'"
+                    <label for="cityInput">
+                        City
+                    </label>
+                    <div class="card-header--part" style="position: relative; display: flex; flex: 1;">
+                        <input id="cityInput" name="city" class="form-control city-input"
+                               (keyup.enter)="loadInitialObjects()"
+                               [formControlName]="'city'">
+                    </div>
+                    <label for="streetInput">
+                        Street
+                    </label>
+                    <input (keyup.enter)="loadInitialObjects()" id="streetInput" name="street"
+                           [formControlName]="'street'"
                            class="form-control">
                     <div class="row">
                         <div class="filter-input-in-row col-3 col-sm-6">
-                            Price min
-                            <input (keyup.enter)="loadInitialObjects()" type="number" name="minPrice"
+                            <label for="minPriceInput">
+                                Price min
+                            </label>
+                            <input id="minPriceInput" (keyup.enter)="loadInitialObjects()" type="number" name="minPrice"
                                    [formControlName]="'priceMin'"
                                    class="form-control">
                         </div>
                         <div class="filter-input-in-row col-3 col-sm-6">
-                            Price max
-                            <input (keyup.enter)="loadInitialObjects()" type="number" name="maxPrice"
+                            <label for="maxPriceInput">
+                                Price max
+                            </label>
+                            <input id="maxPriceInput"
+                                   type="number"
+                                   name="maxPrice"
+                                   (keyup.enter)="loadInitialObjects()"
                                    [formControlName]="'priceMax'"
                                    class="form-control">
                         </div>
                         <div class="filter-input-in-row col-3 col-sm-6">
-                            Area min
-                            <input (keyup.enter)="loadInitialObjects()" type="number" name="minTotalArea"
-                                   [formControlName]="'totalAreaMin'" class="form-control">
+                            <label for="minPriceInput">
+                                Area min
+                            </label>
+                            <input id="minAreaInput"
+                                   type="number"
+                                   name="minTotalArea"
+                                   class="form-control"
+                                   (keyup.enter)="loadInitialObjects()"
+                                   [formControlName]="'totalAreaMin'">
                         </div>
                         <div class="filter-input-in-row col-3 col-sm-6">
-                            Area max
-                            <input (keyup.enter)="loadInitialObjects()" type="number" name="maxTotalArea"
-                                   [formControlName]="'totalAreaMax'" class="form-control">
+                            <label for="maxAreaInput">
+                                Area max
+                            </label>
+                            <input id="maxAreaInput"
+                                   type="number"
+                                   name="maxTotalArea"
+                                   class="form-control"
+                                   (keyup.enter)="loadInitialObjects()"
+                                   [formControlName]="'totalAreaMax'">
                         </div>
                     </div>
-                    Rooms
-                    <input (keyup.enter)="loadInitialObjects()" name="rooms" type="number"
-                           [formControlName]="'roomsAmount'"
-                           class="form-control">
-                    Description like
-                    <input (keyup.enter)="loadInitialObjects()" name="description" [formControlName]="'description'"
-                           class="form-control">
-                    Building type
-                    <select [formControlName]="'buildingType'" name="buildingType" class="form-control" required>
-                        <option (change)="loadInitialObjects()" *ngFor="let buildingType of buildingTypes"
+                    <label for="roomsAmountInput">
+                        Rooms
+                    </label>
+                    <input id="roomsAmountInput" name="rooms" type="number" class="form-control"
+                           (keyup.enter)="loadInitialObjects()"
+                           [formControlName]="'roomsAmount'">
+                    <label for="descriptionLikeInput">
+                        Description like
+                    </label>
+                    <input id="descriptionLikeInput"
+                           name="description"
+                           class="form-control"
+                           (keyup.enter)="loadInitialObjects()"
+                           [formControlName]="'description'">
+                    <label for="buildingTypeInput">
+                        Building type
+                    </label>
+                    <select id="buildingTypeInput"
+                            name="buildingType"
+                            class="form-control"
+                            [formControlName]="'buildingType'">
+                        <option *ngFor="let buildingType of buildingTypes"
+                                (change)="loadInitialObjects()"
                                 [ngValue]="buildingType">{{ buildingType }}
                         </option>
                     </select>
