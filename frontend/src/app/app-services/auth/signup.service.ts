@@ -44,7 +44,7 @@ export class SignupService extends AbstractService<Credentials> implements OnDes
     }
 
     public signUpRequest(credentials: Credentials): Observable<HttpResponse<any>> {
-        return this.sendRequest<any>('post', '', {body: credentials, customHeaders: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}});
+        return this.sendRequest<any>('post', '', {body: credentials, customHeaders: {[HTTP_CONSTANTS.SKIP_ERROR_INTERCEPTOR_HEADER]: 'true'}});
     }
 
     private dismissAllModal(): Observable<void> {

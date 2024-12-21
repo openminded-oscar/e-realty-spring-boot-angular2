@@ -5,8 +5,26 @@
 
 $filter-icon-margin: 10px;
 
+input {
+  height: 28px;
+}
+select {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  height: 30px;
+  font-size: 17px !important;
+}
+
+label {
+  padding-top: 1px;
+}
+
 .city-input {
   padding-right: 35px;
+}
+
+.city-input::placeholder {
+  color: rgba(0, 0, 0, 0.3); /* Adjust the color and opacity */
 }
 
 .toggle-order-icon {

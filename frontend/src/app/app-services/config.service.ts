@@ -1,47 +1,49 @@
 import {Injectable} from '@angular/core';
-import {CityOnMap} from '../app-models/city-on-map';
 
 export enum OPERATION_TYPES {
-  SELLING = 'SELLING',
-  RENT = 'RENT',
+    SELLING = 'SELLING',
+    RENT = 'RENT',
 }
 
 export enum DWELLING_TYPES {
-  APARTMENT = 'APARTMENT',
-  HOUSE = 'HOUSE'
+    APARTMENT = 'APARTMENT',
+    HOUSE = 'HOUSE'
 }
 
 export enum BUILDING_TYPES {
-  BLOCK = 'BLOCK',
-  BRICK = 'BRICK',
-  WOODEN = 'WOODEN'
+    BRICK = 'BRICK',
+    BLOCK = 'BLOCK',
+    WOODEN = 'WOODEN'
 }
 
 @Injectable({providedIn: 'root'})
 export class ConfigService {
-  constructor() { }
-  private _supportedOperations: string[] = Object.values(OPERATION_TYPES);
-  private _supportedDwellingTypes: string[] = Object.values(DWELLING_TYPES);
-  private _supportedBuildingTypes: string[] = Object.values(BUILDING_TYPES);
+    constructor() {
+    }
 
-  get supportedBuildingTypes(): string[] {
-    return this._supportedBuildingTypes;
-  }
+    private _supportedOperations: string[] = Object.values(OPERATION_TYPES);
 
-  set supportedBuildingTypes(value: string[]) {
-    this._supportedBuildingTypes = value;
-  }
+    get supportedOperations(): string[] {
+        return this._supportedOperations;
+    }
 
-  get supportedDwellingTypes(): string[] {
-    return this._supportedDwellingTypes;
-  }
+    private _supportedDwellingTypes: string[] = Object.values(DWELLING_TYPES);
 
-  set supportedDwellingTypes(value: string[]) {
-    this._supportedDwellingTypes = value;
-  }
+    get supportedDwellingTypes(): string[] {
+        return this._supportedDwellingTypes;
+    }
 
+    set supportedDwellingTypes(value: string[]) {
+        this._supportedDwellingTypes = value;
+    }
 
-  get supportedOperations(): string[] {
-    return this._supportedOperations;
-  }
+    private _supportedBuildingTypes: string[] = Object.values(BUILDING_TYPES);
+
+    get supportedBuildingTypes(): string[] {
+        return this._supportedBuildingTypes;
+    }
+
+    set supportedBuildingTypes(value: string[]) {
+        this._supportedBuildingTypes = value;
+    }
 }

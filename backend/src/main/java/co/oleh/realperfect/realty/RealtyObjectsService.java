@@ -187,10 +187,6 @@ public class RealtyObjectsService {
 
     @Transactional
     public Boolean delete(Long objectId) {
-        // TODO remove all target operations
-        // TODO remove all related photos
-        // TODO remove all related document photos
-        // TODO remove all related interests
         Instant oneWeekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
         if (!objectReviewRepository.findByRealtyObjIdAndDateTimeAfter(objectId, oneWeekAgo).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You Can Not Remove Objects With Future Or Recent" +
