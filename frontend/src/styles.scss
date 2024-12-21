@@ -34,6 +34,14 @@ $aw-colors: (
 
 @import '../node_modules/@rg-software/angular-archwizard/styles/archwizard.scss';
 
+.steps-indicator {
+  @include media-breakpoint-down(sm) {
+    li a div.label {
+      display: none !important;
+    }
+  }
+}
+
 .btn-block {
   width: 100%;
 }

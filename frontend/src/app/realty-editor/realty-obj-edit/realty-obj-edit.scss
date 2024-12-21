@@ -9,6 +9,25 @@ label {
   }
 }
 
+.region-input-container {
+  @include media-breakpoint-up(md) {
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    ::ng-deep {
+      select {
+        text-align: start !important;
+      }
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    margin-top: 50px;
+  }
+}
+
 .geomap-container {
   width: 50%;
   @include media-breakpoint-down(lg) {
@@ -18,6 +37,7 @@ label {
     width: 100%;
   }
 }
+
 :host ::ng-deep .map-widget-container {
   height: 300px;
 }
@@ -30,6 +50,7 @@ label {
 .realty-pic-preview-container img, .realty-confirmation-pic-preview-container img {
   max-height: 150px;
 }
+
 .realty-pic-preview-container img {
   width: 100%;
   object-fit: cover;
