@@ -1,7 +1,8 @@
 package co.oleh.realperfect.address;
 
 import co.oleh.realperfect.model.AddressByGeocodingDto;
-import co.oleh.realperfect.model.Location;
+import co.oleh.realperfect.model.GeoLocationUtils;
+import co.oleh.realperfect.model.GeoSegment;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -12,21 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class AddressService {
-    private static final List<Location> SUPPORTED_CITIES;
-
-    static {
-        SUPPORTED_CITIES = Arrays.asList(
-                new Location("Львів", 24.0215309, 49.8430008),
-                new Location("Київ", 30.5267917, 50.4431254),
-                new Location("Івано-Франківськ", 24.701189, 48.9119062),
-                new Location("Черкаси", 32.0495275, 49.4260047));
-    }
-
     @Value("${google.geocodingapikey}")
     private String geocodingapikey;
     private final RestTemplate restTemplate;
@@ -40,8 +30,8 @@ public class AddressService {
     }
 
 
-    public List<Location> getSupportedCities() {
-        return AddressService.SUPPORTED_CITIES;
+    public List<GeoSegment> supportedCities() {
+        return GeoLocationUtils.generateRegionalCentersForUkraine();
     }
 
     public AddressByGeocodingDto getAddressByLngAndLat(Double lng, Double lat, String term) {

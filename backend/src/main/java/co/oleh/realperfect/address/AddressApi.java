@@ -1,7 +1,7 @@
 package co.oleh.realperfect.address;
 
 import co.oleh.realperfect.model.AddressByGeocodingDto;
-import co.oleh.realperfect.model.Location;
+import co.oleh.realperfect.model.GeoSegment;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.annotation.security.RolesAllowed;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/addresses")
 @AllArgsConstructor
@@ -19,9 +21,9 @@ public class AddressApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AddressApi.class);
 
-    @GetMapping("/cities-supported")
-    public ResponseEntity<Iterable<Location>> getCities() {
-        return new ResponseEntity<>(addressService.getSupportedCities(), HttpStatus.OK);
+    @GetMapping("/regions-supported")
+    public ResponseEntity<List<GeoSegment>> getCities() {
+        return new ResponseEntity<>(addressService.supportedCities(), HttpStatus.OK);
     }
 
     @GetMapping("/address-by-geocoding")
