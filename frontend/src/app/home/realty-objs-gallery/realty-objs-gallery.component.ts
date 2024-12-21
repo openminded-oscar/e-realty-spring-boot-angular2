@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '
 
 import {Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subject, take} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {debounceTime, tap} from 'rxjs/operators';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +13,8 @@ import {UserService} from '../../app-services/user.service';
 import {RealtyObjsListComponent} from '../../shared/realty-objs-list/realty-objs-list.component';
 import {WindowService} from '../../app-services/window.service';
 import {GeolocationWidgetModalComponent} from './geolocation-widget-modal/geolocation-widget-modal.component';
+import {CityOnMap} from '../../app-models/city-on-map';
+import {AddressService} from '../../app-services/address.service';
 import {LVIV_COORDINATES} from '../../utils/location-utils';
 
 
@@ -26,6 +28,8 @@ export interface SortField {
     field: string;
 }
 
+const ALL_REGIONS_ID = 0;
+
 @Component({
     selector: 'realty-objs-gallery',
     templateUrl: './realty-objs-gallery.component.html',
@@ -34,12 +38,12 @@ export interface SortField {
 })
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     public filterForm: FormGroup;
-    public readonly DEFAULT_CITY = 'Lviv';
-
+    public supportedRegions: CityOnMap[] = [];
     public readonly INITIAL_FILTER_FORM = {
         priceMin: ['0'],
         priceMax: ['1000000'],
-        city: [this.DEFAULT_CITY],
+        region: [ALL_REGIONS_ID],// all regions
+        city: [''],
         street: [''],
         roomsAmount: [''],
         description: [''],
@@ -47,37 +51,18 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         totalAreaMin: [''],
         totalAreaMax: ['']
     };
-    private lastPage = false;
-
     @ViewChild(RealtyObjsListComponent)
     public listComponent: RealtyObjsListComponent;
-
-    constructor(
-      public realtyObjService: RealtyObjService,
-                public userService: UserService,
-                public config: ConfigService,
-                public router: Router,
-                public ngbModal: NgbModal,
-                public fb: FormBuilder,
-                public windowService: WindowService,
-    ) {
-    }
-
     public pageable: any;
     public buildingTypes: string[];
     public showNotificaton = false;
-
-    private destroy$ = new Subject<boolean>();
-
     public currentRealtyObjectsPortion = new BehaviorSubject<RealtyObj[]>([]);
     public currentObjectsPortion$: Observable<RealtyObj[]> = this.currentRealtyObjectsPortion.asObservable();
-
     public targetOperation: OPERATION_TYPES;
     public readonly initialPageable: any = {
         page: 0,
         size: 12
     };
-
     public FILTER_DEBOUNCE_TIME = 1000;
     public selectedOrderingOption: SortField = {
         display: 'Recent',
@@ -98,20 +83,31 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         field: 'address.city',
     }];
     public isFilterCollapsed = false;
+    private destroy$ = new Subject<boolean>();
+    private lastPage = false;
+
+    constructor(
+        public realtyObjService: RealtyObjService,
+        public userService: UserService,
+        public config: ConfigService,
+        public router: Router,
+        public ngbModal: NgbModal,
+        public fb: FormBuilder,
+        public windowService: WindowService,
+        public addressService: AddressService
+    ) {
+    }
 
     public ngOnInit() {
         this.isFilterCollapsed = this.windowService.nativeWindow?.innerWidth < 576;
+        this.addressService.supportedRegions()
+            .pipe(
+                tap(regions => this.supportedRegions = regions),
+            )
+            .subscribe();
         this.resolveTargetOperations();
         this.buildingTypes = this.config.supportedBuildingTypes;
         this.resetFiltersAndLoadInitialObjects();
-    }
-
-    private resolveTargetOperations() {
-        if (this.router.url.endsWith('/rent')) {
-            this.targetOperation = OPERATION_TYPES.RENT;
-        } else {
-            this.targetOperation = OPERATION_TYPES.SELLING;
-        }
     }
 
     public resetFiltersAndLoadInitialObjects() {
@@ -164,6 +160,30 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         }
     }
 
+    public ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
+    }
+
+    public openRealtyOnMapWidget(regionId: number): void {
+        const realtyOnMap: NgbModalRef = this.ngbModal.open(GeolocationWidgetModalComponent);
+        realtyOnMap.componentInstance.initialLocation =
+            this.supportedRegions.find(r => r.id === Number(regionId)) ?? LVIV_COORDINATES;
+        realtyOnMap.componentInstance.zoomLevel = 10;
+    }
+
+    public onRegionChange() {
+        this.loadInitialObjects();
+    }
+
+    private resolveTargetOperations() {
+        if (this.router.url.endsWith('/rent')) {
+            this.targetOperation = OPERATION_TYPES.RENT;
+        } else {
+            this.targetOperation = OPERATION_TYPES.SELLING;
+        }
+    }
+
     private getFilterValue() {
         const formValues = this.filterForm.value;
         const priceFilter = this.targetOperation === OPERATION_TYPES.SELLING ? {
@@ -171,8 +191,12 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         } : {
             priceForRent: {ge: formValues.priceMin, le: formValues.priceMax},
         };
+
         return {
             ...priceFilter,
+            ...formValues.region && Number(formValues.region) !== ALL_REGIONS_ID ? {
+                region: {eq: formValues.region},
+            } : {},
             city: {like: formValues.city},
             street: {like: formValues.street},
             roomsAmount: {eq: formValues.roomsAmount},
@@ -188,16 +212,5 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
             field: this.selectedOrderingOption.field,
             direction: this.selectedOrderingDirection,
         };
-    }
-
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
-    }
-
-    public openRealtyOnMapWidget(): void {
-        const realtyOnMap: NgbModalRef = this.ngbModal.open(GeolocationWidgetModalComponent);
-        realtyOnMap.componentInstance.initialLocation = LVIV_COORDINATES;
-        realtyOnMap.componentInstance.zoomLevel = 10;
     }
 }

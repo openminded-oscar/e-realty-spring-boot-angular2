@@ -26,7 +26,7 @@ export class AddressService {
 
     return this.http.get<AddressByGeolocation>(endpoints.addressesByCoordinates, {
       params: params,
-      headers: {[HTTP_CONSTANTS.SKIP_INTERCEPTOR_HEADER]: 'true'}
+      headers: {[HTTP_CONSTANTS.SKIP_ERROR_INTERCEPTOR_HEADER]: 'true'}
     });
   }
 
