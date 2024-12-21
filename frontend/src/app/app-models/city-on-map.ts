@@ -1,3 +1,10 @@
+export interface Region {
+    id: number;
+    centerLatitude: number;
+    centerLongitude: number;
+    name: string;
+}
+
 export class CityOnMap {
     id: number;
     name: string;
