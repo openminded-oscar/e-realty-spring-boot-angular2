@@ -1,38 +1,41 @@
 <div id="itemsContainer" class="row" *ngIf="interests.length; else noInterests">
-  <div *ngFor="let interest of interests; trackBy: trackById" class="col-md-6 col-lg-4">
-    <app-realty-obj-card [realtyObject]="interest.realtyObj">
-      <div class style="width: 100%; display: flex; justify-content: space-between">
-        <div>
-          <ng-container *ngIf="!interest.reviewScheduled; else reviewScheduled">
-            <button (click)="openScheduleReviewModal(interest.realtyObj)">Schedule A Review</button>
-          </ng-container>
-          <ng-template #reviewScheduled>
-            <ng-container *ngIf="isFutureDate(interest.reviewScheduled.dateTime); else pastDate">
-              <div style="display: flex; flex-direction: row; justify-content: space-between">
-                <div>
-                  Scheduled for {{ interest.reviewScheduled.dateTime | date: 'MMM d, HH:mm':'local' }}
+    <div *ngFor="let interest of interests; trackBy: trackById" class="col-md-6 col-lg-4">
+        <app-realty-obj-card-details [realtyObject]="interest.realtyObj">
+            <ng-container imageOverlayContent>
+                <div class style="width: 100%; display: flex; justify-content: space-between">
+                    <div>
+                        <ng-container *ngIf="!interest.reviewScheduled; else reviewScheduled">
+                            <button (click)="openScheduleReviewModal(interest.realtyObj)">Schedule A Review</button>
+                        </ng-container>
+                        <ng-template #reviewScheduled>
+                            <ng-container *ngIf="isFutureDate(interest.reviewScheduled.dateTime); else pastDate">
+                                <div style="display: flex; flex-direction: row; justify-content: space-between">
+                                    <div>
+                                        Scheduled
+                                        for {{ interest.reviewScheduled.dateTime | date: 'MMM d, HH:mm':'local' }}
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #pastDate>
+                                <div>
+                                    Reviewed on {{ interest.reviewScheduled.dateTime | date: 'MMM d, HH:mm':'local' }}
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                    <div>
+                        <i style="cursor: pointer; margin-right: 10px" (click)="toggleInterested(interest.realtyObj)"
+                           ngbTooltip="Remove From Favorites"
+                           class="fa-solid fa-heart text-danger"></i>
+                    </div>
                 </div>
-              </div>
             </ng-container>
-            <ng-template #pastDate>
-              <div>
-                Reviewed on {{ interest.reviewScheduled.dateTime | date: 'MMM d, HH:mm':'local' }}
-              </div>
-            </ng-template>
-          </ng-template>
-        </div>
-        <div>
-          <i style="cursor: pointer; margin-right: 20px" (click)="toggleInterested(interest.realtyObj)"
-             ngbTooltip="Remove From Favorites"
-             class="fa-solid fa-heart text-danger"></i>
-        </div>
-      </div>
-    </app-realty-obj-card>
-  </div>
+        </app-realty-obj-card-details>
+    </div>
 </div>
 
 <ng-template #noInterests>
-  <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
-    <div>For Now You Didn't Like Any Realty. Enjoy Using Our Service!</div>
-  </div>
+    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 30vh">
+        <div>For Now You Didn't Like Any Realty. Enjoy Using Our Service!</div>
+    </div>
 </ng-template>
