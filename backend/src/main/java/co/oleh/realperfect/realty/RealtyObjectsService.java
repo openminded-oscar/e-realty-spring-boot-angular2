@@ -2,9 +2,11 @@ package co.oleh.realperfect.realty;
 
 import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.emails.EmailsService;
+import co.oleh.realperfect.interest.InterestService;
 import co.oleh.realperfect.mapping.mappers.MappingService;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
+import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDtoLikable;
 import co.oleh.realperfect.model.GeoLocationUtils;
 import co.oleh.realperfect.model.Realtor;
 import co.oleh.realperfect.model.RealtyObject;
@@ -31,9 +33,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
@@ -50,16 +50,18 @@ public class RealtyObjectsService {
     private final RealtorService realtorService;
     private final MappingService mappingService;
     private final UserRepository userRepository;
+    private final InterestService interestService;
 
     public RealtyObjectsService(RealtyObjectFilterRepository realtyObjectFilterRepository,
                                 UserRepository userRepository,
+                                InterestService interestService,
                                 EmailsService emailsService,
                                 ConfirmationDocPhotoRepository confirmationDocPhotoRepository,
                                 ObjectReviewRepository objectReviewRepository,
                                 RealtyObjectPhotoRepository realtyObjectPhotoRepository,
                                 RealtyObjectCrudRepository realtyObjectCrudRepository,
                                 RealtorService realtorService,
-                                MappingService mappingService) {
+                                MappingService mappingService, InterestService interestService1) {
         this.emailsService = emailsService;
         this.confirmationDocPhotoRepository = confirmationDocPhotoRepository;
         this.objectReviewRepository = objectReviewRepository;
@@ -69,9 +71,13 @@ public class RealtyObjectsService {
         this.realtyObjectPhotoRepository = realtyObjectPhotoRepository;
         this.realtorService = realtorService;
         this.mappingService = mappingService;
+        this.interestService = interestService;
     }
 
-    public Page<RealtyObjectDto> getAllActiveObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
+    public Page<RealtyObjectDtoLikable> getAllActiveObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
+        if (filterItems == null) {
+            filterItems = new ArrayList<>();
+        }
         RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
         filterItems.add(FilterItem.ofStatusActive());
 
@@ -79,10 +85,14 @@ public class RealtyObjectsService {
             builder.with(filterItem);
         }
         Specification<RealtyObject> spec = builder.build();
-
         Page<RealtyObject> objects = realtyObjectFilterRepository.findAll(spec, pageable);
 
-        return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
+        Page<RealtyObjectDtoLikable> page = objects.map(o -> this.mappingService.map(o, RealtyObjectDtoLikable.class));
+
+        Map<Long, Long> likesPerId = this.interestService.countByRealtyObjIds(objects.stream().map(RealtyObject::getId)
+                .collect(Collectors.toList()));
+        page.forEach(p -> p.setLikesAmount(Optional.ofNullable(likesPerId.get(p.getId())).orElse(0L)));
+        return page;
     }
 
     public List<RealtyObjectDetailsDto> getMyAllObjects(Long userId) {

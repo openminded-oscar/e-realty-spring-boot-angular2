@@ -9,122 +9,121 @@ export type RealtyObjectByStatusFilter = 'all' | 'active' | 'archived' | 'drafts
 
 export const filterByObjectStatus =
     (realtyObjects: RealtyObj[], filter: RealtyObjectByStatusFilter): RealtyObj[] => {
-    if (filter === 'all') {
-        return [...realtyObjects];
-    } else if (filter === 'active') {
-        return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.ACTIVE);
-    } else if (filter === 'archived') {
-        return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.ARCHIVED);
-    } else if (filter === 'drafts') {
-        return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.DRAFT);
+        if (filter === 'all') {
+            return [...realtyObjects];
+        } else if (filter === 'active') {
+            return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.ACTIVE);
+        } else if (filter === 'archived') {
+            return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.ARCHIVED);
+        } else if (filter === 'drafts') {
+            return realtyObjects.filter(realtyObject => realtyObject.status === RealtyObjectStatus.DRAFT);
+        }
     }
-}
 
 export class AddressForm {
-  region: FormControl<number|CityOnMap>;
-  city: FormControl<string>;
-  street: FormControl<string>;
-  numberOfStreet: FormControl<string>;
-  apartmentNumber: FormControl<number>;
+    region: FormControl<number | CityOnMap>;
+    city: FormControl<string>;
+    street: FormControl<string>;
+    numberOfStreet: FormControl<string>;
+    apartmentNumber: FormControl<number>;
 }
 
 export interface BasicInfoForm {
-  address: FormGroup<AddressForm>; // Address should be a FormGroup
-  dwellingType: FormControl<string>;
-  buildingType: FormControl<string>;
-  floor: FormControl<number | null>;
-  totalFloors: FormControl<number | null>;
-  totalArea: FormControl<number | null>;
-  livingArea: FormControl<number | null>;
-  roomsAmount: FormControl<number | null>;
+    address: FormGroup<AddressForm>; // Address should be a FormGroup
+    dwellingType: FormControl<string>;
+    buildingType: FormControl<string>;
+    floor: FormControl<number | null>;
+    totalFloors: FormControl<number | null>;
+    totalArea: FormControl<number | null>;
+    livingArea: FormControl<number | null>;
+    roomsAmount: FormControl<number | null>;
 }
 
 export interface ImportantInfoForm {
-  description: FormControl<string>;
-  otherInfo: FormControl<string>;
-  foundationYear: FormControl<number>;
-  hasRepairing: FormControl<boolean>;
-  hasGarage: FormControl<boolean>;
-  hasCellar: FormControl<boolean>;
-  hasLoft: FormControl<boolean>;
-  targetOperations: FormArray<FormGroup<OperationFormGroup>>;
-  price: FormControl<number>;
-  priceForRent: FormControl<number>;
-  realtor: FormControl<number|Realtor>;
+    description: FormControl<string>;
+    otherInfo: FormControl<string>;
+    foundationYear: FormControl<number>;
+    hasRepairing: FormControl<boolean>;
+    hasGarage: FormControl<boolean>;
+    hasCellar: FormControl<boolean>;
+    hasLoft: FormControl<boolean>;
+    targetOperations: FormArray<FormGroup<OperationFormGroup>>;
+    price: FormControl<number>;
+    priceForRent: FormControl<number>;
+    realtor: FormControl<number | Realtor>;
 }
 
 export interface OperationFormGroup {
-  name: FormControl<string>;
-  checked: FormControl<boolean>;
+    name: FormControl<string>;
+    checked: FormControl<boolean>;
 }
 
 export interface PhotosForm {
-  confirmationDocPhoto: FormControl<RealtyPhoto | null>;
-  photos: FormArray<FormControl<RealtyPhoto | null>>;
+    confirmationDocPhoto: FormControl<RealtyPhoto | null>;
+    photos: FormArray<FormControl<RealtyPhoto | null>>;
 }
 
 export interface RealtyForm {
-  basicInfoFormGroup: FormGroup<BasicInfoForm>;
-  importantInfoFormGroup: FormGroup<ImportantInfoForm>;
-  photosFormGroup: FormGroup<PhotosForm>;
-  geolocation: FormControl<Geolocation>;
+    basicInfoFormGroup: FormGroup<BasicInfoForm>;
+    importantInfoFormGroup: FormGroup<ImportantInfoForm>;
+    photosFormGroup: FormGroup<PhotosForm>;
+    geolocation: FormControl<Geolocation>;
 }
 
 
 export enum RealtyObjectStatus {
-  ACTIVE = 'ACTIVE',
-  ARCHIVED = 'ARCHIVED',
-  DRAFT = 'DRAFT',
+    ACTIVE = 'ACTIVE',
+    ARCHIVED = 'ARCHIVED',
+    DRAFT = 'DRAFT',
 }
 
 export class RealtyObj {
-  public id?: number;
-  public roomsAmount: number;
-  public floor: number;
-  public totalFloors: number;
-  public price: number;
-  public priceForRent: number;
-  public totalArea: number;
-  public livingArea: number;
-  public description: string;
-  public hasGarage: boolean;
-  public hasCellar: boolean;
-  public hasLoft: boolean;
-  public hasRepairing: boolean;
-  public foundationYear: number;
-  public otherInfo: string;
-  public buildingType: string;
-  public targetOperations: string[];
-  public status: RealtyObjectStatus;
-  public confirmed: boolean;
-  public realtorAware: boolean;
-  public dwellingType: string;
-  public photos: RealtyPhoto[];
-  public confirmationDocPhoto: Photo;
-  public address: Partial<Address>;
-  public realtor: Realtor;
-  public owner: string;
-  public mainPhotoPath: string;
-  public createdAt?: Date;
-  public updatedAt?: Date;
+    public id?: number;
+    public roomsAmount: number;
+    public floor: number;
+    public totalFloors: number;
+    public price: number;
+    public priceForRent: number;
+    public totalArea: number;
+    public livingArea: number;
+    public description: string;
+    public hasGarage: boolean;
+    public hasCellar: boolean;
+    public hasLoft: boolean;
+    public hasRepairing: boolean;
+    public foundationYear: number;
+    public otherInfo: string;
+    public buildingType: string;
+    public targetOperations: string[];
+    public status: RealtyObjectStatus;
+    public dwellingType: string;
+    public photos: RealtyPhoto[];
+    public confirmationDocPhoto: Photo;
+    public address: Partial<Address>;
+    public realtor: Realtor;
+    public mainPhotoPath: string;
+    public createdAt?: Date;
+    public updatedAt?: Date;
+    public owner: string;
+    public likesAmount?: number;
 
 
-  constructor() {
-    this.targetOperations = [];
-    this.photos = [];
-    this.address = new Address();
-  }
-
-  public static checkIfOperationSupported(realty: RealtyObj, operation: string) {
-    return realty.targetOperations.includes(operation);
-  }
-
-  public static getMainPhoto(realty: RealtyObj) {
-    const mainPhotos = realty.photos?.filter(value => value.type === RealtyPhotoType.REALTY_MAIN);
-
-    if (mainPhotos && mainPhotos.length > 0) {
-      return Photo.getLinkByFilename(mainPhotos[0].filename);
+    constructor() {
+        this.targetOperations = [];
+        this.photos = [];
+        this.address = new Address();
     }
-  }
+
+    public static checkIfOperationSupported(realty: RealtyObj, operation: string) {
+        return realty.targetOperations.includes(operation);
+    }
+
+    public static getMainPhoto(realty: RealtyObj) {
+        const mainPhotos = realty.photos?.filter(value => value.type === RealtyPhotoType.REALTY_MAIN);
+
+        if (mainPhotos && mainPhotos.length > 0) {
+            return Photo.getLinkByFilename(mainPhotos[0].filename);
+        }
+    }
 }
 
