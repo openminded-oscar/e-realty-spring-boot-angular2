@@ -1,17 +1,19 @@
-<app-realty-obj-card-details [realtyObject]="realtyObject" [isMyObject]="isMyObject" [showCreatedAt]="showCreatedAt">
-  <ng-container topRow>
-    <h4 style="flex: 1;">
+<app-realty-obj-card-details [realtyObject]="realtyObject"
+                             [isMyObject]="isMyObject"
+                             [showCreatedAt]="showCreatedAt">
+    <ng-container topRow>
+        <h4 style="flex: 1;">
         <span [routerLink]="['/realty-object', realtyObject.id]"
               style="cursor: pointer">{{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}</span>
-    </h4>
-    <ng-container *ngIf="showManageStatusOptions">
-      <app-realty-status-editor [realtyObject]="realtyObject"></app-realty-status-editor>
+        </h4>
+        <ng-container *ngIf="showManageStatusOptions">
+            <app-realty-status-editor [realtyObject]="realtyObject"></app-realty-status-editor>
+        </ng-container>
+        <div>
+            <div *ngIf="isMyObject">
+                <a [routerLink]="['/realty-object', realtyObject.id, 'editor']" style="padding: 0 5px;"
+                   class="btn btn-info btn-block">Edit</a>
+            </div>
+        </div>
     </ng-container>
-    <div>
-      <div *ngIf="isMyObject">
-        <a [routerLink]="['/realty-object', realtyObject.id, 'editor']" style="padding: 0 5px;"
-           class="btn btn-info btn-block">Edit</a>
-      </div>
-    </div>
-  </ng-container>
 </app-realty-obj-card-details>

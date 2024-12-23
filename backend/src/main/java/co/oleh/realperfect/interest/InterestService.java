@@ -57,4 +57,9 @@ public class InterestService {
         List<Interest> interests = interestRepository.findByUserId(userId);
         return interests.stream().map(i -> this.mappingService.map(i, MyInterestDto.class)).collect(Collectors.toList());
     }
+
+    public List<MyInterestDto> findInterestsForUserAndObjects(Long userId, List<Long> realtyObjIds) {
+        List<Interest> interests = interestRepository.findByUserIdAndRealtyObjIdIn(userId, realtyObjIds);
+        return interests.stream().map(i -> this.mappingService.map(i, MyInterestDto.class)).collect(Collectors.toList());
+    }
 }
