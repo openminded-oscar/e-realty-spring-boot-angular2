@@ -19,13 +19,13 @@
         </tbody>
     </table>
 
-    <ngb-pagination
+    <ngb-pagination *ngIf="pagedObjects.length"
             [(page)]="currentPage"
-            [maxSize]="5"
             [pageSize]="pageSize"
+            [collectionSize]="totalElements"
+            [maxSize]="5"
             [boundaryLinks]="true"
-            [collectionSize]="currentObjects.length"
-            (pageChange)="updatePage()"
+            (pageChange)="updatePage($event)"
             aria-label="Pagination">
     </ngb-pagination>
 </div>

@@ -74,6 +74,11 @@ public class RealtyObjectsService {
         this.interestService = interestService;
     }
 
+    public Page<RealtyObjectDto> getAllItemsForAdmin(Pageable pageable) {
+        Page<RealtyObject> objects = realtyObjectFilterRepository.findAll(pageable);
+        return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
+    }
+
     public Page<RealtyObjectDtoLikable> getAllActiveObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
         if (filterItems == null) {
             filterItems = new ArrayList<>();

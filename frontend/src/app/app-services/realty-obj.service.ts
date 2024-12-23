@@ -34,14 +34,15 @@ export class RealtyObjService implements OnDestroy {
                 private dialogService: NgbModal) {
     }
 
-    public findAdminObjectsByFilterAndPage(filter: {
-        [filterField: string]: { [operationName: string]: string }
-    }, ordering: SortValue, pageable, operation: OPERATION_TYPES): Observable<PageableResponse<RealtyObj>> {
-        return this.http.get<PageableResponse<RealtyObj>>(endpoints.realtyObj.listSell, {
+    public findAdminObjectsByFilterAndPage(pageable, ordering?: SortValue): Observable<PageableResponse<RealtyObj>> {
+
+        return this.http.get<PageableResponse<RealtyObj>>(endpoints.adminRealtyObj, {
             params: {
                 page: pageable.page,
                 size: pageable.size,
-                sort: ordering.field + ',' + ordering.direction,
+                ...(ordering ? {
+                    sort: ordering.field + ',' + ordering.direction
+                } : {}),
             }
         }).pipe(
             tap(res => {

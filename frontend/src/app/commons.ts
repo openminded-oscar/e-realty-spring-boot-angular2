@@ -28,5 +28,5 @@ export const endpoints: any = {
         byId: apiBase + '/realty-objects',
         realtorList: apiBase + '/realty-objects/my-as-realtor',
     },
-    adminRealtyObj: apiBase + '/admin-realty-obj',
+    adminRealtyObj: apiBase + '/realty-objects/admin',
 };

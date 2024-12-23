@@ -7,6 +7,7 @@ import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDtoLikable;
+import co.oleh.realperfect.model.RealtyObject;
 import co.oleh.realperfect.model.RealtyObjectStatus;
 import co.oleh.realperfect.ratelimiter.RateLimited;
 import co.oleh.realperfect.realtor.RealtorService;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,6 +97,16 @@ public class RealtyObjectsApi {
                         lng, lat, zoomLevel != null ? zoomLevel : DEFAULT_BY_LOCATION_ZOOM_LEVEL
                 );
         return new ResponseEntity<>(realtyObjects, HttpStatus.OK);
+    }
+
+    @GetMapping("/admin")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<Page<RealtyObjectDto>> getItems(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<RealtyObjectDto> objects = realtyObjectsService.getAllItemsForAdmin(PageRequest.of(page, size));
+
+        return new ResponseEntity<>(objects, HttpStatus.OK);
     }
 
     @PostMapping("/sell")
