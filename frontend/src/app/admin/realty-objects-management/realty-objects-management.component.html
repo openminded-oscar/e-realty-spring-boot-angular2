@@ -1,0 +1,31 @@
+<div class="container mt-3">
+    <h2>Realty Objects Management</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Region</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let object of pagedObjects; let i = index">
+            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td>{{ object.name }}</td>
+            <td>{{ object.location }}</td>
+            <td>{{ object.price | currency }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <ngb-pagination
+            [(page)]="currentPage"
+            [maxSize]="5"
+            [pageSize]="pageSize"
+            [boundaryLinks]="true"
+            [collectionSize]="currentObjects.length"
+            (pageChange)="updatePage()"
+            aria-label="Pagination">
+    </ngb-pagination>
+</div>
