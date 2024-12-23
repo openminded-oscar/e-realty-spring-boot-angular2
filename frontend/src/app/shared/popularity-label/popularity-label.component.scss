@@ -1,0 +1,34 @@
+/* Base styling for the component */
+.interest-count {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  cursor: default;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Styling for the star icon */
+.interest-count i {
+  margin-right: 8px;
+  font-size: 20px; /* Adjust the icon size */
+  color: #f39c12; /* Default gold color */
+}
+
+/* When the item is popular, change the style */
+.interest-count.popular i {
+  color: #ff5733; /* Red color when popular */
+}
+
+.interest-count.popular span {
+  font-weight: bold;
+  color: #ff5733; /* Red color for "Popular" label */
+  margin-left: 8px; /* Add space between the star and the label */
+}
+
+/* Default label for count (when not popular) */
+.interest-count span {
+  font-size: 18px;
+  color: #333; /* Default color */
+}
+

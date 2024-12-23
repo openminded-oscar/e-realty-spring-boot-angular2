@@ -1,0 +1,3 @@
+<div [ngClass]="{'popular': isPopular}" class="interest-count" [ngbTooltip]="isPopular ? 'This object is popular!' : ''">
+    <span *ngIf="isPopular">Popular</span>
+</div>

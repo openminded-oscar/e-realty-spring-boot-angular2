@@ -6,7 +6,11 @@ import co.oleh.realperfect.model.user.User;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tbl_interest")
+@Table(name = "tbl_interest",
+        indexes = {
+                @Index(name = "idx_user_id", columnList = "user_id"),
+                @Index(name = "idx_realty_obj_id", columnList = "realty_obj_id")
+        })
 public class Interest extends AuditableEntity {
     private Long id;
     private User user;
