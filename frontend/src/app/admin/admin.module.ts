@@ -7,22 +7,28 @@ import {UserManagementComponent} from './user-management/user-management.compone
 import {AuthGuard} from '../app-guards/auth.guard';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: UserManagementComponent,
-    canActivate: [AuthGuard],
-  }
+    {
+        path: 'users',
+        component: UserManagementComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'objects',
+        component: UserManagementComponent,
+        canActivate: [AuthGuard],
+    }
 ];
 
 @NgModule({
-  declarations: [
-    UserManagementComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    SharedModule,
-    RouterModule.forChild(routes),
-  ]
+    declarations: [
+        UserManagementComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        SharedModule,
+        RouterModule.forChild(routes),
+    ]
 })
-export class AdminModule { }
+export class AdminModule {
+}

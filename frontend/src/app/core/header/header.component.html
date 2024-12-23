@@ -22,8 +22,19 @@
         </ul>
 
         <div class="menu-right-block" style="display: flex">
-            <div class="nav-item owner-item mobile-fixed-size-button-block" *ngIf="this.userService.isAdmin$ | async">
-                <a class="btn btn-light nav-link" routerLink="/admin" (click)="closeMenu()">Admin Section</a>
+            <div class="nav-item dropdown owner-item mobile-fixed-size-button-block" *ngIf="this.userService.isAdmin$ | async"
+                 ngbDropdown>
+                <a class="btn btn-light nav-link dropdown-toggle" id="adminDropdown" ngbDropdownToggle>
+                    Admin Section
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="adminDropdown">
+                    <li (click)="closeMenu()">
+                        <a class="dropdown-item" routerLink="/admin/users">Users</a>
+                    </li>
+<!--                    <li (click)="closeMenu()">-->
+<!--                        <a class="dropdown-item" routerLink="/admin/objects">Realty Objects</a>-->
+<!--                    </li>-->
+                </ul>
             </div>
             <div *ngIf="!isAuthenticated" style="display: flex; flex-direction: row; gap: 10px">
                 <signup-button></signup-button>
