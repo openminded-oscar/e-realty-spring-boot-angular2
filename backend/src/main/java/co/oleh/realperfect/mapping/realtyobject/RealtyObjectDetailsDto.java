@@ -1,5 +1,6 @@
 package co.oleh.realperfect.mapping.realtyobject;
 import co.oleh.realperfect.mapping.AddressDto;
+import co.oleh.realperfect.mapping.PhotoDto;
 import co.oleh.realperfect.mapping.RealtorDto;
 import co.oleh.realperfect.mapping.UserDto;
 import co.oleh.realperfect.model.*;
@@ -49,15 +50,12 @@ public class RealtyObjectDetailsDto {
         DwellingType dwellingType;
         @NotNull(message = "Target operations are required")
         Set<OperationType> targetOperations;
-        Boolean confirmed;
-        Boolean realtorAware;
         @Valid
         AddressDto address;
-
         UserDto owner;
         RealtorDto realtor;
         List<RealtyObjectPhoto> photos;
-        ConfirmationDocPhoto confirmationDocPhoto;
+        PhotoDto confirmationDocPhoto;
         Instant createdAt;
         Instant updatedAt;
 }

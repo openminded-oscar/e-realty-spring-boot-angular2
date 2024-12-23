@@ -1,31 +1,60 @@
 <div class="container mt-3">
     <h2>Realty Objects Management</h2>
+
+    <!-- Filter Section -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label for="regionFilter" class="form-label">Region</label>
+            <select id="regionFilter" class="form-select" [(ngModel)]="selectedRegion" (change)="applyFilters()">
+                <option [value]="'all'">All Regions</option>
+                <option *ngFor="let region of regions" [value]="region.id">{{ region.name }}</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="operationFilter" class="form-label">Operation</label>
+            <select id="operationFilter" class="form-select" [(ngModel)]="selectedOperation" (change)="applyFilters()">
+                <option [value]="'all'">All</option>
+                <option value="SELLING">Selling</option>
+                <option value="RENT">Rent</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Table -->
     <table class="table table-striped">
         <thead>
         <tr>
             <th>#</th>
-            <th>Name</th>
+            <th>Description</th>
             <th>Region</th>
-            <th>Price</th>
+            <th>Pricing</th>
+            <th>Status</th>
+            <th>Created At</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let object of pagedObjects; let i = index">
-            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td>{{ object.name }}</td>
-            <td>{{ object.location }}</td>
-            <td>{{ object.price | currency }}</td>
+            <td><a [routerLink]="['/realty-object', object.id]">{{ (currentPage - 1) * pageSize + i + 1 }}</a></td>
+            <td>{{ object.description }}</td>
+            <td>{{ object.address.region?.name }}</td>
+            <td>
+                <ng-container *ngIf="object.price">{{ object.price | currency }} For Sell</ng-container>
+                <span *ngIf="object.price && object.priceForRent"> | </span>
+                <ng-container *ngIf="object.priceForRent">{{ object.priceForRent | currency }} For Rent</ng-container>
+            </td>
+            <td>{{ object.status }}</td>
+            <td>{{ object.createdAt | date }}</td>
         </tr>
         </tbody>
     </table>
 
-    <ngb-pagination *ngIf="pagedObjects.length"
-            [(page)]="currentPage"
-            [pageSize]="pageSize"
-            [collectionSize]="totalElements"
-            [maxSize]="5"
-            [boundaryLinks]="true"
-            (pageChange)="updatePage($event)"
-            aria-label="Pagination">
+    <!-- Pagination -->
+    <ngb-pagination [pageSize]="pageSize"
+                    [(page)]="currentPage"
+                    [collectionSize]="totalElements"
+                    [maxSize]="5"
+                    [boundaryLinks]="true"
+                    (pageChange)="updatePage($event)"
+                    aria-label="Pagination">
     </ngb-pagination>
 </div>

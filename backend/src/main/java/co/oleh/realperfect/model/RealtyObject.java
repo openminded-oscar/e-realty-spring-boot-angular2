@@ -264,7 +264,7 @@ public class RealtyObject extends AuditableEntity {
     }
 
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "realty_object_id")
     public ConfirmationDocPhoto getConfirmationDocPhoto() {
         return confirmationDocPhoto;
