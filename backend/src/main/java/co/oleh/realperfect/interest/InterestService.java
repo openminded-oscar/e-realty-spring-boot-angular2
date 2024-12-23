@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,5 +57,19 @@ public class InterestService {
     public List<MyInterestDto> findInterestsForUser(Long userId) {
         List<Interest> interests = interestRepository.findByUserId(userId);
         return interests.stream().map(i -> this.mappingService.map(i, MyInterestDto.class)).collect(Collectors.toList());
+    }
+
+    public List<MyInterestDto> findInterestsForUserAndObjects(Long userId, List<Long> realtyObjIds) {
+        List<Interest> interests = interestRepository.findByUserIdAndRealtyObjIdIn(userId, realtyObjIds);
+        return interests.stream().map(i -> this.mappingService.map(i, MyInterestDto.class)).collect(Collectors.toList());
+    }
+
+    public Map<Long, Long> countByRealtyObjIds(List<Long> objectIds) {
+        List<Object[]> counts = this.interestRepository.countByRealtyObjIds(objectIds);
+        return counts.stream()
+                .collect(Collectors.toMap(
+                        obj -> (Long) obj[0],  // The realtyObj.id (key)
+                        obj -> (Long) obj[1]   // The count (value)
+                ));
     }
 }

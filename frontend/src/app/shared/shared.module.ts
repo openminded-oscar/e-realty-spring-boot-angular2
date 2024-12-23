@@ -30,6 +30,7 @@ import {
 } from '../user-cabinet/user-objects/objects-in-profile-filter/objects-in-profile-filter.component';
 import {ApproveReviewModalComponent} from './approve-review-modal/approve-review-modal.component';
 import {UserProfileImageComponent} from '../core/header/user-profile-image/user-profile-image.component';
+import {PopularityLabelComponent} from './popularity-label/popularity-label.component';
 
 const components = [
     ObjectsInProfileFilterComponent,
@@ -47,6 +48,7 @@ const components = [
     CancelReviewModalComponent,
     MessageModalComponent,
     RealtyStatusComponent,
+    PopularityLabelComponent,
     UserProfileImageComponent
 ];
 
