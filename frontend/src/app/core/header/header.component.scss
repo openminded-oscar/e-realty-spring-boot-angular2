@@ -61,13 +61,13 @@ li.nav-item {
   font-size: 1.4rem !important;
 }
 
-li.nav-item.owner-item {
+.owner-item {
+  height: 100%;
+  font-size: 1rem;
+  border-radius: 8%;
   background-color: white;
   color: black !important;
   font-weight: bolder;
-  border-radius: 8%;
-  margin-left: 25px;
-  font-size: 1rem;
 }
 
 .navbar-nav {
