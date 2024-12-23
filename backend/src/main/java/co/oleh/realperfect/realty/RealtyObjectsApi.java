@@ -4,6 +4,7 @@ import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.config.cache.CacheNames;
 import co.oleh.realperfect.emails.EmailsService;
 import co.oleh.realperfect.mapping.UserDto;
+import co.oleh.realperfect.mapping.realtyobject.RealtyObjectAdminDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDtoLikable;
@@ -19,13 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -97,11 +99,24 @@ public class RealtyObjectsApi {
         return new ResponseEntity<>(realtyObjects, HttpStatus.OK);
     }
 
+    @GetMapping("/admin")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<Page<RealtyObjectAdminDto>> getItems(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Long regionId,
+            @RequestParam(required = false) String supportedOperation) {
+        Page<RealtyObjectAdminDto> objects = realtyObjectsService.getAllItemsForAdmin(PageRequest.of(page, size,
+                Sort.by(Sort.Direction.DESC, "createdAt")), regionId, supportedOperation);
+
+        return new ResponseEntity<>(objects, HttpStatus.OK);
+    }
+
     @PostMapping("/sell")
     @Cacheable(value = CacheNames.REALTY_OBJECT_GALLERY_CACHE, keyGenerator = "realtyObjectFilterKeyGenerator")
     public ResponseEntity<Page<RealtyObjectDtoLikable>> getRealtyObjects(@RequestBody(required = false)
-                                                                  List<FilterItem> filterItems,
-                                                                  Pageable pageable) {
+                                                                         List<FilterItem> filterItems,
+                                                                         Pageable pageable) {
         Page<RealtyObjectDtoLikable> allObjects = realtyObjectsService.getAllActiveObjectsForFilterItems(filterItems,
                 pageable);
         return new ResponseEntity<>(allObjects, HttpStatus.OK);
@@ -110,7 +125,7 @@ public class RealtyObjectsApi {
     @PostMapping("/rent")
     @Cacheable(value = CacheNames.REALTY_OBJECT_GALLERY_CACHE, keyGenerator = "realtyObjectFilterKeyGenerator")
     public ResponseEntity<Page<RealtyObjectDtoLikable>> getRentRealtyObjects(@RequestBody(required = false)
-                                                                      List<FilterItem> filterItems,
+                                                                             List<FilterItem> filterItems,
                                                                              Pageable pageable) {
         Page<RealtyObjectDtoLikable> allObjects =
                 realtyObjectsService.getAllActiveObjectsForFilterItems(filterItems, pageable);

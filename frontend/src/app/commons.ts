@@ -27,5 +27,6 @@ export const endpoints: any = {
         delete: apiBase + '/realty-objects',
         byId: apiBase + '/realty-objects',
         realtorList: apiBase + '/realty-objects/my-as-realtor',
-    }
+    },
+    adminRealtyObj: apiBase + '/realty-objects/admin',
 };

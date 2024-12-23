@@ -34,6 +34,28 @@ export class RealtyObjService implements OnDestroy {
                 private dialogService: NgbModal) {
     }
 
+    public findAdminObjectsByFilterAndPage(pageable, regionId?: string, operation?: string): Observable<PageableResponse<RealtyObj>> {
+        return this.http.get<PageableResponse<RealtyObj>>(endpoints.adminRealtyObj, {
+            params: {
+                page: pageable.page,
+                size: pageable.size,
+                ...(regionId ? {
+                    regionId: Number(regionId)
+                } : {}),
+                ...(operation ? {
+                    supportedOperation: operation
+                } : {}),
+            }
+        }).pipe(
+            tap(res => {
+                const realtyObjects = res.content;
+                (realtyObjects ?? []).forEach(value => {
+                    value.mainPhotoPath = RealtyObj.getMainPhoto(value);
+                });
+            })
+        );
+    }
+
     public findByFilterAndPage(filter: {
         [filterField: string]: { [operationName: string]: string }
     }, ordering: SortValue, pageable, operation: OPERATION_TYPES): Observable<PageableResponse<RealtyObj>> {
