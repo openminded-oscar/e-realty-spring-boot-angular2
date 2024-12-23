@@ -4,18 +4,17 @@ import co.oleh.realperfect.auth.SpringSecurityUser;
 import co.oleh.realperfect.emails.EmailsService;
 import co.oleh.realperfect.interest.InterestService;
 import co.oleh.realperfect.mapping.mappers.MappingService;
+import co.oleh.realperfect.mapping.realtyobject.RealtyObjectAdminDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDtoLikable;
-import co.oleh.realperfect.model.GeoLocationUtils;
-import co.oleh.realperfect.model.Realtor;
-import co.oleh.realperfect.model.RealtyObject;
-import co.oleh.realperfect.model.RealtyObjectStatus;
+import co.oleh.realperfect.model.*;
 import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
+import co.oleh.realperfect.realty.filtering.FilterOperation;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
 import co.oleh.realperfect.repository.*;
 import jakarta.validation.Valid;
@@ -74,7 +73,35 @@ public class RealtyObjectsService {
         this.interestService = interestService;
     }
 
-    public Page<RealtyObjectDtoLikable> getAllActiveObjectsForFilterItems(List<FilterItem> filterItems, Pageable pageable) {
+    public Page<RealtyObjectAdminDto> getAllItemsForAdmin(Pageable pageable,
+                                                          Long regionId,
+                                                          String supportedOperation) {
+        List<FilterItem> filterItems = new ArrayList<>();
+        RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
+        if (regionId != null) {
+            filterItems.add(FilterItem.builder()
+                    .field("address.region.id")
+                    .operation(FilterOperation.EQ)
+                    .value(String.valueOf(regionId)).build());
+        }
+        if (supportedOperation != null) {
+            filterItems.add(FilterItem.builder()
+                    .field("targetOperations")
+                    .operation(FilterOperation.CONTAINS)
+                    .value(supportedOperation).build());
+        }
+        for (FilterItem filterItem : filterItems) {
+            builder.with(filterItem);
+        }
+        Specification<RealtyObject> spec = builder.build();
+
+        Page<RealtyObject> objects = realtyObjectFilterRepository.findAll(spec, pageable);
+
+        return objects.map(o -> this.mappingService.map(o, RealtyObjectAdminDto.class));
+    }
+
+    public Page<RealtyObjectDtoLikable> getAllActiveObjectsForFilterItems(List<FilterItem> filterItems,
+                                                                          Pageable pageable) {
         if (filterItems == null) {
             filterItems = new ArrayList<>();
         }
