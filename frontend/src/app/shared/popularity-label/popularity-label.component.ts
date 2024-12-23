@@ -8,8 +8,8 @@ import {RealtyObj} from '../../app-models/realty-obj';
 })
 export class PopularityLabelComponent {
     @Input() realtyObject!: RealtyObj;
-    @Input() count: number = 0; // Input property to pass the number of interests
-    @Input() threshold: number = 0; // Threshold to define "popularity"
+    @Input() count: number = 0;
+    @Input() threshold: number = 5;
 
     // Returns true if the interest is considered popular
     get isPopular(): boolean {
