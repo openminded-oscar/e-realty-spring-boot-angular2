@@ -14,6 +14,7 @@ import java.util.Set;
 @Entity
 @Table(indexes = {
         @Index(name = "idx_city", columnList = "city"),
+        @Index(name = "idx_region", columnList = "region_id"),
         @Index(name = "idx_owner_id", columnList = "owner_id"),
         @Index(name = "idx_realtor_id", columnList = "realtor_id")
 }, name = "tbl_realty_object")

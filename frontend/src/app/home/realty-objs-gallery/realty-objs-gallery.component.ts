@@ -28,8 +28,6 @@ export interface SortField {
     field: string;
 }
 
-const ALL_REGIONS_ID = 0;
-
 @Component({
     selector: 'realty-objs-gallery',
     templateUrl: './realty-objs-gallery.component.html',
@@ -39,10 +37,12 @@ const ALL_REGIONS_ID = 0;
 export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     public filterForm: FormGroup;
     public supportedRegions: CityOnMap[] = [];
+    public ALL_REGIONS_ID = 0;
+
     public readonly INITIAL_FILTER_FORM = {
         priceMin: ['0'],
         priceMax: ['1000000'],
-        region: [ALL_REGIONS_ID],// all regions
+        region: [this.ALL_REGIONS_ID],// all regions
         city: [''],
         street: [''],
         roomsAmount: [''],
@@ -194,7 +194,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
 
         return {
             ...priceFilter,
-            ...formValues.region && Number(formValues.region) !== ALL_REGIONS_ID ? {
+            ...formValues.region && Number(formValues.region) !== this.ALL_REGIONS_ID ? {
                 region: {eq: formValues.region},
             } : {},
             city: {like: formValues.city},
