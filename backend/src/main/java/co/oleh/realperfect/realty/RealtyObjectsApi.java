@@ -12,6 +12,7 @@ import co.oleh.realperfect.model.RealtyObjectStatus;
 import co.oleh.realperfect.ratelimiter.RateLimited;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
+import co.oleh.realperfect.validation.ValidRealtyFilterComponents;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +37,7 @@ import java.util.Map;
 @RequestMapping(value = "/api/realty-objects")
 @AllArgsConstructor()
 @Slf4j
+@Validated
 public class RealtyObjectsApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(RealtyObjectsApi.class);
     public static final int DEFAULT_BY_LOCATION_ZOOM_LEVEL = 10;
@@ -115,6 +118,8 @@ public class RealtyObjectsApi {
     @PostMapping("/sell")
     @Cacheable(value = CacheNames.REALTY_OBJECT_GALLERY_CACHE, keyGenerator = "realtyObjectFilterKeyGenerator")
     public ResponseEntity<Page<RealtyObjectDtoLikable>> getRealtyObjects(@RequestBody(required = false)
+                                                                         @Valid
+                                                                         @ValidRealtyFilterComponents
                                                                          List<FilterItem> filterItems,
                                                                          Pageable pageable) {
         Page<RealtyObjectDtoLikable> allObjects = realtyObjectsService.getAllActiveObjectsForFilterItems(filterItems,
@@ -125,6 +130,8 @@ public class RealtyObjectsApi {
     @PostMapping("/rent")
     @Cacheable(value = CacheNames.REALTY_OBJECT_GALLERY_CACHE, keyGenerator = "realtyObjectFilterKeyGenerator")
     public ResponseEntity<Page<RealtyObjectDtoLikable>> getRentRealtyObjects(@RequestBody(required = false)
+                                                                             @Valid
+                                                                             @ValidRealtyFilterComponents
                                                                              List<FilterItem> filterItems,
                                                                              Pageable pageable) {
         Page<RealtyObjectDtoLikable> allObjects =
@@ -135,7 +142,8 @@ public class RealtyObjectsApi {
     @PostMapping("/save")
     @RateLimited(requestsPerMinute = 10)
     public ResponseEntity<RealtyObjectDetailsDto> postRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
-                                                                   @Valid @RequestBody RealtyObjectDetailsDto realtyObject) {
+                                                                   @Valid
+                                                                   @RequestBody RealtyObjectDetailsDto realtyObject) {
         realtyObject.setOwner(new UserDto() {{
             setId(user.getId());
         }});

@@ -8,6 +8,8 @@ import lombok.*;
 @ToString
 @Builder
 public class FilterItem {
+    public static String REGION_FILTER_PATH = "address.region.id";
+
 	private String field;
 	private String value;
 	private FilterOperation operation;

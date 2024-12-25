@@ -17,6 +17,7 @@ public class RealtyObjectSpecification implements Specification<RealtyObject> {
     @Override
     public Predicate toPredicate(Root<RealtyObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         Path<String> keyPath = getField(root, filterItem.getField());
+
         String value = filterItem.getValue();
         if (value == null) {
             return null;
