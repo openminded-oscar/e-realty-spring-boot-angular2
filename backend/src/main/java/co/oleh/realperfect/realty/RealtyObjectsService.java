@@ -80,7 +80,7 @@ public class RealtyObjectsService {
         RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
         if (regionId != null) {
             filterItems.add(FilterItem.builder()
-                    .field("address.region.id")
+                    .field(FilterItem.REGION_FILTER_PATH)
                     .operation(FilterOperation.EQ)
                     .value(String.valueOf(regionId)).build());
         }

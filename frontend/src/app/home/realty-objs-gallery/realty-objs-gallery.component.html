@@ -123,11 +123,15 @@
                     <label for="descriptionLikeInput">
                         Description like
                     </label>
+                    <!-- eslint-disable -->
                     <input id="descriptionLikeInput"
                            name="description"
                            class="form-control"
+                           [readOnly]="!filterForm?.controls.region.value || filterForm?.controls.region.value == 0 ? true : null"
+                           [ngbTooltip]="!filterForm?.controls.region.value || filterForm?.controls.region.value == 0 ? 'Please select a region first' : null"
                            (keyup.enter)="loadInitialObjects()"
                            [formControlName]="'description'">
+                    <!-- eslint-enable -->
                     <label for="buildingTypeInput">
                         Building type
                     </label>
