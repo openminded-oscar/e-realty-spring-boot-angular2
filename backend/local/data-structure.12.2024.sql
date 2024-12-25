@@ -92,7 +92,7 @@ CREATE TABLE `tbl_realty_object` (
                                      `region_lng` double DEFAULT NULL,
                                      `region_name` varchar(255) DEFAULT NULL,
                                      PRIMARY KEY (`id`),
-                                     KEY `IDXb250f2bas61gsgph9bamhh257` (`city`),
+                                     KEY `idx_region` (`region_id`),
                                      KEY `idx_city` (`city`),
                                      KEY `idx_owner_id` (`owner_id`),
                                      KEY `idx_realtor_id` (`realtor_id`),
