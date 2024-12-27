@@ -86,7 +86,7 @@ CREATE TABLE `tbl_realty_object` (
                                      `updated_at` datetime(6) DEFAULT NULL,
                                      `price_for_rent` decimal(38,2) DEFAULT NULL,
                                      `status` varchar(255) DEFAULT NULL,
-                                     `geolocation` point NOT NULL,
+                                     `geolocation` point /*!80003 SRID 4326 */ DEFAULT NOT NULL,
                                      `region_id` bigint DEFAULT NULL,
                                      `region_lat` double DEFAULT NULL,
                                      `region_lng` double DEFAULT NULL,

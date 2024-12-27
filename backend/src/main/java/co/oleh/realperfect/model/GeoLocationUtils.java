@@ -22,7 +22,10 @@ public class GeoLocationUtils {
      */
     public static Point lonLatToPoint(double lon, double lat) {
         Coordinate coordinate = new Coordinate(lon, lat);
-        return geometryFactory.createPoint(coordinate);
+        Point point = geometryFactory.createPoint(coordinate);
+        point.setSRID(4326);
+
+        return point;
     }
 
     public static String pointToWkt(Point point) {
@@ -33,10 +36,6 @@ public class GeoLocationUtils {
         // Use WKTWriter to convert the Point to its WKT representation
         WKTWriter writer = new WKTWriter();
         return writer.write(point);
-    }
-
-    public static String coordinatesToWkt(double lon, double lat) {
-        return pointToWkt(lonLatToPoint(lon, lat));
     }
 
     public static int zoomLevelToRadiusMeters(int zoomLevel) {
@@ -64,27 +63,6 @@ public class GeoLocationUtils {
             case 20 -> 19;
             default -> 50_000;
         };
-    }
-
-    public static List<GeoSegment> generateGeoSegmentsForUkraine(int numRows, int numCols) {
-        List<GeoSegment> geoSegments = new ArrayList<>();
-        double minLat = 44.0;  // Southern boundary
-        double maxLat = 52.0;  // Northern boundary
-        double minLon = 22.0;  // Western boundary
-        double maxLon = 40.0;  // Eastern boundary
-
-        double latStep = (maxLat - minLat) / (numRows - 1);
-        double lonStep = (maxLon - minLon) / (numCols - 1);
-
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-                double latitude = minLat + i * latStep;
-                double longitude = minLon + j * lonStep;
-                geoSegments.add(new GeoSegment(longitude, latitude));
-            }
-        }
-
-        return geoSegments;
     }
 
     public static List<GeoSegment> generateRegionalCentersForUkraine() {
