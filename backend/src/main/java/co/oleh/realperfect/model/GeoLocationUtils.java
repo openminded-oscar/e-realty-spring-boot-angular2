@@ -22,7 +22,11 @@ public class GeoLocationUtils {
      */
     public static Point lonLatToPoint(double lon, double lat) {
         Coordinate coordinate = new Coordinate(lon, lat);
-        return geometryFactory.createPoint(coordinate);
+        Point point = geometryFactory.createPoint(coordinate);
+
+        point.setSRID(4326);
+
+        return point;
     }
 
     public static String pointToWkt(Point point) {
@@ -30,13 +34,15 @@ public class GeoLocationUtils {
             return null;
         }
 
+        double resultingY = point.getX();
+        double resultingX = point.getY();
+        Coordinate coordinate = new Coordinate(resultingX, resultingY);
+        Point noSridTempPoint = geometryFactory.createPoint(coordinate);
+
         // Use WKTWriter to convert the Point to its WKT representation
         WKTWriter writer = new WKTWriter();
-        return writer.write(point);
-    }
 
-    public static String coordinatesToWkt(double lon, double lat) {
-        return pointToWkt(lonLatToPoint(lon, lat));
+        return writer.write(noSridTempPoint);
     }
 
     public static int zoomLevelToRadiusMeters(int zoomLevel) {
