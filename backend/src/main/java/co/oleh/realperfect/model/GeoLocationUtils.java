@@ -37,12 +37,12 @@ public class GeoLocationUtils {
         double resultingY = point.getX();
         double resultingX = point.getY();
         Coordinate coordinate = new Coordinate(resultingX, resultingY);
-        Point revertedPoint = geometryFactory.createPoint(coordinate);
+        Point noSridTempPoint = geometryFactory.createPoint(coordinate);
 
         // Use WKTWriter to convert the Point to its WKT representation
         WKTWriter writer = new WKTWriter();
 
-        return writer.write(revertedPoint);
+        return writer.write(noSridTempPoint);
     }
 
     public static int zoomLevelToRadiusMeters(int zoomLevel) {
