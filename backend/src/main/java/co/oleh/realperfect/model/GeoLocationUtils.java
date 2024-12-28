@@ -22,7 +22,11 @@ public class GeoLocationUtils {
      */
     public static Point lonLatToPoint(double lon, double lat) {
         Coordinate coordinate = new Coordinate(lon, lat);
-        return geometryFactory.createPoint(coordinate);
+        Point point = geometryFactory.createPoint(coordinate);
+
+        point.setSRID(4326);
+
+        return point;
     }
 
     public static String pointToWkt(Point point) {
