@@ -34,13 +34,15 @@ public class GeoLocationUtils {
             return null;
         }
 
+        double resultingY = point.getX();
+        double resultingX = point.getY();
+        Coordinate coordinate = new Coordinate(resultingX, resultingY);
+        Point revertedPoint = geometryFactory.createPoint(coordinate);
+
         // Use WKTWriter to convert the Point to its WKT representation
         WKTWriter writer = new WKTWriter();
-        return writer.write(point);
-    }
 
-    public static String coordinatesToWkt(double lon, double lat) {
-        return pointToWkt(lonLatToPoint(lon, lat));
+        return writer.write(revertedPoint);
     }
 
     public static int zoomLevelToRadiusMeters(int zoomLevel) {
