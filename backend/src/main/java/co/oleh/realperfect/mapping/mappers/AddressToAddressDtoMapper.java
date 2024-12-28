@@ -15,8 +15,8 @@ public class AddressToAddressDtoMapper extends AbstractConverter<Address, Addres
         AddressDto to = new AddressDto();
         modelMapper.map(from, to);
         if (from.getGeolocation() != null) {
-            to.setLng(from.getGeolocation().getX());
-            to.setLat(from.getGeolocation().getY());
+            to.setLng(from.getGeolocation().getY());
+            to.setLat(from.getGeolocation().getX());
         }
         return to;
     }
