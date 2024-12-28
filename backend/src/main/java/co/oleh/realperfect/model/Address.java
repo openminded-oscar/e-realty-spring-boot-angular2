@@ -13,7 +13,7 @@ public class Address {
 	private Integer apartmentNumber;
 	private Point geolocation;
 
-	@Column(columnDefinition = "Point")
+	@Column(columnDefinition = "Geometry SRID 4326")
 	public Point getGeolocation() {
 		return geolocation;
 	}

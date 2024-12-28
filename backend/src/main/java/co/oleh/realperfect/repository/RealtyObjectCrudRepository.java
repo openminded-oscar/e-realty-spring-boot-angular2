@@ -19,7 +19,17 @@ public interface RealtyObjectCrudRepository extends CrudRepository<RealtyObject,
     @Query("UPDATE RealtyObject r SET r.status = :status WHERE r.id = :id")
     int updateRealtyObjectStatusById(@Param("id") Long id, @Param("status") RealtyObjectStatus status);
 
-    @Query(value = "SELECT * FROM tbl_realty_object r WHERE status='ACTIVE' AND ST_Distance_Sphere(r.geolocation, ST_GeomFromText(:point)) <= :radius ORDER BY ST_Distance_Sphere(r.geolocation, ST_GeomFromText(:point)) ASC",
+    @Query(value = "SELECT * FROM tbl_realty_object r " +
+            "WHERE status='ACTIVE' " +
+            "AND ST_Distance_Sphere(" +
+            "        r.geolocation, " +
+            "        ST_GeomFromText(:point, 4326) " +
+            "    ) <= :radius " +
+            "ORDER BY " +
+            "    ST_Distance_Sphere(" +
+            "        r.geolocation, " +
+            "        ST_GeomFromText(:point, 4326) " +
+            "    ) ASC;",
             nativeQuery = true)
     List<RealtyObject> findWithinRadius(@Param("point") String pointWKT, @Param("radius") double radius);
 }
