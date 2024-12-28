@@ -2,7 +2,7 @@
                              [isMyObject]="isMyObject"
                              [showCreatedAt]="showCreatedAt">
     <ng-container topRow>
-        <h4 style="flex: 1;">
+        <h4 style="flex: 1; text-overflow: ellipsis; overflow: auto">
         <span [routerLink]="['/realty-object', realtyObject.id]"
               style="cursor: pointer">{{ realtyObject.address.street }},&nbsp;{{ realtyObject.address.city }}</span>
         </h4>
