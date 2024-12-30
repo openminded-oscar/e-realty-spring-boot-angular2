@@ -13,6 +13,8 @@ import jakarta.annotation.security.RolesAllowed;
 
 import java.util.List;
 
+import static co.oleh.realperfect.model.user.RoleUtils.*;
+
 @RestController
 @RequestMapping(value = "/api/addresses")
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class AddressApi {
     }
 
     @GetMapping("/address-by-geocoding")
-    @RolesAllowed({"USER", "REALTOR", "ADMIN"})
+    @RolesAllowed({USER_ROLE, REALTOR_ROLE, ADMIN_ROLE})
     public ResponseEntity<AddressByGeocodingDto> getAddressesNearby(@RequestParam Double lat,
                                                                     @RequestParam Double lng,
                                                                     @RequestParam(required = false)

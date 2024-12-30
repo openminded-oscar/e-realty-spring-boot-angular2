@@ -27,6 +27,9 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import static co.oleh.realperfect.model.user.RoleUtils.ADMIN_ROLE;
+import static co.oleh.realperfect.model.user.RoleUtils.REALTOR_ROLE;
+
 @RestController
 @RequestMapping(value = "/api/object-review")
 @AllArgsConstructor
@@ -77,7 +80,7 @@ public class ObjectReviewApi {
     }
 
     @PostMapping(value = "/{reviewId}/approve")
-    @RolesAllowed({"REALTOR", "ADMIN"})
+    @RolesAllowed({REALTOR_ROLE, ADMIN_ROLE})
     public ResponseEntity<Boolean> approveReviewById(@AuthenticationPrincipal SpringSecurityUser user,
                                                      @PathVariable Long reviewId) {
         Objects.requireNonNull(user, "User must not be null");

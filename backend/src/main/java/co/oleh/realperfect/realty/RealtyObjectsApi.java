@@ -9,6 +9,7 @@ import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDtoLikable;
 import co.oleh.realperfect.model.RealtyObjectStatus;
+import co.oleh.realperfect.model.user.RoleUtils;
 import co.oleh.realperfect.ratelimiter.RateLimited;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
@@ -33,6 +34,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static co.oleh.realperfect.model.user.RoleUtils.*;
+
 @RestController
 @RequestMapping(value = "/api/realty-objects")
 @AllArgsConstructor()
@@ -55,7 +58,7 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/{objectId}/activate")
-    @RolesAllowed({"REALTOR", "ADMIN"})
+    @RolesAllowed({RoleUtils.REALTOR_ROLE, RoleUtils.ADMIN_ROLE})
     public ResponseEntity<Map<String, Integer>> activateRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
                                                                      @PathVariable Long objectId) {
         int updated = this.realtyObjectsService.setRealtyObjectStatusById(objectId, RealtyObjectStatus.ACTIVE);
@@ -63,7 +66,7 @@ public class RealtyObjectsApi {
     }
 
     @PostMapping("/{objectId}/archive")
-    @RolesAllowed({"USER", "REALTOR", "ADMIN"})
+    @RolesAllowed({USER_ROLE, REALTOR_ROLE, ADMIN_ROLE})
     public ResponseEntity<Map<String, Integer>> archiveRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
                                                                     @PathVariable Long objectId) {
         this.realtyObjectsService.verifyRealtorOrAdminOrOwner(user, objectId);
@@ -73,7 +76,7 @@ public class RealtyObjectsApi {
     }
 
     @DeleteMapping("/{objectId}/archive")
-    @RolesAllowed({"USER", "REALTOR", "ADMIN"})
+    @RolesAllowed({USER_ROLE, REALTOR_ROLE, ADMIN_ROLE})
     public ResponseEntity<Map<String, Integer>> reactivateRealtyObject(@AuthenticationPrincipal SpringSecurityUser user,
                                                                        @PathVariable Long objectId) {
         this.realtyObjectsService.verifyRealtorOrAdminOrOwner(user, objectId);
@@ -83,13 +86,13 @@ public class RealtyObjectsApi {
     }
 
     @DeleteMapping("/{objectId}")
-    @RolesAllowed({"USER", "REALTOR", "ADMIN"})
+    @RolesAllowed({USER_ROLE, REALTOR_ROLE, ADMIN_ROLE})
     public ResponseEntity<Boolean> deleteRealtyObject(@PathVariable Long objectId) {
         return new ResponseEntity<>(realtyObjectsService.delete(objectId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/by-geolocation")
-    @RolesAllowed({"USER", "REALTOR", "ADMIN"})
+    @RolesAllowed({USER_ROLE, REALTOR_ROLE, ADMIN_ROLE})
     public ResponseEntity<List<RealtyObjectDto>> getObjectsByGeolocation(
             @RequestParam double lng,
             @RequestParam double lat,
@@ -172,7 +175,7 @@ public class RealtyObjectsApi {
     }
 
     @GetMapping(value = "/my-as-realtor")
-    @RolesAllowed({"REALTOR", "ADMIN"})
+    @RolesAllowed({REALTOR_ROLE, ADMIN_ROLE})
     public ResponseEntity<List<RealtyObjectDetailsDto>> getRealtorRealtyObjects(
             @AuthenticationPrincipal SpringSecurityUser user
     ) {
