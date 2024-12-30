@@ -8,13 +8,15 @@ import co.oleh.realperfect.mapping.realtyobject.RealtyObjectAdminDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDetailsDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDto;
 import co.oleh.realperfect.mapping.realtyobject.RealtyObjectDtoLikable;
-import co.oleh.realperfect.model.*;
+import co.oleh.realperfect.model.GeoLocationUtils;
+import co.oleh.realperfect.model.Realtor;
+import co.oleh.realperfect.model.RealtyObject;
+import co.oleh.realperfect.model.RealtyObjectStatus;
 import co.oleh.realperfect.model.photos.ConfirmationDocPhoto;
 import co.oleh.realperfect.model.photos.RealtyObjectPhoto;
 import co.oleh.realperfect.model.user.User;
 import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.realty.filtering.FilterItem;
-import co.oleh.realperfect.realty.filtering.FilterOperation;
 import co.oleh.realperfect.realty.filtering.RealtyObjectSpecificationBuilder;
 import co.oleh.realperfect.repository.*;
 import jakarta.validation.Valid;
@@ -24,8 +26,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,7 +35,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static co.oleh.realperfect.model.user.RoleUtils.ROLE_PREFIX;
+import static co.oleh.realperfect.model.user.RoleUtils.isAdminOrRealtor;
 
 @Service
 @Slf4j
@@ -60,44 +60,35 @@ public class RealtyObjectsService {
                                 RealtyObjectPhotoRepository realtyObjectPhotoRepository,
                                 RealtyObjectCrudRepository realtyObjectCrudRepository,
                                 RealtorService realtorService,
-                                MappingService mappingService, InterestService interestService1) {
+                                MappingService mappingService) {
+        this.realtyObjectFilterRepository = realtyObjectFilterRepository;
+        this.userRepository = userRepository;
+        this.interestService = interestService;
         this.emailsService = emailsService;
         this.confirmationDocPhotoRepository = confirmationDocPhotoRepository;
         this.objectReviewRepository = objectReviewRepository;
-        this.realtyObjectFilterRepository = realtyObjectFilterRepository;
-        this.realtyObjectCrudRepository = realtyObjectCrudRepository;
-        this.userRepository = userRepository;
         this.realtyObjectPhotoRepository = realtyObjectPhotoRepository;
+        this.realtyObjectCrudRepository = realtyObjectCrudRepository;
         this.realtorService = realtorService;
         this.mappingService = mappingService;
-        this.interestService = interestService;
     }
 
     public Page<RealtyObjectAdminDto> getAllItemsForAdmin(Pageable pageable,
                                                           Long regionId,
                                                           String supportedOperation) {
-        List<FilterItem> filterItems = new ArrayList<>();
         RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
+        List<FilterItem> filterItems = new ArrayList<>();
         if (regionId != null) {
-            filterItems.add(FilterItem.builder()
-                    .field(FilterItem.REGION_FILTER_PATH)
-                    .operation(FilterOperation.EQ)
-                    .value(String.valueOf(regionId)).build());
+            filterItems.add(FilterItem.ofRegionId(regionId));
         }
         if (supportedOperation != null) {
-            filterItems.add(FilterItem.builder()
-                    .field("targetOperations")
-                    .operation(FilterOperation.CONTAINS)
-                    .value(supportedOperation).build());
+            filterItems.add(FilterItem.ofSupportedOperation(supportedOperation));
         }
-        for (FilterItem filterItem : filterItems) {
-            builder.with(filterItem);
-        }
+        filterItems.forEach(builder::with);
+
         Specification<RealtyObject> spec = builder.build();
-
-        Page<RealtyObject> objects = realtyObjectFilterRepository.findAll(spec, pageable);
-
-        return objects.map(o -> this.mappingService.map(o, RealtyObjectAdminDto.class));
+        return realtyObjectFilterRepository.findAll(spec, pageable)
+                .map(o -> mappingService.map(o, RealtyObjectAdminDto.class));
     }
 
     public Page<RealtyObjectDtoLikable> getAllActiveObjectsForFilterItems(List<FilterItem> filterItems,
@@ -105,113 +96,101 @@ public class RealtyObjectsService {
         if (filterItems == null) {
             filterItems = new ArrayList<>();
         }
-        RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
         filterItems.add(FilterItem.ofStatusActive());
-
-        for (FilterItem filterItem : filterItems) {
-            builder.with(filterItem);
-        }
+        RealtyObjectSpecificationBuilder builder = new RealtyObjectSpecificationBuilder();
+        filterItems.forEach(builder::with);
         Specification<RealtyObject> spec = builder.build();
         Page<RealtyObject> objects = realtyObjectFilterRepository.findAll(spec, pageable);
 
-        Page<RealtyObjectDtoLikable> page = objects.map(o -> this.mappingService.map(o, RealtyObjectDtoLikable.class));
+        List<Long> objectIds = objects.stream().map(RealtyObject::getId).collect(Collectors.toList());
+        Map<Long, Long> likesPerId = interestService.countByRealtyObjIds(objectIds);
 
-        Map<Long, Long> likesPerId = this.interestService.countByRealtyObjIds(objects.stream().map(RealtyObject::getId)
-                .collect(Collectors.toList()));
-        page.forEach(p -> p.setLikesAmount(Optional.ofNullable(likesPerId.get(p.getId())).orElse(0L)));
-        return page;
+        return objects.map(o -> {
+            RealtyObjectDtoLikable dto = mappingService.map(o, RealtyObjectDtoLikable.class);
+            dto.setLikesAmount(likesPerId.getOrDefault(dto.getId(), 0L));
+            return dto;
+        });
     }
 
     public List<RealtyObjectDetailsDto> getMyAllObjects(Long userId) {
-        List<RealtyObject> objects = realtyObjectCrudRepository.findByOwnerId(userId);
-
-        return objects.stream().map(o -> this.mappingService.map(o, RealtyObjectDetailsDto.class)).collect(Collectors.toList());
+        return realtyObjectCrudRepository.findByOwnerId(userId).stream()
+                .map(o -> mappingService.map(o, RealtyObjectDetailsDto.class))
+                .collect(Collectors.toList());
     }
 
     public Page<RealtyObjectDto> getAllObjects(Pageable pageable) {
-        Page<RealtyObject> objects = realtyObjectFilterRepository.findAll(pageable);
-
-        return objects.map(o -> this.mappingService.map(o, RealtyObjectDto.class));
+        return realtyObjectFilterRepository.findAll(pageable)
+                .map(o -> mappingService.map(o, RealtyObjectDto.class));
     }
 
-    public RealtyObjectDetailsDto insert(@Valid RealtyObjectDetailsDto realtyObjectDto,
-                                         SpringSecurityUser springUser) {
-        RealtyObject realtyObjectSaved = this.save(realtyObjectDto, Optional.empty());
-
-        if (realtyObjectDto.getRealtor() != null) {
-            Realtor realtor = this.realtorService.findById(realtyObjectDto.getRealtor().getId());
-            User user = this.userRepository.findById(springUser.getId()).get();
+    public RealtyObjectDetailsDto insert(@Valid RealtyObjectDetailsDto realtyObjectDto, SpringSecurityUser springUser) {
+        RealtyObject realtyObjectSaved = save(realtyObjectDto, Optional.empty());
+        Optional.ofNullable(realtyObjectDto.getRealtor()).ifPresent(realtorDto -> {
+            Realtor realtor = realtorService.findById(realtorDto.getId());
+            User user = userRepository.findById(springUser.getId()).orElseThrow();
             if (realtor != null) {
-                this.emailsService.sendNewObjectSetForRealtorAsync(user, realtyObjectSaved, realtor);
+                emailsService.sendNewObjectSetForRealtorAsync(user, realtyObjectSaved, realtor);
             }
-        }
-
-        return this.mappingService.map(realtyObjectSaved, RealtyObjectDetailsDto.class);
+        });
+        return mappingService.map(realtyObjectSaved, RealtyObjectDetailsDto.class);
     }
 
     public RealtyObjectDetailsDto update(@Valid RealtyObjectDetailsDto realtyObject, Long objectId) {
         realtyObject.setId(objectId);
-
-        RealtyObject existingObjectInDb = this.realtyObjectCrudRepository.findById(realtyObject.getId()).get();
-        RealtyObject realtyObjectSaved = this.save(realtyObject, Optional.of(existingObjectInDb));
-
-        return this.mappingService.map(realtyObjectSaved, RealtyObjectDetailsDto.class);
+        RealtyObject existingObjectInDb = realtyObjectCrudRepository.findById(objectId).orElseThrow();
+        RealtyObject realtyObjectSaved = save(realtyObject, Optional.of(existingObjectInDb));
+        return mappingService.map(realtyObjectSaved, RealtyObjectDetailsDto.class);
     }
 
     private RealtyObject save(RealtyObjectDetailsDto realtyObjectDetailsDto,
                               Optional<RealtyObject> existingRealtyObject) {
-        RealtyObject realtyObject = this.mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
+        RealtyObject realtyObject = mappingService.map(realtyObjectDetailsDto, RealtyObject.class);
         if (realtyObject.getAddress().getGeolocation() == null) {
             realtyObject.getAddress().setGeolocation(GeoLocationUtils.lonLatToPoint(1, 1));
         }
-
-        if (existingRealtyObject.isPresent()) {
-            RealtyObject existingObjectInDb = existingRealtyObject.get();
-            realtyObject.setStatus(existingObjectInDb.getStatus());
-        }
-        if (realtyObjectDetailsDto.getRealtor() != null) {
-            Realtor realtor = this.realtorService.findById(realtyObjectDetailsDto.getRealtor().getId());
+        existingRealtyObject.ifPresent(existingObject -> realtyObject.setStatus(existingObject.getStatus()));
+        Optional.ofNullable(realtyObjectDetailsDto.getRealtor()).ifPresent(realtorDto -> {
+            Realtor realtor = realtorService.findById(realtorDto.getId());
             realtyObject.setRealtor(realtor);
-        }
-        if (realtyObjectDetailsDto.getOwner() != null) {
-            User owner = this.userRepository.findById(realtyObjectDetailsDto.getOwner().getId()).get();
+        });
+        Optional.ofNullable(realtyObjectDetailsDto.getOwner()).ifPresent(ownerDto -> {
+            User owner = userRepository.findById(ownerDto.getId()).orElse(null);
             realtyObject.setOwner(owner);
-        }
+        });
 
         List<RealtyObjectPhoto> retrievedPhotos = realtyObject.getPhotos()
                 .stream()
-                .map(photoToMap -> {
-                    RealtyObjectPhoto photo = realtyObjectPhotoRepository.findById(photoToMap.getId()).get();
-                    photo.setType(photoToMap.getType());
-                    return photo;
-                })
+                .map(photoToMap -> realtyObjectPhotoRepository.findById(photoToMap.getId())
+                        .map(photo -> {
+                            photo.setType(photoToMap.getType());
+                            return photo;
+                        })
+                        .orElse(null))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         realtyObject.setPhotos(retrievedPhotos);
 
-        if (realtyObjectDetailsDto.getConfirmationDocPhoto() != null) {
+
+        Optional.ofNullable(realtyObjectDetailsDto.getConfirmationDocPhoto()).ifPresent(confPhotoDto -> {
             ConfirmationDocPhoto confPhoto =
-                    confirmationDocPhotoRepository.findById(realtyObjectDetailsDto.getConfirmationDocPhoto().getId()).get();
+                    confirmationDocPhotoRepository.findById(confPhotoDto.getId()).orElse(null);
             realtyObject.setConfirmationDocPhoto(confPhoto);
-        }
+        });
 
         return realtyObjectCrudRepository.save(realtyObject);
     }
 
     public RealtyObjectDetailsDto getObjectById(Long objectId) {
-        RealtyObject realtyObject = realtyObjectCrudRepository
-                .findById(objectId)
+        RealtyObject realtyObject = realtyObjectCrudRepository.findById(objectId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        return this.mappingService.map(realtyObject, RealtyObjectDetailsDto.class);
+        return mappingService.map(realtyObject, RealtyObjectDetailsDto.class);
     }
 
     public void verifyRealtorOrAdminOrOwner(SpringSecurityUser user, Long objectId) {
         Long userId = user.getId();
-        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-        if (!authorities.contains(new SimpleGrantedAuthority(ROLE_PREFIX + "ADMIN")) &&
-                !authorities.contains(new SimpleGrantedAuthority(ROLE_PREFIX + "REALTOR"))) {
-            RealtyObject realtyObject = this.realtyObjectCrudRepository.findById(objectId).get();
+        if (!isAdminOrRealtor(user)) {
+            RealtyObject realtyObject = realtyObjectCrudRepository.findById(objectId).orElseThrow();
             if (!realtyObject.getOwner().getId().equals(userId)) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
@@ -219,23 +198,22 @@ public class RealtyObjectsService {
     }
 
     public int setRealtyObjectStatusById(Long objectId, RealtyObjectStatus realtyObjectStatus) {
-        return this.realtyObjectCrudRepository.updateRealtyObjectStatusById(objectId, realtyObjectStatus);
+        return realtyObjectCrudRepository.updateRealtyObjectStatusById(objectId, realtyObjectStatus);
     }
 
     @Transactional
     public Boolean delete(Long objectId) {
         Instant oneWeekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
         if (!objectReviewRepository.findByRealtyObjIdAndDateTimeAfter(objectId, oneWeekAgo).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You Can Not Remove Objects With Future Or Recent" +
-                    " Reviews");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot remove objects with future or recent " +
+                    "reviews.");
         }
         try {
-            this.realtyObjectCrudRepository.deleteById(objectId);
+            realtyObjectCrudRepository.deleteById(objectId);
         } catch (DataIntegrityViolationException e) {
-            log.error("Error while removing realty object" + objectId + e.getMessage());
+            log.error("Error while removing realty object {}: {}", objectId, e.getMessage());
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
-
         return true;
     }
 }

@@ -18,10 +18,13 @@ public class RoleUtils {
         }
 
         String roleWithPrefix = ROLE_PREFIX + roleToCheck;
-
         Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) user.getAuthorities();
 
         return authorities.stream()
                 .anyMatch(authority -> authority.getAuthority().equals(roleWithPrefix));
+    }
+
+    public static boolean isAdminOrRealtor(SpringSecurityUser user) {
+        return containsAuthority(user, ADMIN_ROLE) || containsAuthority(user, REALTOR_ROLE);
     }
 }
