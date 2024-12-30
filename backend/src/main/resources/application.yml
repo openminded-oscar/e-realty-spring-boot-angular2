@@ -55,7 +55,7 @@ management:
   security:
     enabled: false
 
-realtypics.storage.root: "D:/realperfect"
+realtypics.storage.root: "D:/realperfect-file-storage"
 
 jwt:
   secret: dummy #change to real
