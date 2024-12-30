@@ -15,7 +15,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
@@ -25,7 +24,7 @@ public class FileSystemStorageService implements InitializingBean {
     private Path rootLocation = null;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         try {
             this.rootLocation = Paths.get(rootLocationString);
             Files.createDirectories(rootLocation);
@@ -34,9 +33,9 @@ public class FileSystemStorageService implements InitializingBean {
         }
     }
 
-    public String uploadFileForCategoryAndUser(MultipartFile file, String filename, String category, String userId) {
+    public String uploadFile(MultipartFile file, String filename) {
         try {
-            Path path = prepareForFileStorageAndReturnPath(file, filename, category, userId);
+            Path path = prepareForFileStorageAndReturnPath(file, filename);
             Files.copy(file.getInputStream(), path);
             return path.getFileName().toString();
         } catch (IOException e) {
@@ -44,17 +43,16 @@ public class FileSystemStorageService implements InitializingBean {
         }
     }
 
-    private Path prepareForFileStorageAndReturnPath(MultipartFile file, String filename, String category, String userId) throws IOException {
+    private Path prepareForFileStorageAndReturnPath(MultipartFile file, String filename) throws IOException {
         if (file.isEmpty()) {
             throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
         }
-        Path photoPath = this.rootLocation.resolve(userId).resolve(category);
-        File photoFolder = photoPath.toFile();
+        File photoFolder = this.rootLocation.toFile();
         if (!photoFolder.exists()) {
             photoFolder.mkdirs();
         }
 
-        Path path = photoPath.resolve(filename);
+        Path path = this.rootLocation.resolve(filename);
         Files.deleteIfExists(path);
 
         return path;
@@ -68,13 +66,12 @@ public class FileSystemStorageService implements InitializingBean {
         } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
-
     }
 
 
-    public Resource downloadFileAsResourceForCategoryAndUser(String filename, String category, String userId) {
+    public Resource downloadFileAsResource(String filename) {
         try {
-            Path file = rootLocation.resolve(userId).resolve(category).resolve(filename);
+            Path file = rootLocation.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;

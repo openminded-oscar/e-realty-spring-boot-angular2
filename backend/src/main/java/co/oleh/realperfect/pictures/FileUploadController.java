@@ -14,12 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -34,7 +31,8 @@ public class FileUploadController {
     @RateLimited(requestsPerHour = 200)
     public ResponseEntity<Photo> handleFileUpload(@RequestParam("file") MultipartFile file, @PathVariable String type) {
         String filename = generateUuidFilename(file);
-        storageService.uploadFileForCategoryAndUser(file, filename, "category", "someId");
+
+        storageService.uploadFile(file, filename);
 
         Photo photo = switch (type) {
             case "object" -> pictureInfoService.save(new RealtyObjectPhoto(filename));
@@ -52,25 +50,10 @@ public class FileUploadController {
         return UUID.randomUUID() + "." + filenameParts[filenameParts.length - 1];
     }
 
-    @GetMapping("/list-uploaded-photos")
-    public ResponseEntity<List<String>> listUploadedFiles() {
-        List<String> fileNamesList = storageService
-                .listAllPicsForCategoryAndUser("category", "someId")
-                .map(path ->
-                        MvcUriComponentsBuilder
-                                .fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString())
-                                .build().toString())
-                .collect(Collectors.toList());
-
-        return ResponseEntity
-                .ok()
-                .body(fileNamesList);
-    }
-
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-        Resource file = storageService.downloadFileAsResourceForCategoryAndUser(filename, "category", "someId");
+        Resource file = storageService.downloadFileAsResource(filename);
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
