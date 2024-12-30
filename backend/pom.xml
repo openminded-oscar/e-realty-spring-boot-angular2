@@ -216,6 +216,13 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.gavlyukovskiy</groupId>
+                    <artifactId>datasource-proxy-spring-boot-starter</artifactId>
+                    <version>1.9.2</version>
+                </dependency>
+            </dependencies>
         </profile>
         <profile>
             <id>prod</id>
