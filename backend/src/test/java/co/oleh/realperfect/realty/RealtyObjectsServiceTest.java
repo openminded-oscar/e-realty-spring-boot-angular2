@@ -15,7 +15,6 @@ import co.oleh.realperfect.realtor.RealtorService;
 import co.oleh.realperfect.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
@@ -36,7 +35,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 public class RealtyObjectsServiceTest {
-
     @Mock
     private RealtyObjectCrudRepository realtyObjectCrudRepository;
     @Mock
@@ -58,12 +56,23 @@ public class RealtyObjectsServiceTest {
     @Mock
     private InterestService interestService;
 
-    @InjectMocks
     private RealtyObjectsService realtyObjectsService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        realtyObjectsService = new RealtyObjectsService(
+                realtyObjectFilterRepository,
+                userRepository,
+                interestService,
+                emailsService,
+                confirmationDocPhotoRepository,
+                objectReviewRepository,
+                realtyObjectPhotoRepository,
+                realtyObjectCrudRepository,
+                realtorService,
+                mappingService
+        );
     }
 
     @Test
