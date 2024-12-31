@@ -9,10 +9,10 @@ import jakarta.annotation.PostConstruct;
 
 @Service
 @Slf4j
-public class RealtyObjectsByGeolocationCacheUpdaterService {
+public class RealtyObjectsByGeolocationCacheUpdaterJob {
     private final RealtyObjectsByGeolocationService realtyObjectsByGeolocationService;
 
-    public RealtyObjectsByGeolocationCacheUpdaterService(RealtyObjectsByGeolocationService realtyObjectsByGeolocationService) {
+    public RealtyObjectsByGeolocationCacheUpdaterJob(RealtyObjectsByGeolocationService realtyObjectsByGeolocationService) {
         this.realtyObjectsByGeolocationService = realtyObjectsByGeolocationService;
     }
 
