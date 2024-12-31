@@ -15,6 +15,10 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -43,32 +47,6 @@ public class FileSystemStorageService implements InitializingBean {
         }
     }
 
-    private Path prepareForFileStorageAndReturnPath(MultipartFile file, String filename) throws IOException {
-        if (file.isEmpty()) {
-            throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
-        }
-        File photoFolder = this.rootLocation.toFile();
-        if (!photoFolder.exists()) {
-            photoFolder.mkdirs();
-        }
-
-        Path path = this.rootLocation.resolve(filename);
-        Files.deleteIfExists(path);
-
-        return path;
-    }
-
-    public Stream<Path> listAllPicsForCategoryAndUser(String category, String userId) {
-        try {
-            return Files.walk(this.rootLocation.resolve(userId).resolve(category), 1)
-                    .filter(path -> !Files.isDirectory(path))
-                    .map(path -> this.rootLocation.relativize(path));
-        } catch (IOException e) {
-            throw new StorageException("Failed to read stored files", e);
-        }
-    }
-
-
     public Resource downloadFileAsResource(String filename) {
         try {
             Path file = rootLocation.resolve(filename);
@@ -83,7 +61,34 @@ public class FileSystemStorageService implements InitializingBean {
         }
     }
 
+
+    public List<String> listAllFilesInRootLocation() {
+        return Arrays.stream(rootLocation.toFile().listFiles())
+                .filter(file -> !file.isDirectory())
+                .map(File::getName)
+                .toList();
+    }
+
+    public boolean deleteByName(String filename) {
+        return new File(rootLocation.toFile(), filename).delete();
+    }
+
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    }
+
+    private Path prepareForFileStorageAndReturnPath(MultipartFile file, String filename) throws IOException {
+        if (file.isEmpty()) {
+            throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
+        }
+        File photoFolder = this.rootLocation.toFile();
+        if (!photoFolder.exists()) {
+            photoFolder.mkdirs();
+        }
+
+        Path path = this.rootLocation.resolve(filename);
+        Files.deleteIfExists(path);
+
+        return path;
     }
 }
