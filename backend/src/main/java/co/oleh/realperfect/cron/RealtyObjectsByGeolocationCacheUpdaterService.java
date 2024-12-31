@@ -1,5 +1,6 @@
-package co.oleh.realperfect.realty;
+package co.oleh.realperfect.cron;
 
+import co.oleh.realperfect.realty.RealtyObjectsByGeolocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
