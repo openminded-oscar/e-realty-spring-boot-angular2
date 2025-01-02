@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO make bean scope request to unit test better
+// TODO make bean scope request to unit test better (to be able to mock in service test)
 public class RealtyObjectSpecificationBuilder {
     private List<FilterItem> params;
 
