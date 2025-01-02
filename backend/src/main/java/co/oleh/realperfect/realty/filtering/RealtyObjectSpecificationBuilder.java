@@ -6,11 +6,12 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO make bean scope request to unit test better
 public class RealtyObjectSpecificationBuilder {
-    private final List<FilterItem> params;
+    private List<FilterItem> params;
 
     public RealtyObjectSpecificationBuilder() {
-        params = new ArrayList<>();
+        reset();
     }
 
     public void with(FilterItem filterItem) {
@@ -31,6 +32,12 @@ public class RealtyObjectSpecificationBuilder {
         for (int i = 1; i < specs.size(); i++) {
             result = result.and(specs.get(i));
         }
+
+        reset();
         return result;
+    }
+
+    private void reset() {
+        params = new ArrayList<>();
     }
 }
