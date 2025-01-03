@@ -1,12 +1,16 @@
 package co.oleh.realperfect.realty.filtering;
 
 import co.oleh.realperfect.model.RealtyObject;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // TODO make bean scope request to unit test better (to be able to mock in service test)
+@Component()
+@Scope("prototype")
 public class RealtyObjectSpecificationBuilder {
     private List<FilterItem> params;
 
