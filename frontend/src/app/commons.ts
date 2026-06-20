@@ -1,4 +1,4 @@
-export const base = 'http://localhost:8080';
+export const base = 'http://localhost:8075';
 export const apiBase = `${base}/api`;
 export const endpoints: any = {
     userStatus: apiBase + '/signin/with-token',

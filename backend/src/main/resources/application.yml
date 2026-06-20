@@ -2,7 +2,7 @@ google:
   geocodingapikey: dummy
 
 spring.datasource:
-  url: jdbc:mysql://localhost:3306/realperfect?autoReconnect=true&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
+  url: jdbc:mysql://localhost:3307/realperfect?autoReconnect=true&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
   username: root
   password: root
 
@@ -61,10 +61,11 @@ jwt:
   secret: dummy #change to real
 
 server:
+  port: 8075
   apiRoot: api.realperfect.com
   appRoot: realperfect.com
   websocket:
-    port: 8081
+    port: 8076
   error:
     whitelabel:
       enabled: false
