@@ -8,8 +8,11 @@
 
 ### Build
 * application-local.yml file required for local run
-* (recommended) run create db schema by sql commands in file (current file is data-structure.12.2024.sql)
-* `mvn spring-boot:run -Dspring-boot.run.profiles=local -P local|prod`
+* (recommended) run create db schema by sql commands in file (current file is data-structure.06.2026.sql)
+* `mvn spring-boot:run -Dspring-boot.run.profiles=local -P local` (env variables will be pickuped)
+OR with remote debugging on 5005 port
+* `mvn spring-boot:run -Dspring-boot.run.profiles=local -P local \
+  -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"`
 
 ### Api Keys 
 google.geocodingapikey (needed for map functionality)

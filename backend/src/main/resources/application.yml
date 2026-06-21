@@ -1,3 +1,6 @@
+jwt:
+  secret: dummy #change to real
+
 google:
   geocodingapikey: dummy
 
@@ -56,9 +59,6 @@ management:
     enabled: false
 
 realtypics.storage.root: "D:/realperfect-file-storage"
-
-jwt:
-  secret: dummy #change to real
 
 server:
   port: 8075
