@@ -1,0 +1,33 @@
+# Profile for the N+1 listing perf test.
+# Uses a DEDICATED schema on the dev MySQL (localhost:3307) so it never touches dev data.
+# The schema is auto-created (createDatabaseIfNotExist) and tables are create-drop per run.
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3307/realperfect_perftest?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
+        generate_statistics: true
+        # Kill the per-statement "Hibernate: ..." System.out echo (raw property — authoritative
+        # over the main application.yml's spring.jpa.show-sql: true).
+        show_sql: false
+        # Baseline = batch fetching OFF (-1), explicitly overriding the value now set in the
+        # main application.yml so this profile stays independent of it. The WITH-batch test
+        # turns it back on (=25) via @TestPropertySource.
+        default_batch_fetch_size: -1
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+# Silence create-drop noise (drop-FK-on-empty-schema stack traces), the per-session
+# "Session Metrics" dump from generate_statistics, the DDL echo, and the dialect
+# deprecation warning — so the only thing that stands out is the test's own count line.
+logging:
+  level:
+    org.hibernate.SQL: "WARN"
+    org.hibernate.tool.schema: "ERROR"
+    org.hibernate.orm.deprecation: "ERROR"
+    org.hibernate.engine.internal.StatisticalLoggingSessionEventListener: "WARN"
