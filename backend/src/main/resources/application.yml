@@ -16,6 +16,13 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
+        # Batch lazy/eager association loads into IN(?, ?, ...) queries of up to 25 ids
+        # instead of one SELECT per parent row. Kills N+1 when mapping lists of
+        # RealtyObject to DTOs (photos, targetOperations, confirmationDocPhoto, realtor):
+        # a page of 20 drops from ~102 queries to ~7. Safe with pagination, unlike JOIN
+        # FETCH on collections. See RealtyListing*BatchFetchTest for the measured before/after.
+        # Little related post on StackOverflow: https://stackoverflow.com/questions/21162172/default-batch-fetch-size-recommended-values
+        default_batch_fetch_size: 25
     show-sql: true
     hibernate:
       ddl-auto: update

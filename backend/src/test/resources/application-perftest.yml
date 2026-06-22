@@ -11,9 +11,6 @@ spring:
       hibernate:
         dialect: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
         generate_statistics: true
-        # Kill the per-statement "Hibernate: ..." System.out echo (raw property — authoritative
-        # over the main application.yml's spring.jpa.show-sql: true).
-        show_sql: false
         # Baseline = batch fetching OFF (-1), explicitly overriding the value now set in the
         # main application.yml so this profile stays independent of it. The WITH-batch test
         # turns it back on (=25) via @TestPropertySource.
