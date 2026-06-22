@@ -12,9 +12,9 @@ INSERT INTO tbl_user_photo (id, filename) VALUES
 -- ==========================================
 
 INSERT INTO tbl_role (id, name) VALUES
-                                    (1, 'ROLE_USER'),
-                                    (2, 'ROLE_REALTOR'),
-                                    (3, 'ROLE_ADMIN');
+                                    (1, 'USER'),
+                                    (2, 'REALTOR'),
+                                    (3, 'ADMIN');
 
 -- ==========================================
 -- USERS
