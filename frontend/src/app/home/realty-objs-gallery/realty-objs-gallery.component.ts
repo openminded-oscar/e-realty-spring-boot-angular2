@@ -1,7 +1,8 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, ViewChild} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {Router} from '@angular/router';
-import {BehaviorSubject, Observable, Subject, take} from 'rxjs';
+import {BehaviorSubject, Observable, take} from 'rxjs';
 import {debounceTime, tap} from 'rxjs/operators';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
@@ -34,7 +35,8 @@ export interface SortField {
     styleUrls: ['./realty-objs-gallery.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
+export class RealtyObjsGalleryComponent implements OnInit {
+    private destroyRef = inject(DestroyRef);
     public filterForm: FormGroup;
     public supportedRegions: CityOnMap[] = [];
     public ALL_REGIONS_ID = 0;
@@ -80,7 +82,6 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         field: 'totalArea',
     }];
     public isFilterCollapsed = false;
-    private destroy$ = new Subject<boolean>();
     private lastPage = false;
 
     constructor(
@@ -100,6 +101,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         this.addressService.supportedRegions()
             .pipe(
                 tap(regions => this.supportedRegions = regions),
+                takeUntilDestroyed(this.destroyRef),
             )
             .subscribe();
         this.resolveTargetOperations();
@@ -131,6 +133,7 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         ).pipe(
             take(1),
             debounceTime(this.FILTER_DEBOUNCE_TIME),
+            takeUntilDestroyed(this.destroyRef),
         ).subscribe(objectsPage => {
             this.lastPage = objectsPage.last;
             this.showNotificaton = true;
@@ -155,11 +158,6 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
         if (!this.lastPage) {
             this.loadNextObjects();
         }
-    }
-
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 
     public openRealtyOnMapWidget(regionId: number): void {

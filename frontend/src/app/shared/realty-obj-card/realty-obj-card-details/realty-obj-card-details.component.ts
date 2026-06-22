@@ -1,5 +1,4 @@
-import {Component, Input, OnDestroy} from '@angular/core';
-import {Subject} from 'rxjs';
+import {Component, Input} from '@angular/core';
 import {RealtyObj} from '../../../app-models/realty-obj';
 
 @Component({
@@ -7,7 +6,7 @@ import {RealtyObj} from '../../../app-models/realty-obj';
   templateUrl: './realty-obj-card-details.component.html',
   styleUrls: ['./realty-obj-card-details.component.scss']
 })
-export class RealtyObjCardDetailsComponent implements OnDestroy {
+export class RealtyObjCardDetailsComponent {
   private _realtyObject: RealtyObj;
   @Input()
   public set realtyObject(value: RealtyObj) {
@@ -23,15 +22,9 @@ export class RealtyObjCardDetailsComponent implements OnDestroy {
 
   @Input()
   public isMyObject: boolean;
-  private destroy$ = new Subject<boolean>();
 
   protected readonly RealtyObj = RealtyObj;
 
   constructor() {
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

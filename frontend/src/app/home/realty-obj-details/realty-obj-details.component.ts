@@ -1,9 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpResponse} from '@angular/common/http';
-import {combineLatest, of, Subject, switchMap} from 'rxjs';
-import {filter, takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, of, switchMap} from 'rxjs';
+import {filter, tap} from 'rxjs/operators';
 import {latLng} from 'leaflet';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
@@ -26,7 +27,8 @@ import {ApproveReviewModalComponent} from '../../shared/approve-review-modal/app
     templateUrl: './realty-obj-details.component.html',
     styleUrls: ['./realty-obj-details.component.scss']
 })
-export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
+export class RealtyObjDetailsComponent implements OnInit {
+    private destroyRef = inject(DestroyRef);
     public RealtyObjectStatus = RealtyObjectStatus;
 
     public currentObject: RealtyObj;
@@ -37,8 +39,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     public user: User;
     public isRealtorOrAdmin = false;
     public isMyObject = false;
-
-    private destroy$ = new Subject<boolean>();
 
     constructor(public realtyObjService: RealtyObjService,
                 public userService: UserService,
@@ -65,7 +65,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
             ),
             this.route.params
         ]).pipe(
-                takeUntil(this.destroy$),
+                takeUntilDestroyed(this.destroyRef),
                 switchMap(([user, params]) => {
                     const id = params['objectId'];
                     if (!id) {
@@ -73,7 +73,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                     }
                     return this.realtyObjService.findById(id)
                         .pipe(
-                            takeUntil(this.destroy$),
+                            takeUntilDestroyed(this.destroyRef),
                             tap(realtyObj => {
                                 this.enlargedPhoto = RealtyObj.getMainPhoto(realtyObj);
                                 this.currentObject = realtyObj;
@@ -97,7 +97,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     public toggleInterested() {
         if (this.isInterested) {
             this.interestService.remove(this.currentObject.id)
-                .pipe(takeUntil(this.destroy$))
+                .pipe(takeUntilDestroyed(this.destroyRef))
                 .subscribe(interest => {
                     this.isInterested = false;
                 });
@@ -107,7 +107,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                 realtyObjId: this.currentObject.id
             };
             this.interestService.save(interest)
-                .pipe(takeUntil(this.destroy$))
+                .pipe(takeUntilDestroyed(this.destroyRef))
                 .subscribe(interestFromServer => {
                     this.isInterested = true;
                 });
@@ -130,7 +130,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         this.modalService.open(DeleteRealtyModalComponent).result.then(data => {
             if (data) {
                 this.realtyObjService.deleteById(this.currentObject.id)
-                    .pipe(takeUntil(this.destroy$))
+                    .pipe(takeUntilDestroyed(this.destroyRef))
                     .subscribe();
             }
         }, error => {
@@ -141,7 +141,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
     public openScheduleReviewModal() {
         this.reviewsService.scheduleReviewFlow(this.currentObject)
             .pipe(
-                takeUntil(this.destroy$),
+                takeUntilDestroyed(this.destroyRef),
                 tap(reviewDto => {
                     if (reviewDto) {
                         this.currentReview = {
@@ -168,11 +168,6 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
         modalRef.result.then();
     }
 
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
-    }
-
     public openCancelDialog() {
         this.reviewsService.getById(this.currentReview.id)
             .subscribe((review: RelatedReviewDto) => {
@@ -196,13 +191,13 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                         this.isInterested = true;
                     }
                 }),
-                takeUntil(this.destroy$)
+                takeUntilDestroyed(this.destroyRef)
             )
             .subscribe();
 
         this.reviewsService.getForObjectAndCurrentUser(this.currentObject.id)
             .pipe(
-                takeUntil(this.destroy$),
+                takeUntilDestroyed(this.destroyRef),
                 tap((reviewsResponse: HttpResponse<ReviewDto>) => {
                     if (reviewsResponse.body) {
                         this.currentReview = reviewsResponse.body;
@@ -210,7 +205,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                 }),
                 tap((v) => {
                     this.reviewsService.approvedReviewId$.pipe(
-                        takeUntil(this.destroy$),
+                        takeUntilDestroyed(this.destroyRef),
                         filter(id => !!id),
                         tap((id) => {
                             if (id && id === this.currentReview?.id) {
@@ -218,7 +213,7 @@ export class RealtyObjDetailsComponent implements OnInit, OnDestroy {
                             }
                         })).subscribe();
                     this.reviewsService.canceledReviewId$.pipe(
-                        takeUntil(this.destroy$),
+                        takeUntilDestroyed(this.destroyRef),
                         filter(id => !!id),
                         tap((id) => {
                             if (id && id === this.currentReview?.id) {

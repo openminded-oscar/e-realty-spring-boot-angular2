@@ -1,6 +1,5 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {UserManagementService} from '../../app-services/user-management.service';
 import {User, UserRole} from '../../app-models/user';
 
@@ -9,13 +8,12 @@ import {User, UserRole} from '../../app-models/user';
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss']
 })
-export class UserManagementComponent implements OnInit, OnDestroy {
+export class UserManagementComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   public defaultUserPhoto = 'https://placehold.co/400x450?text=User+photo';
 
   constructor(public userManagementService: UserManagementService, public cdr: ChangeDetectorRef) {
   }
-
-  private destroy$ = new Subject<boolean>();
 
   public users: User[] = [];
 
@@ -24,7 +22,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userManagementService.getUsers().pipe(
-      takeUntil(this.destroy$),
+      takeUntilDestroyed(this.destroyRef),
     ).subscribe(
       users => {
         this.users = users;
@@ -49,10 +47,5 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
   public isRealtor(user: User) {
     return user.roles.includes(UserRole.Realtor);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

@@ -1,4 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {
     AbstractControl,
     FormBuilder,
@@ -9,8 +10,7 @@ import {
     Validators
 } from '@angular/forms';
 import {NgbActiveModal, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {switchMap, tap} from 'rxjs/operators';
 import {dateBasedOnNGBDatePicker, ReviewsService} from '../../app-services/reviews.service';
 import {RealtyObj} from '../../app-models/realty-obj';
 import {RelatedReviewDto} from '../../app-models/review';
@@ -48,13 +48,13 @@ export function reviewDateTimeValidator(): ValidatorFn {
     templateUrl: './schedule-form-modal.component.html',
     styleUrls: ['./schedule-form-modal.component.scss']
 })
-export class ScheduleFormModalComponent implements OnInit, OnDestroy {
+export class ScheduleFormModalComponent implements OnInit {
+    private destroyRef = inject(DestroyRef);
     public realtyObject: RealtyObj;
     public reviewTimeForm: FormGroup;
     public availableTimesOfDay: Date[] = [];
     public selectedDateTime = null;
     public savedReview: RelatedReviewDto;
-    private destroy$ = new Subject<boolean>();
 
     constructor(
         public reviewService: ReviewsService,
@@ -141,7 +141,7 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
             realtorId: this.realtyObject.realtor?.id,
             dateTime: this.reviewTimeForm.controls.reviewTime.value
         }).pipe(
-            takeUntil(this.destroy$),
+            takeUntilDestroyed(this.destroyRef),
             tap(reviewDto => {
                 this.savedReview = reviewDto;
             })
@@ -158,11 +158,6 @@ export class ScheduleFormModalComponent implements OnInit, OnDestroy {
         } else {
             this.modal.dismiss('Cross click')
         }
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 
     private formatToGoogleCalendarUTC(date: Date) {

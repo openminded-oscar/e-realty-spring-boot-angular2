@@ -1,8 +1,9 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {BehaviorSubject, of, Subject, timer} from 'rxjs';
-import {map, switchMap, takeUntil} from 'rxjs/operators';
+import {BehaviorSubject, of, timer} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
 import {SocialAuthService, SocialUser} from '@abacritt/angularx-social-login';
 import {UserService} from '../app-services/user.service';
 import {SampleSocketService} from '../app-services/socket/sample-socket.service';
@@ -18,8 +19,8 @@ import {MIN_LOADER_SHOW_TIME} from './data-loader/data-loader.component';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
-    private destroy$ = new Subject<boolean>();
+export class AppComponent implements OnInit {
+    private destroyRef = inject(DestroyRef);
     public isLoading$ = new BehaviorSubject<boolean>(false);
 
     constructor(public http: HttpClient,
@@ -52,7 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
             this.userService.clearUserInState();
         }
-        this.socialAuthService.authState.pipe(takeUntil(this.destroy$)).subscribe((googleUser: SocialUser) => {
+        this.socialAuthService.authState.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((googleUser: SocialUser) => {
             const {email, idToken, authToken, authorizationCode} = googleUser;
             this.signinSignoutService.signInWithGoogleData({
                 email,
@@ -67,10 +68,10 @@ export class AppComponent implements OnInit, OnDestroy {
                 switchMap(user =>
                     this.socketService.currentDocument.pipe(
                         map(object => ({object, user})),
-                        takeUntil(this.destroy$)
+                        takeUntilDestroyed(this.destroyRef)
                     )
                 ),
-                takeUntil(this.destroy$)
+                takeUntilDestroyed(this.destroyRef)
             )
             .subscribe({
                 next: ({object, user}) => this.handleAddToFavoritesSocketUpdate(object, user),
@@ -88,10 +89,5 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.notificationService.showNotification('Success! Somebody interested with your object!' + interest.realtyObjId);
             }
         }
-    }
-
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

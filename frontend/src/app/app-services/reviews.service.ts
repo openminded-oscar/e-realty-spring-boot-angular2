@@ -1,6 +1,6 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {BehaviorSubject, from, Observable, of, Subject, switchMap} from 'rxjs';
+import {BehaviorSubject, from, Observable, of, switchMap} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import {NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {endpoints} from '../commons';
@@ -23,8 +23,8 @@ export const dateBasedOnNGBDatePicker = (reviewDate: NgbDateStruct) => {
 };
 
 @Injectable()
-export class ReviewsService extends AbstractService<ReviewDto> implements OnDestroy {
-    private destroy$ = new Subject<boolean>();
+export class ReviewsService extends AbstractService<ReviewDto> {
+    // No teardown: methods return cold Observables; the prior destroy$ was dead code.
     private approvedReviewId = new BehaviorSubject<number>(null);
     public approvedReviewId$ = this.approvedReviewId.asObservable();
 
@@ -201,10 +201,5 @@ export class ReviewsService extends AbstractService<ReviewDto> implements OnDest
                 }
             })
         );
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

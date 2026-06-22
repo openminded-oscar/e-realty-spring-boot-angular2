@@ -1,7 +1,6 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, DestroyRef, inject, Input} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
 
 import {RealtyObj} from '../../app-models/realty-obj';
 import {RelatedReviewDto} from '../../app-models/review';
@@ -17,14 +16,14 @@ import {UserContactModalComponent} from '../realtor-contact/user-contact-modal.c
     templateUrl: './realty-obj-review-card.component.html',
     styleUrl: './realty-obj-review-card.component.scss'
 })
-export class RealtyObjReviewCardComponent implements OnDestroy {
+export class RealtyObjReviewCardComponent {
+    private destroyRef = inject(DestroyRef);
     public realtyObject!: RealtyObj;
     @Input()
     public showRealtyObjectCreatedAt!: boolean;
     @Input()
     public isRealtorMode!: boolean;
     protected readonly isFutureDate = isFutureDate;
-    private destroy$ = new Subject<boolean>();
 
     constructor(public modalService: NgbModal, public reviewsService: ReviewsService) {
     }
@@ -54,7 +53,7 @@ export class RealtyObjReviewCardComponent implements OnDestroy {
         modalRef.result.then((result) => {
             if (result) {
                 this.reviewsService.approveReview(review)
-                    .pipe(takeUntil(this.destroy$))
+                    .pipe(takeUntilDestroyed(this.destroyRef))
                     .subscribe();
             }
         });
@@ -66,10 +65,5 @@ export class RealtyObjReviewCardComponent implements OnDestroy {
         (modalRef.componentInstance as UserContactModalComponent).message = 'User Contact Information';
         (modalRef.componentInstance as UserContactModalComponent).userTitle = 'will review the object';
         modalRef.result.then();
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

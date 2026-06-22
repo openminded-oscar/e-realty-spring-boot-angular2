@@ -1,6 +1,6 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {delay, from, Observable, of, Subject, switchMap, take} from 'rxjs';
+import {delay, from, Observable, of, switchMap, take} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {catchError, filter, tap} from 'rxjs/operators';
 import {Credentials} from '../../app-models/credentials.model';
@@ -12,8 +12,8 @@ import {MessageModalComponent} from '../../shared/message-modal/message-modal.co
 import {HTTP_CONSTANTS} from '../common/HttpErrorInterceptor';
 
 @Injectable({providedIn: 'root'})
-export class SignupService extends AbstractService<Credentials> implements OnDestroy {
-    private destroy$ = new Subject<boolean>();
+export class SignupService extends AbstractService<Credentials> {
+    // No teardown: root singleton; the inner modal+HTTP flow completes on its own.
 
     constructor(public http: HttpClient,
                 public globalNotificationService: GlobalNotificationService,
@@ -64,10 +64,5 @@ export class SignupService extends AbstractService<Credentials> implements OnDes
                     return of(null);
                 })
             );
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

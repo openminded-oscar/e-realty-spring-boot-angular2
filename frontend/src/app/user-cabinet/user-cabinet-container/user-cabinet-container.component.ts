@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit, ViewChild} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {NgbNav} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute} from '@angular/router';
-import {takeUntil} from 'rxjs/operators';
-import {BehaviorSubject, from, Subject} from 'rxjs';
+import {BehaviorSubject, from} from 'rxjs';
 import {
   MyFavoritesTabPath,
   MyObjectsTabPath,
@@ -21,8 +21,8 @@ import {RealtorService} from '../../app-services/realtor.service';
   templateUrl: './user-cabinet-container.component.html',
   styleUrls: ['./user-cabinet-container.component.scss']
 })
-export class UserCabinetContainerComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class UserCabinetContainerComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   @ViewChild(NgbNav, {static: true})
   public ngbNav: NgbNav;
   public activeLinksSubject = new BehaviorSubject([]);
@@ -49,7 +49,7 @@ export class UserCabinetContainerComponent implements OnInit, OnDestroy {
     this.reviewsService.getAllReviewsForUser().subscribe();
 
     this.userService.isRealtor$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(isRealtor => {
         if (isRealtor) {
           this.reviewsService.getMyAsRealtorReviews().subscribe();
@@ -63,10 +63,5 @@ export class UserCabinetContainerComponent implements OnInit, OnDestroy {
       const urlPath = url[url.length - 1]?.path;
       this.ngbNav.select(urlPath);
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

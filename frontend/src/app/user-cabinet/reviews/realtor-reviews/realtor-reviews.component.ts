@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {tap} from 'rxjs/operators';
 import {filterByReviewType, RelatedReviewDto, ReviewFilter} from '../../../app-models/review';
 import {ReviewsService} from '../../../app-services/reviews.service';
 
@@ -9,8 +9,8 @@ import {ReviewsService} from '../../../app-services/reviews.service';
     templateUrl: './realtor-reviews.component.html',
     styles: ``
 })
-export class RealtorReviewsComponent implements OnInit, OnDestroy {
-    public destroy$ = new Subject<boolean>();
+export class RealtorReviewsComponent implements OnInit {
+    private destroyRef = inject(DestroyRef);
 
     public allRealtorReviews: RelatedReviewDto[];
     public filteredReviews: RelatedReviewDto[] = [];
@@ -22,7 +22,7 @@ export class RealtorReviewsComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.reviewsService.currentRealtorReviews$
             .pipe(
-                takeUntil(this.destroy$),
+                takeUntilDestroyed(this.destroyRef),
                 tap(reviews => {
                     this.allRealtorReviews = reviews;
                     this.applyFilter();
@@ -39,10 +39,5 @@ export class RealtorReviewsComponent implements OnInit, OnDestroy {
     public onFilterChanged(filter: ReviewFilter): void {
         this.filter = filter;
         this.applyFilter();
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

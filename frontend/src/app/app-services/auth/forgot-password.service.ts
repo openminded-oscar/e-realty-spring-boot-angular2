@@ -1,5 +1,5 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {delay, from, Observable, of, Subject, switchMap, take} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {delay, from, Observable, of, switchMap, take} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpClient, HttpResponse} from '@angular/common/http';
@@ -14,8 +14,8 @@ import {ForgotPasswordModalComponent} from '../../core/forgot-password-modal/for
 @Injectable({
     providedIn: 'root'
 })
-export class ForgotPasswordService extends AbstractService<Credentials> implements OnDestroy {
-    private destroy$ = new Subject<boolean>();
+export class ForgotPasswordService extends AbstractService<Credentials> {
+    // No teardown: root singleton; the inner modal+HTTP flow completes on its own.
 
     constructor(public modalService: NgbModal,
                 public http: HttpClient,
@@ -51,10 +51,5 @@ export class ForgotPasswordService extends AbstractService<Credentials> implemen
 
     public resetPasswordRequest(newPassword: string, confirmationCode: string): Observable<HttpResponse<string>> {
         return this.sendRequest<string>('post', '/reset-password', {body: {newPassword, confirmationCode}});
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

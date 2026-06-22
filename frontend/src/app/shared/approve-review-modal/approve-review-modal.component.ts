@@ -1,7 +1,7 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, DestroyRef, inject, Input} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {takeUntil} from 'rxjs/operators';
-import {Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 import {ReviewsService} from '../../app-services/reviews.service';
 import {RelatedReviewDto} from '../../app-models/review';
 
@@ -10,10 +10,10 @@ import {RelatedReviewDto} from '../../app-models/review';
   templateUrl: './approve-review-modal.component.html',
   styleUrl: './approve-review-modal.component.scss'
 })
-export class ApproveReviewModalComponent implements OnDestroy {
+export class ApproveReviewModalComponent {
+    private destroyRef = inject(DestroyRef);
     @Input() message = 'Are you sure?';
     public review: RelatedReviewDto = null;
-    private destroy$ = new Subject<boolean>();
 
     constructor(public activeModal: NgbActiveModal, public reviewsService: ReviewsService) {
 
@@ -28,15 +28,10 @@ export class ApproveReviewModalComponent implements OnDestroy {
 
     public approveReview(review: RelatedReviewDto): Observable<any> {
         return this.reviewsService.approveReview(review)
-            .pipe(takeUntil(this.destroy$));
+            .pipe(takeUntilDestroyed(this.destroyRef));
     }
 
     public cancel() {
         this.activeModal.dismiss('cancel');
-    }
-
-    public ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

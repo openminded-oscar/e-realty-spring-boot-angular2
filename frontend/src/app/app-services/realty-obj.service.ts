@@ -1,7 +1,7 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subject, throwError} from 'rxjs';
-import {catchError, takeUntil, tap} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RealtyObj} from '../app-models/realty-obj';
 import {endpoints} from '../commons';
@@ -26,8 +26,8 @@ export interface PageableResponse<T> {
 }
 
 @Injectable({providedIn: 'root'})
-export class RealtyObjService implements OnDestroy {
-    private destroy$ = new Subject<boolean>();
+export class RealtyObjService {
+    // No teardown: root singleton returning cold Observables — the subscriber owns the lifecycle.
 
     constructor(private http: HttpClient,
                 private notificationService: GlobalNotificationService,
@@ -145,18 +145,12 @@ export class RealtyObjService implements OnDestroy {
         return this.http.delete(`${endpoints.realtyObj.byId}/${realtyObject.id}/archive`).pipe();
     }
 
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
-    }
-
     private callSaveOnServer(realtyObj: Partial<RealtyObj>, method: 'POST' | 'PUT') {
         const urlPath = endpoints.realtyObj.add + (method === 'POST' ? '' : '/' + realtyObj.id);
         return this.http.request<RealtyObj>(method, urlPath, {
             body: realtyObj,
             headers: {[HTTP_CONSTANTS.SKIP_ERROR_INTERCEPTOR_HEADER]: 'true'}
         }).pipe(
-            takeUntil(this.destroy$),
             tap((realtyObjReturned: RealtyObj) => {
                 if (realtyObjReturned.realtor && realtyObjReturned.realtor.profilePic) {
                     realtyObjReturned.realtor.profilePic.fullUrl =

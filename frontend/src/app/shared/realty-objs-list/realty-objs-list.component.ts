@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 import {RealtyObj} from '../../app-models/realty-obj';
 import {UserService} from '../../app-services/user.service';
 
@@ -12,7 +12,7 @@ import {UserService} from '../../app-services/user.service';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RealtyObjsListComponent implements OnDestroy {
+export class RealtyObjsListComponent {
     @Input()
     public showCreatedAt = false;
     @Input()
@@ -21,7 +21,6 @@ export class RealtyObjsListComponent implements OnDestroy {
     public displayMode: 'accumulateByPortion' | 'reset' = 'accumulateByPortion';
 
     public realtyObjects$ = new BehaviorSubject<RealtyObj[]>([]);
-    private destroy$ = new Subject<boolean>();
 
     constructor(public userService: UserService) {
     }
@@ -45,10 +44,5 @@ export class RealtyObjsListComponent implements OnDestroy {
     public resetObjects() {
         this.realtyObjectsPortion = [];
         this.realtyObjects$.next([]);
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

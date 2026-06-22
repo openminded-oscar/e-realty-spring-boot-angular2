@@ -1,8 +1,9 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit, ViewChild} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {from, Observable, of, Subject, take} from 'rxjs';
-import {catchError, takeUntil, tap} from 'rxjs/operators';
+import {from, Observable, of, take} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {WizardComponent} from '@rg-software/angular-archwizard';
 import {BUILDING_TYPES, ConfigService, DWELLING_TYPES, OPERATION_TYPES} from '../../app-services/config.service';
@@ -37,7 +38,8 @@ export interface SupportedOperation {
     templateUrl: './realty-obj-edit.component.html',
     styleUrls: ['./realty-obj-edit.scss']
 })
-export class RealtyObjEditComponent implements OnInit, OnDestroy {
+export class RealtyObjEditComponent implements OnInit {
+    private destroyRef = inject(DestroyRef);
     @ViewChild(WizardComponent)
     public wizard: WizardComponent;
     public operationsInputValues: SupportedOperation[] = this.config.supportedOperations.map(value => ({
@@ -57,7 +59,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
     public location: Geolocation;
     public regionChanged: CityOnMap;
     public supportedRegions: CityOnMap[] = [];
-    private destroy$ = new Subject<boolean>();
 
     public isCreateMode: Boolean = null;
 
@@ -78,19 +79,19 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         this.initFormControls();
 
         this.addressService.supportedRegions()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(regions => this.supportedRegions = regions);
 
         this.realtorsService.getRealtors()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(realtors => this.realtors = realtors);
 
-        this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
+        this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
             if (params['objectId']) {
                 this.isCreateMode = false;
                 this.objectId = params['objectId'];
                 this.realtyObjService.findById(params['objectId'])
-                    .pipe(takeUntil(this.destroy$))
+                    .pipe(takeUntilDestroyed(this.destroyRef))
                     .subscribe(realtyObj => this.populateRealtyForm(realtyObj));
             } else {
                 this.isCreateMode = true;
@@ -147,7 +148,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
                 targetOperations: includedOperationsNames as string[],
                 realtor: realtyObjFormData.realtor as Realtor
             }).pipe(
-                takeUntil(this.destroy$)
+                takeUntilDestroyed(this.destroyRef)
             ).subscribe(object => {
                 this.router.navigate(['/realty-object', object.id]).then();
             });
@@ -158,7 +159,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         const fileList = (event as any).target.files;
         if (fileList.length > 0) {
             this.uploadFile(fileList[0], '/upload-photo/confirm-object')
-                .pipe(takeUntil(this.destroy$))
+                .pipe(takeUntilDestroyed(this.destroyRef))
                 .subscribe({
                     next: (data: RealtyPhoto) => {
                         this.photosFormGroup.patchValue({confirmationDocPhoto: data});
@@ -172,7 +173,7 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
         const fileList = (event as any).target.files;
         if (fileList.length > 0) {
             this.uploadFile(fileList[0], '/upload-photo/object')
-                .pipe(takeUntil(this.destroy$))
+                .pipe(takeUntilDestroyed(this.destroyRef))
                 .subscribe((photo: RealtyPhoto) => {
                     const photosArray = this.photosFormGroup.get('photos') as FormArray;
                     const type = (photosArray.length === 0) ? RealtyPhotoType.REALTY_MAIN : RealtyPhotoType.REALTY_PLAIN;
@@ -206,11 +207,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
                 type: RealtyPhotoType.REALTY_MAIN
             });
         }
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 
     public changeLocation(location: Geolocation) {
@@ -393,6 +389,6 @@ export class RealtyObjEditComponent implements OnInit, OnDestroy {
 
     private uploadFile(file: File, endpoint: string): Observable<Photo> {
         return this.fileUploadService.upload(file, `${apiBase}${endpoint}`)
-            .pipe(takeUntil(this.destroy$));
+            .pipe(takeUntilDestroyed(this.destroyRef));
     }
 }

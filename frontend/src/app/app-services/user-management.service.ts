@@ -1,15 +1,15 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 import {User, UserRole} from '../app-models/user';
 import {Photo} from '../app-models/photo';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserManagementService implements OnDestroy {
-  private onDestroy$ = new Subject<boolean>();
+export class UserManagementService {
+  // No teardown: root singleton; the inner HTTP requests complete on their own.
   private users$ = new BehaviorSubject<User[]>([]); // Store users as a BehaviorSubject
 
   constructor(public http: HttpClient) {
@@ -25,7 +25,6 @@ export class UserManagementService implements OnDestroy {
   private loadAllUsers(): void {
     this.http.get<User[]>('/api/manage-users')
       .pipe(
-        takeUntil(this.onDestroy$),
         tap(users => {
           users.forEach(user => {
             user.profilePicUrl = user.profilePic ? Photo.getLinkByFilename(user.profilePic?.filename) : null;
@@ -37,7 +36,6 @@ export class UserManagementService implements OnDestroy {
 
   public grantRealtor(userId: number): void {
     this.http.post(`/api/manage-users/set-realtor/${userId}`, {})
-      .pipe(takeUntil(this.onDestroy$))
       .subscribe(() => {
         // Update the local user roles
         const users = this.users$.getValue(); // Get current users
@@ -51,7 +49,6 @@ export class UserManagementService implements OnDestroy {
 
   public removeRealtorRole(userId: number): void {
     this.http.delete(`/api/manage-users/set-realtor/${userId}`, {})
-      .pipe(takeUntil(this.onDestroy$))
       .subscribe(() => {
         const users = this.users$.getValue(); // Get current users
         const user = users.find(u => u.id === userId);
@@ -60,10 +57,5 @@ export class UserManagementService implements OnDestroy {
           this.users$.next(users); // Emit the updated user list
         }
       });
-  }
-
-  ngOnDestroy(): void {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
   }
 }

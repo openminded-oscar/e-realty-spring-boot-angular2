@@ -1,7 +1,7 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {delay, from, Observable, of, Subject, take} from 'rxjs';
-import {catchError, filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {delay, from, Observable, of, take} from 'rxjs';
+import {catchError, filter, switchMap, tap} from 'rxjs/operators';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Credentials} from '../../app-models/credentials.model';
 import {AbstractService} from '../common/abstract.service';
@@ -17,8 +17,8 @@ export interface SignInResponse {
 }
 
 @Injectable({providedIn: 'root'})
-export class SignInSignOutService extends AbstractService<Credentials> implements OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class SignInSignOutService extends AbstractService<Credentials> {
+  // No teardown: root singleton; the inner modal/HTTP flows complete on their own.
 
   constructor(public http: HttpClient,
               public userService: UserService,
@@ -50,7 +50,6 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
 
   public signInWithGoogleData(googleCredentialsData: any) {
     this.signInGoogleRequest(googleCredentialsData).pipe(
-      takeUntil(this.destroy$),
       tap(() => {
         this.userService.fetchUserStatus();
         this.modalService.dismissAll();
@@ -101,10 +100,5 @@ export class SignInSignOutService extends AbstractService<Credentials> implement
 
   public signOut() {
     localStorage.removeItem('token');
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

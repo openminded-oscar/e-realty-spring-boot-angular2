@@ -1,7 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
 import {RealtorService} from '../../app-services/realtor.service';
 import {Realtor} from '../../app-models/realtor';
 import {UserService} from '../../app-services/user.service';
@@ -12,8 +11,8 @@ import {User} from '../../app-models/user';
   templateUrl: './realtors-gallery.component.html',
   styleUrls: ['./realtors-gallery.component.scss']
 })
-export class RealtorsGalleryComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class RealtorsGalleryComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   public realtors: Realtor[];
   public defaultRealtorPhoto = 'https://placehold.co/600x400?text=Realtor+photo';
   public user: User;
@@ -30,7 +29,7 @@ export class RealtorsGalleryComponent implements OnInit, OnDestroy {
       });
 
     this.userService.user$.pipe(
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(user => {
       this.user = user;
     });
@@ -39,11 +38,5 @@ export class RealtorsGalleryComponent implements OnInit, OnDestroy {
   public setDefaultRealtorPhoto(event: Event) {
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = this.defaultRealtorPhoto;
-  }
-
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

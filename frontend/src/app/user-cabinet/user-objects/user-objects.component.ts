@@ -1,6 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {User} from '../../app-models/user';
 import {UserService} from '../../app-services/user.service';
 import {filterByObjectStatus, RealtyObj, RealtyObjectByStatusFilter} from '../../app-models/realty-obj';
@@ -10,19 +9,19 @@ import {filterByObjectStatus, RealtyObj, RealtyObjectByStatusFilter} from '../..
     templateUrl: './user-objects.component.html',
     styleUrls: ['./user-objects.component.scss']
 })
-export class UserObjectsComponent implements OnInit, OnDestroy {
+export class UserObjectsComponent implements OnInit {
     public user: User;
     public allUserRealtyObjects = [];
     public filter: RealtyObjectByStatusFilter = 'all';
     public filteredObjects: RealtyObj[] = [];
-    private destroy$ = new Subject<boolean>();
+    private destroyRef = inject(DestroyRef);
 
     constructor(private userService: UserService) {
     }
 
     ngOnInit(): void {
         this.userService.user$.pipe(
-            takeUntil(this.destroy$),
+            takeUntilDestroyed(this.destroyRef),
         ).subscribe(
             user => {
                 this.user = user;
@@ -40,10 +39,5 @@ export class UserObjectsComponent implements OnInit, OnDestroy {
 
     public applyFilter(): void {
         this.filteredObjects = filterByObjectStatus(this.allUserRealtyObjects, this.filter)
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }

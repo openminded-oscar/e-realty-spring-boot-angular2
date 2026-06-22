@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {filter} from 'rxjs/operators';
 import {NavigationEnd, Router} from '@angular/router';
-import {Subject} from 'rxjs';
 import {UserService} from '../../app-services/user.service';
 import {User} from '../../app-models/user';
 
@@ -12,20 +12,23 @@ import {User} from '../../app-models/user';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
   constructor(public router: Router,
               public userService: UserService) {
-    this.userService.user$.subscribe(user => {
-      if (user) {
-        this.user = user;
-        this.isAuthenticated = !!user;
-      } else {
-        this.user = null;
-        this.isAuthenticated = false;
-      }
-    });
+    this.userService.user$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(user => {
+        if (user) {
+          this.user = user;
+          this.isAuthenticated = !!user;
+        } else {
+          this.user = null;
+          this.isAuthenticated = false;
+        }
+      });
   }
-  private destroy$ = new Subject<boolean>();
   public isAuthenticated: boolean;
   public isAdmin: boolean;
 
@@ -48,14 +51,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.url;
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

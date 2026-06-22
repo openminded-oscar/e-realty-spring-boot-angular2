@@ -1,6 +1,5 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component} from '@angular/core';
 
-import {Subject} from 'rxjs';
 import {UserService} from '../../app-services/user.service';
 
 @Component({
@@ -8,14 +7,7 @@ import {UserService} from '../../app-services/user.service';
   templateUrl: './google-sign-in-button.component.html',
   styleUrls: ['./google-sign-in-button.component.scss']
 })
-export class GoogleSignInButtonComponent implements OnDestroy {
-  private destroy$ = new Subject<boolean>();
-
+export class GoogleSignInButtonComponent {
   constructor(public userService: UserService) {
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

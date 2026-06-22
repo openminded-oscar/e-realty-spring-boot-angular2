@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {map, takeUntil, tap} from 'rxjs/operators';
-import {combineLatest, Subject} from 'rxjs';
+import {Component, DestroyRef, inject, Input, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {map, tap} from 'rxjs/operators';
+import {combineLatest} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RealtyObj, RealtyObjectStatus} from '../../app-models/realty-obj';
 import {RealtyObjService} from '../../app-services/realty-obj.service';
@@ -14,10 +15,10 @@ import {MessageModalComponent} from '../message-modal/message-modal.component';
   styleUrls: ['./realty-status.component.scss']
 })
 export class RealtyStatusComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   @Input()
   public realtyObject: RealtyObj;
   protected readonly RealtyObjectStatus = RealtyObjectStatus;
-  private destroy$ = new Subject<boolean>();
   public isRealtorOrAdmin = false;
 
   constructor(public realtyObjectService: RealtyObjService,
@@ -30,7 +31,7 @@ export class RealtyStatusComponent implements OnInit {
       combineLatest([this.userService.isAdmin$, this.userService.isRealtor$])
           .pipe(
               map(([isAdmin, isRealtor]) => isAdmin || isRealtor), // Check if either condition is true
-              takeUntil(this.destroy$),
+              takeUntilDestroyed(this.destroyRef),
               tap(value => {
                   this.isRealtorOrAdmin = value;
               })

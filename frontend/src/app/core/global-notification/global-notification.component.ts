@@ -1,6 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {GlobalNotificationService, Notification} from '../../app-services/global-notification.service';
 
 @Component({
@@ -8,15 +7,15 @@ import {GlobalNotificationService, Notification} from '../../app-services/global
   templateUrl: './global-notification.component.html',
   styleUrls: ['./global-notification.component.scss']
 })
-export class GlobalNotificationComponent implements OnInit, OnDestroy {
+export class GlobalNotificationComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   notifications: Notification[] = []; // Store notification objects
-  private destroy$ = new Subject<boolean>();
 
   constructor(public notificationService: GlobalNotificationService) {}
 
   ngOnInit(): void {
     this.notificationService.notificationSubject.asObservable()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(notification => {
         this.addNotification(notification);
       });
@@ -31,10 +30,5 @@ export class GlobalNotificationComponent implements OnInit, OnDestroy {
 
   private removeNotification(notification: Notification) {
     this.notifications = this.notifications.filter(n => n !== notification);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

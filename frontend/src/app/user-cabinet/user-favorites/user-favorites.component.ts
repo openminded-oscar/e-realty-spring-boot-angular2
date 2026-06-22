@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {combineLatest, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {combineLatest} from 'rxjs';
 import {InterestService} from '../../app-services/interest.service';
 import {Interest} from '../../app-models/interest';
 import {RealtyObj} from '../../app-models/realty-obj';
@@ -11,9 +11,9 @@ import {ReviewsService} from '../../app-services/reviews.service';
   templateUrl: './user-favorites.component.html',
   styleUrls: ['./user-favorites.component.scss']
 })
-export class UserFavoritesComponent implements OnInit, OnDestroy {
+export class UserFavoritesComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   public interests: Interest[] = [];
-  private destroy$ = new Subject<boolean>();
 
   constructor(public interestService: InterestService,
               public reviewsService: ReviewsService) {
@@ -30,7 +30,7 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
   private fetchUserInterests() {
     combineLatest([
       this.interestService.currentUserInterest$, this.reviewsService.currentUserReviews$
-    ]).pipe(takeUntil(this.destroy$))
+    ]).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([interests, reviews]) => {
         this.interests = interests ?? [];
         for (const interest of this.interests) {
@@ -41,11 +41,6 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
-
   public isFutureDate(dateTime: Date): boolean {
     const currentDate = new Date();
     return new Date(dateTime) > currentDate;
@@ -53,7 +48,7 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
 
   public toggleInterested(currentObject: RealtyObj) {
     this.interestService.remove(currentObject.id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.fetchUserInterests();
       });
@@ -62,7 +57,7 @@ export class UserFavoritesComponent implements OnInit, OnDestroy {
   public openScheduleReviewModal(object: RealtyObj) {
     this.reviewsService.scheduleReviewFlow(object)
       .pipe(
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }

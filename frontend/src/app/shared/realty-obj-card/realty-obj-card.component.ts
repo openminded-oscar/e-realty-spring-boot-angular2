@@ -1,6 +1,5 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {ChangeDetectorRef, Component, DestroyRef, inject, Input, OnInit} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {RealtyObj} from '../../app-models/realty-obj';
 import {UserService} from '../../app-services/user.service';
 
@@ -9,13 +8,12 @@ import {UserService} from '../../app-services/user.service';
   templateUrl: './realty-obj-card.component.html',
   styleUrl: './realty-obj-card.component.scss'
 })
-export class RealtyObjCardComponent implements OnInit, OnDestroy {
+export class RealtyObjCardComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   @Input() showManageStatusOptions!: boolean;
   @Input() showCreatedAt!: boolean;
   @Input() realtyObject!: RealtyObj;
   public isMyObject: boolean;
-
-  private destroy$ = new Subject<boolean>();
 
   constructor(public userService: UserService,
               public cdr: ChangeDetectorRef) {
@@ -23,7 +21,7 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userService.user$.pipe(
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe((user) => {
       let currentUserObjects = [];
       if (user) {
@@ -32,10 +30,5 @@ export class RealtyObjCardComponent implements OnInit, OnDestroy {
       this.isMyObject = !!currentUserObjects?.find((obj) => obj.id === this.realtyObject.id);
       this.cdr.detectChanges();
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }
