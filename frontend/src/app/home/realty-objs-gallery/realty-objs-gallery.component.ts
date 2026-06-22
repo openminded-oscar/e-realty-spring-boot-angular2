@@ -78,9 +78,6 @@ export class RealtyObjsGalleryComponent implements OnInit, OnDestroy {
     }, {
         display: 'Area',
         field: 'totalArea',
-    }, {
-        display: 'City',
-        field: 'address.city',
     }];
     public isFilterCollapsed = false;
     private destroy$ = new Subject<boolean>();
